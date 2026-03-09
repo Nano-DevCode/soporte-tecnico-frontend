@@ -1,0 +1,141 @@
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { getFullName, getInitials } from "../util/extraUtil";
+import { Users, Shield } from "lucide-react";
+import { CustomActionsMenuUser } from "./CustomActionsMenuUser";
+import { Badge } from "@/components/ui/badge";
+import type { User } from "../interfaces/users.response";
+import { useTranslation } from 'react-i18next';
+
+interface Props {
+  users: User[];
+  handleBajaClick: (user: User) => void;
+  handleEliminarClick: (user: User) => void;
+}
+
+export const CustomDesktopTableUsers = ({ users, handleBajaClick, handleEliminarClick }: Props) => {
+  const { t } = useTranslation();
+
+  return (
+    // Quité bg-card para que herede el fondo de tu componente Table base (el que hicimos azul/oscuro)
+    <div className="hidden md:block rounded-xl border border-border shadow-sm overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[50px] items-center justify-center text-center">
+              {t("custom_desktop_table_users_head_control")}
+            </TableHead>
+            <TableHead className="w-[300px] text-left">
+              {t("custom_desktop_table_users_head_user")}
+            </TableHead>
+            <TableHead className="w-[280px] text-left">
+              {t("custom_desktop_table_users_head_departament")}
+            </TableHead>
+            <TableHead className="w-[120px] text-center">
+              {t("custom_desktop_table_users_head_rol")}
+            </TableHead>
+            <TableHead className="w-[100px] text-center">
+              {t("custom_desktop_table_users_head_status")}
+            </TableHead>
+            <TableHead className="w-[80px] text-center">
+              {t("custom_desktop_table_users_head_actions")}
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        
+        <TableBody>
+          {users.map((user) => (
+            <TableRow key={user.id} className="group transition-colors">
+              <TableCell className="font-mono text-xs font-semibold text-muted-foreground align-middle text-center py-4">
+                {user.staff.num_control}
+              </TableCell>
+              
+              {/* USUARIO */}
+              <TableCell className="align-middle py-4">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-9 w-9 shrink-0 border border-border shadow-sm">
+                    {/* Cambiado a bg-muted para que se adapte al tema */}
+                    <AvatarFallback className="bg-muted text-foreground text-xs font-bold uppercase">
+                      {getInitials(user.staff.name, user.staff.paternalSurname)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col gap-0.5 min-w-0">
+                    <span className="text-sm font-bold text-foreground truncate max-w-[220px]">
+                      {getFullName(user.staff.name, user.staff.paternalSurname, user.staff.maternalSurname)}
+                    </span>
+                    <span className="text-xs text-muted-foreground truncate max-w-[220px]">
+                      {user.email}
+                    </span>
+                  </div>
+                </div>
+              </TableCell>
+
+              {/* DEPARTAMENTO */}
+              <TableCell className="text-sm text-muted-foreground align-middle py-4">
+                 <div className="max-w-[280px] line-clamp-2 font-medium">
+                  {user.staff.department.name}
+                 </div>
+              </TableCell>
+
+              {/* ROL */}
+              <TableCell className="align-middle text-center py-4 text-sm">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-secondary text-secondary-foreground text-xs font-semibold border border-border">
+                  <Shield className="h-3 w-3 opacity-50" />
+                  {user.role.name}
+                </span>
+              </TableCell>
+              
+              {/* ESTADO (Usando las variantes de Shadcn) */}
+              <TableCell className="align-middle text-center py-4 uppercase">
+                <Badge 
+                  // default = se ve bien en claro/oscuro para "Activo"
+                  // destructive = rojo estandarizado de Shadcn para "Inactivo"
+                  variant={user.status ? "default" : "destructive"}
+                  className="font-semibold px-2.5 py-0.5 rounded-full shadow-sm"
+                >
+                  {user.status ? 'Activo' : 'Inactivo'}
+                </Badge>
+              </TableCell>
+              
+              {/* ACCIONES */}
+              <TableCell className="text-center align-middle py-4">
+                <div className="flex justify-center">
+                  <CustomActionsMenuUser 
+                    user={user} 
+                    handleBajaClick={handleBajaClick} 
+                    handleEliminarClick={handleEliminarClick}
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+
+          {/* ESTADO VACÍO */}
+          {users.length === 0 && (
+            <TableRow>
+              <TableCell
+                colSpan={6}
+                className="h-[300px] text-center text-muted-foreground"
+              >
+                <div className="flex flex-col items-center gap-3">
+                  <div className="h-14 w-14 rounded-full bg-muted flex items-center justify-center border border-border">
+                    <Users className="h-6 w-6 text-muted-foreground opacity-50" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-base font-semibold text-foreground">
+                      {t("custom_desktop_table_users_not_found")}
+                    </p>
+                    <p className="text-sm">
+                      {t("custom_desktop_table_users_setting_filters")}
+                    </p>
+                  </div>
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
+          
+        </TableBody>
+      </Table>
+    </div>
+  );
+};
