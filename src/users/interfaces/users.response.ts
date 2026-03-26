@@ -19,6 +19,8 @@ export interface User {
     status: boolean;
     role:   Rol;
     staff:  Staff;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export interface Staff {
@@ -28,8 +30,11 @@ export interface Staff {
     paternalSurname: string;
     maternalSurname: string;
     num_control:     string;
+    rfc:             string;
     department:      Department;
     coordination:    Coordination;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export interface Coordination {

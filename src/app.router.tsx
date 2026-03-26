@@ -7,6 +7,7 @@ import { ForgotPasswordPage } from "./auth/pages/ForgotPasswordPage";
 import { AuthenticatedRoute, NotAuthenticatedRoute } from "./auth/routes/ProtectedRoutes";
 import { userRoutes } from "./users/users.router";
 import { accountRoutes } from "./account/account.router";
+import { departmentRoutes } from "./Departments/departments.routes";
 
 const PanelLayout = lazy(() => import("./layout/PanelLayout"))
 
@@ -25,11 +26,15 @@ export const appRouter = createBrowserRouter([
             },
             {
                 path: 'user',
-                children: userRoutes
+                children: userRoutes,
             },
             {
                 path: 'account',
-                children: accountRoutes
+                children: accountRoutes,
+            },
+            {
+                path: 'department',
+                children: departmentRoutes,
             }
         ],
     },
@@ -52,7 +57,7 @@ export const appRouter = createBrowserRouter([
             {
                 path: 'forgot-password',
                 element: <ForgotPasswordPage/>
-            }
+            },
         ]
     },
     {

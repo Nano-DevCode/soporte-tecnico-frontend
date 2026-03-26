@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import LogoIto from '@/assets/logo-SinFondo.png'
 
 export const CustomLogo = () => {
   const { t } = useTranslation();
@@ -6,7 +7,7 @@ export const CustomLogo = () => {
     <div className="flex h-16 items-center gap-2 border-b px-4">
       <div className="flex h-8 w-8 items-center justify-center">
         <img 
-          src="/logo-SinFondo.png" 
+          src={LogoIto} 
           alt="Logo" 
           className="h-full w-full object-contain" 
         />

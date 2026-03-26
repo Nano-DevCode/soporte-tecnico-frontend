@@ -1,5 +1,5 @@
-
-import { Loader2, type LucideIcon } from 'lucide-react'
+import { memo } from 'react';
+import { Loader2, type LucideIcon } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,24 +9,24 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { cn } from '@/lib/utils'
-import { useTranslation } from 'react-i18next';
+} from '@/components/ui/alert-dialog';
+import { cn } from '@/lib/utils';
+import type { ReactNode } from 'react';
 
 interface ActionConfirmDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void | Promise<void>;
   title: string;
-  description: string;
-  isLoading?: boolean
-  confirmText?: string
-  cancelText?: string
-  variant?: 'danger' | 'primary';
+  description: ReactNode;
+  isLoading?: boolean;
+  confirmText?: string;
+  cancelText?: string;
+  variant?: 'danger' | 'primary' | 'warning';
   icon: LucideIcon;
 }
 
-export const CustomDialogConfirm = ({
+export const CustomDialogConfirm = memo(({
   open,
   onOpenChange,
   onConfirm,
@@ -39,51 +39,66 @@ export const CustomDialogConfirm = ({
   icon: Icon,
 }: ActionConfirmDialogProps) => {
 
-  const { t } = useTranslation();
-  
   const variantStyles = {
-    danger: "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400",
-    primary: "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
-  }
+    danger: "bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-400 ring-4 ring-red-50 dark:ring-red-900/20",
+    primary: "bg-blue-50 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400 ring-4 ring-blue-50 dark:ring-blue-900/20",
+    warning: "bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400 ring-4 ring-amber-50 dark:ring-amber-900/20",
+  };
 
   const buttonStyles = {
-    danger: "bg-red-600 hover:bg-red-700 focus:ring-red-600",
-    primary: "bg-primary hover:bg-primary/90 focus:ring-primary",
-  }
+    danger: "bg-red-600 hover:bg-red-700 shadow-sm shadow-red-200 dark:shadow-none",
+    primary: "bg-primary hover:bg-primary/90 shadow-sm shadow-primary/20",
+    warning: "bg-amber-600 hover:bg-amber-700 shadow-sm",
+  };
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="max-w-md">
-        <AlertDialogHeader>
-          <div className="flex items-center gap-3">
-            <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full", variantStyles[variant])}>
-              <Icon className="h-5 w-5" />
-            </div>
-            <AlertDialogTitle>{title}</AlertDialogTitle>
+      <AlertDialogContent className="max-w-[400px] gap-0 overflow-hidden border-none p-0 sm:rounded-2xl">
+        <div className="flex flex-col items-center justify-center pt-8 pb-4 px-6 text-center">
+          <div className={cn(
+            "mb-4 flex h-14 w-14 items-center justify-center rounded-full transition-transform hover:scale-110 duration-300", 
+            variantStyles[variant]
+          )}>
+            <Icon className="h-7 w-7" strokeWidth={2.5} />
           </div>
-        </AlertDialogHeader>
 
-        <AlertDialogDescription className="text-sm text-muted-foreground pt-2">
-          {description}
-        </AlertDialogDescription>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-bold tracking-tight">
+              {title}
+            </AlertDialogTitle>
+            
+            <AlertDialogDescription asChild>
+              <div className="text-sm leading-relaxed text-muted-foreground pt-2">
+                {description}
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+        </div>
 
-        <AlertDialogFooter className="mt-4">
-          <AlertDialogCancel disabled={isLoading}>
+        <AlertDialogFooter className="flex flex-col-reverse sm:flex-row gap-2 p-6 bg-muted/30 dark:bg-muted/10 border-t border-border/50">
+          <AlertDialogCancel
+            disabled={isLoading}
+            className="sm:flex-1 rounded-xl border-border/50 bg-background hover:bg-muted font-medium"
+          >
             {cancelText}
           </AlertDialogCancel>
+          
           <AlertDialogAction
             onClick={(e) => {
-              e.preventDefault(); 
+              e.preventDefault();
               onConfirm();
             }}
             disabled={isLoading}
-            className={cn(buttonStyles[variant])}
+            className={cn(
+              "sm:flex-1 rounded-xl font-bold text-white transition-all active:scale-95", 
+              buttonStyles[variant]
+            )}
           >
             {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {t("custom_dialog_confirm_loading")}
-              </>
+              <div className="flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Procesando...</span>
+              </div>
             ) : (
               confirmText
             )}
@@ -91,5 +106,5 @@ export const CustomDialogConfirm = ({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
-}
+  );
+});

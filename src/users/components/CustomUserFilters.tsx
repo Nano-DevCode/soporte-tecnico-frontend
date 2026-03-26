@@ -6,7 +6,7 @@ import { useSearchParams } from "react-router";
 import { useDepartments } from "../hooks/useDepartment";
 import { useRef } from "react";
 
-export const CustomFiltersUser = () => {
+export const CustomUserFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: departments } = useDepartments();
 

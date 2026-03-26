@@ -13,10 +13,13 @@ type AuthState = {
 
   // Getters
   isSuperAdmin: () => boolean,
-  isAdmin: () => boolean,
+  isBossCC: () => boolean,
   isCoordinator: () => boolean,
   isBoss: () => boolean,
   isTechnician: () => boolean,
+  isPlaning: () => boolean,
+  isSecretaryCC: () => boolean,
+
 
   // Actions
   login: (email: string, password:string) => Promise<boolean>,
@@ -32,23 +35,31 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   // Getters
   isSuperAdmin() {
     const role = get().user?.role.name || '';
-    return role === 'superAdmin' ? true : false;
+    return role === 'SuperAdmin' ? true : false;
   },
-  isAdmin: () => {
+  isBossCC: () => {
     const role = get().user?.role.name || '';
-    return role === 'admin' ? true : false;
+    return role === 'Jefe CC' ? true : false;
   },
   isCoordinator: () => {
     const role = get().user?.role.name || '';
-    return role === 'coordinator' ? true : false;
+    return role === 'Coordinador' ? true : false;
   },
   isBoss: () => {
     const role = get().user?.role.name || '';
-    return role === 'boss' ? true : false;
+    return role === 'Jefe Departamento' ? true : false;
   },
   isTechnician: () => {
     const role = get().user?.role.name || '';
-    return role === 'technician' ? true : false;
+    return role === 'Técnico' ? true : false;
+  },
+  isPlaning: () => {
+    const role = get().user?.role.name || '';
+    return role === 'Planeación' ? true : false;
+  },
+  isSecretaryCC: () => {
+    const role = get().user?.role.name || '';
+    return role === 'Secretaria CC' ? true : false;
   },
 
   // Actions

@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Heart, ArrowLeft, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
 import { useRecuperatePassword } from '../hooks/useRecuperatePassword';
+import LogoIto from '@/assets/logo-SinFondo.png'
 
 interface Forget {
   email: string;
@@ -124,7 +125,7 @@ export const ForgotPasswordPage = () => {
           
           <div className="relative hidden bg-muted md:block">
             <img
-              src="/logo.png" 
+              src={LogoIto} 
               alt="Centro de Cómputo"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />

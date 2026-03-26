@@ -32,12 +32,12 @@ export const SuperAdmiRoute = ({children}: PropsWithChildren) => {
 }
 
 export const AdmiRoute = ({children}: PropsWithChildren) => {
-  const { authStatus, isAdmin } = useAuthStore();
+  const { authStatus, isBossCC } = useAuthStore();
   if(authStatus === 'checking') return null;
 
   if(authStatus === 'not-authenticated') return <Navigate to='/auth/login'/>;
 
-  if(!isAdmin()) return <Navigate to='/'/>;
+  if(!isBossCC()) return <Navigate to='/'/>;
 
   return children;
 }

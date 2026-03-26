@@ -1,4 +1,6 @@
-import { CreateUserPage } from "./pages/CreateUserPage";
+import { UserCreatePage } from "./pages/UserCreatePage";
+import { UserDetailsPage } from "./pages/UserDetailsPage";
+import { UserEditPage } from "./pages/UserEditPage";
 import { UserPage } from "./pages/UserPage";
 
 export const userRoutes = [
@@ -8,10 +10,14 @@ export const userRoutes = [
     },
     {
         path: 'new',
-        element: <CreateUserPage />
+        element: <UserCreatePage />
     },
     {
-        path: ':id',
-        element: <CreateUserPage />
+        path: 'details/:id',
+        element: <UserDetailsPage />
     },
+    {
+        path: 'edit/:id',
+        element: <UserEditPage/>
+    }
 ];

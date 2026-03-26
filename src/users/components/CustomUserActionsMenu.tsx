@@ -10,7 +10,7 @@ interface Props {
   handleEliminarClick: (user: User) => void;
 }
 
-export const CustomActionsMenuUser = ({ user, handleBajaClick, handleEliminarClick}: Props) => {
+export const CustomUserActionsMenu = ({ user, handleBajaClick, handleEliminarClick}: Props) => {
   return (
     <>
       <DropdownMenu>
@@ -25,14 +25,16 @@ export const CustomActionsMenuUser = ({ user, handleBajaClick, handleEliminarCli
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem className="gap-2" asChild>
-            <Link to={`/usuarios/${user.id}`}>
+            <Link to={`/user/details/${user.id}`}>
               <Eye className="h-4 w-4" />
               Ver Detalles
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="gap-2">
-            <Pencil className="h-4 w-4" />
-            Editar
+          <DropdownMenuItem className="gap-2" asChild>
+            <Link to={`/user/edit/${user.id}`}>
+              <Pencil className="h-4 w-4" />
+              Editar
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="gap-2 text-amber-600 focus:text-amber-600" onClick={() => handleBajaClick(user)}>

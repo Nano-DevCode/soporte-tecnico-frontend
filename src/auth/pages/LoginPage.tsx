@@ -9,6 +9,7 @@ import { useAuthStore } from "../store/auth.store";
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Alert, AlertDescription } from "@/components/ui/alert"; 
+import LogoIto from '@/assets/logo-SinFondo.png'
 
 interface Inputs {
   email: string;
@@ -133,7 +134,7 @@ export const LoginPage = () => {
 
           <div className="relative hidden bg-muted md:block">
             <img
-              src="../public/logo.png"
+              src={LogoIto}
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />

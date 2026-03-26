@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
 import { useTranslation } from 'react-i18next';
+import LogoIto from '@/assets/logo-SinFondo.png'
 
 interface Props {
   onClose: () => void
@@ -15,7 +16,7 @@ export const CustomMobilHeader = ({ onClose }: Props) => {
             
             <div className="flex h-9 w-9 items-center justify-center">
                 <img 
-                    src="/logo-SinFondo.png" 
+                    src={LogoIto} 
                     alt="Logo" 
                     className="h-full w-full object-contain" 
                 />

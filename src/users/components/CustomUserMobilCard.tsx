@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getFullName, getInitials } from "../util/extraUtil";
 import { Building2, Mail, Users } from "lucide-react";
-import { CustomActionsMenuUser } from "./CustomActionsMenuUser";
+import { CustomUserActionsMenu } from "./CustomUserActionsMenu";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { User } from "../interfaces/users.response";
@@ -12,7 +12,7 @@ interface Props {
   handleEliminarClick: (user: User) => void;
 }
 
-export const CustomMobilCardUsers = ({users, handleBajaClick, handleEliminarClick}: Props) => {
+export const CustomUserMobilCard = ({users, handleBajaClick, handleEliminarClick}: Props) => {
   return (
     <div className="md:hidden space-y-3">
       {users.map((user) => (
@@ -75,7 +75,7 @@ export const CustomMobilCardUsers = ({users, handleBajaClick, handleEliminarClic
           </div>
 
           <div className="shrink-0">
-            <CustomActionsMenuUser 
+            <CustomUserActionsMenu 
               user={user} 
               handleBajaClick={handleBajaClick} 
               handleEliminarClick={handleEliminarClick}

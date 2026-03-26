@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Users, Heart, Plus} from "lucide-react";
-import { CustomMobilCardUsers } from "../components/CustomMobilCardUsers";
-import { CustomDesktopTableUsers } from "../components/CustomDesktopTableUsers";
+import { CustomUserMobilCard } from "../components/CustomUserMobilCard";
+import { CustomUserDesktopTable } from "../components/CustomUserDesktopTable";
 import { CustomDialogConfirm } from "@/components/custom/CustomDialogCorfirm";
 import { CustomPagination } from "@/components/custom/CustomPagination";
 import { useUsers } from "../hooks/useUsers";
 import { CustomSkeletonTableCard } from "@/components/custom/CustomSkeletonTableCard";
-import { CustomFiltersUser } from "../components/CustomFiltersUser";
+import { CustomUserFilters } from "../components/CustomUserFilters";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
@@ -92,19 +92,19 @@ export function UserPage() {
         onOpenChange={setEliminarDialogOpen}
       />
 
-      <CustomFiltersUser/>
+      <CustomUserFilters/>
 
       {skelettonLoading ? (
         <CustomSkeletonTableCard/>
       ) : (
         <>
 
-          <CustomDesktopTableUsers
+          <CustomUserDesktopTable
             users={data?.users ?? []}
             handleBajaClick={handleBajaClick}
             handleEliminarClick={handleEliminarClick}
           />
-          <CustomMobilCardUsers
+          <CustomUserMobilCard
             users={data?.users ?? []}
             handleBajaClick={handleBajaClick}
             handleEliminarClick={handleEliminarClick}

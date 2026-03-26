@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getFullName, getInitials } from "../util/extraUtil";
 import { Users, Shield } from "lucide-react";
-import { CustomActionsMenuUser } from "./CustomActionsMenuUser";
+import { CustomUserActionsMenu } from "./CustomUserActionsMenu";
 import { Badge } from "@/components/ui/badge";
 import type { User } from "../interfaces/users.response";
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ interface Props {
   handleEliminarClick: (user: User) => void;
 }
 
-export const CustomDesktopTableUsers = ({ users, handleBajaClick, handleEliminarClick }: Props) => {
+export const CustomUserDesktopTable = ({ users, handleBajaClick, handleEliminarClick }: Props) => {
   const { t } = useTranslation();
 
   return (
@@ -100,7 +100,7 @@ export const CustomDesktopTableUsers = ({ users, handleBajaClick, handleEliminar
               {/* ACCIONES */}
               <TableCell className="text-center align-middle py-4">
                 <div className="flex justify-center">
-                  <CustomActionsMenuUser 
+                  <CustomUserActionsMenu 
                     user={user} 
                     handleBajaClick={handleBajaClick} 
                     handleEliminarClick={handleEliminarClick}

@@ -2,7 +2,7 @@ import { RouterProvider } from 'react-router'
 import { appRouter } from './app.router'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Toaster } from 'sonner';
+import { Toaster } from "sileo";
 import type { PropsWithChildren } from 'react';
 import { CustomFullScreenLoading } from './components/custom/CustomFullScreenLoading';
 import { useAuthStore } from './auth/store/auth.store';
@@ -11,7 +11,7 @@ import { ThemeProvider } from './components/theme-provider';
 
 const queryClient = new QueryClient();
 
-const CheckAuthProvider = ({children}: PropsWithChildren) => {
+const CheckAuthProvider = ({ children }: PropsWithChildren) => {
 
   const { checkAuthStatus } = useAuthStore();
 
@@ -23,7 +23,7 @@ const CheckAuthProvider = ({children}: PropsWithChildren) => {
     refetchOnWindowFocus: false,
   }); 
   
-  if(isLoading) return <CustomFullScreenLoading/>;
+  if (isLoading) return <CustomFullScreenLoading />;
 
   return children;
 }
@@ -31,13 +31,11 @@ const CheckAuthProvider = ({children}: PropsWithChildren) => {
 export const SoporteTecnico = () => {
   return (
     <QueryClientProvider client={queryClient}>
-
+      <Toaster position='top-center' theme='dark'/>
       <ThemeProvider defaultTheme="system" storageKey="soporte-tecnico-theme">
 
-        <Toaster />
-
         <CheckAuthProvider>
-          <RouterProvider router={appRouter}/>
+          <RouterProvider router={appRouter} />
         </CheckAuthProvider>
 
         <ReactQueryDevtools initialIsOpen={false} />

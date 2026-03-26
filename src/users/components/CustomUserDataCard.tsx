@@ -15,7 +15,7 @@ import { useDepartments } from "../hooks/useDepartment";
 import { useRoles } from "../hooks/userRoles";
 import { Button } from "@/components/ui/button";
 
-export const CustomUserDataCard = () => {
+export const CustomUsersDataCard = () => {
   const { data: departments } = useDepartments();
   const { data: roles } = useRoles();
   const [showPassword, setShowPassword] = useState(false);

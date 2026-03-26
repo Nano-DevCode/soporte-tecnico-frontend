@@ -19,11 +19,12 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'es',
     fallbackLng: 'es',
+    detection: {
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
+    },
     interpolation: {
       escapeValue: false,
     },
   });
-
-export default i18n;

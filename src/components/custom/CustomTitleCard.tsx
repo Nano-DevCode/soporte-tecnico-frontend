@@ -1,3 +1,4 @@
+import { memo } from "react"; // <-- Importamos memo
 import type { LucideIcon } from "lucide-react";
 
 interface Props {
@@ -6,7 +7,8 @@ interface Props {
   icon: LucideIcon;
 }
 
-export const CustomTitleCard = ({title, description, icon: Icon}: Props) => {
+// Envolvemos el componente con memo()
+export const CustomTitleCard = memo(({title, description, icon: Icon}: Props) => {
   return (
     <div className="flex items-center gap-3 md:gap-4 pb-5 md:pb-6">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
@@ -23,4 +25,7 @@ export const CustomTitleCard = ({title, description, icon: Icon}: Props) => {
         </div>
     </div>
   )
-}
+});
+
+// Le damos su nombre para que React Scan lo identifique bonito
+CustomTitleCard.displayName = "CustomTitleCard";

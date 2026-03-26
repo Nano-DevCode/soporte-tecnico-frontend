@@ -5,13 +5,13 @@ import {
   Building, ShieldCheck, User 
 } from "lucide-react";
 import { CustomReadOnlyField } from "../components/CustomReadOnlyField";
-import { useUserProfile } from "../hooks/useUserProfile";
+import { useProfile } from "../hooks/useUserProfile";
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { useTranslation } from "react-i18next";
 
 export const ProfilePage = () => {
   const { t } = useTranslation();
-  const { data: user, isLoading} = useUserProfile();
+  const { data: user, isLoading} = useProfile();
 
   if (isLoading) return <p className="p-8 text-center text-muted-foreground">Cargando perfil...</p>;
 

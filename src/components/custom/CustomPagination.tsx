@@ -1,3 +1,4 @@
+import { memo } from 'react'; // <-- Agregamos memo
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,7 +15,8 @@ interface Props {
   totalPages: number;
 }
 
-export const CustomPagination = ({ totalPages }: Props) => {
+// Envolvemos tu componente en memo para el rendimiento
+export const CustomPagination = memo(({ totalPages }: Props) => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -38,7 +40,11 @@ export const CustomPagination = ({ totalPages }: Props) => {
     setSearchParams(newParams);
   };
 
+  // Tu lógica original que sí funcionaba
   const renderPageNumbers = () => {
+    // PROTECCIÓN EXTRA: Si totalPages es 0 o menor, regresamos array vacío
+    if (totalPages <= 0) return [];
+    
     if (totalPages <= 6) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
@@ -81,6 +87,9 @@ export const CustomPagination = ({ totalPages }: Props) => {
     return pages;
   };
 
+  // PROTECCIÓN EXTRA: Si no hay páginas, no renderizamos el componente
+  if (totalPages <= 0) return null;
+
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-4 sm:flex-row sm:gap-8">
       
@@ -89,7 +98,7 @@ export const CustomPagination = ({ totalPages }: Props) => {
         <span className="whitespace-nowrap">Filas por pág:</span>
         <Select 
           value={queryLimit} 
-          defaultValue='10'
+          // defaultValue='10' <-- Quitamos esto, el value ya hace el trabajo en Radix
           onValueChange={handleLimitChange}
         >
           <SelectTrigger className="h-8 w-[70px]">
@@ -111,7 +120,7 @@ export const CustomPagination = ({ totalPages }: Props) => {
           variant="outline"
           size="icon"
           className="h-8 w-8 shrink-0"
-          disabled={currentPage === 1}
+          disabled={currentPage <= 1} // Ajustado para mayor seguridad
           onClick={() => handlePageChange(currentPage - 1)}
         >
           <ChevronLeft className="h-4 w-4" />
@@ -144,14 +153,14 @@ export const CustomPagination = ({ totalPages }: Props) => {
           variant="outline"
           size="icon"
           className="h-8 w-8 shrink-0"
-          disabled={currentPage === totalPages}
+          disabled={currentPage >= totalPages} 
           onClick={() => handlePageChange(currentPage + 1)}
         >
           <ChevronRight className="h-4 w-4" />
-          <span className="sr-only">{t("custom_pagination_previous")}</span>
+          <span className="sr-only">{t("custom_pagination_next")}</span> 
         </Button>
 
       </div>
     </div>
   );
-};
+});
