@@ -13,18 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCreateDepartment } from "../hooks/useCreateDepartment";
 import { isAxiosError } from "axios";
-
-interface DepartmentFormData {
-  name: string;
-  acronym: string;
-  priority: string;
-}
-
-interface BackendError {
-  message: string | string[];
-  error: string;
-  statusCode: number;
-}
+import type { Department } from "../interfaces/department.interface";
+import type { BackendError } from "@/interfaces/backendError.interfaces";
 
 export const DepartmentCreatePage = () => {
   const navigate = useNavigate();
@@ -35,15 +25,15 @@ export const DepartmentCreatePage = () => {
     register, 
     handleSubmit, 
     formState: { errors } 
-  } = useForm<DepartmentFormData>({
+  } = useForm<Department>({
     defaultValues: {
       name: "",
       acronym: "",
-      priority: "",
+      priority: undefined,
     }
   });
 
-  const onSubmit = async (data: DepartmentFormData) => {
+  const onSubmit = async (data: Department) => {
     
     const payload = {
       name: data.name.trim(),

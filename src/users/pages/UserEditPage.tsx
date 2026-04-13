@@ -189,6 +189,9 @@ export const UserEditPage = () => {
     }
   };
 
+  console.log(departments, user, roles);
+  
+
   // 7. LA VISTA PRINCIPAL
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">

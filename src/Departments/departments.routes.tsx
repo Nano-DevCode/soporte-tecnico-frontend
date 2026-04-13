@@ -1,23 +1,38 @@
-import { DepartmentCreatePage } from "./pages/DepartmentCreatePage";
-import { DepartmentDetailsPage } from "./pages/DepartmentDetailsPage";
-import { DepartmentEditPage } from "./pages/DepartmentEditPage";
-import { DepartmentPage } from "./pages/DepartmentPage";
+import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
+import { lazy } from "react";
+
+const DepartmentPage = lazy(() => import('./pages/DepartmentPage').then(m => ({ default: m.DepartmentPage })));
+const DepartmentCreatePage = lazy(() => import('./pages/DepartmentCreatePage').then(m => ({ default: m.DepartmentCreatePage })));
+const DepartmentDetailsPage = lazy(() => import('./pages/DepartmentDetailsPage').then(m => ({ default: m.DepartmentDetailsPage })));
+const DepartmentEditPage = lazy(() => import('./pages/DepartmentEditPage').then(m => ({ default: m.DepartmentEditPage })));
 
 export const departmentRoutes = [
     {
         index: true,
-        element: <DepartmentPage />
+        element:
+        <SuspenseWrapper>
+            <DepartmentPage />
+        </SuspenseWrapper> 
     },
     {
         path: 'create',
-        element: <DepartmentCreatePage />
+        element: 
+        <SuspenseWrapper>
+            <DepartmentCreatePage />
+        </SuspenseWrapper>
     },
     {
         path: 'details/:id',
-        element: <DepartmentDetailsPage />
+        element:
+        <SuspenseWrapper>
+            <DepartmentDetailsPage />
+        </SuspenseWrapper>
     },
     {
         path: 'edit/:id',
-        element: <DepartmentEditPage />
+        element: 
+        <SuspenseWrapper>
+            <DepartmentEditPage />
+        </SuspenseWrapper>
     }
 ];

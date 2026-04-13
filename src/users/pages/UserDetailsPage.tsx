@@ -166,7 +166,7 @@ export const UserDetailsPage = () => {
                   </dd>
                 </div>
 
-                {user.staff?.coordination?.name && user.staff.coordination.name !== 'Sin coordinación' && (
+                {user.staff?.coordination?.name !== 'Sin Coordinación' && (
                   <div className="rounded-lg bg-muted/30 p-3 border border-border/50">
                     <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">Coordinación</dt>
                     <dd className="font-bold text-base">
