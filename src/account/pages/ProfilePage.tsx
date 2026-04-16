@@ -108,7 +108,7 @@ export const ProfilePage = () => {
                 value={user?.role.name} 
               />
               
-              {user?.staff.coordination.name !== 'Sin Coordianción' && (
+              {user?.staff.coordination.name === 'Sin Coordianción' && (
                 <CustomReadOnlyField 
                   icon={Briefcase} 
                   label={t("profile_page_coordination")} 

@@ -16,6 +16,7 @@ export interface Meta {
 export interface User {
     id:     string;
     email:  string;
+    password: string;
     status: boolean;
     role:   Rol;
     staff:  Staff;
@@ -35,6 +36,10 @@ export interface Staff {
     coordination:    Coordination;
     createdAt?: Date;
     updatedAt?: Date;
+}
+
+export interface CoordinationResponse {
+    coordinations: Coordination[];
 }
 
 export interface Coordination {

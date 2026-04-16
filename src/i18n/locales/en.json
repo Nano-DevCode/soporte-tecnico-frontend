@@ -77,8 +77,14 @@
   "custom_password_configuration_title": "Account Security",
   "custom_password_configuration_description": "Update your password to keep your account secure.",
   "custom_password_configuration_new_password": "New Password",
-  "custom_password_configuration_confirm_new_password": "Confirm New Password",
+  "custom_password_configuration_required_new_password": "Password is required",
+  "custom_password_configuration_min_length_new_password": "Password must be at least 8 characters long",
+  "custom_password_configuration_max_length_new_password": "Maximum 50 characters",
+  "custom_password_configuration_not_match_with_regex": "Password is too weak (must include uppercase, lowercase, and numbers or symbols)",
+  "custom_password_configuration_confirm_new_password": "You must confirm the new password",
+  "custom_password_configuration_not_match_new_password": "Passwords do not match",
   "custom_password_configuration_warning": "You will be logged out after changing your password.",
+  "custom_password_configuration_requireds": "Requirements: Min. 8 characters, uppercase letters, and numbers",
   "custom_password_configuration_button_update": "Update Password",
 
   "custom_language_configuration_title": "Language Preferences",
@@ -102,6 +108,11 @@
   "profile_page_departament": "Department",
   "profile_page_role": "System Role",
   "profile_page_coordination": "Coordination",
+
+  "configuration_page_title_card": "Configuration",
+  "configuration_page_description_card": "Manage your system preferences and account security.",
+
+  "custom_read_only_field": "Not specified",
 
   "custom_mode_toggle_class_changue": "Change Theme",
   "custom_mode_toggle_light": "Light",

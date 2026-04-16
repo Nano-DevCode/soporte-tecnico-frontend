@@ -20,17 +20,20 @@ import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
-  SelectGroup,      // <-- Añadido
-  SelectLabel,      // <-- Añadido
+  SelectGroup,     
+  SelectLabel,     
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton"; 
 import { useDepartments } from "../hooks/useDepartment";
 import { useRoles } from "../hooks/userRoles";
 import { AxiosError } from "axios";
 import { useState } from "react";
 import { useUserCreate } from "../hooks/useUserCreate";
+import type { BackendError } from "@/interfaces/backendError.interfaces";
+import { useCoordinations } from "../hooks/useCoordinations";
 
 interface UserFormData {
   email: string;
@@ -46,19 +49,22 @@ interface UserFormData {
   coordinationId: string;
 }
 
-interface BackendError {
-  message: string | string[];
-  error: string;
-  statusCode: number;
-}
-
 export const UserCreatePage = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   
   const { createUser, isCreating } = useUserCreate();
-  const { data: departments } = useDepartments();
-  const { data: roles } = useRoles();
+  
+  const { data: departments, isLoading: isLoadingDepartments } = useDepartments();
+  const { data: roles, isLoading: isLoadingRoles } = useRoles();
+  const { data: coordinations, isLoading: isLoadingCoordinations } = useCoordinations();
+
+  // Expresiones regulares del DTO
+  const passwordRegex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+  const lettersOnlyRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+  const numericOnlyRegex = /^[0-9]+$/;
+  const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+  const rfcRegex = /^[A-Z0-9]+$/;
 
   const { 
     register, 
@@ -82,7 +88,6 @@ export const UserCreatePage = () => {
   });
 
   const onSubmit = async (data: UserFormData) => {
-    
     const payload = {
       email: data.email.trim(),
       password: data.password!,
@@ -92,7 +97,7 @@ export const UserCreatePage = () => {
       num_control: data.num_control.trim(),
       roleId: data.roleId,
       departmentId: data.departmentId,
-      rfc: data.rfc.trim() || undefined,
+      rfc: data.rfc.trim(), // YA NO ES OPCIONAL: se envía directo
       idTelegram: data.idTelegram.trim() || undefined,
       coordinationId: data.coordinationId || undefined,
     };
@@ -140,7 +145,7 @@ export const UserCreatePage = () => {
     <div className="mx-auto w-full max-w-4xl space-y-4">
       
       <button 
-        onClick={() => navigate('/user')}
+        onClick={() => navigate('/users')}
         type="button"
         className="group flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
       >
@@ -148,8 +153,19 @@ export const UserCreatePage = () => {
         Regresar a Usuarios
       </button>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="rounded-xl border border-border bg-card p-6 shadow-sm">
+      <form 
+        onSubmit={handleSubmit(onSubmit)} 
+        autoComplete="off"
+        className="rounded-xl border border-border bg-card p-6 shadow-sm"
+      >
         
+        {/* --- TRAMPA ANTI-AUTOCOMPLETADO --- */}
+        <div style={{ width: 0, height: 0, overflow: 'hidden', position: 'absolute', zIndex: -1 }}>
+          <input type="text" name="fakeusernameremembered" tabIndex={-1} autoComplete="username" />
+          <input type="password" name="fakepasswordremembered" tabIndex={-1} autoComplete="current-password" />
+        </div>
+        {/* ---------------------------------- */}
+
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-6">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -177,9 +193,14 @@ export const UserCreatePage = () => {
               </Label>
               <Input 
                 id="name"
+                autoComplete="nope"
                 placeholder="Ej. Juan Carlos"
                 className={cn("bg-muted/10", errors.name && "border-red-500 focus-visible:ring-red-500")}
-                {...register("name", { required: "Requerido" })}
+                {...register("name", { 
+                  required: "Requerido",
+                  maxLength: { value: 50, message: "Máximo 50 caracteres" },
+                  pattern: { value: lettersOnlyRegex, message: "El nombre solo debe contener letras" }
+                })}
               />
               {errors.name && <p className="text-xs font-medium text-red-500">{errors.name.message}</p>}
             </div>
@@ -190,9 +211,14 @@ export const UserCreatePage = () => {
               </Label>
               <Input 
                 id="paternalSurname"
+                autoComplete="nope"
                 placeholder="Ej. Rodriguez"
                 className={cn("bg-muted/10", errors.paternalSurname && "border-red-500 focus-visible:ring-red-500")}
-                {...register("paternalSurname", { required: "Requerido" })}
+                {...register("paternalSurname", { 
+                  required: "Requerido",
+                  maxLength: { value: 50, message: "Máximo 50 caracteres" },
+                  pattern: { value: lettersOnlyRegex, message: "El apellido solo debe contener letras" }
+                })}
               />
               {errors.paternalSurname && <p className="text-xs font-medium text-red-500">{errors.paternalSurname.message}</p>}
             </div>
@@ -203,9 +229,14 @@ export const UserCreatePage = () => {
               </Label>
               <Input 
                 id="maternalSurname"
+                autoComplete="nope"
                 placeholder="Ej. Martinez"
                 className={cn("bg-muted/10", errors.maternalSurname && "border-red-500 focus-visible:ring-red-500")}
-                {...register("maternalSurname", { required: "Requerido" })}
+                {...register("maternalSurname", { 
+                  required: "Requerido",
+                  maxLength: { value: 50, message: "Máximo 50 caracteres" },
+                  pattern: { value: lettersOnlyRegex, message: "El apellido solo debe contener letras" }
+                })}
               />
               {errors.maternalSurname && <p className="text-xs font-medium text-red-500">{errors.maternalSurname.message}</p>}
             </div>
@@ -217,36 +248,56 @@ export const UserCreatePage = () => {
               </Label>
               <Input 
                 id="num_control"
+                autoComplete="nope"
                 placeholder="Ej. 20230045"
                 className={cn("bg-muted/10", errors.num_control && "border-red-500 focus-visible:ring-red-500")}
-                {...register("num_control", { required: "Requerido" })}
+                {...register("num_control", { 
+                  required: "Requerido",
+                  maxLength: { value: 20, message: "Máximo 20 caracteres" },
+                  pattern: { value: alphanumericRegex, message: "Evita caracteres especiales" }
+                })}
               />
               {errors.num_control && <p className="text-xs font-medium text-red-500">{errors.num_control.message}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="rfc" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                RFC (Opcional)
+              {/* CAMBIO AQUÍ: Se agrega el asterisco indicando que es obligatorio */}
+              <Label htmlFor="rfc" className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.rfc && "text-red-500")}>
+                RFC <span className="text-red-500">*</span>
               </Label>
               <Input 
                 id="rfc"
+                autoComplete="nope"
                 placeholder="XXXX999999XX9"
-                className="bg-muted/10 uppercase"
-                {...register("rfc")}
+                className={cn("bg-muted/10 uppercase", errors.rfc && "border-red-500 focus-visible:ring-red-500")}
+                {...register("rfc", {
+                  required: "El RFC es obligatorio", // CAMBIO AQUÍ: Regla de requerido agregada
+                  maxLength: { value: 13, message: "Máximo 13 caracteres" },
+                  pattern: { value: rfcRegex, message: "RFC formato inválido (solo mayúsculas y números)" },
+                  onChange: (e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }
+                })}
               />
+              {errors.rfc && <p className="text-xs font-medium text-red-500">{errors.rfc.message}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="idTelegram" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              <Label htmlFor="idTelegram" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.idTelegram && "text-red-500")}>
                 <Send className="h-3.5 w-3.5" />
                 ID Telegram (Opcional)
               </Label>
               <Input 
                 id="idTelegram"
+                autoComplete="nope"
                 placeholder="Ej. 123456789"
-                className="bg-muted/10"
-                {...register("idTelegram")}
+                className={cn("bg-muted/10", errors.idTelegram && "border-red-500 focus-visible:ring-red-500")}
+                {...register("idTelegram", {
+                  maxLength: { value: 20, message: "Máximo 20 caracteres" },
+                  pattern: { value: numericOnlyRegex, message: "ID de Telegram debe ser numérico" }
+                })}
               />
+              {errors.idTelegram && <p className="text-xs font-medium text-red-500">{errors.idTelegram.message}</p>}
             </div>
           </div>
         </div>
@@ -254,34 +305,69 @@ export const UserCreatePage = () => {
         {/* --- SECCIÓN 2: ASIGNACIÓN --- */}
         <div className="pt-6 mt-6 border-t border-border/50">
           <h4 className="text-sm font-semibold text-foreground mb-4 border-l-2 border-primary pl-2">Asignación</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             
             {/* Departamento */}
             <div className="space-y-2">
               <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.departmentId && "text-red-500")}>
                 Departamento <span className="text-red-500">*</span>
               </Label>
-              <Controller
-                control={control}
-                name="departmentId"
-                rules={{ required: "Selecciona un departamento" }}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value || undefined}>
-                    <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.departmentId && "border-red-500")}>
-                      <SelectValue placeholder="Selecciona un departamento" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Departamentos Disponibles</SelectLabel>
-                        {departments?.map(department =>(
-                            <SelectItem key={department.id} value={department.id}>{department.name}</SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
+              {isLoadingDepartments ? (
+                <Skeleton className="h-10 w-full rounded-md bg-muted/50" />
+              ) : (
+                <Controller
+                  control={control}
+                  name="departmentId"
+                  rules={{ required: "Selecciona un departamento" }}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value || undefined}>
+                      <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.departmentId && "border-red-500")}>
+                        <SelectValue placeholder="Selecciona un departamento" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Departamentos Disponibles</SelectLabel>
+                          {departments?.map(department =>(
+                              <SelectItem key={department.id} value={department.id}>{department.name}</SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              )}
               {errors.departmentId && <p className="text-xs font-medium text-red-500">{errors.departmentId.message}</p>}
+            </div>
+
+            {/* Coordinación */}
+            <div className="space-y-2">
+              <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.coordinationId && "text-red-500")}>
+                Coordinación (Opcional)
+              </Label>
+              {isLoadingCoordinations ? (
+                <Skeleton className="h-10 w-full rounded-md bg-muted/50" />
+              ) : (
+                <Controller
+                  control={control}
+                  name="coordinationId"
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value || undefined}>
+                      <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.coordinationId && "border-red-500")}>
+                        <SelectValue placeholder="Selecciona una coordinación" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Coordinaciones Disponibles</SelectLabel>
+                          {coordinations?.map(coord =>(
+                            <SelectItem key={coord.id} value={coord.id}>{coord.name}</SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              )}
+              {errors.coordinationId && <p className="text-xs font-medium text-red-500">{errors.coordinationId.message}</p>}
             </div>
 
             {/* Rol */}
@@ -289,26 +375,30 @@ export const UserCreatePage = () => {
               <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.roleId && "text-red-500")}>
                 Rol en el Sistema <span className="text-red-500">*</span>
               </Label>
-              <Controller
-                control={control}
-                name="roleId"
-                rules={{ required: "Selecciona un rol" }}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value || undefined}>
-                    <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.roleId && "border-red-500")}>
-                      <SelectValue placeholder="Selecciona un rol" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Roles del Sistema</SelectLabel>
-                        {roles?.map(role =>(
-                          <SelectItem key={role.id} value={role.id}>{role.name}</SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
+              {isLoadingRoles ? (
+                <Skeleton className="h-10 w-full rounded-md bg-muted/50" />
+              ) : (
+                <Controller
+                  control={control}
+                  name="roleId"
+                  rules={{ required: "Selecciona un rol" }}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value || undefined}>
+                      <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.roleId && "border-red-500")}>
+                        <SelectValue placeholder="Selecciona un rol" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Roles del Sistema</SelectLabel>
+                          {roles?.map(role =>(
+                            <SelectItem key={role.id} value={role.id}>{role.name}</SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              )}
               {errors.roleId && <p className="text-xs font-medium text-red-500">{errors.roleId.message}</p>}
             </div>
 
@@ -328,11 +418,13 @@ export const UserCreatePage = () => {
               <Input 
                 id="email"
                 type="email"
+                autoComplete="nope"
                 placeholder="usuario@oaxaca.tecnm.mx"
                 className={cn("bg-muted/10", errors.email && "border-red-500 focus-visible:ring-red-500")}
                 {...register("email", { 
                   required: "El correo es obligatorio",
-                  pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Correo inválido" }
+                  maxLength: { value: 100, message: "Máximo 100 caracteres" },
+                  pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "El formato del email es inválido" }
                 })}
               />
               {errors.email && <p className="text-xs font-medium text-red-500">{errors.email.message}</p>}
@@ -347,11 +439,14 @@ export const UserCreatePage = () => {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Mínimo 6 caracteres"
+                  autoComplete="new-password"
+                  placeholder="Mínimo 8 caracteres"
                   className={cn("pr-10 bg-muted/10", errors.password && "border-red-500 focus-visible:ring-red-500")}
                   {...register("password", { 
                     required: "La contraseña es obligatoria",
-                    minLength: { value: 6, message: "Mínimo 6 caracteres" }
+                    minLength: { value: 8, message: "Password muy corta (min 8)" },
+                    maxLength: { value: 50, message: "Máximo 50 caracteres" },
+                    pattern: { value: passwordRegex, message: "El password es demasiado débil" }
                   })}
                 />
                 <button

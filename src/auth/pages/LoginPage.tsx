@@ -28,6 +28,9 @@ export const LoginPage = () => {
     defaultValues: { email: '', password: '' }
   });
 
+  // Regex estricta del backend (minúscula, mayúscula y número/símbolo)
+  const passwordRegex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+
   const handleLogin = async (data: Inputs) => {
     setPosting(true);
     setErrorMsg(null);
@@ -58,12 +61,15 @@ export const LoginPage = () => {
                 <p className="text-sm text-muted-foreground">{t("login_page_welcom")}</p>
               </div>
 
-              {/* Mensaje de Error Superior */}
-              {errorMsg && (
+              {/* Mensaje de Error Unificado (Backend o Validación Manual) */}
+              {(errorMsg || errors.email || errors.password) && (
                 <Alert variant="destructive" className="py-3 animate-in fade-in zoom-in duration-300">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription className="text-xs font-medium">
-                    {errorMsg}
+                    {/* Mensaje genérico para no dar pistas al usuario/atacante */}
+                    {errors.email || errors.password 
+                      ? t("login_page_invalid_credentials") 
+                      : errorMsg}
                   </AlertDescription>
                 </Alert>
               )}
@@ -78,18 +84,10 @@ export const LoginPage = () => {
                     autoComplete="email"
                     className={errors.email ? "border-destructive focus-visible:ring-destructive" : ""}
                     {...register("email", {
-                      required: t("requerid_email"),
-                      pattern: {
-                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                        message: t("requerid_email_format")
-                      }
+                      required: true, 
+                      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                     })}
                   />
-                  {errors.email && (
-                    <span className="text-[10px] text-destructive font-bold uppercase tracking-wider">
-                      {errors.email.message}
-                    </span>
-                  )}
                 </div>
 
                 <div className="grid gap-2">
@@ -108,14 +106,11 @@ export const LoginPage = () => {
                     autoComplete="current-password"
                     className={errors.password ? "border-destructive focus-visible:ring-destructive" : ""}
                     {...register("password", {
-                      required: t("requerid_password")
+                      required: true,
+                      minLength: 8,
+                      pattern: passwordRegex
                     })}
                   />
-                  {errors.password && (
-                    <span className="text-[10px] text-destructive font-bold uppercase tracking-wider">
-                      {errors.password.message}
-                    </span>
-                  )}
                 </div>
 
                 <Button type="submit" className="w-full mt-2" disabled={posting}>

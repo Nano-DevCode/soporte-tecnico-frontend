@@ -1,4 +1,5 @@
 import { Label } from "@/components/ui/label";
+import { t } from "i18next";
 import type { LucideIcon } from "lucide-react";
 
 interface ReadOnlyFieldProps {
@@ -22,7 +23,7 @@ export const CustomReadOnlyField = ({ icon: Icon, label, value }: ReadOnlyFieldP
         {value ? (
           value
         ) : (
-          <span className="text-muted-foreground/60 italic">No especificado</span>
+          <span className="text-muted-foreground/60 italic">{t("custom_read_only_field")}</span>
         )}
       </div>
     </div>

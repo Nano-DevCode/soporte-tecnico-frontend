@@ -76,8 +76,14 @@
   "custom_password_configuration_title": "Seguridad de la Cuenta",
   "custom_password_configuration_description": "Actualiza tu contraseña para mantener tu cuenta protegida.",
   "custom_password_configuration_new_password": "Nueva Contraseña",
-  "custom_password_configuration_confirm_new_password": "Confirmar Nueva Contraseña",
+  "custom_password_configuration_required_new_password":"La contraseña es requerida",
+  "custom_password_configuration_min_length_new_password":"La contraseña debe tener al menos 8 caracteres",
+  "custom_password_configuration_max_length_new_password": "Máximo 50 caracteres",
+  "custom_password_configuration_not_match_with_regex": "El password es demasiado débil (debe incluir mayúsculas, minúsculas y números o símbolos)",
+  "custom_password_configuration_confirm_new_password":"Debes confirmar la Nueva Contraseña",
+  "custom_password_configuration_not_match_new_password": "Las contraseñas no coinciden",
   "custom_password_configuration_warning": "Se cerrará tu sesión tras cambiar contraseña.",
+  "custom_password_configuration_requireds": "Requisitos: Min. 8 caracteres, mayúsculas y números",
   "custom_password_configuration_button_update": "Actualizar contraseña",
 
   "custom_language_configuration_title":"Preferencias de Idioma",
@@ -101,6 +107,11 @@
   "profile_page_departament": "Departamento",
   "profile_page_role": "Rol del Sistema",
   "profile_page_coordination": "Coordinación",
+
+  "configuration_page_title_card": "Configuración",
+  "configuration_page_description_card": "Administra tus preferencias de sistema y la seguridad de tu cuenta.",
+
+  "custom_read_only_field": "No especificado",
 
   "custom_mode_toggle_class_changue": "Cambiar tema",
   "custom_mode_toggle_light": "Claro",
