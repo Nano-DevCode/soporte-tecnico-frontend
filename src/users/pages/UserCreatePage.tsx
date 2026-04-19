@@ -59,17 +59,18 @@ export const UserCreatePage = () => {
   const { data: roles, isLoading: isLoadingRoles } = useRoles();
   const { data: coordinations, isLoading: isLoadingCoordinations } = useCoordinations();
 
-  // Expresiones regulares del DTO
+  // Expresiones regulares
   const passwordRegex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
   const lettersOnlyRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
-  const numericOnlyRegex = /^[0-9]+$/;
   const alphanumericRegex = /^[a-zA-Z0-9]+$/;
   const rfcRegex = /^[A-Z0-9]+$/;
+  const uuidV4Regex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i; // Regex para UUID v4
 
   const { 
     register, 
     handleSubmit,
     control, 
+    watch, // <-- Importamos watch para observar cambios en tiempo real
     formState: { errors } 
   } = useForm<UserFormData>({
     defaultValues: {
@@ -87,6 +88,12 @@ export const UserCreatePage = () => {
     }
   });
 
+  // Observamos el ID del rol seleccionado
+  const selectedRoleId = watch("roleId");
+
+  // Buscamos si el rol seleccionado corresponde a "Coordinador" (ignorando mayúsculas/minúsculas por seguridad)
+  const isCoordinador = roles?.find(r => r.id === selectedRoleId)?.name?.toLowerCase() === "coordinador";
+
   const onSubmit = async (data: UserFormData) => {
     const payload = {
       email: data.email.trim(),
@@ -97,16 +104,14 @@ export const UserCreatePage = () => {
       num_control: data.num_control.trim(),
       roleId: data.roleId,
       departmentId: data.departmentId,
-      rfc: data.rfc.trim(), // YA NO ES OPCIONAL: se envía directo
-      idTelegram: data.idTelegram.trim() || undefined,
-      coordinationId: data.coordinationId || undefined,
+      rfc: data.rfc.trim(),
+      idTelegram: isCoordinador ? data.idTelegram?.trim() : undefined,
+      coordinationId: isCoordinador ? data.coordinationId : undefined,
     };
 
     try {
       await sileo.promise(createUser(payload), {
-        loading: { 
-          title: "Creando usuario...",
-        },
+        loading: { title: "Creando usuario..." },
         success: { 
           title: "¡Usuario creado!", 
           description: `${payload.name} se guardó correctamente.`,
@@ -261,7 +266,6 @@ export const UserCreatePage = () => {
             </div>
 
             <div className="space-y-2">
-              {/* CAMBIO AQUÍ: Se agrega el asterisco indicando que es obligatorio */}
               <Label htmlFor="rfc" className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.rfc && "text-red-500")}>
                 RFC <span className="text-red-500">*</span>
               </Label>
@@ -271,7 +275,7 @@ export const UserCreatePage = () => {
                 placeholder="XXXX999999XX9"
                 className={cn("bg-muted/10 uppercase", errors.rfc && "border-red-500 focus-visible:ring-red-500")}
                 {...register("rfc", {
-                  required: "El RFC es obligatorio", // CAMBIO AQUÍ: Regla de requerido agregada
+                  required: "El RFC es obligatorio",
                   maxLength: { value: 13, message: "Máximo 13 caracteres" },
                   pattern: { value: rfcRegex, message: "RFC formato inválido (solo mayúsculas y números)" },
                   onChange: (e) => {
@@ -282,23 +286,27 @@ export const UserCreatePage = () => {
               {errors.rfc && <p className="text-xs font-medium text-red-500">{errors.rfc.message}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="idTelegram" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.idTelegram && "text-red-500")}>
-                <Send className="h-3.5 w-3.5" />
-                ID Telegram (Opcional)
-              </Label>
-              <Input 
-                id="idTelegram"
-                autoComplete="nope"
-                placeholder="Ej. 123456789"
-                className={cn("bg-muted/10", errors.idTelegram && "border-red-500 focus-visible:ring-red-500")}
-                {...register("idTelegram", {
-                  maxLength: { value: 20, message: "Máximo 20 caracteres" },
-                  pattern: { value: numericOnlyRegex, message: "ID de Telegram debe ser numérico" }
-                })}
-              />
-              {errors.idTelegram && <p className="text-xs font-medium text-red-500">{errors.idTelegram.message}</p>}
-            </div>
+            {/* --- SE MUESTRA SOLO SI ES COORDINADOR --- */}
+            {isCoordinador && (
+              <div className="space-y-2 animate-in fade-in zoom-in-95 duration-200">
+                <Label htmlFor="idTelegram" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.idTelegram && "text-red-500")}>
+                  <Send className="h-3.5 w-3.5" />
+                  ID Telegram <span className="text-red-500">*</span>
+                </Label>
+                <Input 
+                  id="idTelegram"
+                  autoComplete="nope"
+                  placeholder="Ej. 550e8400-e29b-41d4-a716-446655440000"
+                  className={cn("bg-muted/10", errors.idTelegram && "border-red-500 focus-visible:ring-red-500")}
+                  {...register("idTelegram", {
+                    required: "El ID de Telegram es obligatorio para Coordinadores",
+                    pattern: { value: uuidV4Regex, message: "Solo números" }
+                  })}
+                />
+                {errors.idTelegram && <p className="text-xs font-medium text-red-500">{errors.idTelegram.message}</p>}
+              </div>
+            )}
+
           </div>
         </div>
 
@@ -307,6 +315,38 @@ export const UserCreatePage = () => {
           <h4 className="text-sm font-semibold text-foreground mb-4 border-l-2 border-primary pl-2">Asignación</h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             
+            {/* Rol (Lo moví al principio para que sea lo primero que elijan y detone los otros campos) */}
+            <div className="space-y-2">
+              <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.roleId && "text-red-500")}>
+                Rol en el Sistema <span className="text-red-500">*</span>
+              </Label>
+              {isLoadingRoles ? (
+                <Skeleton className="h-10 w-full rounded-md bg-muted/50" />
+              ) : (
+                <Controller
+                  control={control}
+                  name="roleId"
+                  rules={{ required: "Selecciona un rol" }}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value || undefined}>
+                      <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.roleId && "border-red-500")}>
+                        <SelectValue placeholder="Selecciona un rol" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Roles del Sistema</SelectLabel>
+                          {roles?.map(role =>(
+                            <SelectItem key={role.id} value={role.id}>{role.name}</SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              )}
+              {errors.roleId && <p className="text-xs font-medium text-red-500">{errors.roleId.message}</p>}
+            </div>
+
             {/* Departamento */}
             <div className="space-y-2">
               <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.departmentId && "text-red-500")}>
@@ -339,68 +379,39 @@ export const UserCreatePage = () => {
               {errors.departmentId && <p className="text-xs font-medium text-red-500">{errors.departmentId.message}</p>}
             </div>
 
-            {/* Coordinación */}
-            <div className="space-y-2">
-              <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.coordinationId && "text-red-500")}>
-                Coordinación (Opcional)
-              </Label>
-              {isLoadingCoordinations ? (
-                <Skeleton className="h-10 w-full rounded-md bg-muted/50" />
-              ) : (
-                <Controller
-                  control={control}
-                  name="coordinationId"
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value || undefined}>
-                      <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.coordinationId && "border-red-500")}>
-                        <SelectValue placeholder="Selecciona una coordinación" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Coordinaciones Disponibles</SelectLabel>
-                          {coordinations?.map(coord =>(
-                            <SelectItem key={coord.id} value={coord.id}>{coord.name}</SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-              )}
-              {errors.coordinationId && <p className="text-xs font-medium text-red-500">{errors.coordinationId.message}</p>}
-            </div>
-
-            {/* Rol */}
-            <div className="space-y-2">
-              <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.roleId && "text-red-500")}>
-                Rol en el Sistema <span className="text-red-500">*</span>
-              </Label>
-              {isLoadingRoles ? (
-                <Skeleton className="h-10 w-full rounded-md bg-muted/50" />
-              ) : (
-                <Controller
-                  control={control}
-                  name="roleId"
-                  rules={{ required: "Selecciona un rol" }}
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value || undefined}>
-                      <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.roleId && "border-red-500")}>
-                        <SelectValue placeholder="Selecciona un rol" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Roles del Sistema</SelectLabel>
-                          {roles?.map(role =>(
-                            <SelectItem key={role.id} value={role.id}>{role.name}</SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-              )}
-              {errors.roleId && <p className="text-xs font-medium text-red-500">{errors.roleId.message}</p>}
-            </div>
+            {/* --- SE MUESTRA SOLO SI ES COORDINADOR --- */}
+            {isCoordinador && (
+              <div className="space-y-2 animate-in fade-in zoom-in-95 duration-200">
+                <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.coordinationId && "text-red-500")}>
+                  Coordinación <span className="text-red-500">*</span>
+                </Label>
+                {isLoadingCoordinations ? (
+                  <Skeleton className="h-10 w-full rounded-md bg-muted/50" />
+                ) : (
+                  <Controller
+                    control={control}
+                    name="coordinationId"
+                    rules={{ required: "Selecciona una coordinación para este rol" }}
+                    render={({ field }) => (
+                      <Select onValueChange={field.onChange} value={field.value || undefined}>
+                        <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.coordinationId && "border-red-500")}>
+                          <SelectValue placeholder="Selecciona una coordinación" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Coordinaciones Disponibles</SelectLabel>
+                            {coordinations?.coordinations?.map(coord =>(
+                              <SelectItem key={coord.id} value={coord.id}>{coord.name}</SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                )}
+                {errors.coordinationId && <p className="text-xs font-medium text-red-500">{errors.coordinationId.message}</p>}
+              </div>
+            )}
 
           </div>
         </div>
