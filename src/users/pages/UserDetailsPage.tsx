@@ -31,7 +31,7 @@ export const UserDetailsPage = () => {
   if (isError || !user) {
     sileo.error({
       title: "Error al cargar el usuario",
-      description: `El usuario no existe o hubo un problema de conexión.`,
+      description: `El usuario no existe`,
       duration: 9500,
     });
     navigate('/user');

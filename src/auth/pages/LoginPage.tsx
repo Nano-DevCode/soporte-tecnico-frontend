@@ -28,7 +28,6 @@ export const LoginPage = () => {
     defaultValues: { email: '', password: '' }
   });
 
-  // Regex estricta del backend (minúscula, mayúscula y número/símbolo)
   const passwordRegex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 
   const handleLogin = async (data: Inputs) => {
@@ -61,12 +60,10 @@ export const LoginPage = () => {
                 <p className="text-sm text-muted-foreground">{t("login_page_welcom")}</p>
               </div>
 
-              {/* Mensaje de Error Unificado (Backend o Validación Manual) */}
               {(errorMsg || errors.email || errors.password) && (
                 <Alert variant="destructive" className="py-3 animate-in fade-in zoom-in duration-300">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription className="text-xs font-medium">
-                    {/* Mensaje genérico para no dar pistas al usuario/atacante */}
                     {errors.email || errors.password 
                       ? t("login_page_invalid_credentials") 
                       : errorMsg}
@@ -127,13 +124,14 @@ export const LoginPage = () => {
             </div>
           </form>
 
-          <div className="relative hidden bg-muted md:block">
+          <div className="relative hidden md:flex md:items-center md:justify-center p-12 lg:p-16 bg-transparent">
             <img
               src={LogoIto}
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              alt="Logo"
+              className="w-full max-w-[280px] h-auto object-contain transition-transform hover:scale-105 duration-500 mix-blend-multiply dark:mix-blend-plus-lighter"
             />
           </div>
+
         </CardContent>
       </Card>
 

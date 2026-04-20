@@ -1,20 +1,23 @@
+import { useState, useCallback, useMemo } from "react";
+import { Users, AlertTriangle, ArrowUpCircle, Plus } from "lucide-react";
+import { Link } from "react-router";
+
+import { CustomDepartmentDesktopTable } from "../components/CustomDepartmentDesktopTable";
+import { CustomDepartmentMobileCard } from "../components/CustomDepartmentMobileCard";
+import { CustomDepartmentFilters } from "../components/CustomDepartmentFilters";
+import { useDepartments } from "../hooks/useDepartments";
+import type { Department } from "../interfaces/department.interface";
+
 import { CustomDialogConfirm } from "@/components/custom/CustomDialogCorfirm";
 import { CustomPagination } from "@/components/custom/CustomPagination";
 import { CustomSkeletonTableCard } from "@/components/custom/CustomSkeletonTableCard";
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, ArrowUpCircle, Plus, Users } from "lucide-react";
-import { useState, useCallback, useMemo } from "react";
-import { Link } from "react-router";
-import type { Department } from "../interfaces/department.interface";
-import { useDepartments } from "../hooks/useDepartments";
-import { CustomDepartmentDesktopTable } from "../components/CustomDepartmentDesktopTable";
 import { cn } from "@/lib/utils";
-import { CustomDepartmentFilters } from "../components/CustomDepartmentFilters";
-import { CustomDepartmentMobileCard } from "../components/CustomDepartmentMobileCard";
 
 export const DepartmentPage = () => {
   const { departments, meta, isLoading: skelettonLoading, isUpdating, changeStatus } = useDepartments();
+  
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [departmentSelect, setDepartmentSeleccionado] = useState<Department | null>(null);
 
@@ -73,18 +76,22 @@ export const DepartmentPage = () => {
 
   return (
     <div className="space-y-6">
-
+      {/* Page header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        
+        {/* Lado izquierdo */}
         <CustomTitleCard icon={Users} title="Gestión de Departamentos" description="Administra los departamentos del sistema"/>
-        <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800" asChild>
-          <Link to="/department/create">
+        
+        {/* Botón */}
+        <Link to="/department/create">
+          <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
             <Plus className="mr-2 h-4 w-4" />
             Crear Departamento
-          </Link>
-        </Button>
+          </Button>
+        </Link>
+
       </div>
       
-      {/* Custom Dialog para cambiar el estatus del departamento */}
       <CustomDialogConfirm
         open={statusDialogOpen}
         isLoading={isUpdating}
@@ -98,25 +105,20 @@ export const DepartmentPage = () => {
         cancelText="Cancelar"
       />
 
-      {/* Filtro personalizado para departamentos */}
       <CustomDepartmentFilters/>
 
-      {/* Tabla de departamentos en PC y Cards para Mobile con skeletton*/}
       {skelettonLoading ? (
         <CustomSkeletonTableCard/>
       ) : (
         <>
-          {/* Version PC */}
           <CustomDepartmentDesktopTable
             departments={departments}
             handleDownClick={handleDownClick}
           />
-          {/* Version Mobile */}
           <CustomDepartmentMobileCard 
             departments={departments} 
             handleDownClick={handleDownClick} 
           />
-
           <CustomPagination totalPages={meta?.lastPage ?? 0} />
         </>
       )}

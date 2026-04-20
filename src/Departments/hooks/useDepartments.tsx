@@ -36,13 +36,17 @@ export const useDepartments = () => {
   });
 
   return {
+    // Datos procesados
     departments: departmentsQuery.data?.departments ?? [],
     meta: departmentsQuery.data?.meta,
+
+    // Estados de carga
     isLoading: departmentsQuery.isLoading,
     isFetching: departmentsQuery.isFetching,
     error: departmentsQuery.error,
     refetch: departmentsQuery.refetch,
 
+    // Acciones de mutación
     changeStatus: statusMutation.mutateAsync,
     isUpdating: statusMutation.isPending,
   };

@@ -2,17 +2,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Edit2, Eye, MoreVertical, Power, Trash2 } from "lucide-react"
 import { Link } from "react-router"
-
-export interface User {
-  id: number;
-  correo: string;
-  nombre: string;
-  primerApellido: string;
-  segundoApellido: string;
-  rol: string;
-  avatar: string;
-  estado: 0 | 1;
-}
+import type { User } from "./CustomTableSolicitudDepartamento";
 
 interface Props {
   handleBajaClick: (user: User) => void;

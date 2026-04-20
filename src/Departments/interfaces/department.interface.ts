@@ -2,9 +2,10 @@ export interface DepartmentResponse {
   data: Department[];
   meta: Meta;
 }
+export type DepartmentResponseAll = Department[];
 
 export interface Department {
-  id?: string;
+  id: string;
   name: string;
   priority: number;
   status?: boolean;

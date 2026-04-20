@@ -1,5 +1,5 @@
-import type { Department } from "./department";
-import type { Rol } from "./roles.response";
+import type { Department } from "@/Departments/interfaces/department.interface";
+import type { Role } from "./roles.response";
 
 export interface UserResponse {
     users: User[];
@@ -18,7 +18,7 @@ export interface User {
     email:  string;
     password: string;
     status: boolean;
-    role:   Rol;
+    role:   Role;
     staff:  Staff;
     createdAt?: Date;
     updatedAt?: Date;
@@ -38,9 +38,8 @@ export interface Staff {
     updatedAt?: Date;
 }
 
-export interface CoordinationResponse {
-    coordinations: Coordination[];
-}
+export type CoordinationResponse = Coordination[];
+
 
 export interface Coordination {
     id:   string;

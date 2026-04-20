@@ -1,6 +1,6 @@
-export interface Rol {
+export interface Role {
     id:   string;
     name: string;
 }
 
-export type RolResponse = Rol[];
+export type RolesResponse = Role[];

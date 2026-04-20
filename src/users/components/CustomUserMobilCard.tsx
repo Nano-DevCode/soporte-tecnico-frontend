@@ -8,11 +8,11 @@ import type { User } from "../interfaces/users.response";
 
 interface Props {
   users: User[];
-  handleBajaClick: (user: User) => void;
-  handleEliminarClick: (user: User) => void;
+  // Reemplazamos los dos métodos anteriores por el único necesario para el status
+  handleStatusClick: (user: User) => void;
 }
 
-export const CustomUserMobilCard = ({users, handleBajaClick, handleEliminarClick}: Props) => {
+export const CustomUserMobilCard = ({users, handleStatusClick}: Props) => {
   return (
     <div className="md:hidden space-y-3">
       {users.map((user) => (
@@ -37,12 +37,12 @@ export const CustomUserMobilCard = ({users, handleBajaClick, handleEliminarClick
               </span>
             </div>
 
-            {/* Nombre Completo - Ahora baja si es muy largo */}
+            {/* Nombre Completo */}
             <p className="text-sm font-bold text-foreground leading-snug whitespace-normal break-words">
               {getFullName(user.staff.name, user.staff.paternalSurname, user.staff.maternalSurname)}
             </p>
 
-            {/* Email - Usa break-all por si el dominio es muy largo */}
+            {/* Email */}
             <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
               <Mail className="h-3.5 w-3.5 shrink-0 mt-0.5" />
               <span className="whitespace-normal break-all leading-relaxed">
@@ -65,8 +65,8 @@ export const CustomUserMobilCard = ({users, handleBajaClick, handleEliminarClick
                 className={cn(
                   "font-semibold text-[10px] px-2 py-0 rounded-full border-none", 
                   user.status === true 
-                    ? "bg-emerald-100 text-emerald-700" 
-                    : "bg-red-100 text-red-600"
+                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400" 
+                    : "bg-red-100 text-red-600 dark:bg-red-950/50 dark:text-red-400"
                 )}
               >
                 {user.status === true ? 'Activo' : 'Inactivo'}
@@ -77,13 +77,14 @@ export const CustomUserMobilCard = ({users, handleBajaClick, handleEliminarClick
           <div className="shrink-0">
             <CustomUserActionsMenu 
               user={user} 
-              handleBajaClick={handleBajaClick} 
-              handleEliminarClick={handleEliminarClick}
+              // Pasamos únicamente el handler para cambiar el estado
+              handleStatusClick={handleStatusClick} 
             />
           </div>
         </div>
       ))}
 
+      {/* EMPTY STATE */}
       {users.length === 0 && (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card py-16">
           <Users className="h-10 w-10 text-muted-foreground/40" />

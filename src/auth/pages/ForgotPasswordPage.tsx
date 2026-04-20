@@ -38,13 +38,13 @@ export const ForgotPasswordPage = () => {
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto">
-      <Card className="overflow-hidden border-none shadow-lg">
+      <Card className="overflow-hidden border-none shadow-lg bg-card">
         <CardContent className="grid p-0 md:grid-cols-2">
           
-          <form className="p-8 md:p-12 bg-white" onSubmit={handleSubmit(handleResetPassword)}>
+          <form className="p-8 md:p-12" onSubmit={handleSubmit(handleResetPassword)}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center gap-2">
-                <h1 className="text-3xl font-bold tracking-tight text-slate-950">
+                <h1 className="text-3xl font-bold tracking-tight">
                   {t("login_page_recop_password")}
                 </h1>
                 <p className="text-sm text-muted-foreground text-balance">
@@ -52,18 +52,20 @@ export const ForgotPasswordPage = () => {
                 </p>
               </div>
 
+              {/* Mensaje de error */}
               {error && (
-                <Alert variant="destructive" className="py-3 animate-in fade-in zoom-in duration-300">
-                  <AlertCircle className="h-4 w-4" />
+                <Alert className="py-3 border-red-200 bg-red-50 text-red-800 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400 animate-in fade-in zoom-in duration-300">
+                  <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-500" />
                   <AlertDescription className="text-xs font-medium">
                     {apiErrorMsg || t("error_server")}
                   </AlertDescription>
                 </Alert>
               )}
 
+              {/* Mensaje de exito */}
               {isSuccess && (
-                <Alert className="py-3 border-green-500 bg-green-50 text-green-700 animate-in fade-in zoom-in duration-300">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <Alert className="py-3 border-green-200 bg-green-50 text-green-800 dark:bg-green-500/10 dark:border-green-500/20 dark:text-green-400 animate-in fade-in zoom-in duration-300">
+                  <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-500" />
                   <AlertDescription className="text-xs font-medium">
                     {t("forget_password_success")}
                   </AlertDescription>
@@ -72,12 +74,11 @@ export const ForgotPasswordPage = () => {
 
               <div className="grid gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="email" className="text-slate-900">{t("email")}</Label>
+                  <Label htmlFor="email">{t("email")}</Label>
                   <Input 
                     id="email" 
                     type="email" 
                     placeholder="tu-correo@itoaxaca.edu.mx" 
-
                     {...register("email", {
                       onChange: () => { if(error || isSuccess) reset() },
                       required: t("requerid_email"),
@@ -86,7 +87,7 @@ export const ForgotPasswordPage = () => {
                         message: t("requerid_email_format")
                       }
                     })}
-                    className={`h-11 ${errors.email ? "border-destructive focus-visible:ring-destructive" : "border-slate-200"}`}
+                    className={`h-11 ${errors.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   />
                   {errors.email && (
                     <span className="text-[11px] text-destructive font-semibold tracking-wide mt-1 uppercase">
@@ -123,20 +124,22 @@ export const ForgotPasswordPage = () => {
             </div>
           </form>
           
-          <div className="relative hidden bg-muted md:block">
+
+          <div className="relative hidden md:flex md:items-center md:justify-center p-12 lg:p-16">
             <img
               src={LogoIto} 
               alt="Centro de Cómputo"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="w-full max-w-[280px] h-auto object-contain transition-transform hover:scale-105 duration-500 mix-blend-multiply dark:mix-blend-plus-lighter"
             />
           </div>
+
         </CardContent>
       </Card>
 
       <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground pb-4">
         <span>{t("made_with")}</span>
         <Heart className="h-3.5 w-3.5 fill-red-500 text-red-500 animate-pulse" />
-        <span className="font-medium text-slate-600">{t("by_made_center_computer_department")}</span>
+        <span className="font-medium">{t("by_made_center_computer_department")}</span>
       </div>
     </div>
   );

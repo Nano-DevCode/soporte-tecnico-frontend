@@ -1,95 +1,126 @@
-import { useState } from "react";
-import { Users, Heart, Plus} from "lucide-react";
-import { CustomUserMobilCard } from "../components/CustomUserMobilCard";
+import { useState, useCallback, useMemo } from "react";
+import { Users, Plus, AlertTriangle, ArrowUpCircle } from "lucide-react";
+import { Link } from "react-router";
+
 import { CustomUserDesktopTable } from "../components/CustomUserDesktopTable";
+import { CustomUserMobilCard } from "../components/CustomUserMobilCard";
+import { CustomUserFilters } from "../components/CustomUserFilters";
+import { useUsers } from "../hooks/useUsers";
+import type { User } from "../interfaces/users.response";
+import { getFullName } from "../util/extraUtil";
+
 import { CustomDialogConfirm } from "@/components/custom/CustomDialogCorfirm";
 import { CustomPagination } from "@/components/custom/CustomPagination";
-import { useUsers } from "../hooks/useUsers";
 import { CustomSkeletonTableCard } from "@/components/custom/CustomSkeletonTableCard";
-import { CustomUserFilters } from "../components/CustomUserFilters";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
-import type { User } from "../interfaces/users.response";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-export function UserPage() {
-  const { data, isLoading: skelettonLoading } = useUsers();
+export const UserPage = () => {
+  // Desestructuramos usando el mismo patrón limpio que en useDepartments
+  const { users = [], meta, isLoading: skelettonLoading, isUpdating, changeStatus } = useUsers();
 
-  const [bajaDialogOpen, setBajaDialogOpen] = useState(false);
-  const [eliminarDialogOpen, setEliminarDialogOpen] = useState(false);
+  const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [userSeleccionado, setUserSeleccionado] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleBajaClick = (user: User) => {
+  const handleStatusClick = useCallback((user: User) => {
     setUserSeleccionado(user);
-    setBajaDialogOpen(true);
-  };
+    setStatusDialogOpen(true);
+  }, []);
 
-  const handleEliminarClick = (user: User) => {
-    setUserSeleccionado(user);
-    setEliminarDialogOpen(true);
-  };
+  const handleStatusConfirm = async () => {
+    if (!userSeleccionado) return;
 
-  const handleConfirmarBaja = async () => {
-    setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setBajaDialogOpen(false);
+      // Ejecutamos la mutación real a través del hook
+      await changeStatus({ 
+        id: userSeleccionado.id || "", 
+        status: !userSeleccionado.status 
+      });
+      setStatusDialogOpen(false);
     } catch (error) {
-      console.error("Error al dar de baja:", error);
-    } finally {
-      setIsLoading(false);
+      console.error("Error al actualizar el estado del usuario:", error);
     }
   };
 
-  const handleConfirmarEliminar = async () => {
-    setIsLoading(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setEliminarDialogOpen(false);
-    } catch (error) {
-      console.error("Error al eliminar:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const dialogDescription = useMemo(() => {
+    if (!userSeleccionado) return null;
+
+    const fullName = getFullName(
+      userSeleccionado.staff.name, 
+      userSeleccionado.staff.paternalSurname, 
+      userSeleccionado.staff.maternalSurname
+    );
+
+    return (
+      <div className="space-y-2">
+        <div className={cn(
+          "rounded-lg p-3 border",
+          userSeleccionado.status 
+            ? "bg-red-50 dark:bg-red-950/30 border-red-100 dark:border-red-900/50" 
+            : "bg-blue-50 dark:bg-blue-950/30 border-blue-100 dark:border-blue-900/50"
+        )}>
+          <p className={cn(
+            "font-bold text-lg",
+            userSeleccionado.status ? "text-red-700 dark:text-red-400" : "text-blue-700 dark:text-blue-400"
+          )}>
+            {fullName}
+          </p>
+          <div className="flex flex-col gap-0.5 mt-1">
+            <span className={cn(
+              "text-[10px] font-mono",
+              userSeleccionado.status ? "text-red-600/70 dark:text-red-400/50" : "text-blue-600/70 dark:text-blue-400/50"
+            )}>
+              No. Control: {userSeleccionado.staff.num_control}
+            </span>
+            <span className={cn(
+              "text-[11px] font-medium",
+              userSeleccionado.status ? "text-red-600/80 dark:text-red-400/70" : "text-blue-600/80 dark:text-blue-400/70"
+            )}>
+              {userSeleccionado.email}
+            </span>
+          </div>
+        </div>
+
+        <p className="text-sm italic pt-1 text-muted-foreground">
+          {userSeleccionado.status 
+            ? "Esta acción deshabilitará el acceso del usuario al sistema."
+            : "Esta acción restaurará el acceso del usuario al sistema."}
+        </p>
+      </div>
+    );
+  }, [userSeleccionado]);
 
   return (
     <div className="space-y-6">
       {/* Page header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-
-      {/* Lado izquierdo */}
+        
+        {/* Lado izquierdo */}
         <CustomTitleCard icon={Users} title="Gestión de Usuarios" description="Administra los usuarios del sistema"/>
 
         {/* Botón */}
         <Link to="/user/new">
-          <Button className="w-full sm:w-auto bg-blue-700">
+          <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
             <Plus className="mr-2 h-4 w-4" />
             Crear Usuario
           </Button>
         </Link>
-
+        
       </div>
 
+      {/* Custom Dialog para cambiar el estatus del usuario */}
       <CustomDialogConfirm
-        open={bajaDialogOpen}
-        isLoading={isLoading}
-        title="Estas seguro de dar de baja al usuario"
-        description="Este cambio pasara al usaurio a un estado que no permitira realizar operaciones"
-        icon={Heart}
-        onConfirm={handleConfirmarBaja}
-        onOpenChange={setBajaDialogOpen}
-      />
-
-      <CustomDialogConfirm
-        open={eliminarDialogOpen}
-        isLoading={isLoading}
-        title="Se eliminara de forma permanete al usuario"
-        description={`${userSeleccionado?.staff.name}`}
-        icon={Heart}
-        onConfirm={handleConfirmarEliminar}
-        onOpenChange={setEliminarDialogOpen}
+        open={statusDialogOpen}
+        isLoading={isUpdating}
+        variant={userSeleccionado?.status ? "danger" : "primary"}
+        title={userSeleccionado?.status ? "Confirmar baja del usuario" : "Confirmar alta del usuario"}
+        description={dialogDescription}
+        icon={userSeleccionado?.status ? AlertTriangle : ArrowUpCircle}
+        onConfirm={handleStatusConfirm}
+        onOpenChange={setStatusDialogOpen}
+        confirmText={userSeleccionado?.status ? "Sí, dar de baja" : "Sí, dar de alta"}
+        cancelText="Cancelar"
       />
 
       <CustomUserFilters/>
@@ -98,18 +129,15 @@ export function UserPage() {
         <CustomSkeletonTableCard/>
       ) : (
         <>
-
           <CustomUserDesktopTable
-            users={data?.users ?? []}
-            handleBajaClick={handleBajaClick}
-            handleEliminarClick={handleEliminarClick}
+            users={users}
+            handleStatusClick={handleStatusClick} 
           />
           <CustomUserMobilCard
-            users={data?.users ?? []}
-            handleBajaClick={handleBajaClick}
-            handleEliminarClick={handleEliminarClick}
+            users={users}
+            handleStatusClick={handleStatusClick} 
           />
-          <CustomPagination totalPages={data?.meta.lastPage ?? 0} />
+          <CustomPagination totalPages={meta?.lastPage ?? 0} />
         </>
       )}
     </div>

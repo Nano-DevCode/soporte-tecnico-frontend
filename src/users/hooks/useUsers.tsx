@@ -1,27 +1,57 @@
-import { useQuery } from "@tanstack/react-query"
-import { getUsersActions } from "../actions/get-users.action"
-import { useSearchParams } from "react-router"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "react-router";
+import { getUsersActions } from "../actions/get-users.action";
+import { setStatusUserAction } from "../actions/set-status-user.action";
+import type { UserResponse } from "../interfaces/users.response";
 
 export const useUsers = () => {
-
   const [searchParams] = useSearchParams();
+  const queryClient = useQueryClient();
 
-  const limit = searchParams.get('limit') || 10;
-  const page = searchParams.get('page') || 1;
-  const offset = (Number(page) - 1) * Number(limit);
+  const limit = Number(searchParams.get('limit')) || 10;
+  const page = Number(searchParams.get('page')) || 1;
+  const offset = (page - 1) * limit;
+  
   const departmentId = searchParams.get('dept') || undefined;
-  const status = searchParams.get('status') || undefined; 
   const query = searchParams.get("search")?.trim() || undefined; 
 
-  return useQuery({
-    queryKey: ['users',{limit, offset, departmentId, status, query }],
-    queryFn: async() => getUsersActions({
-      limit,
-      offset,
-      departmentId,
-      status,
-      query,
-    }),
+  const status = searchParams.get('status') || undefined;
+
+  const usersQuery = useQuery({
+    queryKey: ['users', { limit, offset, departmentId, status, query }],
+    queryFn: () => getUsersActions({ limit, offset, departmentId, status, query }),
     staleTime: 1000 * 60 * 5,
-  })
-}
+    select: (response: UserResponse) => ({
+      users: response.users, 
+      meta: response.meta,
+    }),
+  });
+
+  // 3. Mutación para cambiar el estado (Alta/Baja)
+  const statusMutation = useMutation({
+    mutationFn: setStatusUserAction,
+    onSuccess: () => {
+      // Invalidamos la cache para que la tabla se refresque automáticamente
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+    onError: (error) => {
+      console.error("Error al cambiar el estado del usuario:", error);
+    }
+  });
+
+  return {
+    // Datos procesados
+    users: usersQuery.data?.users ?? [],
+    meta: usersQuery.data?.meta,
+    
+    // Estados de carga
+    isLoading: usersQuery.isLoading,
+    isFetching: usersQuery.isFetching,
+    error: usersQuery.error,
+    refetch: usersQuery.refetch,
+
+    // Acciones de mutación
+    changeStatus: statusMutation.mutateAsync,
+    isUpdating: statusMutation.isPending,
+  };
+};
