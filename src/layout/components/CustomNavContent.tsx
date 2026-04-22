@@ -71,11 +71,11 @@ export const CustomNavContent = memo(() => {
             <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
               
               <Link to='/user'  className={getItemClass(pathname.startsWith("/user"))}>
-                <List className="h-4 w-4"/> {t("list_users")}
+                <List className="h-4 w-4"/> {t("custom_nav_content_users")}
               </Link>
 
               <Link to='/department'  className={getItemClass(pathname.startsWith("/department"))}>
-                <List className="h-4 w-4"/> Lista de Departamentos
+                <List className="h-4 w-4"/> {t("custom_nav_content_depatment")}
               </Link>
               
             </div>

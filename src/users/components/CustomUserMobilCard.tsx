@@ -5,6 +5,7 @@ import { CustomUserActionsMenu } from "./CustomUserActionsMenu";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { User } from "../interfaces/users.response";
+import { t } from "i18next";
 
 interface Props {
   users: User[];
@@ -69,7 +70,7 @@ export const CustomUserMobilCard = ({users, handleStatusClick}: Props) => {
                     : "bg-red-100 text-red-600 dark:bg-red-950/50 dark:text-red-400"
                 )}
               >
-                {user.status === true ? 'Activo' : 'Inactivo'}
+                {user.status === true ? t("active") : t("inactive")}
               </Badge>
             </div>
           </div>

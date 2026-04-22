@@ -12,6 +12,7 @@ import { alphanumericRegex, lettersOnlyRegex, passwordRegex, rfcRegex } from "..
 import type { Coordination, CoordinationResponse, User } from "../interfaces/users.response";
 import type { Role, RolesResponse } from "../interfaces/roles.response";
 import type { Department, DepartmentResponseAll } from "@/Departments/interfaces/department.interface";
+import { t } from "i18next";
 
 interface CustomUserFormProps {
   mode: "create" | "edit";
@@ -82,10 +83,10 @@ export const CustomUserForm = ({
           </div>
           <div className="space-y-1">
             <h3 className="text-xl font-bold text-foreground leading-none">
-              {isEditMode ? "Editar Usuario" : "Nuevo Usuario"}
+              {isEditMode ? t("custom_user_form_edit_user") : t("custmo_user_form_new_user")}
             </h3>
             <p className="text-sm font-medium text-muted-foreground">
-              {isEditMode ? "Actualiza los datos del empleado y sus credenciales" : "Ingresa los datos del empleado y sus credenciales"}
+              {isEditMode ? t("custom_user_form_edit_user_description") : t("custom_user_form_new_user_description")}
             </p>
           </div>
         </div>
@@ -93,54 +94,55 @@ export const CustomUserForm = ({
 
       {/* --- DATOS PERSONALES --- */}
       <div className="pt-6">
-        <h4 className="text-sm font-semibold text-foreground mb-4 border-l-2 border-primary pl-2">Datos Personales</h4>
+        <h4 className="text-sm font-semibold text-foreground mb-4 border-l-2 border-primary pl-2">{t("custom_user_form_personal_data")}</h4>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div className="space-y-2">
             <Label htmlFor="name" className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.name && "text-red-500")}>
-              Nombres <span className="text-red-500">*</span>
+              {t("custom_user_form_names")}
+              <span className="text-red-500">*</span>
             </Label>
-            <Input id="name" autoComplete="nope" className={cn("bg-muted/10", errors.name && "border-red-500")} {...register("name", { required: "Requerido", pattern: { value: lettersOnlyRegex, message: "Solo letras" } })} />
+            <Input id="name" autoComplete="nope" className={cn("bg-muted/10", errors.name && "border-red-500")} {...register("name", { required: t("custom_user_form_name_required"), pattern: { value: lettersOnlyRegex, message: t("custom_user_form_name_error") } })} />
             {errors.name && <p className="text-xs font-medium text-red-500">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="paternalSurname" className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.paternalSurname && "text-red-500")}>
-              Primer Apellido <span className="text-red-500">*</span>
+              {t("custom_user_form_first_last_name")} <span className="text-red-500">*</span>
             </Label>
-            <Input id="paternalSurname" autoComplete="nope" className={cn("bg-muted/10", errors.paternalSurname && "border-red-500")} {...register("paternalSurname", { required: "Requerido", pattern: { value: lettersOnlyRegex, message: "Solo letras" } })} />
+            <Input id="paternalSurname" autoComplete="nope" className={cn("bg-muted/10", errors.paternalSurname && "border-red-500")} {...register("paternalSurname", { required: t("custom_user_form_first_last_name_required"), pattern: { value: lettersOnlyRegex, message: t("custom_user_form_first_last_name_error") } })} />
             {errors.paternalSurname && <p className="text-xs font-medium text-red-500">{errors.paternalSurname.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="maternalSurname" className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.maternalSurname && "text-red-500")}>
-              Segundo Apellido <span className="text-red-500">*</span>
+              {t("custom_user_form_second_last_name")} <span className="text-red-500">*</span>
             </Label>
-            <Input id="maternalSurname" autoComplete="nope" className={cn("bg-muted/10", errors.maternalSurname && "border-red-500")} {...register("maternalSurname", { required: "Requerido", pattern: { value: lettersOnlyRegex, message: "Solo letras" } })} />
+            <Input id="maternalSurname" autoComplete="nope" className={cn("bg-muted/10", errors.maternalSurname && "border-red-500")} {...register("maternalSurname", { required: t("custom_user_form_second_last_name_required"), pattern: { value: lettersOnlyRegex, message: t("custom_user_form_second_last_name_error") } })} />
             {errors.maternalSurname && <p className="text-xs font-medium text-red-500">{errors.maternalSurname.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="num_control" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.num_control && "text-red-500")}>
-              <Hash className="h-3.5 w-3.5" /> Num. Control / Nómina <span className="text-red-500">*</span>
+              <Hash className="h-3.5 w-3.5" /> {t("custom_user_form_n_control")} <span className="text-red-500">*</span>
             </Label>
-            <Input id="num_control" autoComplete="nope" className={cn("bg-muted/10", errors.num_control && "border-red-500")} {...register("num_control", { required: "Requerido", pattern: { value: alphanumericRegex, message: "Sin caracteres especiales" } })} />
+            <Input id="num_control" autoComplete="nope" className={cn("bg-muted/10", errors.num_control && "border-red-500")} {...register("num_control", { required: t("custom_user_form_n_control_required"), pattern: { value: alphanumericRegex, message: t("custom_user_form_n_control_error") } })} />
             {errors.num_control && <p className="text-xs font-medium text-red-500">{errors.num_control.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="rfc" className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.rfc && "text-red-500")}>
-              RFC <span className="text-red-500">*</span>
+              {t("custom_user_form_rfc")} <span className="text-red-500">*</span>
             </Label>
-            <Input id="rfc" autoComplete="nope" className={cn("bg-muted/10 uppercase", errors.rfc && "border-red-500")} {...register("rfc", { required: "Obligatorio", pattern: { value: rfcRegex, message: "RFC inválido" }, onChange: (e) => e.target.value = e.target.value.toUpperCase() })} />
+            <Input id="rfc" autoComplete="nope" className={cn("bg-muted/10 uppercase", errors.rfc && "border-red-500")} {...register("rfc", { required: t("custom_user_form_rfc_required"), pattern: { value: rfcRegex, message: t("custom_user_form_rfc_error") }, onChange: (e) => e.target.value = e.target.value.toUpperCase() })} />
             {errors.rfc && <p className="text-xs font-medium text-red-500">{errors.rfc.message}</p>}
           </div>
 
           {isCoordinador && (
             <div className="space-y-2 animate-in fade-in zoom-in-95 duration-200">
               <Label htmlFor="idTelegram" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.idTelegram && "text-red-500")}>
-                <Send className="h-3.5 w-3.5" /> ID Telegram <span className="text-red-500">*</span>
+                <Send className="h-3.5 w-3.5" /> {t("custom_user_form_id_telegram")} <span className="text-red-500">*</span>
               </Label>
-              <Input id="idTelegram" autoComplete="nope" className={cn("bg-muted/10", errors.idTelegram && "border-red-500")} {...register("idTelegram", { required: "Obligatorio para Coordinadores", pattern: { value: alphanumericRegex, message: "Formato incorrecto" } })} />
+              <Input id="idTelegram" autoComplete="nope" className={cn("bg-muted/10", errors.idTelegram && "border-red-500")} {...register("idTelegram", { required: t("custom_user_form_id_telegram_required"), pattern: { value: alphanumericRegex, message: t("custom_user_form_id_telegram_error") } })} />
               {errors.idTelegram && <p className="text-xs font-medium text-red-500">{errors.idTelegram.message}</p>}
             </div>
           )}
@@ -153,15 +155,15 @@ export const CustomUserForm = ({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           
           <div className="space-y-2">
-            <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.roleId && "text-red-500")}>Rol en el Sistema <span className="text-red-500">*</span></Label>
+            <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.roleId && "text-red-500")}> {t("custom_user_form_role")} <span className="text-red-500">*</span></Label>
             <Controller
               control={control}
               name="roleId"
-              rules={{ required: "Selecciona un rol" }}
+              rules={{ required: t("custom_user_form_role_required") }}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                   <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.roleId && "border-red-500")}>
-                    <SelectValue placeholder="Selecciona un rol" />
+                    <SelectValue placeholder={t("custom_user_form_role_placeholder")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -175,15 +177,15 @@ export const CustomUserForm = ({
           </div>
 
           <div className="space-y-2">
-            <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.departmentId && "text-red-500")}>Departamento <span className="text-red-500">*</span></Label>
+            <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.departmentId && "text-red-500")}> {t("custom_user_form_department")} <span className="text-red-500">*</span></Label>
             <Controller
               control={control}
               name="departmentId"
-              rules={{ required: "Selecciona un departamento" }}
+              rules={{ required: t("custom_user_form_department_required") }}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                   <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.departmentId && "border-red-500")}>
-                    <SelectValue placeholder="Selecciona un departamento" />
+                    <SelectValue placeholder={t("custom_user_form_department_placeholder")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -198,15 +200,15 @@ export const CustomUserForm = ({
 
           {isCoordinador && (
             <div className="space-y-2 animate-in fade-in zoom-in-95 duration-200">
-              <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.coordinationId && "text-red-500")}>Coordinación <span className="text-red-500">*</span></Label>
+              <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.coordinationId && "text-red-500")}> {t("custom_user_form_coordination")} <span className="text-red-500">*</span></Label>
               <Controller
                 control={control}
                 name="coordinationId"
-                rules={{ required: "Selecciona una coordinación" }}
+                rules={{ required: t("custom_user_form_coordination_required") }}
                 render={({ field }) => (
                   <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                     <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.coordinationId && "border-red-500")}>
-                      <SelectValue placeholder="Selecciona una coordinación" />
+                      <SelectValue placeholder={t("custom_user_form_coordination_placeholder")} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
@@ -228,27 +230,27 @@ export const CustomUserForm = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="space-y-2">
             <Label htmlFor="email" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.email && "text-red-500")}>
-              <Mail className="h-3.5 w-3.5" /> Correo Electrónico <span className="text-red-500">*</span>
+              <Mail className="h-3.5 w-3.5" /> {t("custom_user_form_email")} <span className="text-red-500">*</span>
             </Label>
-            <Input id="email" type="email" autoComplete="nope" className={cn("bg-muted/10", errors.email && "border-red-500")} {...register("email", { required: "Obligatorio", pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Correo inválido" } })} />
+            <Input id="email" type="email" autoComplete="nope" className={cn("bg-muted/10", errors.email && "border-red-500")} {...register("email", { required: t("custom_user_form_email_required"), pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: t("custom_user_form_email_error") } })} />
             {errors.email && <p className="text-xs font-medium text-red-500">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="password" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.password && "text-red-500")}>
-              <Lock className="h-3.5 w-3.5" /> {isEditMode ? "Nueva Contraseña" : "Contraseña"} {isEditMode ? "" : <span className="text-red-500">*</span>}
+              <Lock className="h-3.5 w-3.5" /> {isEditMode ? t("custom_user_form_password_new") : t("custom_user_form_password_edit")} {isEditMode ? "" : <span className="text-red-500">*</span>}
             </Label>
             <div className="relative">
               <Input 
                 id="password" 
                 type={showPassword ? "text" : "password"} 
                 autoComplete="new-password" 
-                placeholder={isEditMode ? "Dejar en blanco para conservar actual" : "Mínimo 8 caracteres"} 
+                placeholder={isEditMode ? t("custom_user_form_password_edit_placeholder") : t("custom_user_form_password_new_placeholder")} 
                 className={cn("pr-10 bg-muted/10", errors.password && "border-red-500")} 
                 {...register("password", { 
-                  required: isEditMode ? false : "Obligatorio para nuevos usuarios", // Requerido solo en Create
-                  minLength: { value: 8, message: "Mínimo 8" }, 
-                  pattern: { value: passwordRegex, message: "Muy débil" } 
+                  required: isEditMode ? false : t("custom_user_form_password_new_required"), // Requerido solo en Create
+                  minLength: { value: 8, message: t("custom_user_form_password_min_lenght") }, 
+                  pattern: { value: passwordRegex, message: t("custom_user_form_password_regex_error") } 
                 })} 
               />
               <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground" onClick={() => setShowPassword(!showPassword)}>
@@ -263,13 +265,13 @@ export const CustomUserForm = ({
       {/* --- BOTONES FINALES --- */}
       <div className="mt-8 flex flex-col sm:flex-row justify-end gap-3 border-t border-border pt-6">
         <Button type="button" variant="outline" onClick={() => navigate('/users')} className="w-full sm:w-auto" disabled={isMutating}>
-          <X className="mr-2 h-4 w-4" /> Cancelar
+          <X className="mr-2 h-4 w-4" /> {t("cancel")}
         </Button>
         <Button type="submit" className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 text-white" disabled={isMutating}>
           <Save className="mr-2 h-4 w-4" /> 
           {isMutating 
-            ? (isEditMode ? "Actualizando..." : "Creando...") 
-            : (isEditMode ? "Guardar Cambios" : "Crear Usuario")}
+            ? (isEditMode ? t("custom_user_form_editing") : t("custom_user_form_creating")) 
+            : (isEditMode ? t("custom_user_form_editing_save") : t("custom_user_form_creating_save"))}
         </Button>
       </div>
     </form>

@@ -5,6 +5,7 @@ import { FilterX, Search } from "lucide-react";
 import { useSearchParams } from "react-router";
 import { useDepartments } from "../hooks/useDepartment";
 import { useRef } from "react";
+import { t } from "i18next";
 
 export const CustomUserFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,7 +47,7 @@ export const CustomUserFilters = () => {
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />
         <Input
-          placeholder="Buscar usuario..."
+          placeholder={t("custom_user_filters_placeholder_searchs")}
           className="pl-9 h-10 bg-background/60"
           defaultValue={searchTerm}
           ref={inputRef}
@@ -62,7 +63,7 @@ export const CustomUserFilters = () => {
           </SelectTrigger>
           
           <SelectContent>
-            <SelectItem value="all">Todos los Deptos</SelectItem>
+            <SelectItem value="all">{t("custom_user_filters_all_departments")}</SelectItem>
 
             {
               departments?.map(department => (
@@ -75,12 +76,12 @@ export const CustomUserFilters = () => {
         {/* Filtro Estado */}
         <Select value={statusFilter} onValueChange={(v) => updateFilters("status", v)}>
           <SelectTrigger className="w-full sm:w-[130px] h-10 bg-background/60">
-            <SelectValue placeholder="Estado" />
+            <SelectValue placeholder={t("custom_user_filters_placeholder_status")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos</SelectItem>
-            <SelectItem value="1">Activos</SelectItem>
-            <SelectItem value="0">Inactivos</SelectItem>
+            <SelectItem value="all">{t("custom_user_filters_all_status")}</SelectItem>
+            <SelectItem value="1">{t("custom_user_filters_active_status")}</SelectItem>
+            <SelectItem value="0">{t( "custom_user_filters_inactive_status")}</SelectItem>
           </SelectContent>
         </Select>
 
@@ -92,7 +93,7 @@ export const CustomUserFilters = () => {
             className="h-10 px-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all"
           >
             <FilterX className="h-4 w-4 mr-2" />
-            <span className="sm:hidden lg:inline">Limpiar</span>
+            <span className="sm:hidden lg:inline">{t("clear")}</span>
           </Button>
         )}
       </div>

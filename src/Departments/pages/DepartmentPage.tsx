@@ -14,6 +14,7 @@ import { CustomSkeletonTableCard } from "@/components/custom/CustomSkeletonTable
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { t } from "i18next";
 
 export const DepartmentPage = () => {
   const { departments, meta, isLoading: skelettonLoading, isUpdating, changeStatus } = useDepartments();
@@ -55,20 +56,20 @@ export const DepartmentPage = () => {
             "font-bold text-lg",
             departmentSelect.status ? "text-red-700 dark:text-red-400" : "text-blue-700 dark:text-blue-400"
           )}>
-            {departmentSelect.name ?? 'Nombre no disponible'}
+            {departmentSelect.name ?? t("department_page_name_un_available")}
           </p>
           <p className={cn(
             "text-[10px] font-mono mt-1",
             departmentSelect.status ? "text-red-600/70 dark:text-red-400/50" : "text-blue-600/70 dark:text-blue-400/50"
           )}>
-            ID: {departmentSelect.id}
+            {t("department_page_id")} {departmentSelect.id}
           </p>
         </div>
 
         <p className="text-sm italic pt-1 text-muted-foreground">
           {departmentSelect.status 
-            ? "Esta acción impedirá que el departamento sea asignado a nuevos registros."
-            : "Esta acción permitirá que el departamento vuelva a aparecer en las listas de selección."}
+            ? t("department_page_down_department")
+            : t("department_page_up_department")}
         </p>
       </div>
     );
@@ -80,13 +81,15 @@ export const DepartmentPage = () => {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         
         {/* Lado izquierdo */}
-        <CustomTitleCard icon={Users} title="Gestión de Departamentos" description="Administra los departamentos del sistema"/>
+        <CustomTitleCard icon={Users} 
+          title={t("department_page_custom_title_card")} 
+          description={t("department_page_custom_title_card")}/>
         
         {/* Botón */}
         <Link to="/department/create">
           <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
             <Plus className="mr-2 h-4 w-4" />
-            Crear Departamento
+            {t("department_page_create_department")}
           </Button>
         </Link>
 
@@ -96,13 +99,13 @@ export const DepartmentPage = () => {
         open={statusDialogOpen}
         isLoading={isUpdating}
         variant={departmentSelect?.status ? "danger" : "primary"}
-        title={departmentSelect?.status ? "Confirmar baja del departamento" : "Confirmar alta del departamento"}
+        title={departmentSelect?.status ? t("department_page_confirm_down"): t("department_page_confirm_up")}
         description={dialogDescription}
         icon={departmentSelect?.status ? AlertTriangle : ArrowUpCircle} 
         onConfirm={handleDownConfirm}
         onOpenChange={setStatusDialogOpen}
         confirmText={departmentSelect?.status ? "Sí, dar de baja" : "Sí, dar de alta"}
-        cancelText="Cancelar"
+        cancelText= {t("department_page_cancel")}
       />
 
       <CustomDepartmentFilters/>

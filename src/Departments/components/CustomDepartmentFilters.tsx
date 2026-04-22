@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FilterX, Search } from "lucide-react";
 import { useSearchParams } from "react-router";
+import { t } from "i18next";
 
 export const CustomDepartmentFilters = memo(() => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -44,7 +45,7 @@ export const CustomDepartmentFilters = memo(() => {
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />
         <Input
-          placeholder="Buscar departamento por nombre o acrónimo..."
+          placeholder={t("custom_department_filters_placeholder_searchs")}
           className="pl-9 h-10 bg-background/60 focus-visible:ring-primary"
           defaultValue={searchTerm}
           ref={inputRef}
@@ -60,9 +61,9 @@ export const CustomDepartmentFilters = memo(() => {
             <SelectValue placeholder="Estado" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos los estados</SelectItem>
-            <SelectItem value="true">Activos</SelectItem>
-            <SelectItem value="false">Inactivos</SelectItem>
+            <SelectItem value="all">{t("custom_department_filters_all_status")}</SelectItem>
+            <SelectItem value="true">{t("custom_department_filters_active_status")}</SelectItem>
+            <SelectItem value="false">{t("custom_department_filters_inactive_status")}</SelectItem>
           </SelectContent>
         </Select>
 
@@ -74,7 +75,7 @@ export const CustomDepartmentFilters = memo(() => {
             className="h-10 px-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all border border-transparent hover:border-destructive/20"
           >
             <FilterX className="h-4 w-4 mr-2" />
-            <span>Limpiar filtros</span>
+            <span>{t("clear")}</span>
           </Button>
         )}
       </div>

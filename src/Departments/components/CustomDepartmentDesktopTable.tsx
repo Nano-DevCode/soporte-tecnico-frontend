@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Building2, Layers } from "lucide-react";
 import type { Department } from "../interfaces/department.interface";
 import { CustomDepartmentActionsMenu } from "./CustomDepartmentActionsMenu";
+import { t } from "i18next";
 
 interface Props {
   departments: Department[];
@@ -19,22 +20,22 @@ export const CustomDepartmentDesktopTable = memo(({ departments, handleDownClick
         <TableHeader>
           <TableRow>
             <TableHead className="w-[80px] items-center justify-center text-center">
-              Folio
+              {t("custom_department_desktop_table_folio")}
             </TableHead>
             <TableHead className="w-[120px] text-left">
-              Acrónimo
+              {t("custom_department_desktop_table_acronym")}
             </TableHead>
             <TableHead className="w-[300px] text-left">
-              Departamento
+              {t("custom_department_desktop_table_name")}
             </TableHead>
             <TableHead className="w-[120px] text-center">
-              Prioridad
+              {t("custom_department_desktop_table_priority")}
             </TableHead>
             <TableHead className="w-[100px] text-center">
-              Estado
+              {t("custom_department_desktop_table_status")}
             </TableHead>
             <TableHead className="w-[80px] text-center">
-              Acciones
+              {t("custom_department_desktop_table_actions")}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -62,7 +63,7 @@ export const CustomDepartmentDesktopTable = memo(({ departments, handleDownClick
                     {dept.name}
                   </span>
                   <span className="text-xs text-muted-foreground truncate max-w-[280px]">
-                    ID: {dept.id}
+                    {t("custom_department_desktop_table_id")} {dept.id}
                   </span>
                 </div>
               </TableCell>
@@ -81,7 +82,7 @@ export const CustomDepartmentDesktopTable = memo(({ departments, handleDownClick
                   variant={dept.status ? "default" : "destructive"}
                   className="font-semibold px-2.5 py-0.5 rounded-full shadow-sm"
                 >
-                  {dept.status ? "Activo" : "Inactivo"}
+                  {dept.status ? t("custom_department_desktop_table_active") : t("custom_department_desktop_table_inactive")}
                 </Badge>
               </TableCell>
               
@@ -110,10 +111,10 @@ export const CustomDepartmentDesktopTable = memo(({ departments, handleDownClick
                   </div>
                   <div className="space-y-1">
                     <p className="text-base font-semibold text-foreground">
-                      No se encontraron departamentos
+                      {t("custom_department_desktop_table_not_found")}
                     </p>
                     <p className="text-sm">
-                      Intenta ajustar los filtros de búsqueda
+                      {t("custom_department_desktop_table_setting_filters")}
                     </p>
                   </div>
                 </div>

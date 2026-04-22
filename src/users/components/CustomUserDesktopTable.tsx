@@ -96,7 +96,7 @@ export const CustomUserDesktopTable = memo(({ users, handleStatusClick }: Props)
                   variant={user.status ? "default" : "destructive"}
                   className="font-semibold px-2.5 py-0.5 rounded-full shadow-sm"
                 >
-                  {user.status ? 'Activo' : 'Inactivo'}
+                  {user.status ? t("active") : t("inactive")}
                 </Badge>
               </TableCell>
               

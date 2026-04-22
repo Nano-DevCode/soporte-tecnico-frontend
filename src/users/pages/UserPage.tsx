@@ -15,6 +15,7 @@ import { CustomSkeletonTableCard } from "@/components/custom/CustomSkeletonTable
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { t } from "i18next";
 
 export const UserPage = () => {
   // Desestructuramos usando el mismo patrón limpio que en useDepartments
@@ -32,7 +33,6 @@ export const UserPage = () => {
     if (!userSeleccionado) return;
 
     try {
-      // Ejecutamos la mutación real a través del hook
       await changeStatus({ 
         id: userSeleccionado.id || "", 
         status: !userSeleccionado.status 
@@ -71,7 +71,7 @@ export const UserPage = () => {
               "text-[10px] font-mono",
               userSeleccionado.status ? "text-red-600/70 dark:text-red-400/50" : "text-blue-600/70 dark:text-blue-400/50"
             )}>
-              No. Control: {userSeleccionado.staff.num_control}
+              {t("users_page_n_control")} {userSeleccionado.staff.num_control}
             </span>
             <span className={cn(
               "text-[11px] font-medium",
@@ -84,8 +84,8 @@ export const UserPage = () => {
 
         <p className="text-sm italic pt-1 text-muted-foreground">
           {userSeleccionado.status 
-            ? "Esta acción deshabilitará el acceso del usuario al sistema."
-            : "Esta acción restaurará el acceso del usuario al sistema."}
+            ? t("users_page_down_user")
+            : t("users_page_up_user")}
         </p>
       </div>
     );
@@ -97,13 +97,13 @@ export const UserPage = () => {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         
         {/* Lado izquierdo */}
-        <CustomTitleCard icon={Users} title="Gestión de Usuarios" description="Administra los usuarios del sistema"/>
+        <CustomTitleCard icon={Users} title={t("users_page_custom_title_card")} description={t("users_page_custom_description_card")}/>
 
         {/* Botón */}
         <Link to="/user/new">
           <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
             <Plus className="mr-2 h-4 w-4" />
-            Crear Usuario
+            {t("users_page_create_user")}
           </Button>
         </Link>
         

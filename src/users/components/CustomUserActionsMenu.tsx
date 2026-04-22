@@ -4,6 +4,7 @@ import { Eye, MoreHorizontal, Pencil, UserCheck, UserMinus } from 'lucide-react'
 import { Link } from 'react-router'
 import type { User } from '../interfaces/users.response';
 import { cn } from '@/lib/utils';
+import { t } from 'i18next';
 
 interface Props {
   user: User;
@@ -26,14 +27,14 @@ export const CustomUserActionsMenu = ({ user, handleStatusClick }: Props) => {
         <DropdownMenuItem className="gap-2" asChild>
           <Link to={`/user/details/${user.id}`}>
             <Eye className="h-4 w-4" />
-            Ver Detalles
+            {t("custom_user_actions_menu_view_details")}
           </Link>
         </DropdownMenuItem>
         
         <DropdownMenuItem className="gap-2" asChild>
           <Link to={`/user/edit/${user.id}`}>
             <Pencil className="h-4 w-4" />
-            Editar
+            {t("custom_user_actions_menu_edit")}
           </Link>
         </DropdownMenuItem>
         
@@ -52,12 +53,12 @@ export const CustomUserActionsMenu = ({ user, handleStatusClick }: Props) => {
           {user.status ? (
             <>
               <UserMinus className="h-4 w-4" />
-              Dar de Baja
+              {t("custom_user_actions_menu_down")}
             </>
           ) : (
             <>
               <UserCheck className="h-4 w-4" />
-              Dar de Alta
+              {t("custom_user_actions_menu_up")}
             </>
           )}
         </DropdownMenuItem>

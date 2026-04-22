@@ -1,7 +1,7 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
-import type { DepartmentResponse } from "../interfaces/department";
+import type { DepartmentResponseAll } from "@/Departments/interfaces/department.interface";
 
-export const getDepartmentsActions = async(): Promise<DepartmentResponse> => {
-  const { data } = await soporteTecnicoApi.get<DepartmentResponse>('/departments');
+export const getDepartmentsActions = async(): Promise<DepartmentResponseAll> => {
+  const { data } = await soporteTecnicoApi.get<DepartmentResponseAll>('/departments');
   return data;
 }

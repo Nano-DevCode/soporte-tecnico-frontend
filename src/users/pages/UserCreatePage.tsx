@@ -5,7 +5,7 @@ import { useDepartments } from "../hooks/useDepartment";
 import { useRoles } from "../hooks/userRoles";
 import { useCoordinations } from "../hooks/useCoordinations";
 import { useUserCreate } from "../hooks/useUserCreate";
-import { CustomUserForm } from "../components/CustomUserForm"; // Asegura la ruta correcta
+import { CustomUserForm } from "../components/CustomUserForm";
 import { sileo } from "sileo";
 import type { UserFormData } from "../schema/user-form.schema";
 import type { AxiosError } from "axios";

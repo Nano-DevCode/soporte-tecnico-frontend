@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, MoreHorizontal, Pencil, PowerOff, CheckCircle } from "lucide-react"; // Íconos actualizados
 import { Link } from "react-router";
 import { cn } from "@/lib/utils";
+import { t } from "i18next";
 
 interface Props {
   department: Department;
@@ -33,14 +34,14 @@ export const CustomDepartmentActionsMenu = ({
           <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
             <Link to={`/department/details/${department.id}`}>
               <Eye className="h-4 w-4 text-muted-foreground" />
-              Ver Detalles
+              {t("custom_department_actions_menu_view_details")}
             </Link>
           </DropdownMenuItem>
           
           <Link to={`/department/edit/${department.id}`}>
             <DropdownMenuItem className="gap-2 cursor-pointer">
               <Pencil className="h-4 w-4 text-muted-foreground" />
-              Editar
+              {t("custom_department_actions_menu_edit")}
             </DropdownMenuItem>
           </Link>
           
@@ -58,12 +59,12 @@ export const CustomDepartmentActionsMenu = ({
             {isActive ? (
               <>
                 <PowerOff className="h-4 w-4" />
-                Suspender
+                {t("custom_department_actions_menu_down")}
               </>
             ) : (
               <>
                 <CheckCircle className="h-4 w-4" />
-                Habilitar
+                {t("custom_department_actions_menu_up")}
               </>
             )}
           </DropdownMenuItem>

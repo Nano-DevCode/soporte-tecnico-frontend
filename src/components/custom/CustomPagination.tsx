@@ -15,7 +15,6 @@ interface Props {
   totalPages: number;
 }
 
-// Envolvemos tu componente en memo para el rendimiento
 export const CustomPagination = memo(({ totalPages }: Props) => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -40,9 +39,8 @@ export const CustomPagination = memo(({ totalPages }: Props) => {
     setSearchParams(newParams);
   };
 
-  // Tu lógica original que sí funcionaba
   const renderPageNumbers = () => {
-    // PROTECCIÓN EXTRA: Si totalPages es 0 o menor, regresamos array vacío
+    // Si totalPages es 0 o menor, regresamos array vacío
     if (totalPages <= 0) return [];
     
     if (totalPages <= 6) {
@@ -87,7 +85,7 @@ export const CustomPagination = memo(({ totalPages }: Props) => {
     return pages;
   };
 
-  // PROTECCIÓN EXTRA: Si no hay páginas, no renderizamos el componente
+  // Si no hay páginas, no renderizamos el componente
   if (totalPages <= 0) return null;
 
   return (
@@ -95,7 +93,7 @@ export const CustomPagination = memo(({ totalPages }: Props) => {
       
       {/* Selector de Registros */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span className="whitespace-nowrap">Filas por pág:</span>
+        <span className="whitespace-nowrap">{t("custom_pagination_rows_per_page")}</span>
         <Select 
           value={queryLimit} 
           // defaultValue='10' <-- Quitamos esto, el value ya hace el trabajo en Radix
