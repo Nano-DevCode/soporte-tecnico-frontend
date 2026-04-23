@@ -29,8 +29,6 @@ export const appRouter = createBrowserRouter([
             {
                 path: 'users',
                 children: userRoutes,
-                path: 'user',
-                children: userRoutes
             },
             {
                 path: 'tickets',

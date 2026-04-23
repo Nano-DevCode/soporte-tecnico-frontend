@@ -1,0 +1,1 @@
+export const STALE_TIME_5_MIN = 1000 * 60 * 5;
