@@ -7,6 +7,8 @@ import { userRoutes } from "./users/users.router";
 import { accountRoutes } from "./account/account.router";
 import { departmentRoutes } from "./Departments/departments.routes";
 import { authRoutes } from "./auth/auth.router";
+import { equipmentRoutes } from "./Equipments/equipments.routes";
+
 
 const PanelLayout = lazy(() => import("./layout/PanelLayout"))
 

@@ -83,6 +83,33 @@ export const CustomNavContent = memo(() => {
           </CollapsibleContent>
         </Collapsible>
 
+        <Collapsible className="group/collapsible" defaultOpen={pathname.startsWith("/user") || pathname.startsWith("/department")}>
+          <CollapsibleTrigger asChild>
+            <button className={triggerClass}>
+              <Users className="h-5 w-5 shrink-0" />
+              <span className="flex-1 text-left">
+                Inventarios
+              </span>
+              <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+            </button>
+          </CollapsibleTrigger>
+
+          <CollapsibleContent>
+            <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
+
+              <Link to='/equipment' className={getItemClass(pathname.startsWith("/equipment"))}>
+                <List className="h-4 w-4" /> Lista de equipos
+              </Link>
+
+              <Link to='/department' className={getItemClass(pathname.startsWith("/department"))}>
+                <List className="h-4 w-4" /> Lista de materiales
+              </Link>
+
+
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
         {/* --- ITEM COLAPSABLE: CONFIGURACIÓN --- */}
         <Collapsible className="group/collapsible">
           <CollapsibleTrigger asChild>
