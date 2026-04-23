@@ -58,7 +58,7 @@ export const UserEditPage = () => {
           if (axiosErr.response?.data?.message) {
             backendMessage = Array.isArray(axiosErr.response.data.message) ? axiosErr.response.data.message[0] : axiosErr.response.data.message;
           }
-          return { title: "Error al actualizar", description: backendMessage, fill: "#18181b", styles: { title: "text-red-500! font-semibold!" } };
+          return { title: "Error al actualizar", description: backendMessage };
         }
       });
       navigate("/users");

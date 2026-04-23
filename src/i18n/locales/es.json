@@ -28,9 +28,10 @@
   "error_server":"Ocurrió un error en el servidor. Inténtalo más tarde.",
   "active": "Activo",
   "inactive": "Inactivo",
-  "cancel": "Cancelar",
-  "save": "Guardar",
-
+  "cancel": "Cancel",
+  "save": "Save",
+  "updating": "Updating...",
+  "creating": "Creating...",
 
   "login_page_login_loading": "Iniciar Sesión",
   "login_page_welcom": "Bienvenido a nuestro sistema de soporte técnico.",
@@ -234,8 +235,26 @@
   "custom_department_desktop_table_active": "Activo",
   "custom_department_desktop_table_inactive": "Inactivo",
   "custom_department_desktop_table_not_found": "No se encontraron departamentos",
-  "custom_department_desktop_table_setting_filters": "Intenta ajustar los filtros de busqueda"
+  "custom_department_desktop_table_setting_filters": "Intenta ajustar los filtros de busqueda",
 
-
+  "custom_department_form_edit_title": "Editar Departamento",
+  "custom_department_form_new_title": "Nuevo Departamento",
+  "custom_department_form_edit_description": "Modifica los datos del registro actual.",
+  "custom_department_form_new_description": "Ingresa los datos requeridos para el sistema.",
+  "custom_department_form_name":"Nombre del Departamento",
+  "custom_department_form_name_required":"El nombre del departamento es obligatorio.",
+  "custom_department_form_name_min_lenght":"El nombre del departamento debe tener al menos 3 caracteres.",
+  "custom_department_form_acronym":"Acrónimo",
+  "custom_department_form_acronym_required":"El acrónimo es obligatorio.",
+  "custom_department_form_acronym_min_lenght":"El acrónimo no puede estar vacío.",
+  "custom_department_form_priority":"Prioridad",
+  "custom_department_form_priority_required":"La prioridad es obligatoria.",
+  "custom_department_form_priority_min":"Debe ser mayor a 0",
+  "custom_department_form_priority_max":"Debe ser menor a 11",
+  "custom_department_form_folio":"Folio",
+  "custom_department_form_folio_requered":"El folio es obligatorio.",
+  "custom_department_form_folio_min":"Debe ser mayor a 0",
+  "custom_department_form_save_changues":"Guardar Cambios",
+  "custom_department_form_save_department":"Guardar Departamento"
   
 }

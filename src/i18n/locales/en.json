@@ -231,5 +231,25 @@
   "custom_department_desktop_table_active": "Active",
   "custom_department_desktop_table_inactive": "Inactive",
   "custom_department_desktop_table_not_found": "No departments found",
-  "custom_department_desktop_table_setting_filters": "Try adjusting the search filters"
+  "custom_department_desktop_table_setting_filters": "Try adjusting the search filters",
+
+  "custom_department_form_edit_title": "Edit Department",
+  "custom_department_form_new_title": "New Department",
+  "custom_department_form_edit_description": "Modify the current record information.",
+  "custom_department_form_new_description": "Enter the required information for the system.",
+  "custom_department_form_name": "Department Name",
+  "custom_department_form_name_required": "The department name is required.",
+  "custom_department_form_name_min_lenght": "The department name must be at least 3 characters long.",
+  "custom_department_form_acronym": "Acronym",
+  "custom_department_form_acronym_required": "The acronym is required.",
+  "custom_department_form_acronym_min_lenght": "The acronym cannot be empty.",
+  "custom_department_form_priority": "Priority",
+  "custom_department_form_priority_required": "The priority is required.",
+  "custom_department_form_priority_min": "Must be greater than 0",
+  "custom_department_form_priority_max": "Must be less than 11",
+  "custom_department_form_folio": "Folio",
+  "custom_department_form_folio_requered": "The folio is required.",
+  "custom_department_form_folio_min": "Must be greater than 0",
+  "custom_department_form_save_changues": "Save Changes",
+  "custom_department_form_save_department": "Save Department"
 }
