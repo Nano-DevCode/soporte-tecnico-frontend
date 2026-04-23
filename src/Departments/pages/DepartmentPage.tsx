@@ -86,7 +86,7 @@ export const DepartmentPage = () => {
           description={t("department_page_custom_title_card")}/>
         
         {/* Botón */}
-        <Link to="/department/create">
+        <Link to="/departments/create">
           <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
             <Plus className="mr-2 h-4 w-4" />
             {t("department_page_create_department")}

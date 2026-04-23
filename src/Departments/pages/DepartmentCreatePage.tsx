@@ -1,4 +1,3 @@
-import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
@@ -6,6 +5,7 @@ import { useCreateDepartment } from "../hooks/useCreateDepartment";
 import { CustomDepartmentForm } from "../components/CustomDepartmentForm";
 import type { Department } from "../interfaces/department.interface";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
+import { CustomBackToList } from "@/components/custom/CustomBackToList";
 
 export const DepartmentCreatePage = () => {
   const navigate = useNavigate();
@@ -52,13 +52,10 @@ export const DepartmentCreatePage = () => {
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-4">
-      <button 
-        onClick={() => navigate('/departments')}
-        className="group flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-        Regresar a Departamentos
-      </button>
+      <CustomBackToList 
+        onBack={() => navigate('/departments')} 
+        backLabel="Lista de Departamentos"
+      />
 
       <CustomDepartmentForm 
         mode="create" 

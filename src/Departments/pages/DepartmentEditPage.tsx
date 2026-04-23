@@ -60,7 +60,7 @@ export const DepartmentEditPage = () => {
   return (
     <div className="mx-auto w-full max-w-3xl space-y-4">
       <CustomBackToList 
-        onBack={() => navigate('/department')} 
+        onBack={() => navigate('/departments')} 
         backLabel="Lista de Departamentos"
       />
 

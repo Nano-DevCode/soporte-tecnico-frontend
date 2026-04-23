@@ -1,4 +1,3 @@
-import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDepartments } from "../hooks/useDepartment";
@@ -10,6 +9,7 @@ import { sileo } from "sileo";
 import type { UserFormData } from "../schema/user-form.schema";
 import type { AxiosError } from "axios";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
+import { CustomBackToList } from "@/components/custom/CustomBackToList";
 
 export const UserCreatePage = () => {
   const navigate = useNavigate();
@@ -58,9 +58,7 @@ export const UserCreatePage = () => {
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
-      <button onClick={() => navigate('/users')} className="group flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" /> Regresar a Usuarios
-      </button>
+      <CustomBackToList onBack={() => navigate('/users')} backLabel="Regresar a Usuarios" actionUrl="user"/>
 
       {isLoading ? (
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-8">

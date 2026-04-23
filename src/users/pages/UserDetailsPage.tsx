@@ -19,6 +19,7 @@ import { CustomUserSkeleton } from "../components/CustomUserSkeleton";
 import { CustomBackToList } from "@/components/custom/CustomBackToList";
 import { sileo } from "sileo";
 import { formatDate } from "../util/formatDate";
+import { t } from "i18next";
 
 export const UserDetailsPage = () => {
   const navigate = useNavigate();
@@ -30,23 +31,22 @@ export const UserDetailsPage = () => {
 
   if (isError || !user) {
     sileo.error({
-      title: "Error al cargar el usuario",
-      description: `El usuario no existe`,
+      title: t("user_details_page_sileo_error_title"),
+      description: t("user_details_page_sileo_error_description"),
       duration: 9500,
     });
     navigate('/users');
     return null;
   }
 
-  // Helper para fechas seguras (evita que formatDate rompa si la fecha es undefined)
   const renderDate = (dateString?: string | Date) => {
-    return dateString ? formatDate(dateString) : <span className="text-muted-foreground italic">N/A</span>;
+    return dateString ? formatDate(dateString) : <span className="text-muted-foreground italic">{t("user_details_page_non")}</span>;
   };
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
       
-      <CustomBackToList onBack={() => navigate('/users')} backLabel="Regresar a Usuarios" actionUrl="user"/>
+      <CustomBackToList onBack={() => navigate('/users')} backLabel={t("user_details_page_back_to_user")}actionUrl="user"/>
 
       <Card>
 
@@ -60,7 +60,6 @@ export const UserDetailsPage = () => {
             </Avatar>
             
             <div className="space-y-1">
-              {/* Agregué los ?. por seguridad */}
               <h3 className="text-2xl font-bold leading-none tracking-tight">
                 {user.staff?.name} {user.staff?.paternalSurname} {user.staff?.maternalSurname}
               </h3>
@@ -77,7 +76,7 @@ export const UserDetailsPage = () => {
               variant={user.status ? "default" : "destructive"} 
               className={user.status ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100/80 dark:bg-emerald-900/30 dark:text-emerald-400" : ""}
             >
-              {user.status ? "Cuenta Activa" : "Cuenta Suspendida"}
+              {user.status ? t("user_details_page_account_up") : t("user_details_page_account_down")}
             </Badge>
 
             <Badge 
@@ -85,7 +84,7 @@ export const UserDetailsPage = () => {
               className="gap-1 bg-blue-100 text-blue-700 hover:bg-blue-100/80 dark:bg-blue-900/30 dark:text-blue-400"
             >
               <ShieldCheck className="h-3 w-3" />
-              {user.role?.name || "Sin Rol"}
+              {user.role?.name || t("user_details_page_non")}
             </Badge>
           </div>
         </CardHeader>
@@ -96,35 +95,37 @@ export const UserDetailsPage = () => {
             <div>
               <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
                 <Briefcase className="h-4 w-4 text-muted-foreground" />
-                Información Laboral
+                {t("user_details_page_information_laboral")}
               </h4>
               <dl className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 text-sm">
                 
                 <div className="space-y-1">
-                  <dt className="font-medium text-muted-foreground">Núm. Control / Nómina</dt>
+                  <dt className="font-medium text-muted-foreground">{t("user_details_page_n_control")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <Hash className="h-3.5 w-3.5 text-muted-foreground" />
-                    {user.staff?.num_control || "N/A"}
+                    {user.staff?.num_control || t("user_details_page_non")}
                   </dd>
                 </div>
-
+                
                 <div className="space-y-1">
                   <dt className="font-medium text-muted-foreground">RFC</dt>
                   <dd className="font-semibold uppercase">
-                    {user.staff?.rfc || "N/A"}
+                    {user.staff?.rfc || t("user_details_page_non")}
                   </dd>
                 </div>
 
-                <div className="space-y-1">
-                  <dt className="font-medium text-muted-foreground">ID Telegram</dt>
-                  <dd className="font-semibold flex items-center gap-1.5">
-                    <Send className="h-3.5 w-3.5 text-muted-foreground" />
-                    {user.staff?.idTelegram || "N/A"}
-                  </dd>
-                </div>
+                {user.staff?.coordination?.name !== 'Sin Coordinación' && (
+                  <div className="space-y-1">
+                    <dt className="font-medium text-muted-foreground">ID {t("user_details_page_telegram")}</dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <Send className="h-3.5 w-3.5 text-muted-foreground" />
+                      {user.staff?.idTelegram || t("user_details_page_non")}
+                    </dd>
+                  </div>
+                )}
 
                 <div className="space-y-1">
-                  <dt className="font-medium text-muted-foreground">Fecha de Registro</dt>
+                  <dt className="font-medium text-muted-foreground">{t("user_details_page_date_register")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
                     {renderDate(user.createdAt)}
@@ -132,7 +133,7 @@ export const UserDetailsPage = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <dt className="font-medium text-muted-foreground">Actualización de Credenciales</dt>
+                  <dt className="font-medium text-muted-foreground">{t("user_details_page_update_credentials")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
                     {renderDate(user.updatedAt)}
@@ -140,7 +141,7 @@ export const UserDetailsPage = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <dt className="font-medium text-muted-foreground">Actualización de Datos</dt>
+                  <dt className="font-medium text-muted-foreground">{t("user_details_page_update_info")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
                     {renderDate(user.staff?.updatedAt)}
@@ -155,20 +156,20 @@ export const UserDetailsPage = () => {
             <div>
               <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
                 <Building2 className="h-4 w-4 text-muted-foreground" />
-                Ubicación Organizacional
+                {t("user_details_page_department")}
               </h4>
               <dl className="grid grid-cols-1 gap-y-5 text-sm">
                 
                 <div className="rounded-lg bg-muted/30 p-3 border border-border/50">
-                  <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">Departamento</dt>
+                  <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider"> {t("user_details_page_department")} </dt>
                   <dd className="font-bold text-base">
-                    {user.staff?.department?.name || "Sin asignar"}
+                    {user.staff?.department?.name || t("user_details_page_non")}
                   </dd>
                 </div>
 
                 {user.staff?.coordination?.name !== 'Sin Coordinación' && (
                   <div className="rounded-lg bg-muted/30 p-3 border border-border/50">
-                    <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">Coordinación</dt>
+                    <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">{t("user_details_page_coordination")}</dt>
                     <dd className="font-bold text-base">
                       {user.staff.coordination.name}
                     </dd>

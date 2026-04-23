@@ -138,6 +138,21 @@
   "custom_user_actions_menu_down":"Dar de Baja",
   "custom_user_actions_menu_up":"Dar de Alta",
 
+  "user_details_page_sileo_error_title":"Error al cargar el usuario",
+  "user_details_page_sileo_error_description":"El usuario no existe",
+  "user_details_page_non":"N/A",
+  "user_details_page_back_to_user":"Regresar a Usuarios",
+  "user_details_page_account_up":"Cuenta Activa",
+  "user_details_page_account_down":"Cuenta Suspendida",
+  "user_details_page_information_laboral":"Información Laboral",
+  "user_details_page_telegram":"Telegram",
+  "user_details_page_department":"Departamento",
+  "user_details_page_n_control":"Número de Control",
+  "user_details_page_date_register":"Fecha de Registro",
+  "user_details_page_update_credentials":"Actualización de Credenciales",
+  "user_details_page_update_info":"Actualización de Datos",
+  "user_details_page_coordination":"Coordinación",
+
   "custom_password_configuration_title": "Seguridad de la Cuenta",
   "custom_password_configuration_description": "Actualiza tu contraseña para mantener tu cuenta protegida.",
   "custom_password_configuration_new_password": "Nueva Contraseña",
@@ -214,6 +229,28 @@
   "department_page_confirm_up": "Confirmar alta del departamento",
   "department_page_cancel": "Cancelar",
 
+  "department_deatils_page_sileo_error_title":"",
+  "department_deatils_page_sileo_error_description":"",
+  "department_deatils_page_back_to_list":"",
+  "department_deatils_page_non":"N/A",
+  "department_deatils_page_acronym":"Acrónimo",
+  "department_deatils_page_name":"Nombre",
+  "department_deatils_page_priority":"Prioridad",
+  "department_deatils_page_details_department": "Detalles de Departamento",
+  "department_deatils_page_active":"Departamento Activo",
+  "department_deatils_page_suspended":"Departamento Suspendido",
+  "department_deatils_page_actions":"Acciones",
+  "department_deatils_id":"Identificador (UUID):",
+  "department_deatils_actual_folio":"Folio Actual",
+  "department_deatils_last_modification":"Última Modificación",
+  "department_deatils_page_status":"Estado",
+  "department_deatils_page_year":"Folio",
+  "department_details_page_system_status":"Estado en el Sistema",
+  "department_details_page_system_status_up":"Habilitado para asignaciones",
+  "department_details_page_system_status_down":"Deshabilitado en el sistema",
+  "department_deatils_page_preority_level": "Nivel de Prioridad",
+
+
   "custom_department_actions_menu_view_details":"Ver Detalles",
   "custom_department_actions_menu_edit":"Editar",
   "custom_department_actions_menu_down":"Suspender",
@@ -256,5 +293,4 @@
   "custom_department_form_folio_min":"Debe ser mayor a 0",
   "custom_department_form_save_changues":"Guardar Cambios",
   "custom_department_form_save_department":"Guardar Departamento"
-  
 }
