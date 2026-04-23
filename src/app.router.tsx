@@ -5,7 +5,10 @@ import { lazy } from "react";
 import { AuthenticatedRoute, NotAuthenticatedRoute } from "./auth/routes/ProtectedRoutes";
 import { userRoutes } from "./users/users.router";
 import { accountRoutes } from "./account/account.router";
+import { SchoolPeriodsRoutes } from "./school-periods/school-periods.router";
+import { CenterManagersRoutes } from "./computing-center-managers/center-manager.router";
 import { departmentRoutes } from "./Departments/departments.routes";
+import { TicketsRoutes } from "./tickets/tickets.router";
 import { authRoutes } from "./auth/auth.router";
 import { equipmentRoutes } from "./Equipments/equipments.routes";
 
@@ -30,6 +33,18 @@ export const appRouter = createBrowserRouter([
                 children: userRoutes,
             },
             {
+                path: 'tickets',
+                children: TicketsRoutes
+            },
+            {
+                path: 'school-period',
+                children: SchoolPeriodsRoutes
+            },
+            {
+                path: 'center-managers',
+                children: CenterManagersRoutes
+            },
+            {
                 path: 'account',
                 children: accountRoutes,
             },
@@ -46,14 +61,14 @@ export const appRouter = createBrowserRouter([
     // Auth Routes
     {
         path: '/auth',
-        element: 
+        element:
             <NotAuthenticatedRoute>
-                <AuthLayout/>
+                <AuthLayout />
             </NotAuthenticatedRoute>,
         children: authRoutes
     },
     {
         path: '*',
-        element: <Navigate to='/'/>
+        element: <Navigate to='/' />
     }
 ])

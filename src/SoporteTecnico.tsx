@@ -7,7 +7,8 @@ import type { PropsWithChildren } from 'react';
 import { CustomFullScreenLoading } from './components/custom/CustomFullScreenLoading';
 import { useAuthStore } from './auth/store/auth.store';
 
-import { ThemeProvider } from './components/theme-provider'; 
+import { ThemeProvider } from './components/theme-provider';
+import { TooltipProvider } from './components/ui/tooltip';
 
 const queryClient = new QueryClient();
 
@@ -21,8 +22,8 @@ const CheckAuthProvider = ({ children }: PropsWithChildren) => {
     retry: false,
     refetchInterval: 1000 * 60 * 1.5,
     refetchOnWindowFocus: false,
-  }); 
-  
+  });
+
   if (isLoading) return <CustomFullScreenLoading />;
 
   return children;
@@ -31,17 +32,18 @@ const CheckAuthProvider = ({ children }: PropsWithChildren) => {
 export const SoporteTecnico = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster position='top-center' theme='dark'/>
       <ThemeProvider defaultTheme="system" storageKey="soporte-tecnico-theme">
+        <TooltipProvider>
+          <CheckAuthProvider>
+            <RouterProvider router={appRouter} />
+          </CheckAuthProvider>
+        </TooltipProvider>
 
-        <CheckAuthProvider>
-          <RouterProvider router={appRouter} />
-        </CheckAuthProvider>
-
+        <Toaster position='top-center' theme='system' />
         <ReactQueryDevtools initialIsOpen={false} />
-        
+
       </ThemeProvider>
-      
+
     </QueryClientProvider>
   )
 }
