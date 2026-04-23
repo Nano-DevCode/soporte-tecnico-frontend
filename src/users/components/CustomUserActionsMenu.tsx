@@ -25,14 +25,14 @@ export const CustomUserActionsMenu = ({ user, handleStatusClick }: Props) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem className="gap-2" asChild>
-          <Link to={`/user/details/${user.id}`}>
+          <Link to={`/users/${user.id}`}>
             <Eye className="h-4 w-4" />
             {t("custom_user_actions_menu_view_details")}
           </Link>
         </DropdownMenuItem>
         
         <DropdownMenuItem className="gap-2" asChild>
-          <Link to={`/user/edit/${user.id}`}>
+          <Link to={`/users/edit/${user.id}`}>
             <Pencil className="h-4 w-4" />
             {t("custom_user_actions_menu_edit")}
           </Link>

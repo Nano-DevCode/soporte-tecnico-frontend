@@ -47,7 +47,7 @@ export const DepartmentEditPage = () => {
           };
         }
       });
-      navigate("/department");
+      navigate("/departments");
     } catch (error) {
       console.error("Error en la actualización:", error);
     }

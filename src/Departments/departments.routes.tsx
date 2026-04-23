@@ -22,17 +22,17 @@ export const departmentRoutes = [
         </SuspenseWrapper>
     },
     {
-        path: 'details/:id',
-        element:
-        <SuspenseWrapper>
-            <DepartmentDetailsPage />
-        </SuspenseWrapper>
-    },
-    {
         path: 'edit/:id',
         element: 
         <SuspenseWrapper>
             <DepartmentEditPage />
+        </SuspenseWrapper>
+    },
+    {
+        path: ':id',
+        element:
+        <SuspenseWrapper>
+            <DepartmentDetailsPage />
         </SuspenseWrapper>
     }
 ];

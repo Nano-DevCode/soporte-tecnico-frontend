@@ -1,13 +1,12 @@
 import { createBrowserRouter, Navigate } from "react-router";
 import { InicioPage } from "./inicio/pages/InicioPage";
 import { AuthLayout } from './auth/layout/AuthLayout';
-import { LoginPage } from "./auth/pages/LoginPage";
 import { lazy } from "react";
-import { ForgotPasswordPage } from "./auth/pages/ForgotPasswordPage";
 import { AuthenticatedRoute, NotAuthenticatedRoute } from "./auth/routes/ProtectedRoutes";
 import { userRoutes } from "./users/users.router";
 import { accountRoutes } from "./account/account.router";
 import { departmentRoutes } from "./Departments/departments.routes";
+import { authRoutes } from "./auth/auth.router";
 
 const PanelLayout = lazy(() => import("./layout/PanelLayout"))
 
@@ -25,7 +24,7 @@ export const appRouter = createBrowserRouter([
                 element: <InicioPage />
             },
             {
-                path: 'user',
+                path: 'users',
                 children: userRoutes,
             },
             {
@@ -33,7 +32,7 @@ export const appRouter = createBrowserRouter([
                 children: accountRoutes,
             },
             {
-                path: 'department',
+                path: 'departments',
                 children: departmentRoutes,
             }
         ],
@@ -45,20 +44,7 @@ export const appRouter = createBrowserRouter([
             <NotAuthenticatedRoute>
                 <AuthLayout/>
             </NotAuthenticatedRoute>,
-        children: [
-            {
-                index: true,
-                element: <Navigate to='/auth/login'/>
-            },
-            {
-                path: 'login',
-                element: <LoginPage/>
-            },
-            {
-                path: 'forgot-password',
-                element: <ForgotPasswordPage/>
-            },
-        ]
+        children: authRoutes
     },
     {
         path: '*',

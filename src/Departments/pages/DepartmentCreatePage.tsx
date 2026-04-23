@@ -44,7 +44,7 @@ export const DepartmentCreatePage = () => {
           };
         }
       });
-      navigate("/department");
+      navigate("/departments");
     } catch (error) {
       console.error("Error en la creación:", error);
     }
@@ -53,7 +53,7 @@ export const DepartmentCreatePage = () => {
   return (
     <div className="mx-auto w-full max-w-3xl space-y-4">
       <button 
-        onClick={() => navigate('/department')}
+        onClick={() => navigate('/departments')}
         className="group flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />

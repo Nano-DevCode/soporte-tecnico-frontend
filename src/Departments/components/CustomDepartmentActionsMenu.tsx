@@ -32,13 +32,13 @@ export const CustomDepartmentActionsMenu = ({
         <DropdownMenuContent align="end" className="w-48">
           
           <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
-            <Link to={`/department/details/${department.id}`}>
+            <Link to={`/departments/${department.id}`}>
               <Eye className="h-4 w-4 text-muted-foreground" />
               {t("custom_department_actions_menu_view_details")}
             </Link>
           </DropdownMenuItem>
           
-          <Link to={`/department/edit/${department.id}`}>
+          <Link to={`/departments/edit/${department.id}`}>
             <DropdownMenuItem className="gap-2 cursor-pointer">
               <Pencil className="h-4 w-4 text-muted-foreground" />
               {t("custom_department_actions_menu_edit")}

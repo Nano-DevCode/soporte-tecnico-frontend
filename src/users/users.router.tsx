@@ -22,17 +22,17 @@ export const userRoutes = [
         </SuspenseWrapper> 
     },
     {
-        path: 'details/:id',
-        element: 
-        <SuspenseWrapper>
-           <UserDetailsPage />
-        </SuspenseWrapper> 
-    },
-    {
         path: 'edit/:id',
         element: 
         <SuspenseWrapper>
            <UserEditPage/>
         </SuspenseWrapper> 
-    }
+    },
+    {
+        path: ':id',
+        element: 
+        <SuspenseWrapper>
+           <UserDetailsPage />
+        </SuspenseWrapper> 
+    },
 ];

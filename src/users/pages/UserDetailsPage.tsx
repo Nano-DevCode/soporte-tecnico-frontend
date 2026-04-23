@@ -34,7 +34,7 @@ export const UserDetailsPage = () => {
       description: `El usuario no existe`,
       duration: 9500,
     });
-    navigate('/user');
+    navigate('/users');
     return null;
   }
 
@@ -46,7 +46,7 @@ export const UserDetailsPage = () => {
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
       
-      <CustomBackToList onBack={() => navigate('/user')} backLabel="Regresar a Usuarios" actionUrl="user"/>
+      <CustomBackToList onBack={() => navigate('/users')} backLabel="Regresar a Usuarios" actionUrl="user"/>
 
       <Card>
 

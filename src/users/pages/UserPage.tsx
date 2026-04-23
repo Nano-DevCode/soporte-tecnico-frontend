@@ -100,7 +100,7 @@ export const UserPage = () => {
         <CustomTitleCard icon={Users} title={t("users_page_custom_title_card")} description={t("users_page_custom_description_card")}/>
 
         {/* Botón */}
-        <Link to="/user/new">
+        <Link to="/users/new">
           <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
             <Plus className="mr-2 h-4 w-4" />
             {t("users_page_create_user")}

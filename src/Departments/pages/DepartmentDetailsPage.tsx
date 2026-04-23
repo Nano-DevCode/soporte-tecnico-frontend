@@ -4,19 +4,20 @@ import {
   Tag, 
   Fingerprint, 
   Type,
-  Activity,
-  CalendarDays,
-  Clock,
-  ArrowLeft
+  CalendarDays
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { useDepartment } from "../hooks/useDepartment";
-import { formatDate } from "@/users/util/formatDate";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { sileo } from "sileo";
+
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+
+import { useDepartment } from "../hooks/useDepartment";
+import { formatDate } from "@/users/util/formatDate"; // Ajusta la ruta si es necesario
 import { CustomSkeletonInformation } from "@/components/custom/CustomSkeletonInformation";
+import { CustomBackToList } from "@/components/custom/CustomBackToList";
 
 export const DepartmentDetailsPage = () => {
   const navigate = useNavigate();
@@ -26,8 +27,8 @@ export const DepartmentDetailsPage = () => {
     if (error || (!isLoading && !department)) {
       sileo.error({
         title: "Departamento no encontrado",
-        description: `${error?.message}`,
-        duration: 2500,
+        description: `${error?.message || "El registro no existe."}`,
+        duration: 3500,
       });
 
       navigate("/department", { replace: true });
@@ -36,131 +37,136 @@ export const DepartmentDetailsPage = () => {
 
   if (isLoading) {
     return (
-      <div className="mx-auto w-full max-w-3xl space-y-4">
-        <button 
-          disabled
-          className="flex items-center gap-2 text-sm font-medium text-muted-foreground opacity-50"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Regresar al listado de todos los departamentos 
-        </button>
+      <div className="mx-auto w-full max-w-4xl space-y-4">
+        <CustomBackToList onBack={() => navigate('/departments')} backLabel="Regresar a Departamentos" />
         <CustomSkeletonInformation/>
       </div>
     );
   }
 
-  return (
-    // Envolvemos todo en un div padre para separar el botón de la tarjeta
-    <div className="mx-auto w-full max-w-3xl space-y-4">
-      
-      {/* Botón de Regresar */}
-      <button 
-        onClick={() => navigate('/department')}
-        className="group flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-        Regresar al listado de todos los departamentos
-      </button>
+  // Helper para fechas seguras
+  const renderDate = (dateString?: string | Date) => {
+    return dateString ? formatDate(dateString) : <span className="text-muted-foreground italic">N/A</span>;
+  };
 
-      {/* Tarjeta de Detalles */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-border pb-6">
+  return (
+    <div className="mx-auto w-full max-w-4xl space-y-4">
+      
+      <CustomBackToList onBack={() => navigate('/department')} backLabel="Regresar a Departamentos" actionUrl="department"/>
+
+      <Card>
+        <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-6">
+
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Building2 className="h-6 w-6" />
-            </div>
+            <Avatar className="h-14 w-14">
+              <AvatarFallback className="bg-primary/10 text-primary">
+                <Building2 className="h-7 w-7" />
+              </AvatarFallback>
+            </Avatar>
             
             <div className="space-y-1">
-              <h3 className="text-xl font-bold text-foreground leading-none">
+              <h3 className="text-2xl font-bold leading-none tracking-tight">
                 {department?.name}
               </h3>
-              <p className="text-sm font-medium text-muted-foreground flex items-center gap-1.5 pt-1">
-                <Type className="h-4 w-4" />
-                Acrónimo: <span className="text-foreground">{department?.acronym}</span>
+              <p className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+                <Type className="h-3.5 w-3.5" />
+                Acrónimo: <span className="text-foreground uppercase">{department?.acronym}</span>
               </p>
             </div>
           </div>
+
+          <div className="flex flex-col items-end gap-2">
+            <Badge 
+              variant={department?.status ? "default" : "destructive"} 
+              className={department?.status ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100/80 dark:bg-emerald-900/30 dark:text-emerald-400" : ""}
+            >
+              {department?.status ? "Departamento Activo" : "Departamento Suspendido"}
+            </Badge>
+
+            <Badge 
+              variant="secondary" 
+              className="gap-1 bg-blue-100 text-blue-700 hover:bg-blue-100/80 dark:bg-blue-900/30 dark:text-blue-400"
+            >
+              <Tag className="h-3 w-3" />
+              Prioridad: {department?.priority}
+            </Badge>
+          </div>
+        </CardHeader>
+
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
           
-          <Badge
-            variant="outline"
-            className={cn(
-              "w-fit px-3 py-1 font-bold uppercase tracking-wider text-[10px] border-none",
-              department?.status
-                ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400"
-                : "bg-red-100 text-red-600 dark:bg-red-950/50 dark:text-red-400"
-            )}
-          >
-            {department?.status ? "Operativo" : "Suspendido"}
-          </Badge>
-        </div>
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
+                <Building2 className="h-4 w-4 text-muted-foreground" />
+                Detalles del Departamento
+              </h4>
+              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 text-sm">
+                
+                <div className="space-y-1 sm:col-span-2">
+                  <dt className="font-medium text-muted-foreground">Identificador (UUID)</dt>
+                  <dd className="font-mono text-xs text-foreground break-all flex items-center gap-1.5">
+                    <Fingerprint className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                    {department?.id || "N/A"}
+                  </dd>
+                </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6">
-          <div className="group flex flex-col gap-1.5 rounded-lg border border-border bg-muted/20 p-4 transition-colors hover:bg-muted/50">
-            <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <Fingerprint className="h-4 w-4 text-primary/70" />
-              Identificador (UUID)
-            </span>
-            <span className="text-sm font-mono text-foreground break-all">
-              {department?.id}
-            </span>
-          </div>
+                <div className="space-y-1">
+                  <dt className="font-medium text-muted-foreground">Folio Actual</dt>
+                  <dd className="font-semibold flex items-center gap-1.5">
+                    <Hash className="h-3.5 w-3.5 text-muted-foreground" />
+                    {department?.folio || "N/A"}
+                  </dd>
+                </div>
 
-          <div className="group flex flex-col gap-1.5 rounded-lg border border-border bg-muted/20 p-4 transition-colors hover:bg-muted/50">
-            <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <Tag className="h-4 w-4 text-primary/70" />
-              Nivel de Prioridad
-            </span>
-            <span className="text-sm font-semibold text-foreground">
-              {department?.priority}
-            </span>
-          </div>
+                <div className="space-y-1">
+                  <dt className="font-medium text-muted-foreground">Fecha de Creación</dt>
+                  <dd className="font-semibold flex items-center gap-1.5">
+                    <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
+                    {renderDate(department?.createdAt)}
+                  </dd>
+                </div>
 
-          <div className="group flex flex-col gap-1.5 rounded-lg border border-border bg-muted/20 p-4 transition-colors hover:bg-muted/50">
-            <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <Hash className="h-4 w-4 text-primary/70" />
-              Folio Actual
-            </span>
-            <span className="text-sm font-semibold text-foreground">
-              {department?.folio}
-            </span>
-          </div>
+                <div className="space-y-1 sm:col-span-2">
+                  <dt className="font-medium text-muted-foreground">Última Modificación</dt>
+                  <dd className="font-semibold flex items-center gap-1.5">
+                    <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
+                    {renderDate(department?.updatedAt)}
+                  </dd>
+                </div>
 
-          <div className="group flex flex-col gap-1.5 rounded-lg border border-border bg-muted/20 p-4 transition-colors hover:bg-muted/50">
-            <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <Activity className="h-4 w-4 text-primary/70" />
-              Estado Lógico
-            </span>
-            <span className="text-sm font-semibold text-foreground">
-              {department?.status ? "Habilitado para asignaciones" : "Deshabilitado en el sistema"}
-            </span>
-          </div>
-        </div>
-
-        <div className="mt-6 rounded-lg bg-muted/40 p-4 border border-border/50">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex items-center gap-3">
-              <div className="rounded-md bg-background p-2 shadow-sm border border-border/50">
-                <CalendarDays className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Fecha de Creación</span>
-                <span className="text-sm font-medium text-foreground">{formatDate(department?.createdAt)}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="rounded-md bg-background p-2 shadow-sm border border-border/50">
-                <Clock className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Última Actualización</span>
-                <span className="text-sm font-medium text-foreground">{formatDate(department?.updatedAt)}</span>
-              </div>
+              </dl>
             </div>
           </div>
-        </div>
-        
-      </div>
+
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
+                <Tag className="h-4 w-4 text-muted-foreground" />
+                Estado en el Sistema
+              </h4>
+              <dl className="grid grid-cols-1 gap-y-5 text-sm">
+                
+                <div className="rounded-lg bg-muted/30 p-3 border border-border/50">
+                  <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">Estado Lógico</dt>
+                  <dd className="font-bold text-base">
+                    {department?.status ? "Habilitado para asignaciones" : "Deshabilitado en el sistema"}
+                  </dd>
+                </div>
+
+                <div className="rounded-lg bg-muted/30 p-3 border border-border/50">
+                  <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">Nivel de Prioridad</dt>
+                  <dd className="font-bold text-base">
+                    {department?.priority}
+                  </dd>
+                </div>
+
+              </dl>
+            </div>
+          </div>
+
+        </CardContent>
+      </Card>
     </div>
   );
 };
