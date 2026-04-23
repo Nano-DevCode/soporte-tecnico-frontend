@@ -21,15 +21,15 @@ import { useTranslation } from 'react-i18next';
 
 const getItemClass = (isActive: boolean) => cn(
   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
-  isActive 
-    ? "bg-primary text-primary-foreground shadow-sm" 
+  isActive
+    ? "bg-primary text-primary-foreground shadow-sm"
     : "text-muted-foreground hover:bg-muted hover:text-foreground"
 );
 
 const getSubItemClass = (isActive: boolean) => cn(
   "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors hover:bg-muted hover:text-foreground",
   isActive
-    ? "font-medium text-foreground bg-muted" 
+    ? "font-medium text-foreground bg-muted"
     : "text-muted-foreground"
 );
 
@@ -66,7 +66,7 @@ export const CustomNavContent = memo(() => {
               <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
             </button>
           </CollapsibleTrigger>
-          
+
           <CollapsibleContent>
             <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
               
@@ -77,7 +77,8 @@ export const CustomNavContent = memo(() => {
               <Link to='/departments'  className={getItemClass(pathname.startsWith("/departments"))}>
                 <List className="h-4 w-4"/> {t("custom_nav_content_depatment")}
               </Link>
-              
+
+
             </div>
           </CollapsibleContent>
         </Collapsible>

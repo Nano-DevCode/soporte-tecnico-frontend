@@ -34,6 +34,10 @@ export const appRouter = createBrowserRouter([
             {
                 path: 'departments',
                 children: departmentRoutes,
+            },
+            {
+                path: 'equipment',
+                children: equipmentRoutes,
             }
         ],
     },
