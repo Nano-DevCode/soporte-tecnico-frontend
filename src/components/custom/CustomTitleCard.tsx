@@ -22,7 +22,7 @@ export const CustomTitleCard = memo(({title, description, icon: Icon}: Props) =>
             <p className="text-sm md:text-base text-muted-foreground mt-0.5">
                 {description}
             </p>
-        </div>
+            </div>
     </div>
   )
 });

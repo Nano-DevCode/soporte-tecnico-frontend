@@ -2,10 +2,10 @@
   "title_app": "Soporte Técnico",
   "close_menu": "Cerrar Menú",
   "open_menu": "Abrir Menú",
-  "name_ito":"Instituto Tecnológico de Oaxaca",
+  "name_ito": "Instituto Tecnológico de Oaxaca",
   "profile": "Perfil",
-  "settings":"Configuración",
-  "logout":"Cerrar Sesión",
+  "settings": "Configuración",
+  "logout": "Cerrar Sesión",
   "users": "Usuarios",
   "list_users": "Lista de Usuarios",
   "create_user": "Crear Usuario",
@@ -25,14 +25,13 @@
   "requerid_email": "El correo es obligatorio",
   "requerid_email_format": "Debe ser un correo válido",
   "requerid_password": "La contraseña es obligatoria",
-  "error_server":"Ocurrió un error en el servidor. Inténtalo más tarde.",
+  "error_server": "Ocurrió un error en el servidor. Inténtalo más tarde.",
   "active": "Activo",
   "inactive": "Inactivo",
   "cancel": "Cancel",
   "save": "Save",
   "updating": "Updating...",
   "creating": "Creating...",
-
   "login_page_login_loading": "Iniciar Sesión",
   "login_page_welcom": "Bienvenido a nuestro sistema de soporte técnico.",
   "login_page_back_to_login": "Volver al inicio de sesión",
@@ -40,25 +39,25 @@
   "login_page_recop_password": "Olvidaste tu contraseña?",
   "login_page_instruction_recop": "Ingresa tu correo y te enviaremos las instrucciones para restablecer tu acceso.",
   "login_page_invalid_credentials": "Correo o contraseña no válidos. Por favor, inténtalo de nuevo.",
-
   "custom_pagination_rows_per_page": "Filas por página:",
   "custom_pagination_previous": "Anterior",
   "custom_pagination_next": "Siguiente",
-
   "forget_password_success": "Se han enviado las instrucciones de recuperación a su correo.",
   "forget_password_sending": "Enviando...",
-
   "custom_footer_center_computer_department": "Departamento de Centro de Cómputo",
   "custom_footer_attention_hours": "Lun - Vie: 8:00 - 18:00 hrs",
   "custom_footer_attention_email": "soporte@ito.edu.mx",
   "custom_footer_all_rights_reserved_for_center_computer_department": "Todos los derechos reservados para el Departamento de Centro de Cómputo",
-
   "custom_nav_content_start": "Inicio",
   "custom_nav_content_dashboard": "Dashboard",
   "custom_nav_content_users": "Usuarios",
-  
   "custom_nav_content_depatment": "Lista de Departamentos",
-
+  "custom_nav_content_tickets": "Solicitudes",
+  "custom_nav_content_school_periods": "Periodos Escolares",
+  "custom_nav_content_center_managers": " Jefes de Centro de Cómputo",
+  "custom_nav_content_subitem_list_tickets": "Lista de Solicitudes",
+  "custom_nav_content_subitem_list_school_periods": "Lista de Periodos Escolares",
+  "custom_nav_content_subitem_list_center_managers": "Lista de Jefes de Centro de Cómputo",
   "custom_benefits_card_main_caracteristics": "Características Principales",
   "custom_benefits_card_ez_fast": "Soporte fácil y rápido de Solicitar",
   "custom_benefist_card_create_solicitud": "Crea solicitudes y recibe asistencia de forma rapida y fácil.",
@@ -66,7 +65,6 @@
   "custom_benefist_card_monitoring_progress": "Monitorea el progreso de tus solicitudes en tiempo real y sin esperas.",
   "custom_benefist_card_historial": "Historial Detallado",
   "custom_benefist_card_register_follow": "Mantén un registro completo de todos tus tickets y soluciones pasadas.",
-
   "custom_information_welcome": "Bienvenido al Portal de Servicio Técnico",
   "custom_information_departament": "del Departamento Centro de Cómputo",
   "custom_information_description": "Soporte tecnológico para la comunidad del Instituto Tecnológico de Oaxaca. Accede a nuestros servicios de soporte técnico en cualquier momento, estaremos dispuestos a ayudarte.",
@@ -74,7 +72,6 @@
   "custom_information_new_solicitud": "Nueva Solicitud",
   "custom_information_profesional_support": "Soporte Técnico Profesional",
   "custom_information_info_departament": "Departamento de Centro de Cómputo - ITO",
-
   "custom_desktop_table_users_head_control": "N°",
   "custom_desktop_table_users_head_user": "Usuario",
   "custom_desktop_table_users_head_departament": "Departamento",
@@ -83,8 +80,8 @@
   "custom_desktop_table_users_head_actions": "Acciones",
   "custom_desktop_table_users_active": "Activo",
   "custom_desktop_table_users_inactive": "Inactivo",
-  "custom_desktop_table_users_not_found": "No se encontraron usuarios","custom_desktop_table_users_setting_filters": "Intenta ajustar los filtros de busqueda",
-
+  "custom_desktop_table_users_not_found": "No se encontraron usuarios",
+  "custom_desktop_table_users_setting_filters": "Intenta ajustar los filtros de busqueda",
   "custom_user_form_edit_user": "Editar Usuario",
   "custmo_user_form_new_user": "Nuevo Usuario",
   "custom_user_form_edit_user_description": "Actualiza los datos del usuario y sus credenciales",
@@ -92,86 +89,80 @@
   "custom_user_form_personal_data": "Dados personales",
   "custom_user_form_names": "Nombre(s)",
   "custom_user_form_name_required": "El nombre es obligatorio.",
-  "custom_user_form_name_error":"El nombre solo puede contener letras.",
+  "custom_user_form_name_error": "El nombre solo puede contener letras.",
   "custom_user_form_first_last_name": "Primer Apellido",
   "custom_user_form_first_last_name_required": "El primer apellido es obligatorio.",
-  "custom_user_form_first_last_name_error":"El primer apellido solo puede contener letras.",
+  "custom_user_form_first_last_name_error": "El primer apellido solo puede contener letras.",
   "custom_user_form_second_last_name": "Segundo Apellido",
   "custom_user_form_second_last_name_required": "El segundo apellido es obligatorio.",
-  "custom_user_form_second_last_name_error":"El segundo apellido solo puede contener letras.",
+  "custom_user_form_second_last_name_error": "El segundo apellido solo puede contener letras.",
   "custom_user_form_n_control": "Num. Control / Nómina",
   "custom_user_form_n_control_required": "El número de control/nómina es obligatorio.",
-  "custom_user_form_n_control_error":"El número de control/nómina solo puede contener letras y números, sin caracteres especiales.",
+  "custom_user_form_n_control_error": "El número de control/nómina solo puede contener letras y números, sin caracteres especiales.",
   "custom_user_form_rfc": "RFC",
   "custom_user_form_rfc_required": "El RFC es obligatorio.",
-  "custom_user_form_rfc_error":"Ingrese un RFC válido.",
+  "custom_user_form_rfc_error": "Ingrese un RFC válido.",
   "custom_user_form_id_telegram": "ID Telegram",
   "custom_user_form_id_telegram_required": "El ID de Telegram es obligatorio para coordinadores.",
-  "custom_user_form_id_telegram_error":"El ID de Telegram solo puede contener letras y números, sin caracteres especiales.",
-  "custom_user_form_role":"Rol en el Sistema",
-  "custom_user_form_role_required":"Debe seleccionar un rol.",
-  "custom_user_form_role_placeholder":"Seleccione un rol",
-  "custom_user_form_department":"Departamento",
-  "custom_user_form_department_required":"Debe seleccionar un departamento.",
-  "custom_user_form_department_placeholder":"Seleccione un departamento",
-  "custom_user_form_coordination":"Coordinación",
-  "custom_user_form_coordination_required":"Debe seleccionar una coordinación.",
-  "custom_user_form_coordination_placeholder":"Seleccione una coordinación",
-  "custom_user_form_email":"Correo Electrónico",
-  "custom_user_form_email_required":"El correo electrónico es obligatorio.",
-  "custom_user_form_email_error":"Ingrese un correo electrónico válido.",
-  "custom_user_form_password_new":"Nueva Contraseña",
-  "custom_user_form_password_edit":"Contraseña",
-  "custom_user_form_password_new_placeholder":"Mínimo 8 caracteres.",
-  "custom_user_form_password_edit_placeholder":"Dejar en blanco para conservar la actual.",
-  "custom_user_form_password_new_required":"La contraseña es obligatoria para nuevos usuarios.",
-  "custom_user_form_password_min_lenght":"La contraseña debe tener al menos 8 caracteres.",
-  "custom_user_form_password_regex_error":"La contraseña es muy débil. Debe incluir mayúsculas, minúsculas, números y caracteres especiales.",
-  "custom_user_form_editing":"Actualizando...",
-  "custom_user_form_creating":"Creando...",
-  "custom_user_form_editing_save":"Guardar Cambios",
-  "custom_user_form_creating_save":"Crear Usuario",
-  
-
-  "custom_user_actions_menu_view_details":"Ver Detalles",
-  "custom_user_actions_menu_edit":"Editar",
-  "custom_user_actions_menu_down":"Dar de Baja",
-  "custom_user_actions_menu_up":"Dar de Alta",
-
-  "user_details_page_sileo_error_title":"Error al cargar el usuario",
-  "user_details_page_sileo_error_description":"El usuario no existe",
-  "user_details_page_non":"N/A",
-  "user_details_page_back_to_user":"Regresar a Usuarios",
-  "user_details_page_account_up":"Cuenta Activa",
-  "user_details_page_account_down":"Cuenta Suspendida",
-  "user_details_page_information_laboral":"Información Laboral",
-  "user_details_page_telegram":"Telegram",
-  "user_details_page_department":"Departamento",
-  "user_details_page_n_control":"Número de Control",
-  "user_details_page_date_register":"Fecha de Registro",
-  "user_details_page_update_credentials":"Actualización de Credenciales",
-  "user_details_page_update_info":"Actualización de Datos",
-  "user_details_page_coordination":"Coordinación",
-
+  "custom_user_form_id_telegram_error": "El ID de Telegram solo puede contener letras y números, sin caracteres especiales.",
+  "custom_user_form_role": "Rol en el Sistema",
+  "custom_user_form_role_required": "Debe seleccionar un rol.",
+  "custom_user_form_role_placeholder": "Seleccione un rol",
+  "custom_user_form_department": "Departamento",
+  "custom_user_form_department_required": "Debe seleccionar un departamento.",
+  "custom_user_form_department_placeholder": "Seleccione un departamento",
+  "custom_user_form_coordination": "Coordinación",
+  "custom_user_form_coordination_required": "Debe seleccionar una coordinación.",
+  "custom_user_form_coordination_placeholder": "Seleccione una coordinación",
+  "custom_user_form_email": "Correo Electrónico",
+  "custom_user_form_email_required": "El correo electrónico es obligatorio.",
+  "custom_user_form_email_error": "Ingrese un correo electrónico válido.",
+  "custom_user_form_password_new": "Nueva Contraseña",
+  "custom_user_form_password_edit": "Contraseña",
+  "custom_user_form_password_new_placeholder": "Mínimo 8 caracteres.",
+  "custom_user_form_password_edit_placeholder": "Dejar en blanco para conservar la actual.",
+  "custom_user_form_password_new_required": "La contraseña es obligatoria para nuevos usuarios.",
+  "custom_user_form_password_min_lenght": "La contraseña debe tener al menos 8 caracteres.",
+  "custom_user_form_password_regex_error": "La contraseña es muy débil. Debe incluir mayúsculas, minúsculas, números y caracteres especiales.",
+  "custom_user_form_editing": "Actualizando...",
+  "custom_user_form_creating": "Creando...",
+  "custom_user_form_editing_save": "Guardar Cambios",
+  "custom_user_form_creating_save": "Crear Usuario",
+  "custom_user_actions_menu_view_details": "Ver Detalles",
+  "custom_user_actions_menu_edit": "Editar",
+  "custom_user_actions_menu_down": "Dar de Baja",
+  "custom_user_actions_menu_up": "Dar de Alta",
+  "user_details_page_sileo_error_title": "Error al cargar el usuario",
+  "user_details_page_sileo_error_description": "El usuario no existe",
+  "user_details_page_non": "N/A",
+  "user_details_page_back_to_user": "Regresar a Usuarios",
+  "user_details_page_account_up": "Cuenta Activa",
+  "user_details_page_account_down": "Cuenta Suspendida",
+  "user_details_page_information_laboral": "Información Laboral",
+  "user_details_page_telegram": "Telegram",
+  "user_details_page_department": "Departamento",
+  "user_details_page_n_control": "Número de Control",
+  "user_details_page_date_register": "Fecha de Registro",
+  "user_details_page_update_credentials": "Actualización de Credenciales",
+  "user_details_page_update_info": "Actualización de Datos",
+  "user_details_page_coordination": "Coordinación",
   "custom_password_configuration_title": "Seguridad de la Cuenta",
   "custom_password_configuration_description": "Actualiza tu contraseña para mantener tu cuenta protegida.",
   "custom_password_configuration_new_password": "Nueva Contraseña",
-  "custom_password_configuration_required_new_password":"La contraseña es requerida",
-  "custom_password_configuration_min_length_new_password":"La contraseña debe tener al menos 8 caracteres",
+  "custom_password_configuration_required_new_password": "La contraseña es requerida",
+  "custom_password_configuration_min_length_new_password": "La contraseña debe tener al menos 8 caracteres",
   "custom_password_configuration_max_length_new_password": "Máximo 50 caracteres",
   "custom_password_configuration_not_match_with_regex": "El password es demasiado débil (debe incluir mayúsculas, minúsculas y números o símbolos)",
-  "custom_password_configuration_confirm_new_password":"Debes confirmar la Nueva Contraseña",
+  "custom_password_configuration_confirm_new_password": "Debes confirmar la Nueva Contraseña",
   "custom_password_configuration_not_match_new_password": "Las contraseñas no coinciden",
   "custom_password_configuration_warning": "Se cerrará tu sesión tras cambiar contraseña.",
   "custom_password_configuration_requireds": "Requisitos: Min. 8 caracteres, mayúsculas y números",
   "custom_password_configuration_button_update": "Actualizar contraseña",
-
-  "custom_language_configuration_title":"Preferencias de Idioma",
-  "custom_language_configuration_description":"Elige el idioma principal en el que deseas visualizar la interfaz.",
-  "custom_language_configuration_now_language":"Idioma actual",
-  "custom_language_configuration_select_language_es":"Español (México)",
-  "custom_language_configuration_select_language_en":"English (US)",
-
+  "custom_language_configuration_title": "Preferencias de Idioma",
+  "custom_language_configuration_description": "Elige el idioma principal en el que deseas visualizar la interfaz.",
+  "custom_language_configuration_now_language": "Idioma actual",
+  "custom_language_configuration_select_language_es": "Español (México)",
+  "custom_language_configuration_select_language_en": "English (US)",
   "profile_page_title": "Mi Perfil",
   "profile_page_description": "Información personal y detalles de tu cuenta en el sistema.",
   "profile_page_active": "Cuenta Activa",
@@ -187,22 +178,16 @@
   "profile_page_departament": "Departamento",
   "profile_page_role": "Rol del Sistema",
   "profile_page_coordination": "Coordinación",
-
   "configuration_page_title_card": "Configuración",
   "configuration_page_description_card": "Administra tus preferencias de sistema y la seguridad de tu cuenta.",
-
   "custom_read_only_field": "No especificado",
-
   "custom_mode_toggle_class_changue": "Cambiar tema",
   "custom_mode_toggle_light": "Claro",
   "custom_mode_toggle_dark": "Oscuro",
   "custom_mode_toggle_system": "Sistema",
-
   "custom_dialog_confirm_loading": "Procesando...",
-
-  "custom_full_screen_loading_loading":"Procesando...",
-  "custom_full_screen_loading_loading_description":"Espere un momento porfavor",
-
+  "custom_full_screen_loading_loading": "Procesando...",
+  "custom_full_screen_loading_loading_description": "Espere un momento porfavor",
   "users_page_n_control": "No. Control:",
   "users_page_down_user": "Esta acción deshabilitará el acceso del usuario al sistema.",
   "users_page_up_user": "Esta acción restaurará el acceso del usuario al sistema.",
@@ -210,14 +195,12 @@
   "users_page_custom_description_card": "Administra los usuarios del sistema",
   "users_page_create_user": "Crear Usuario",
   "users_page_update_user": "Actualizar Usuario",
-
   "custom_user_filters_placeholder_searchs": "Buscar usuario..",
   "custom_user_filters_all_departments": "Todos los Deptos",
   "custom_user_filters_placeholder_status": "Todos los Estado",
   "custom_user_filters_all_status": "Todos",
   "custom_user_filters_active_status": "Activo",
   "custom_user_filters_inactive_status": "Inactivo",
-
   "department_page_name_un_available": "Nombre no disponible",
   "department_page_id": "ID",
   "department_page_down_department": "Esta acción impedirá que el departamento sea asignado a nuevos registros.",
@@ -228,40 +211,35 @@
   "department_page_confirm_down": "Confirmar baja del departamento",
   "department_page_confirm_up": "Confirmar alta del departamento",
   "department_page_cancel": "Cancelar",
-
-  "department_deatils_page_sileo_error_title":"",
-  "department_deatils_page_sileo_error_description":"",
-  "department_deatils_page_back_to_list":"",
-  "department_deatils_page_non":"N/A",
-  "department_deatils_page_acronym":"Acrónimo",
-  "department_deatils_page_name":"Nombre",
-  "department_deatils_page_priority":"Prioridad",
+  "department_deatils_page_sileo_error_title": "",
+  "department_deatils_page_sileo_error_description": "",
+  "department_deatils_page_back_to_list": "",
+  "department_deatils_page_non": "N/A",
+  "department_deatils_page_acronym": "Acrónimo",
+  "department_deatils_page_name": "Nombre",
+  "department_deatils_page_priority": "Prioridad",
   "department_deatils_page_details_department": "Detalles de Departamento",
-  "department_deatils_page_active":"Departamento Activo",
-  "department_deatils_page_suspended":"Departamento Suspendido",
-  "department_deatils_page_actions":"Acciones",
-  "department_deatils_id":"Identificador (UUID):",
-  "department_deatils_actual_folio":"Folio Actual",
-  "department_deatils_last_modification":"Última Modificación",
-  "department_deatils_page_status":"Estado",
-  "department_deatils_page_year":"Folio",
-  "department_details_page_system_status":"Estado en el Sistema",
-  "department_details_page_system_status_up":"Habilitado para asignaciones",
-  "department_details_page_system_status_down":"Deshabilitado en el sistema",
+  "department_deatils_page_active": "Departamento Activo",
+  "department_deatils_page_suspended": "Departamento Suspendido",
+  "department_deatils_page_actions": "Acciones",
+  "department_deatils_id": "Identificador (UUID):",
+  "department_deatils_actual_folio": "Folio Actual",
+  "department_deatils_last_modification": "Última Modificación",
+  "department_deatils_page_status": "Estado",
+  "department_deatils_page_year": "Folio",
+  "department_details_page_system_status": "Estado en el Sistema",
+  "department_details_page_system_status_up": "Habilitado para asignaciones",
+  "department_details_page_system_status_down": "Deshabilitado en el sistema",
   "department_deatils_page_preority_level": "Nivel de Prioridad",
-
-
-  "custom_department_actions_menu_view_details":"Ver Detalles",
-  "custom_department_actions_menu_edit":"Editar",
-  "custom_department_actions_menu_down":"Suspender",
-  "custom_department_actions_menu_up":"Habilitar",
-
+  "custom_department_actions_menu_view_details": "Ver Detalles",
+  "custom_department_actions_menu_edit": "Editar",
+  "custom_department_actions_menu_down": "Suspender",
+  "custom_department_actions_menu_up": "Habilitar",
   "custom_department_filters_placeholder_searchs": "Buscar departamento...",
   "custom_department_filters_placeholder_status": "Todos los Estado",
   "custom_department_filters_all_status": "Todos",
   "custom_department_filters_active_status": "Activo",
   "custom_department_filters_inactive_status": "Inactivo",
-
   "custom_department_desktop_table_folio": "Folio",
   "custom_department_desktop_table_acronym": "Acrónimo",
   "custom_department_desktop_table_name": "Nombre",
@@ -273,24 +251,571 @@
   "custom_department_desktop_table_inactive": "Inactivo",
   "custom_department_desktop_table_not_found": "No se encontraron departamentos",
   "custom_department_desktop_table_setting_filters": "Intenta ajustar los filtros de busqueda",
-
   "custom_department_form_edit_title": "Editar Departamento",
   "custom_department_form_new_title": "Nuevo Departamento",
   "custom_department_form_edit_description": "Modifica los datos del registro actual.",
   "custom_department_form_new_description": "Ingresa los datos requeridos para el sistema.",
-  "custom_department_form_name":"Nombre del Departamento",
-  "custom_department_form_name_required":"El nombre del departamento es obligatorio.",
-  "custom_department_form_name_min_lenght":"El nombre del departamento debe tener al menos 3 caracteres.",
-  "custom_department_form_acronym":"Acrónimo",
-  "custom_department_form_acronym_required":"El acrónimo es obligatorio.",
-  "custom_department_form_acronym_min_lenght":"El acrónimo no puede estar vacío.",
-  "custom_department_form_priority":"Prioridad",
-  "custom_department_form_priority_required":"La prioridad es obligatoria.",
-  "custom_department_form_priority_min":"Debe ser mayor a 0",
-  "custom_department_form_priority_max":"Debe ser menor a 11",
-  "custom_department_form_folio":"Folio",
-  "custom_department_form_folio_requered":"El folio es obligatorio.",
-  "custom_department_form_folio_min":"Debe ser mayor a 0",
-  "custom_department_form_save_changues":"Guardar Cambios",
-  "custom_department_form_save_department":"Guardar Departamento"
+  "custom_department_form_name": "Nombre del Departamento",
+  "custom_department_form_name_required": "El nombre del departamento es obligatorio.",
+  "custom_department_form_name_min_lenght": "El nombre del departamento debe tener al menos 3 caracteres.",
+  "custom_department_form_acronym": "Acrónimo",
+  "custom_department_form_acronym_required": "El acrónimo es obligatorio.",
+  "custom_department_form_acronym_min_lenght": "El acrónimo no puede estar vacío.",
+  "custom_department_form_priority": "Prioridad",
+  "custom_department_form_priority_required": "La prioridad es obligatoria.",
+  "custom_department_form_priority_min": "Debe ser mayor a 0",
+  "custom_department_form_priority_max": "Debe ser menor a 11",
+  "custom_department_form_folio": "Folio",
+  "custom_department_form_folio_requered": "El folio es obligatorio.",
+  "custom_department_form_folio_min": "Debe ser mayor a 0",
+  "custom_department_form_save_changues": "Guardar Cambios",
+  "custom_department_form_save_department": "Guardar Departamento""custom_full_screen_loading_loading_description": "Espere un momento porfavor",
+  "custom_desktop_table_head_actions": "Acciones",
+  "custom_desktop_table_school_period_head_name": "Nombre",
+  "custom_desktop_table_school_period_head_period": "Periodo",
+  "custom_desktop_table_school_period_head_period_type": "Tipo de Periodo",
+  "custom_desktop_table_school_period_head_status": "Estado",
+  "custom_desktop_table_school_period_head_actions": "Acciones",
+  "custom_desktop_table_school_period_not_found": "No se encontraron periodos escolares",
+  "custom_desktop_table_school_period_setting_filters": "Intenta ajustar los filtros de busqueda",
+  "custom_school_period_active": "Activo",
+  "custom_school_period_inactive": "Inactivo",
+  "custom_filters_school_period_search_placeholder": "Buscar periodo escolar...",
+  "custom_filters_school_period_search_status_name": "Status",
+  "custom_filters_school_period_search_status_all": "Todos",
+  "custom_filters_school_period_search_status_active": "Activos",
+  "custom_filters_school_period_search_status_inactive": "Inactivos",
+  "custom_filters_school_period_search_clean": "Limpiar",
+  "custom_actions_menu_school_period_watch": "Ver Detalles",
+  "custom_actions_menu_school_period_edit": "Editar",
+  "custom_actions_menu_school_period_activate": "Activar",
+  "custom_actions_menu_school_period_deactivate": "Desactivar",
+  "custom_actions_menu_school_period_delete": "Eliminar",
+  "view_school_period_page_title": "Detalles del Periodo Escolar",
+  "view_school_period_page_description": "Información detallada y de solo lectura del periodo.",
+  "view_school_period_section_data_description": "Datos registrados en el sistema para este periodo escolar.",
+  "view_school_period_section_data_period_type": "Tipo de Periodo",
+  "view_school_period_section_data_title": "Información General",
+  "view_school_period_section_data_name": "Nombre del Periodo",
+  "view_school_period_section_data_date_start": "Fecha de inicio",
+  "view_school_period_section_data_date_end": "Fecha de finalización",
+  "view_school_period_section_data_status": "Estado",
+  "view_school_period_section_data_status_active": "Activo (Periodo Actual)",
+  "view_school_period_section_data_status_inactive": "Inactivo",
+  "view_school_period_button_update": "Actualizar Periodo Escolar",
+  "custom_dialog_active_school_period_page_title": "¿Activar periodo escolar?",
+  "custom_dialog_active_school_period_page_description": "Este periodo escolar pasará a estado activo. Todas las nuevas solicitudes de soporte que se creen a partir de ahora se registrarán bajo este periodo.",
+  "custom_dialog_deactive_school_period_page_title": "¿Desactivar periodo escolar?",
+  "custom_dialog_deactive_school_period_page_description": "Este periodo pasará a estado inactivo. No se podrán crear nuevas solicitudes en el sistema a menos que exista otro periodo activo que las reciba.",
+  "custom_dialog_delete_school_period_page_title": "¿Eliminar periodo escolar de forma permanente?",
+  "custom_dialog_delete_school_period_page_description": "Esta acción no se puede deshacer. El periodo escolar se eliminará definitivamente del sistema.",
+  "custom_title_card_school_period_page_title": "Gestión de Periodos Escolares",
+  "custom_title_card_school_period_page_description": "Administra los periodos escolares del sistema",
+  "school_period_page_new": "Crear Periodo Escolar",
+  "create_school_period_page_title": "Registrar Periodo Escolar",
+  "create_school_period_page_description": "Complete la información para crear un nuevo periodo escolar",
+  "update_school_period_page_title": "Editar Periodo Escolar",
+  "update_school_period_page_description": "Complete la información para editar el periodo escolar",
+  "school_period_form_title_section_data": "Datos del Periodo Escolar",
+  "school_period_form_description_section_data": "Define el nombre y el rango de fechas para el ciclo académico",
+  "school_period_form_section_data_period_type": "Tipo de Periodo",
+  "school_period_form_section_data_period_type_placeholder": "Seleccione el tipo de periodo",
+  "school_period_form_section_data_name": "Nombre del Periodo",
+  "school_period_form_section_data_name_placeholder": "Ej. 2026-1",
+  "school_period_form_section_data_date_start": "Fecha de inicio",
+  "school_period_form_section_data_date_end": "Fecha de finalización",
+  "school_period_form_section_data_date_placeholder": "Selecciona una fecha",
+  "school_period_form_button_create": "Crear Periodo Escolar",
+  "school_period_form_button_update": "Actualizar Periodo Escolar",
+  "school_period_form_button_cancel": "Cancelar",
+  "school_period_form_error_name_min": "El nombre debe tener al menos 3 caracteres",
+  "school_period_form_error_period_type_required": "Por favor, seleccione un tipo de periodo válido.",
+  "school_period_form_error_date_start_required": "La fecha de inicio es obligatoria",
+  "school_period_form_error_date_end_required": "La fecha de finalización es obligatoria",
+  "school_period_form_error_date_invalid_range": "La fecha de finalización debe ser posterior a la fecha de inicio",
+  "success_create_school_period_message": "Periodo escolar creado correctamente.",
+  "success_update_school_period_message": "Periodo escolar actualizado correctamente.",
+  "period_type_enero-junio": "Enero - Junio",
+  "period_type_verano": "Verano",
+  "period_type_agosto-diciembre": "Agosto - Diciembre",
+  "common": {
+    "buttons": {
+      "create": "Crear",
+      "update": "Actualizar",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "cancel": "Cancelar",
+      "save_changes": "Guardar cambios",
+      "view": "Detalles"
+    },
+    "date": {
+      "no_date": "Sin fecha"
+    },
+    "metadata": {
+      "created_at": "Fecha de registro",
+      "updated_at": "Última Actualización"
+    },
+    "notifications": {
+      "error_title": "Ocurrió un error"
+    },
+    "warnings": {
+      "discard_changes": "Tienes cambios sin guardar. ¿Seguro que deseas salir?"
+    },
+    "filters": {
+      "clean": "Limpiar",
+      "status": {
+        "name": "Estado",
+        "options": {
+          "all": "Todos",
+          "active": "Activos",
+          "inactive": "Inactivos"
+        }
+      }
+    },
+    "state": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    }
+  },
+  "center_managers": {
+    "list_page": {
+      "title": "Gestión de los Jefes del Centro de Cómputo",
+      "description": "Administra los jefes del Centro de Cómputo.",
+      "table": {
+        "headers": {
+          "name": "Nombre",
+          "rfc": "RFC",
+          "status": "Estado",
+          "actions": "Acciones"
+        }
+      },
+      "filters": {
+        "searchBar_placeholder": "Buscar Jefe de Centro de Cómputo..."
+      },
+      "actions": {
+        "new": "Agregar Jefe de Centro de Cómputo",
+        "activate": "Activar",
+        "deactivate": "Desactivar"
+      },
+      "empty": {
+        "title": "No se encontraron jefes de Centro de Cómputo",
+        "description": "Intenta ajustar los filtros de busqueda"
+      }
+    },
+    "create_page": {
+      "title": "Nuevo jefe de Centro de Cómputo",
+      "description": "Registra a un nuevo responsable del centro de cómputo para agrupar y gestionar las futuras solicitudes de soporte técnico.",
+      "success": {
+        "title": "Éxito",
+        "message": "Jefe de Centro de Cómputo creado correctamente."
+      },
+      "error": {
+        "title": "Error",
+        "message": "Ocurrió un error al crear el jefe de Centro de Cómputo."
+      }
+    },
+    "update_page": {
+      "title": "Editar jefe de Centro de Cómputo",
+      "description": "Actualiza la información personal, el RFC o los datos generales de este responsable.",
+      "success": {
+        "title": "Éxito",
+        "message": "Jefe de Centro de Cómputo actualizado correctamente."
+      },
+      "error": {
+        "title": "Error",
+        "message": "Ocurrió un error al actualizar el jefe de Centro de Cómputo."
+      },
+      "not_found": {
+        "title": "Registro no encontrado",
+        "message": "El jefe de centro que intentas editar no existe o fue eliminado."
+      }
+    },
+    "view_page": {
+      "title": "Detalles del Jefe de Centro de Cómputo",
+      "description": "Información detallada y de solo lectura del jefe de Centro de Cómputo",
+      "not_found": {
+        "title": "Registro no encontrado",
+        "message": "El jefe de centro que intentas ver no existe o fue eliminado."
+      },
+      "sections": {
+        "personal_data": "Datos Personales",
+        "administrative_record": "Registro Administrativo",
+        "status": "Estatus del Registro"
+      },
+      "status": {
+        "active": "Registro activo en el sistema",
+        "inactive": "Registro inactivo en el sistema"
+      }
+    },
+    "dialog": {
+      "active": {
+        "title": "Activar Jefe de Centro de Cómputo",
+        "description": "¿Confirmas la activación de este responsable? A partir de este momento, las nuevas órdenes de trabajo se generarán bajo su nombre.",
+        "notifications": {
+          "success": "El responsable {{name}} ha sido activado."
+        }
+      },
+      "deactive": {
+        "title": "Desactivar Jefe de Centro de Cómputo",
+        "description": "¿Confirmas la desactivación de este responsable del Centro de Cómputo? Al hacerlo, se suspenderá la creación de nuevas órdenes de trabajo en el sistema.",
+        "notifications": {
+          "success": "El responsable {{name}} ha sido desactivado."
+        }
+      }
+    },
+    "form": {
+      "header": {
+        "title": "Datos del Jefe de Centro de Cómputo",
+        "description": "Información personal."
+      },
+      "fields": {
+        "names": {
+          "label": "Nombre(s)",
+          "placeholder": "Ej. Juan Carlos"
+        },
+        "first_last_name": {
+          "label": "Apellido Paterno",
+          "placeholder": "Ej. Pérez"
+        },
+        "second_last_name": {
+          "label": "Apellido Materno",
+          "placeholder": "Ej. Gómez"
+        },
+        "rfc": {
+          "label": "RFC",
+          "placeholder": "Ej. PEGJ800101XYZ",
+          "description": "13 caracteres alfanuméricos. Se convertirá a mayúsculas."
+        }
+      },
+      "errors": {
+        "names_required": "El nombre es obligatorio",
+        "names_max": "El nombre no puede exceder los 100 caracteres",
+        "first_last_name_required": "El apellido paterno es obligatorio",
+        "first_last_name_max": "El apellido paterno no puede exceder los 100 caracteres",
+        "second_last_name_required": "El apellido materno es obligatorio",
+        "second_last_name_max": "El apellido materno no puede exceder los 100 caracteres",
+        "rfc_required": "El RFC es obligatorio",
+        "rfc_min": "El RFC debe tener al menos 10 caracteres",
+        "rfc_max": "El RFC no puede exceder los 13 caracteres",
+        "rfc_format": "El RFC solo puede contener letras y números"
+      }
+    }
+  },
+  "tickets": {
+    "data": {
+      "affected_name": "Nombre del solicitante",
+      "department": "Departamento",
+      "email": "Correo electrónico",
+      "equipment_location": "Ubicación del equipo",
+      "available_hours": "Horario disponible",
+      "issue_type": "Tipo de problema",
+      "description": "Descripción detallada",
+      "coordinator": "Coordinador",
+      "asigned_to": "Asignado a: ",
+      "canalized_to": "Canalizado a: "
+    },
+    "status": {
+      "RECIBIDA": {
+        "name": "Recibida",
+        "description": "El ticket ha entrado al sistema y está en cola para ser revisado."
+      },
+      "RECHAZADA": {
+        "name": "Rechazada",
+        "description": "El ticket no procede o no cuenta con la información necesaria."
+      },
+      "CANALIZADA": {
+        "name": "Canalizada",
+        "description": "El ticket ha sido enviado al área especializada para su atención."
+      },
+      "ASIGNADA": {
+        "name": "Asignada",
+        "description": "Un técnico específico ya ha tomado la responsabilidad de este ticket."
+      },
+      "ATENDIENDO": {
+        "name": "Atendiendo",
+        "description": "El técnico se encuentra trabajando activamente en la solución."
+      },
+      "SOLUCIONADA": {
+        "name": "Solucionada",
+        "description": "El problema técnico ha sido resuelto exitosamente."
+      },
+      "NO_SOLUCIONADA": {
+        "name": "No solucionada",
+        "description": "No fue posible resolver el problema con los recursos actuales."
+      },
+      "PAUSADA": {
+        "name": "Pausada",
+        "description": "El trabajo está detenido (ej. esperando una pieza o respuesta del usuario)."
+      },
+      "FINALIZADA": {
+        "name": "Finalizada",
+        "description": "El proceso técnico concluyó y está a la espera del cierre administrativo."
+      },
+      "CERRADA": {
+        "name": "Cerrada",
+        "description": "El ticket ha completado todo su ciclo de vida."
+      },
+      "ARCHIVADA": {
+        "name": "Archivada",
+        "description": "El ticket antiguo ha sido movido al historial."
+      },
+      "UNKNOWN": {
+        "name": "Desconocido",
+        "description": "Estado no reconocido por el sistema."
+      }
+    },
+    "priority": {
+      "1": {
+        "name": "Crítica",
+        "description": "Emergencia. Afecta a toda la institución o detiene un servicio vital. SLA: 1 a 4 horas."
+      },
+      "2": {
+        "name": "Alta",
+        "description": "Afecta a un departamento o proceso importante, deteniendo funciones clave. SLA: 4 a 8 horas."
+      },
+      "3": {
+        "name": "Media",
+        "description": "Falla estándar. Afecta a un usuario pero su trabajo general puede continuar. SLA: 1 a 3 días hábiles."
+      },
+      "4": {
+        "name": "Baja",
+        "description": "Solicitudes preventivas, dudas o problemas estéticos que no afectan la operación. SLA: 3 a 5 días hábiles."
+      },
+      "UNKNOWN": {
+        "name": "Desconocida",
+        "description": "Nivel de prioridad no definido en el sistema."
+      }
+    },
+    "view_page": {
+      "title": "Progreso de la solicitud",
+      "description": "Visualiza el avance de la solicitud",
+      "details": {
+        "sections": {
+          "requester_info": "Información del solicitante",
+          "issue_details": "Detalles del problema"
+        }
+      },
+      "timeline": {
+        "title": "Historial de cambio",
+        "description": "Visualiza los cambios de la solicitud"
+      }
+    },
+    "list_page": {
+      "title": "Lista de Solicitudes",
+      "description": "Visualiza y gestiona todas las solicitudes de soporte técnico registradas en el sistema",
+      "actions": {
+        "new": "Nuevo Ticket",
+        "route": "Canalizar",
+        "start": "Canalizar",
+        "assigne": "Asignar",
+        "edit": "Editar",
+        "reject": "Rechazar"
+      },
+      "table": {
+        "headers": {
+          "folio": "Folio",
+          "manager": "Jefe de Departamento",
+          "issue": "Problema",
+          "date": "Fecha de Creación",
+          "status": "Estatus",
+          "priority": "Prioridad",
+          "actions": "Acciones"
+        }
+      },
+      "empty": {
+        "title": "No se encontraron Solicitudes",
+        "description": "Intenta ajustar los filtros de busqueda"
+      }
+    },
+    "create_page": {
+      "title": "Nueva Solicitud de Soporte Técnico",
+      "description": "Registra una nueva solicitud de soporte tecnico.",
+      "success": {
+        "title": "Éxito",
+        "message": "Solicitud enviada."
+      },
+      "error": {
+        "title": "Error",
+        "message": "Ocurrió un error al enviar la solicitud de soporte técnico."
+      }
+    },
+    "form": {
+      "header": {
+        "title": "Datos de la solicitud",
+        "description": "Información de la solicitud de soporte técnico."
+      },
+      "intervene": {
+        "header": {
+          "title": "Registro de Intervención",
+          "description": "Detalla el trabajo realizado y el diagnóstico del equipo."
+        },
+        "fields": {
+          "diagnosis": {
+            "label": "Diagnóstico",
+            "placeholder": "Ej. La fuente de poder estaba quemada por una variación de voltaje..."
+          },
+          "work_performed": {
+            "label": "Trabajo Realizado",
+            "placeholder": "Ej. Se reemplazó la fuente de poder y se hizo limpieza general..."
+          },
+          "required_materials": {
+            "label": "Materiales Utilizados / Requeridos",
+            "placeholder": "Ej. 1x Fuente de poder 500W, 2x Cinchos (Dejar en blanco si no aplica)",
+            "description": "Si no utilizaste ni requieres ninguna refacción o material extra, puedes dejar este campo en blanco."
+          },
+          "is_resolved": {
+            "label": "¿El problema quedó solucionado?",
+            "description": "Activa esta opción si el equipo o servicio quedó completamente operativo. Si el problema persiste o requiere seguimiento, déjalo apagado."
+          }
+        },
+        "buttons": {
+          "submit": "Guardar Intervención"
+        },
+        "errors": {
+          "diagnosis_required": "El diagnóstico es obligatorio.",
+          "diagnosis_min": "El diagnóstico debe tener al menos 10 caracteres.",
+          "diagnosis_max": "El diagnóstico no puede exceder los 1000 caracteres.",
+          "work_performed_required": "Debes describir el trabajo realizado.",
+          "work_performed_min": "La descripción del trabajo debe tener al menos 10 caracteres.",
+          "work_performed_max": "La descripción del trabajo no puede exceder los 2000 caracteres.",
+          "materials_required": "El campo de materiales es obligatorio (puede ir vacío).",
+          "materials_max": "La lista de materiales no puede exceder los 500 caracteres.",
+          "is_resolved_required": "Debes indicar si el ticket fue solucionado o no.",
+          "is_resolved_invalid": "El valor de resolución debe ser verdadero o falso."
+        }
+      },
+      "finish": {
+        "header": {
+          "title": "Finalizar Trabajo",
+          "description": "Completa la información técnica final para cerrar formalmente esta intervención."
+        },
+        "fields": {
+          "diagnosis": {
+            "label": "Diagnóstico Final",
+            "placeholder": "Ej. Se confirmó falla en el nodo de red por cableado en mal estado..."
+          },
+          "work_done": {
+            "label": "Trabajo Realizado",
+            "placeholder": "Ej. Se ponchó un nuevo conector RJ45 y se validó la conectividad..."
+          },
+          "maintenance_type": {
+            "label": "Tipo de Mantenimiento",
+            "placeholder": "Selecciona el tipo de mantenimiento realizado"
+          },
+          "service_type": {
+            "label": "Tipo de Servicio",
+            "placeholder": "Selecciona el tipo servicio realizado"
+          }
+        },
+        "buttons": {
+          "submit": "Finalizar Ticket"
+        },
+        "errors": {
+          "diagnosis_required": "El diagnóstico final es obligatorio.",
+          "diagnosis_min": "El diagnóstico debe tener al menos 10 caracteres.",
+          "diagnosis_max": "El diagnóstico no puede exceder los 1000 caracteres.",
+          "work_done_required": "La descripción del trabajo realizado es obligatoria.",
+          "work_done_min": "El trabajo realizado debe tener al menos 10 caracteres.",
+          "work_done_max": "El trabajo realizado no puede exceder los 2000 caracteres.",
+          "maintenance_type_required": "Debes seleccionar el tipo de mantenimiento.",
+          "service_type_required": "Debes seleccionar el tipo de servicio."
+        }
+      },
+      "route": {
+        "header": {
+          "title": "Canalizar Ticket",
+          "description": "Selecciona la coordinación correspondiente para atender este ticket."
+        },
+        "fields": {
+          "coordination": {
+            "label": "Coordinación",
+            "placeholder": "Selecciona la coordinación..."
+          },
+          "coordinator": {
+            "label": "Coordinador",
+            "placeholder": "Selecciona a un coordinador...",
+            "not_found": "No se encontró ningún coordinador."
+          }
+        },
+        "buttons": {
+          "submit": "Confirmar Canalización"
+        },
+        "errors": {
+          "coordination_required": "Por favor, selecciona un área de coordinación.",
+          "priority_required": "Debes asignar una prioridad al ticket.",
+          "priority_invalid": "La prioridad debe ser un número entero válido.",
+          "priority_min": "La prioridad mínima permitida es 1.",
+          "priority_max": "La prioridad máxima permitida es 4."
+        }
+      },
+      "assign": {
+        "header": {
+          "title": "Asignar Técnicos",
+          "description": "Selecciona hasta 4 técnicos para atender este ticket."
+        },
+        "fields": {
+          "technicians": {
+            "label": "Técnicos asignados",
+            "placeholder": "Buscar técnico...",
+            "not_found": "No se encontró ningún técnico.",
+            "description": "4 seleccionados"
+          }
+        },
+        "buttons": {
+          "submit": "Asignar Técnicos"
+        },
+        "errors": {
+          "technicians_required": "Debes seleccionar a los técnicos para asignar el ticket.",
+          "technicians_min": "Por favor, selecciona al menos un técnico.",
+          "technicians_max": "No puedes asignar este ticket a más de 4 técnicos."
+        }
+      },
+      "fields": {
+        "affected_name": {
+          "label": "Nombre del afectado",
+          "placeholder": "Ej. Juan Pérez"
+        },
+        "contact_email": {
+          "label": "Correo de contacto",
+          "placeholder": "usuario@itoaxaca.edu.mx"
+        },
+        "equipment_location": {
+          "label": "Ubicación del equipo",
+          "placeholder": "Ej. Laboratorio de Cómputo, Máquina 15"
+        },
+        "available_hours": {
+          "label": "Horario disponible para atención",
+          "placeholder": "Ej. Lunes a Viernes de 10:00 a 14:00"
+        },
+        "issue_type": {
+          "label": "Tipo de problema",
+          "placeholder": "Selecciona una categoría..."
+        },
+        "evidence_url": {
+          "label": "URL de evidencia (Opcional)",
+          "placeholder": "https://...",
+          "description": "Seleccione una imagen para cargar"
+        },
+        "description": {
+          "label": "Descripción detallada del problema",
+          "placeholder": "Describe paso a paso lo que ocurrió o el comportamiento del equipo..."
+        }
+      },
+      "errors": {
+        "description_required": "La descripción del problema es obligatoria.",
+        "description_max": "La descripción no puede exceder los 1000 caracteres.",
+        "affected_name_required": "El nombre de la persona afectada es obligatorio.",
+        "affected_name_max": "El nombre no puede exceder los 100 caracteres.",
+        "evidence_url_format": "Ingresa una URL válida que comience con http:// o https://.",
+        "contact_email_required": "El correo electrónico de contacto es obligatorio.",
+        "contact_email_format": "Ingresa un correo electrónico válido (ej. usuario@ejemplo.com).",
+        "available_hours_required": "Por favor indica en qué horario estás disponible.",
+        "available_hours_max": "El texto del horario no puede exceder los 100 caracteres.",
+        "equipment_location_required": "La ubicación del equipo es obligatoria.",
+        "equipment_location_max": "La ubicación no puede exceder los 200 caracteres.",
+        "issue_type_required": "Debes seleccionar una categoría o tipo de problema.",
+        "issue_type_invalid": "El tipo de problema seleccionado no es válido."
+      }
+    }
+  }
 }
