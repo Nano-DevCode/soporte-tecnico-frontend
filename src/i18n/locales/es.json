@@ -503,7 +503,8 @@
   },
   "tickets": {
     "data": {
-      "affected_name": "Nombre del solicitante",
+      "affected_name": "Nombre del afectado",
+      "sender_name": "Nombre del remitente",
       "department": "Departamento",
       "email": "Correo electrónico",
       "equipment_location": "Ubicación del equipo",
@@ -586,13 +587,20 @@
         "description": "Nivel de prioridad no definido en el sistema."
       }
     },
+
+    "not_found": {
+      "title": "Ticket no encontrado",
+      "message": "El ticket al que intentas acceder no existe o fue eliminado."
+    },
+
     "view_page": {
       "title": "Progreso de la solicitud",
       "description": "Visualiza el avance de la solicitud",
       "details": {
         "sections": {
           "requester_info": "Información del solicitante",
-          "issue_details": "Detalles del problema"
+          "issue_details": "Detalles del problema",
+          "sender_info": "Información del remitente"
         }
       },
       "timeline": {
@@ -600,6 +608,33 @@
         "description": "Visualiza los cambios de la solicitud"
       }
     },
+
+    "reject_page": {
+      "title": "Rechazar Solicitud",
+      "description": "La solicitud será devuelto para su modificación",
+      "success": {
+        "title": "Solicitud rechazada",
+        "message": "La justificación se ha guardado y la solicitud ha sido rechazado correctamente."
+      },
+      "error": {
+        "title": "Error al rechazar",
+        "message": "Hubo un problema al intentar rechazar la solicitud."
+      }
+    },
+
+    "edit_page": {
+      "title": "Editar Solicitud",
+      "description": "Modifica la información de la solicitud.",
+      "success": {
+        "title": "Ticket actualizado",
+        "message": "Los cambios se han guardado correctamente."
+      },
+      "error": {
+        "title": "Error al editar",
+        "message": "Hubo un problema al intentar actualizar el ticket."
+      }
+    },
+
     "list_page": {
       "title": "Lista de Solicitudes",
       "description": "Visualiza y gestiona todas las solicitudes de soporte técnico registradas en el sistema",
@@ -639,14 +674,62 @@
         "message": "Ocurrió un error al enviar la solicitud de soporte técnico."
       }
     },
+    "intervene_page": {
+      "title": "Registrar bitácora de intervención",
+      "description": "Documenta el avance en la atención de esta solicitud.",
+      "success": {
+        "title": "Bitácora registrada",
+        "message": "El ticket ha sido actualizado correctamente."
+      },
+      "error": {
+        "title": "Error al guardar",
+        "message": "Ocurrió un error al enviar la solicitud de soporte técnico."
+      }
+    },
+    
+    "rejection_report": {
+      "header": {
+        "title": "Reporte de Rechazo",
+        "description": "Motivo por el cual la solicitud no procedió."
+      },
+      "sections": {
+        "details": "Rrporte de Rechazo"
+      },
+      "data": {
+        "date": "Fecha de rechazo",
+        "justification": "Motivo del rechazo"
+      }
+    },
+
     "form": {
       "header": {
         "title": "Datos de la solicitud",
         "description": "Información de la solicitud de soporte técnico."
       },
+      "reject": {
+        "header": {
+          "title": "Rechazar Solicitud",
+          "description": "Indica el motivo por el cual esta solicitud no procede."
+        },
+        "fields": {
+          "justification": {
+            "label": "Justificación del rechazo",
+            "placeholder": "Explica detalladamente el motivo por el cual no procede esta solicitud..."
+          }
+        },
+        "buttons": {
+          "submit": "Confirmar Rechazo"
+        },
+        "errors": {
+          "justification_required": "Debes proporcionar una justificación para el rechazo.",
+          "justification_min": "La justificación debe tener al menos 10 caracteres.",
+          "justification_max": "La justificación es demasiado larga (máximo 1000 caracteres)."
+        }
+      },
+      
       "intervene": {
         "header": {
-          "title": "Registro de Intervención",
+          "title": "Registro de Bitácora",
           "description": "Detalla el trabajo realizado y el diagnóstico del equipo."
         },
         "fields": {
@@ -666,6 +749,11 @@
           "is_resolved": {
             "label": "¿El problema quedó solucionado?",
             "description": "Activa esta opción si el equipo o servicio quedó completamente operativo. Si el problema persiste o requiere seguimiento, déjalo apagado."
+          },
+          "tags": {
+            "label": "Etiquetas de clasificación",
+            "placeholder": "Añadir etiqueta...",
+            "description": "Escribe y presiona Enter para crear nuevas clasificaciones."
           }
         },
         "buttons": {
@@ -681,7 +769,11 @@
           "materials_required": "El campo de materiales es obligatorio (puede ir vacío).",
           "materials_max": "La lista de materiales no puede exceder los 500 caracteres.",
           "is_resolved_required": "Debes indicar si el ticket fue solucionado o no.",
-          "is_resolved_invalid": "El valor de resolución debe ser verdadero o falso."
+          "is_resolved_invalid": "El valor de resolución debe ser verdadero o falso.",
+          "tags_invalid": "La etiqueta debe ser un texto válido.",
+          "tags_min": "Las etiquetas deben tener al menos 2 caracteres.",
+          "tags_max": "Las etiquetas no pueden exceder los 30 caracteres.",
+          "tags_max_items": "No puedes agregar más de 10 etiquetas por intervención."
         }
       },
       "finish": {

@@ -27,11 +27,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 interface Props {
     isPending: boolean;
+    priorityDefault?: number;
     onSubmit: (data: RouteTicketFormOutput) => void;
     onCancel: () => void;
 }
 
-export const RouteTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
+export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault }: Props) => {
     const { t } = useTranslation();
     const schema = useMemo(() => RouteTicketSchema(t), [t]);
     const { isLoading, isError, data: coordinators } = useGetCoordinators();
@@ -53,6 +54,7 @@ export const RouteTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
         resolver: zodResolver(schema),
         defaultValues: {
             coordinatorId: "",
+            priority: priorityDefault || undefined,
         },
     });
 
@@ -126,7 +128,7 @@ export const RouteTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
                                                             <span className="font-semibold bg-secondary px-1.5 rounded">
                                                                 {coordinator.user.role.name}
                                                             </span>
-                                                            <span className="truncate">{coordinator.user.email}</span>
+                                                            {/* <span className="truncate">{coordinator.user.email}</span> */}
                                                         </div>
                                                     </ComboboxItem>
                                                 )}

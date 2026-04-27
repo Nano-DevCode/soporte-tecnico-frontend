@@ -1,3 +1,4 @@
+import type { Tag } from "@/common/tags/interfaces/tag.interface";
 import type { TicketStatusCode } from "./ticket-status-code.interface";
 
 export interface TicketDetailsResponse {
@@ -46,11 +47,6 @@ export interface Status {
     created_at:   Date;
     updated_at:   Date;
     code:         TicketStatusCode;
-}
-
-export interface Tag {
-    name:    string,
-    id:      number,
 }
 
 export interface User {

@@ -26,6 +26,8 @@ import { AssignTicketSchema, type AssignTicketFormInput, type AssignTicketFormOu
 import { useGetTechnicians } from "@/common/technicians/hooks/useGetTechnicians";
 import React from "react";
 import type { Technician } from "@/common/technicians/interfaces/technicians.interface";
+import type { TicketDetailsResponse } from "@/tickets/interfaces/ticket-details.response";
+import { TicketStatus } from "@/tickets/utils/ticket-state-machine";
 
 interface techValue {
     value: string;
@@ -35,21 +37,26 @@ interface techValue {
 
 interface Props {
     isPending: boolean;
+    ticket: TicketDetailsResponse;
     onSubmit: (data: AssignTicketFormOutput) => void;
     onCancel: () => void;
 }
 
-export const AssignTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
+export const AssignTicketForm = ({ onSubmit, isPending, onCancel, ticket }: Props) => {
     const { t } = useTranslation();
     const schema = useMemo(() => AssignTicketSchema(t), [t]);
     const { isLoading, isError, data: technicians } = useGetTechnicians();
     const navigate = useNavigate();
     const anchor = useComboboxAnchor()
 
+    const technicianDefaultIds = ticket.attends
+        ? ticket.attends.map((tech) => tech.technician.id)
+        : [];
+
     const form = useForm<AssignTicketFormInput, unknown, AssignTicketFormOutput>({
         resolver: zodResolver(schema),
         defaultValues: {
-            technicianIds: []
+            technicianIds: technicianDefaultIds,
         },
     });
     useEffect(() => {
@@ -92,7 +99,7 @@ export const AssignTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
             <Separator />
             <CardContent >
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} id="form-route-ticket">
+                    <form onSubmit={form.handleSubmit(onSubmit)} id="form-assign-ticket">
 
                         <FormField
                             control={form.control}
@@ -193,8 +200,8 @@ export const AssignTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
 
                 <Button
                     type="submit"
-                    form="form-route-ticket"
-                    disabled={isPending || !form.formState.isDirty}
+                    form="form-assign-ticket"
+                    disabled={isPending || (!form.formState.isDirty && ticket.currentStatusCode !== TicketStatus.NO_SOLUCIONADA)}
                     className="flex-auto"
                 >
                     {isPending ? (

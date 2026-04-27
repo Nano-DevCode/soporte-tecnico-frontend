@@ -1,4 +1,4 @@
 export interface AssignTicketPayload {
     technicianIds: string[];
-    priority: number;
+    priority?: number;
 }

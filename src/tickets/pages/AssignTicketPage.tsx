@@ -85,6 +85,7 @@ export const AssignTicketPage = () => {
 
                 <div className="lg:col-span-5 order-1 lg:order-2 lg:sticky lg:top-15">
                     <AssignTicketForm
+                        ticket={ticket}
                         isPending={isPending}
                         onSubmit={handleSubmit}
                         onCancel={handleCancel}

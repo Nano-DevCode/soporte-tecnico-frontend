@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { sileo } from "sileo";
 import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
@@ -11,8 +11,11 @@ export const InterveneTicketPage = () => {
     const { id } = useParams();
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const { mutate, isPending } = useInterveneTicket();
+
+    const previousPage = location.state?.from;
 
     const handleSubmit = (values: InterveneTicketFormOutput) => {
         if (!id) {
@@ -22,11 +25,11 @@ export const InterveneTicketPage = () => {
         mutate({ ticketId: id, interveneTicketPayload: values }, {
             onSuccess: () => {
                 sileo.success({
-                    title: t('tickets.create_page.success.title'),
-                    description: t('tickets.create_page.success.message'),
+                    title: t('tickets.intervene_page.success.title'),
+                    description: t('tickets.intervene_page.success.message'),
                     duration: 5000,
                 });
-                navigate(`/tickets`);
+                navigate(previousPage || '/tickets', { replace: true })
             },
             onError: (error) => {
                 console.error("Error en la mutación:", error);
@@ -34,7 +37,7 @@ export const InterveneTicketPage = () => {
                 const errorMessage = getAxiosErrorMessage(error);
 
                 sileo.error({
-                    title: t('tickets.create_page.error.title'),
+                    title: t('tickets.intervene_page.error.title'),
                     description: errorMessage,
                     duration: 7000,
                 });
@@ -43,20 +46,16 @@ export const InterveneTicketPage = () => {
     };
 
     const handleCancel = () => {
-        navigate('/tickets');
+        navigate(previousPage || '/tickets')
     };
 
     return (
         <div className="mx-auto max-w-4xl space-y-5">
             <CustomTitlePageWithBack
-                backLink="/tickets"
-                title={t('tickets.form.intervene.header.title')}
-                description={t('tickets.form.intervene.header.description')}
+                backLink={previousPage || "/tickets"}
+                title={t('tickets.intervene_page.title')}
+                description={t('tickets.intervene_page.description')}
             />
-            {/* <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start"> */}
-            {/* <div className="lg:col-span-7 order-2 lg:order-1">
-                    <DetailsTicket ticket={ticket} />
-                </div> */}
 
             <div>
                 <InterveneTicketForm
@@ -65,9 +64,6 @@ export const InterveneTicketPage = () => {
                     onCancel={handleCancel}
                 />
             </div>
-
-            {/* </div> */}
-
         </div>
     )
 }

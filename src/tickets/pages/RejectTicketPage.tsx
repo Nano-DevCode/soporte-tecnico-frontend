@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { DetailsTicket } from "../components/details/DetailsTicket"
 import { useGetTicketById } from "../hooks/useGetTicketById"
 import { useTranslation } from "react-i18next";
@@ -6,44 +6,47 @@ import { CustomFullScreenLoading } from "@/components/custom/CustomFullScreenLoa
 import { sileo } from "sileo";
 import { useEffect } from "react";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
-import type { RouteTicketFormOutput } from "../shcemas/route-ticket.schema";
-import { RouteTicketForm } from "../components/forms/RouteTicketForm";
-import { useRouteTicket } from "../hooks/useRouteTicket";
 import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
+import { useRejectTicket } from "../hooks/useRejectTicket";
+import type { RejectTicketFormOutput } from "../shcemas/reject-ticket.schema";
+import { RejectTicketForm } from "../components/forms/RejectTicketForm";
 
-export const RouteTicketPage = () => {
+export const RejectTicketPage = () => {
     const { id } = useParams();
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const { isLoading, isError, data: ticket } = useGetTicketById(id);
-    const { mutate, isPending } = useRouteTicket();
+    const { mutate, isPending } = useRejectTicket();
+
+    const previousPage = location.state?.from;
 
     useEffect(() => {
         if (!isLoading && (isError || !ticket)) {
             sileo.error({
-                title: 'p',
-                description: 'p',
+                title: t('tickets.not_found.title'),
+                description: t('tickets.not_found.message'),
                 duration: 6000,
             });
 
-            navigate('/tickets', { replace: true });
+            navigate(previousPage || `/tickets`, { replace: true });
         }
-    }, [isError, isLoading, ticket, id, navigate, t]);
+    }, [isError, isLoading, ticket, id, navigate, t, previousPage]);
 
-    const handleSubmit = (values: RouteTicketFormOutput) => {
+    const handleSubmit = (values: RejectTicketFormOutput) => {
         if (!id) {
             return
         }
 
-        mutate({ ticketId: id, routeTicketPayload: values }, {
+        mutate({ ticketId: id, rejectTicketPayload: values }, {
             onSuccess: () => {
                 sileo.success({
-                    title: t('tickets.create_page.success.title'),
-                    description: t('tickets.create_page.success.message'),
+                    title: t('tickets.reject_page.success.title'),
+                    description: t('tickets.reject_page.success.message'),
                     duration: 5000,
                 });
-                navigate(`/tickets`);
+                navigate(previousPage || `/tickets`, { replace: true });
             },
             onError: (error) => {
                 console.error("Error en la mutación:", error);
@@ -51,7 +54,7 @@ export const RouteTicketPage = () => {
                 const errorMessage = getAxiosErrorMessage(error);
 
                 sileo.error({
-                    title: t('tickets.create_page.error.title'),
+                    title: t('tickets.reject_page.error.title'),
                     description: errorMessage,
                     duration: 7000,
                 });
@@ -60,23 +63,19 @@ export const RouteTicketPage = () => {
     };
 
     const handleCancel = () => {
-        navigate('/tickets');
+        navigate(previousPage || `/tickets`);
     };
 
-    if (isLoading) {
-        return <CustomFullScreenLoading />;
-    }
+    if (isLoading) return <CustomFullScreenLoading />;
 
-    if (!ticket) {
-        return null;
-    }
+    if (!ticket) return null;
 
     return (
         <div className="mx-auto max-w-4xl space-y-5">
             <CustomTitlePageWithBack
-                backLink={`/tickets/${ticket.id}`}
-                title="Canalizar solicitud"
-                description={"Selecciona la coordinación a la que se canalizara la solicitud"}
+                backLink={previousPage || '/tickets'}
+                title={t('tickets.reject_page.title')}
+                description={t('tickets.reject_page.description')}
             />
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
                 <div className="lg:col-span-7 order-2 lg:order-1">
@@ -84,8 +83,7 @@ export const RouteTicketPage = () => {
                 </div>
 
                 <div className="lg:col-span-5 order-1 lg:order-2 lg:sticky lg:top-15">
-                    <RouteTicketForm
-                        priorityDefault={ticket.priority}
+                    <RejectTicketForm
                         isPending={isPending}
                         onSubmit={handleSubmit}
                         onCancel={handleCancel}

@@ -1,18 +1,15 @@
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { TicketStatusBadge } from "../TicketStatusBadge"
 import type { TicketDetailsResponse } from "@/tickets/interfaces/ticket-details.response";
-import { TicketActions } from "./TicketActions";
 import { useTranslation } from "react-i18next";
 import { TicketPriorityBadge } from "../TicketPriorityBadge";
 import { getFullName } from "@/lib/helpers/toFullName";
-import type { TicketEvent } from "@/tickets/utils/ticket-state-machine";
+import { TicketTagsBadge } from "../TicketTagsBadge";
 
 export interface Props {
     ticket: TicketDetailsResponse;
-    onDirectAction?: (event: TicketEvent) => void;
-    pendingEvent?: TicketEvent | null;
 }
-export const DetailHeaderTicket = ({ ticket, onDirectAction, pendingEvent }: Props) => {
+export const DetailHeaderTicket = ({ ticket }: Props) => {
     const { t } = useTranslation();
     return (
         <Card>
@@ -34,7 +31,11 @@ export const DetailHeaderTicket = ({ ticket, onDirectAction, pendingEvent }: Pro
                             <p>
                                 {t('tickets.data.canalized_to')}
                                 <span className="text-foreground">
-                                    {ticket.coordinator.name}
+                                    {getFullName(
+                                        ticket.coordinator.name,
+                                        ticket.coordinator.paternalSurname,
+                                        ticket.coordinator.maternalSurname)
+                                    }
                                 </span>
                             </p>
                         )}
@@ -52,23 +53,16 @@ export const DetailHeaderTicket = ({ ticket, onDirectAction, pendingEvent }: Pro
                             </p>
                         )}
                     </div>
-                    <div className="flex flex-col gap-2 flex-1">
+                    <div className="flex flex-col gap-4 flex-1">
                         <div className="flex justify-end gap-2">
                             <TicketStatusBadge statusCode={ticket.currentStatusCode} />
                             <TicketPriorityBadge priority={ticket.priority} />
                         </div>
-                        {/* TODO: tags */}
+
+                        <TicketTagsBadge tags={ticket.tags} />
                     </div>
                 </div>
             </CardContent>
-            <CardFooter >
-                <TicketActions
-                    currentState={ticket.currentStatusCode}
-                    ticketId={ticket.id}
-                    onDirectAction={onDirectAction}
-                    pendingEvent={pendingEvent}
-                />
-            </CardFooter>
         </Card>
     )
 }

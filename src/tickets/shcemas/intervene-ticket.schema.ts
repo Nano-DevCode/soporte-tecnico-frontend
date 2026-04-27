@@ -14,6 +14,14 @@ export const InterveneTicketSchema = (t: TFunction) => z.object({
         .optional()
         .or(z.literal('')),
     is_resolved: z.boolean(t('tickets.form.intervene.errors.is_resolved_required')),
+    tags: z.array(
+        z.string(t('tickets.form.intervene.errors.tags_invalid'))
+            .min(2, t('tickets.form.intervene.errors.tags_min'))
+            .max(30, t('tickets.form.intervene.errors.tags_max'))
+    )
+        .max(10, t('tickets.form.intervene.errors.tags_max_items'))
+        .optional()
+        .default([]),
 });
 
 export type InterveneTicketFormInput = z.input<ReturnType<typeof InterveneTicketSchema>>;

@@ -24,7 +24,8 @@ const LINEAR_STEPS: TicketStatusCode[] = [
     'ATENDIENDO',
     'SOLUCIONADA',
     'FINALIZADA',
-    'CERRADA'
+    'CERRADA',
+    'ARCHIVADA'
 ];
 
 interface StateConfig {
@@ -65,7 +66,7 @@ const STATE_DICTIONARY: Record<TicketStatusCode, StateConfig> = {
         label: 'Archivada',
         description: 'Este ticket es antiguo y se encuentra en el archivo histórico.',
         icon: Archive,
-        isException: true,
+        isException: false,
         alertVariant: 'default',
         fallbackIndex: 6
     },
@@ -86,7 +87,7 @@ export function TicketStepper({ currentState, className }: TicketStepperProps) {
 
     const progressPercentage = activeIndex === 0
         ? 0
-        : (activeIndex / (LINEAR_STEPS.length - 1)) * 100;
+        : ((activeIndex * 100) + 50) / LINEAR_STEPS.length;
 
     return (
         <Card className={cn('w-full', className)}>
@@ -110,7 +111,8 @@ export function TicketStepper({ currentState, className }: TicketStepperProps) {
                     <div
                         className={cn(
                             "absolute top-5 left-0 h-1 rounded-full transition-all duration-500 ease-in-out",
-                            isExceptional ? "bg-muted-foreground/30" : "bg-primary"
+                            // isExceptional ? "bg-muted-foreground/30" : 
+                            "bg-primary"
                         )}
                         style={{ width: `${progressPercentage}%` }}
                     />

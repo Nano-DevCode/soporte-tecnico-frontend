@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { getAvailableActions, TicketEvent, type TicketStatus } from '@/tickets/utils/ticket-state-machine';
 import { Send, XCircle, Wrench, type LucideIcon, UserPlus, Inbox, Edit3, Flag, Archive, Lock, Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 export type ActionBehavior = 'navigate' | 'direct' | 'confirm';
 export type Variants = 'default' | 'destructive' | 'outline' | 'secondary';
@@ -18,7 +18,7 @@ interface EventUIConfig {
     confirmMessage?: string;
 }
 // TODO: TRADUCIR LOS MENSAJES.
-const EVENT_UI_CONFIG: Record<TicketEvent, EventUIConfig> = {
+const EVENT_UI_CONFIG: Partial<Record<TicketEvent, EventUIConfig>> = {
     [TicketEvent.RECIBIR]: {
         label: 'Recibir Ticket',
         icon: Inbox,
@@ -86,33 +86,12 @@ const EVENT_UI_CONFIG: Record<TicketEvent, EventUIConfig> = {
         confirmMessage: 'Confirme la recepción de los formatos de la solicitud.'
     },
     [TicketEvent.INTERVENIR]: {
-        label: 'Registrar Intervención',
+        label: 'Registrar Bitácora',
         icon: Edit3,
         variant: 'default',
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/intervene`
     },
-    // [TicketEvent.PAUSAR]: {
-    //     label: 'Pausar Atención',
-    //     icon: PauseCircle,
-    //     variant: 'secondary',
-    //     behavior: 'navigate',
-    //     route: (id) => `/tickets/${id}/pause`
-    // },
-    // [TicketEvent.SOLUCIONAR]: {
-    //     label: 'Marcar como Solucionado',
-    //     icon: CheckCircle2,
-    //     variant: 'default',
-    //     behavior: 'navigate',
-    //     route: (id) => `/tickets/${id}/solve`
-    // },
-    // [TicketEvent.NO_SOLUCIONAR]: {
-    //     label: 'No se pudo solucionar',
-    //     icon: AlertCircle,
-    //     variant: 'destructive',
-    //     behavior: 'navigate',
-    //     route: (id) => `/tickets/${id}/unsolved`
-    // },
 };
 
 interface TicketActionsProps {
@@ -125,6 +104,7 @@ interface TicketActionsProps {
 export function TicketActions({ currentState, pendingEvent, ticketId, onDirectAction }: TicketActionsProps) {
     const availableActions = getAvailableActions(currentState);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [eventToConfirm, setEventToConfirm] = useState<TicketEvent | null>(null);
 
@@ -149,7 +129,9 @@ export function TicketActions({ currentState, pendingEvent, ticketId, onDirectAc
 
                     const handleClick = () => {
                         if (config.behavior === 'navigate' && config.route) {
-                            navigate(config.route(ticketId));
+                            navigate(config.route(ticketId), {
+                                state: { from: location.pathname },
+                            });
                         } else if (config.behavior === 'direct' && onDirectAction) {
                             onDirectAction(event);
                         } else if (config.behavior === 'confirm') {
@@ -180,10 +162,10 @@ export function TicketActions({ currentState, pendingEvent, ticketId, onDirectAc
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>
-                            {eventToConfirm ? EVENT_UI_CONFIG[eventToConfirm].confirmTitle : ''}
+                            {eventToConfirm ? EVENT_UI_CONFIG[eventToConfirm]?.confirmTitle : ''}
                         </AlertDialogTitle>
                         <AlertDialogDescription>
-                            {eventToConfirm ? EVENT_UI_CONFIG[eventToConfirm].confirmMessage : ''}
+                            {eventToConfirm ? EVENT_UI_CONFIG[eventToConfirm]?.confirmMessage : ''}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

@@ -64,7 +64,7 @@ export const TicketStatusBadge = ({ statusCode, className }: Props) => {
             <TooltipTrigger asChild className="w-fit cursor-help">
                 <Badge
                     className={cn(
-                        "font-semibold px-2.5 py-0.5 uppercase tracking-wider text-[10px] sm:text-xs bg",
+                        "font-semibold px-2.5 py-0.5 uppercase tracking-wider text-[10px] sm:text-xs",
                         config.className,
                         className
                     )}

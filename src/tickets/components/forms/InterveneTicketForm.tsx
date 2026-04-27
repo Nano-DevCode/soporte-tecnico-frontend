@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { Loader2, ClipboardSignature, Save, X } from "lucide-react";
+import { Loader2, ClipboardSignature, Save, X, Plus } from "lucide-react";
 
 import {
     Form,
@@ -13,7 +13,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
@@ -21,6 +21,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { InterveneTicketSchema, type InterveneTicketFormInput, type InterveneTicketFormOutput } from "@/tickets/shcemas/intervene-ticket.schema";
 import { Item, ItemActions, ItemContent } from "@/components/ui/item";
+import { useGetTags } from "@/common/tags/hooks/useGetTags";
+import { sileo } from "sileo";
+import { useNavigate } from "react-router";
+import { Combobox, ComboboxChip, ComboboxChips, ComboboxChipsInput, ComboboxContent, ComboboxEmpty, ComboboxItem, ComboboxList, ComboboxValue, useComboboxAnchor } from "@/components/ui/combobox";
+import { CustomFullScreenLoading } from "@/components/custom/CustomFullScreenLoading";
 
 
 interface Props {
@@ -31,8 +36,23 @@ interface Props {
 
 export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
     const { t } = useTranslation();
-    const schema = useMemo(() => InterveneTicketSchema(t), [t]);
+    const navigate = useNavigate();
 
+    const { data: tags, isLoading, isError } = useGetTags();
+
+    useEffect(() => {
+        if (!isLoading && (isError || !tags)) {
+            sileo.error({
+                title: t('center_managers.view_page.not_found.title'),
+                description: t('center_managers.view_page.not_found.message'),
+                duration: 6000,
+            });
+
+            navigate('/tickets', { replace: true });
+        }
+    }, [isError, isLoading, tags, navigate, t]);
+
+    const schema = useMemo(() => InterveneTicketSchema(t), [t]);
     const form = useForm<InterveneTicketFormInput, unknown, InterveneTicketFormOutput>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -40,8 +60,29 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) =>
             work_performed: "",
             required_materials: "",
             is_resolved: false,
+            tags: [],
         },
     });
+
+    const [inputValue, setInputValue] = useState("");
+
+    const tagNames = useMemo(() => tags ? tags.map(t => t.name.toUpperCase()) : [], [tags]);
+
+    const watchedTags = form.watch('tags');
+
+    const dynamicItems = useMemo(() => {
+        const currentSelectedTags = watchedTags || [];
+        const allKnownTags = Array.from(new Set([...tagNames, ...currentSelectedTags]));
+        const normalizedInput = inputValue.trim().toUpperCase();
+        if (normalizedInput && !allKnownTags.includes(normalizedInput)) {
+            return [...allKnownTags, normalizedInput];
+        }
+        return allKnownTags;
+    }, [inputValue, tagNames, watchedTags]);
+
+    const anchor = useComboboxAnchor()
+
+
 
     const handleCancel = () => {
         if (form.formState.isDirty) {
@@ -50,6 +91,9 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) =>
         }
         onCancel();
     };
+
+    if (isLoading) return <CustomFullScreenLoading />;
+    if (!tags) return null;
 
     return (
         <Card>
@@ -130,6 +174,74 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) =>
                                 )}
                             />
 
+                            <FormField
+                                control={form.control}
+                                name="tags"
+                                render={({ field }) => {
+
+                                    return (
+                                        <FormItem>
+                                            <FormLabel>{t('tickets.form.intervene.fields.tags.label')}</FormLabel>
+                                            <FormControl>
+                                                <Combobox
+                                                    items={dynamicItems}
+                                                    multiple
+                                                    autoHighlight
+                                                    value={field.value || []}
+                                                    onValueChange={field.onChange}
+                                                    onInputValueChange={setInputValue}
+                                                    disabled={isPending}
+                                                >
+                                                    <ComboboxChips ref={anchor}>
+                                                        <ComboboxValue>
+                                                            {(field.value || []).map((item) => (
+                                                                <ComboboxChip key={item}>{item}</ComboboxChip>
+                                                            ))}
+                                                        </ComboboxValue>
+                                                        <ComboboxChipsInput
+                                                            placeholder={t('tickets.form.intervene.fields.tags.placeholder')}
+                                                        />
+                                                    </ComboboxChips>
+                                                    <ComboboxContent anchor={anchor}>
+                                                        <ComboboxEmpty>
+                                                            <span> No se encontraron etiquetas.</span>
+                                                        </ComboboxEmpty>
+                                                        <ComboboxList>
+                                                            {(item) => {
+                                                                const isNewTag = !tagNames.includes(item) && !(watchedTags || []).includes(item);
+
+                                                                return (
+                                                                    <ComboboxItem
+                                                                        key={item}
+                                                                        value={item}
+                                                                        className={isNewTag ? "text-primary bg-primary/5 hover:bg-primary/10 transition-colors" : ""}
+                                                                    >
+                                                                        {isNewTag ? (
+                                                                            <div className="flex items-center gap-2">
+                                                                                <Plus className="h-4 w-4" />
+                                                                                <span>
+                                                                                    Crear etiqueta <strong className="font-semibold">"{item}"</strong>
+                                                                                </span>
+                                                                            </div>
+                                                                        ) : (
+                                                                            item
+                                                                        )}
+                                                                    </ComboboxItem>
+                                                                );
+                                                            }}
+                                                        </ComboboxList>
+                                                    </ComboboxContent>
+                                                </Combobox>
+                                            </FormControl>
+                                            <FormDescription>
+                                                {t('tickets.form.intervene.fields.tags.description')}
+                                            </FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )
+                                }}
+                            />
+
                             {/* Switch de Resolución (Destacado) */}
                             <FormField
                                 control={form.control}
@@ -190,6 +302,6 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) =>
                     {t('tickets.form.intervene.buttons.submit')}
                 </Button>
             </CardFooter>
-        </Card>
+        </Card >
     );
 };

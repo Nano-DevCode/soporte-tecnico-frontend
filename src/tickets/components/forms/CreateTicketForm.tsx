@@ -80,13 +80,9 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
         onCancel();
     };
 
-    if (isLoading) {
-        return <CustomFullScreenLoading />;
-    }
+    if (isLoading) return <CustomFullScreenLoading />;
 
-    if (!issueTypes) {
-        return null;
-    }
+    if (!issueTypes) return null;
 
     return (
         <Card>
@@ -157,16 +153,6 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                             />
                                         </FormControl>
                                         <FormMessage />
-
-                                        {/* <FormLabel>{t('tickets.form.fields.equipment_location.label')}</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder={t('tickets.form.fields.equipment_location.placeholder')}
-                                                disabled={isPending}
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage /> */}
                                     </FormItem>
                                 )}
                             />
@@ -186,16 +172,6 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                             />
                                         </FormControl>
                                         <FormMessage />
-                                        {/* 
-                                        <FormLabel>{t('tickets.form.fields.available_hours.label')}</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder={t('tickets.form.fields.available_hours.placeholder')}
-                                                disabled={isPending}
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage /> */}
                                     </FormItem>
                                 )}
                             />
@@ -208,8 +184,8 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                     <FormItem>
                                         <FormLabel>{t('tickets.form.fields.issue_type.label')}</FormLabel>
                                         <Select
+                                            name={field.name}
                                             disabled={isPending}
-                                            // Shadcn Select maneja strings, onValueChange lo inyecta al form
                                             onValueChange={field.onChange}
                                             defaultValue={field.value ? String(field.value) : undefined}
                                         >
@@ -230,31 +206,6 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                     </FormItem>
                                 )}
                             />
-
-                            {/* <FormField
-                                control={form.control}
-                                name="evidence_url"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('tickets.form.fields.evidence_url.label')}</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="File"
-                                                accept="image/*"
-
-                                                placeholder={t('tickets.form.fields.evidence_url.placeholder')}
-                                                disabled={isPending}
-                                                {...field}
-                                                value={field.value || ''}
-                                            />
-                                        </FormControl>
-                                        <FormDescription className="text-xs text-muted-foreground">
-                                            {t('tickets.form.fields.evidence_url.description')}
-                                        </FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            /> */}
 
                             {/* Fila 4: Descripción del problema (Ocupa las 2 columnas) */}
                             <FormField

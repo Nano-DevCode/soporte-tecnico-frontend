@@ -10,10 +10,12 @@ import { DetailsTicket } from '../components/details/DetailsTicket';
 import { DetailHeaderTicket } from '../components/details/DetailHeaderTicket';
 import { TicketTimeLine } from '../components/details/TicketTimeLine';
 import { useStartTicket } from '../hooks/useStartTicket';
-import { TicketEvent } from '../utils/ticket-state-machine';
+import { getAvailableActions, TicketEvent } from '../utils/ticket-state-machine';
 import { useCloseTicket } from '../hooks/useCloseTicket';
 import { useArchiveTicket } from '../hooks/useArchiveTicket';
 import { getAxiosErrorMessage } from '@/lib/helpers/getAxiosErrorMessage';
+import { TicketActions } from '../components/details/TicketActions';
+import { TechnicalReportsAccordion } from '../components/details/TechnicalReportsAccordion';
 
 export const ViewTicketPage = () => {
     const { id } = useParams();
@@ -102,7 +104,8 @@ export const ViewTicketPage = () => {
     if (!ticket) {
         return null;
     }
-
+    const canWatchTechnicalReports =
+        getAvailableActions(ticket.currentStatusCode).includes(TicketEvent.WATCH_TECHNICAL_REPORT);
     return (
         <div className="space-y-5">
             <CustomTitlePageWithBack
@@ -113,10 +116,14 @@ export const ViewTicketPage = () => {
 
             <DetailHeaderTicket
                 ticket={ticket}
+            />
+
+            <TicketActions
+                currentState={ticket.currentStatusCode}
+                ticketId={ticket.id}
                 onDirectAction={handleDirectAction}
                 pendingEvent={currentPendingEvent}
             />
-
             <div className="hidden lg:block">
                 <TicketStepper currentState={ticket.currentStatusCode} />
             </div>
@@ -128,6 +135,10 @@ export const ViewTicketPage = () => {
 
                 <div className="lg:col-span-2 order-1 lg:order-2 space-y-4">
                     <DetailsTicket ticket={ticket} />
+                    {
+                        canWatchTechnicalReports && <TechnicalReportsAccordion ticketId={ticket.id} />
+                    }
+
 
                     {/* Documentos */}
                     {/* {(currentState?.code === 'Pu' || currentState?.code === 'Resuelta' || currentState?.code === 'Cerrada') && (

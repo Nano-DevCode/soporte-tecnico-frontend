@@ -1,20 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { TicketDetailsResponse } from "../interfaces/ticket-details.response";
 import { ticketsQueryKeys } from "../keys/tickets-query.keys";
-import { interveneTicketAction } from "../actions/intervene-ticket.action";
-import { technicalReportsQueryKeys } from "../keys/technical-reports-query.keys";
+import { rejectTicketAction } from "../actions/reject-ticket.action";
 
-export const useInterveneTicket = () => {
+export const useRejectTicket = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: interveneTicketAction,
+        mutationFn: rejectTicketAction,
         onSuccess: (ticket: TicketDetailsResponse) => {
             queryClient.invalidateQueries({
                 queryKey: ticketsQueryKeys.lists()
-            });
-            queryClient.invalidateQueries({
-                queryKey: technicalReportsQueryKeys.details()
             });
             queryClient.setQueryData(
                 ticketsQueryKeys.detail(ticket.id),
