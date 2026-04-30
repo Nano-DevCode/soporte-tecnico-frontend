@@ -10,6 +10,7 @@ export const userRoutes = [
     {
         index: true,
         element: 
+        
         <SuspenseWrapper>
            <UserPage /> 
         </SuspenseWrapper> 

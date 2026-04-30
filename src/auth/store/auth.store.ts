@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { AuthResponse } from '../interfaces/authResponse.interface'
+import { AppRoles, type AuthResponse } from '../interfaces/authResponse.interface'
 import { loginAction } from '../actions/login.action';
 import { checkAuthAction } from '../actions/check-auth.action';
 
@@ -35,31 +35,31 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   // Getters
   isSuperAdmin() {
     const role = get().user?.role.name || '';
-    return role === 'SuperAdmin' ? true : false;
+    return role === AppRoles.SuperAdmin ? true : false;
   },
   isBossCC: () => {
     const role = get().user?.role.name || '';
-    return role === 'Jefe CC' ? true : false;
+    return role === AppRoles.JefeCC ? true : false;
   },
   isCoordinator: () => {
     const role = get().user?.role.name || '';
-    return role === 'Coordinador' ? true : false;
+    return role === AppRoles.Coordinador ? true : false;
   },
   isBoss: () => {
     const role = get().user?.role.name || '';
-    return role === 'Jefe Departamento' ? true : false;
+    return role === AppRoles.JefeDepartamento ? true : false;
   },
   isTechnician: () => {
     const role = get().user?.role.name || '';
-    return role === 'Técnico' ? true : false;
+    return role === AppRoles.Tecnico ? true : false;
   },
   isPlaning: () => {
     const role = get().user?.role.name || '';
-    return role === 'Planeación' ? true : false;
+    return role === AppRoles.Planeacion ? true : false;
   },
   isSecretaryCC: () => {
     const role = get().user?.role.name || '';
-    return role === 'Secretaria CC' ? true : false;
+    return role === AppRoles.SecretariaCC ? true : false;
   },
 
   // Actions

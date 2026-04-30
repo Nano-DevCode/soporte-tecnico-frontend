@@ -1,3 +1,18 @@
+// 1. Creamos un objeto de JS constante
+export const AppRoles = {
+    SuperAdmin: 'SuperAdmin',
+    JefeCC: 'Jefe CC',
+    Coordinador: 'Coordinador',
+    JefeDepartamento: 'Jefe Departamento',
+    Tecnico: 'Técnico',
+    Planeacion: 'Planeación',
+    SecretariaCC: 'Secretaria CC'
+} as const;
+
+// 2. Extraemos los tipos de ese objeto para usarlos en nuestras interfaces
+// Esto crea un Union Type automático: 'SuperAdmin' | 'Jefe CC' | ...
+export type AppRoleType = typeof AppRoles[keyof typeof AppRoles];
+
 export interface AuthResponse {
     id:     string;
     email:  string;
@@ -9,17 +24,8 @@ export interface AuthResponse {
 
 export interface Role {
     id:   string;
-    name: UserRole;
+    name: AppRoleType; // <-- Usamos el tipo extraído aquí
 }
-
-export type UserRole = 
-    | 'SuperAdmin' 
-    | 'Jefe CC' 
-    | 'Coordinador' 
-    | 'Jefe Departamento' 
-    | 'Técnico' 
-    | 'Planeación' 
-    | 'Secretaria CC';
 
 export interface Staff {
     name:            string;

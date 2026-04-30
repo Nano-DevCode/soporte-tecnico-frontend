@@ -21,6 +21,7 @@ import {
 import { Link, useLocation } from "react-router";
 import { cn } from "@/lib/utils";
 import { useTranslation } from 'react-i18next';
+import { useAuthStore } from "@/auth/store/auth.store";
 
 const getItemClass = (isActive: boolean) => cn(
   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
@@ -43,6 +44,7 @@ const triggerClass = "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-s
 export const CustomNavContent = memo(() => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
+  const { isSuperAdmin, isBossCC, isCoordinator } = useAuthStore();
 
   return (
     <ScrollArea className="flex-1 px-3 py-4">
@@ -59,32 +61,34 @@ export const CustomNavContent = memo(() => {
           <span className="flex-1">{t("dashboard")}</span>
         </a>
 
-        <Collapsible className="group/collapsible" defaultOpen={pathname.startsWith("/user") || pathname.startsWith("/department")}>
-          <CollapsibleTrigger asChild>
-            <button className={triggerClass}>
-              <Users className="h-5 w-5 shrink-0" />
-              <span className="flex-1 text-left">
-                {t("users")}
-              </span>
-              <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-            </button>
-          </CollapsibleTrigger>
+        {(isSuperAdmin() || isCoordinator() || isBossCC()) && 
+          (<Collapsible className="group/collapsible" defaultOpen={pathname.startsWith("/user") || pathname.startsWith("/department")}>
+            <CollapsibleTrigger asChild>
+              <button className={triggerClass}>
+                <Users className="h-5 w-5 shrink-0" />
+                <span className="flex-1 text-left">
+                  {t("users")}
+                </span>
+                <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+              </button>
+            </CollapsibleTrigger>
 
-          <CollapsibleContent>
-            <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
+            <CollapsibleContent>
+              <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
 
-              <Link to='/users' className={getItemClass(pathname.startsWith("/users"))}>
-                <List className="h-4 w-4" /> {t("custom_nav_content_users")}
-              </Link>
+                <Link to='/users' className={getItemClass(pathname.startsWith("/users"))}>
+                  <List className="h-4 w-4" /> {t("custom_nav_content_users")}
+                </Link>
 
-              <Link to='/departments' className={getItemClass(pathname.startsWith("/departments"))}>
-                <List className="h-4 w-4" /> {t("custom_nav_content_depatment")}
-              </Link>
+                <Link to='/departments' className={getItemClass(pathname.startsWith("/departments"))}>
+                  <List className="h-4 w-4" /> {t("custom_nav_content_depatment")}
+                </Link>
 
 
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>)
+        }
 
         <Collapsible className="group/collapsible" defaultOpen={pathname.startsWith("/user") || pathname.startsWith("/department")}>
           <CollapsibleTrigger asChild>
