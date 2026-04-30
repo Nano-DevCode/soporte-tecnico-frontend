@@ -16,6 +16,7 @@ import { useArchiveTicket } from '../hooks/useArchiveTicket';
 import { getAxiosErrorMessage } from '@/lib/helpers/getAxiosErrorMessage';
 import { TicketActions } from '../components/details/TicketActions';
 import { TechnicalReportsAccordion } from '../components/details/TechnicalReportsAccordion';
+import { TicketDocuments } from '../components/details/TicketDocuments';
 
 export const ViewTicketPage = () => {
     const { id } = useParams();
@@ -140,39 +141,11 @@ export const ViewTicketPage = () => {
                     }
 
 
-                    {/* Documentos */}
-                    {/* {(currentState?.code === 'Pu' || currentState?.code === 'Resuelta' || currentState?.code === 'Cerrada') && (
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle className="flex items-center gap-2">
-                                        <FileText className="h-5 w-5" />
-                                        Documentos
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-3">
-                                    {currentState.code === 'Pausa' && (
-                                        <Button
-                                            variant="outline"
-                                            className="w-full justify-start"
-                                            onClick={() => { }}
-                                        >
-                                            <FileText className="h-4 w-4 mr-2" />
-                                            Descargar PDF de Pausa
-                                        </Button>
-                                    )}
-                                    {(currentState.code === 'Resuelta' || currentState.code === 'Cerrada') && (
-                                        <Button
-                                            variant="outline"
-                                            className="w-full justify-start"
-                                            onClick={() => { }}
-                                        >
-                                            <FileText className="h-4 w-4 mr-2" />
-                                            Descargar PDF de Finalización
-                                        </Button>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        )} */}
+                    <TicketDocuments
+                        ticketId={ticket.id}
+                        currentState={ticket.currentStatusCode}
+                        documents={ticket.documents}
+                    />
                 </div>
             </div>
         </div>
