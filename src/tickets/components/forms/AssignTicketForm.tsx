@@ -119,17 +119,17 @@ export const AssignTicketForm = ({ onSubmit, isPending, onCancel, ticket }: Prop
                                             {t('tickets.form.assign.fields.technicians.label')}
                                         </FormLabel>
 
-                                        <Combobox
-                                            items={mappedTechnicians}
-                                            multiple
-                                            value={selectedItems}
-                                            onValueChange={(newSelectedItems) => {
-                                                field.onChange(newSelectedItems.map(item => item.value));
-                                            }}
-                                            disabled={isPending}
-                                            autoHighlight
-                                        >
-                                            <FormControl>
+                                        <FormControl>
+                                            <Combobox
+                                                items={mappedTechnicians}
+                                                multiple
+                                                value={selectedItems}
+                                                onValueChange={(newSelectedItems) => {
+                                                    field.onChange(newSelectedItems.map(item => item.value));
+                                                }}
+                                                disabled={isPending}
+                                                autoHighlight
+                                            >
                                                 <ComboboxChips ref={anchor} className="">
                                                     <ComboboxValue>
                                                         {(values: techValue[]) => (
@@ -142,38 +142,38 @@ export const AssignTicketForm = ({ onSubmit, isPending, onCancel, ticket }: Prop
                                                         )}
                                                     </ComboboxValue>
                                                 </ComboboxChips>
-                                            </FormControl>
 
-                                            <ComboboxContent anchor={anchor}>
-                                                <ComboboxEmpty>
-                                                    {t('tickets.form.assign.fields.technicians.not_found')}
-                                                </ComboboxEmpty>
-                                                <ComboboxList>
-                                                    {(item: techValue) => {
-                                                        const isSelected = field.value.includes(item.value);
-                                                        const isDisabled = (isMaxSelected && !isSelected);
+                                                <ComboboxContent anchor={anchor}>
+                                                    <ComboboxEmpty>
+                                                        {t('tickets.form.assign.fields.technicians.not_found')}
+                                                    </ComboboxEmpty>
+                                                    <ComboboxList>
+                                                        {(item: techValue) => {
+                                                            const isSelected = field.value.includes(item.value);
+                                                            const isDisabled = (isMaxSelected && !isSelected);
 
-                                                        return (
-                                                            <ComboboxItem
-                                                                key={item.value}
-                                                                value={item}
-                                                                disabled={isDisabled}
-                                                                className="flex flex-col items-start py-2 px-3"
-                                                            >
-                                                                <span className="font-medium">{item.label}</span>
+                                                            return (
+                                                                <ComboboxItem
+                                                                    key={item.value}
+                                                                    value={item}
+                                                                    disabled={isDisabled}
+                                                                    className="flex flex-col items-start py-2 px-3"
+                                                                >
+                                                                    <span className="font-medium">{item.label}</span>
 
-                                                                <div className="flex gap-2 text-xs text-muted-foreground">
-                                                                    <span className="font-semibold bg-secondary px-1.5 rounded-full">
-                                                                        {item.originalData.num_control}
-                                                                    </span>
-                                                                    <span className="truncate">{item.originalData.user.email}</span>
-                                                                </div>
-                                                            </ComboboxItem>
-                                                        );
-                                                    }}
-                                                </ComboboxList>
-                                            </ComboboxContent>
-                                        </Combobox>
+                                                                    <div className="flex gap-2 text-xs text-muted-foreground">
+                                                                        <span className="font-semibold bg-secondary px-1.5 rounded-full">
+                                                                            {item.originalData.num_control}
+                                                                        </span>
+                                                                        <span className="truncate">{item.originalData.user.email}</span>
+                                                                    </div>
+                                                                </ComboboxItem>
+                                                            );
+                                                        }}
+                                                    </ComboboxList>
+                                                </ComboboxContent>
+                                            </Combobox>
+                                        </FormControl>
                                         <FormMessage />
                                         <FormDescription className="ml-auto">
                                             {field.value.length} / {t('tickets.form.assign.fields.technicians.description')}

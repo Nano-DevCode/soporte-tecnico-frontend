@@ -70,12 +70,12 @@ export const CenterManagerDetails = ({ manager }: Props) => {
                     <CustomInfoRow
                         icon={<CalendarDays className="w-4 h-4" />}
                         label={t('common.metadata.created_at')}
-                        value={toFormatLocalDateString(manager.created_at, i18n.language, "PPP")}
+                        value={toFormatLocalDateString(manager.created_at ?? '', i18n.language, "PPP")}
                     />
                     <CustomInfoRow
                         icon={<RefreshCw className="w-4 h-4" />}
                         label={t('common.metadata.updated_at')}
-                        value={toFormatLocalDateString(manager.updated_at, i18n.language, "PPP")}
+                        value={toFormatLocalDateString(manager.updated_at ?? '', i18n.language, "PPP")}
                     />
                 </div>
 
