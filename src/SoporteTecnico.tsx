@@ -9,6 +9,7 @@ import { useAuthStore } from './auth/store/auth.store';
 
 import { ThemeProvider } from './components/theme-provider';
 import { TooltipProvider } from './components/ui/tooltip';
+import { SessionTimer } from './auth/components/SessionTimer';
 
 const queryClient = new QueryClient();
 
@@ -26,7 +27,12 @@ const CheckAuthProvider = ({ children }: PropsWithChildren) => {
 
   if (isLoading) return <CustomFullScreenLoading />;
 
-  return children;
+  return (
+    <>
+      <SessionTimer />
+      {children}
+    </>
+  );
 }
 
 export const SoporteTecnico = () => {

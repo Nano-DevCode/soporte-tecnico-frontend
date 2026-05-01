@@ -1,3 +1,4 @@
+import { RoleRoute } from "@/auth/routes/ProtectedRoutes";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { lazy } from "react";
 
@@ -12,28 +13,36 @@ export const userRoutes = [
         element: 
         
         <SuspenseWrapper>
-           <UserPage /> 
+            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin"]}>
+                <UserPage /> 
+            </RoleRoute>
         </SuspenseWrapper> 
     },
     {
         path: 'new',
         element: 
         <SuspenseWrapper>
-           <UserCreatePage />
+            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin"]}>
+                <UserCreatePage />
+            </RoleRoute>
         </SuspenseWrapper> 
     },
     {
         path: 'edit/:id',
         element: 
         <SuspenseWrapper>
-           <UserEditPage/>
+            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin"]}>
+                <UserEditPage/>
+            </RoleRoute>
         </SuspenseWrapper> 
     },
     {
         path: ':id',
         element: 
         <SuspenseWrapper>
-           <UserDetailsPage />
+            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin"]}>
+                <UserDetailsPage />
+            </RoleRoute>
         </SuspenseWrapper> 
     },
 ];

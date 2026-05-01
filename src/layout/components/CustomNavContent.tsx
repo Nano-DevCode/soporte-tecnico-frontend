@@ -21,7 +21,7 @@ import {
 import { Link, useLocation } from "react-router";
 import { cn } from "@/lib/utils";
 import { useTranslation } from 'react-i18next';
-import { useAuthStore } from "@/auth/store/auth.store";
+import { useUserRoles } from "@/auth/hooks/useUserRoles";
 
 const getItemClass = (isActive: boolean) => cn(
   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
@@ -44,7 +44,7 @@ const triggerClass = "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-s
 export const CustomNavContent = memo(() => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const { isSuperAdmin, isBossCC, isCoordinator } = useAuthStore();
+  const { isSuperAdmin, isBossCC, isCoordinator } = useUserRoles();
 
   return (
     <ScrollArea className="flex-1 px-3 py-4">
@@ -61,7 +61,7 @@ export const CustomNavContent = memo(() => {
           <span className="flex-1">{t("dashboard")}</span>
         </a>
 
-        {(isSuperAdmin() || isCoordinator() || isBossCC()) && 
+        {(isSuperAdmin || isCoordinator || isBossCC) && 
           (<Collapsible className="group/collapsible" defaultOpen={pathname.startsWith("/user") || pathname.startsWith("/department")}>
             <CollapsibleTrigger asChild>
               <button className={triggerClass}>

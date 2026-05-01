@@ -1,43 +1,59 @@
 import type { PropsWithChildren } from "react";
-import { useAuthStore } from "../store/auth.store";
+import { useAuthStore } from '../store/auth.store';
 import { Navigate } from "react-router";
+import { useUserRoles } from "../hooks/useUserRoles";
 
-// 1. Ruta para usuarios que DEBEN estar autenticados
-interface AuthRouteProps extends PropsWithChildren {
-  redirectTo?: string;
-}
+export const AuthenticatedRoute = ({ children }: PropsWithChildren) => {
+  const authStatus = useAuthStore(state => state.authStatus);
 
-export const AuthenticatedRoute = ({ children, redirectTo = '/auth/login' }: AuthRouteProps) => {
-  const { authStatus } = useAuthStore();
-  
-  if (authStatus === 'checking') return null;
-  if (authStatus === 'not-authenticated') return <Navigate to={redirectTo} />;
-  
-  return children;
-};
-
-// 2. Ruta para usuarios que NO DEBEN estar autenticados (ej. Login)
-export const NotAuthenticatedRoute = ({ children, redirectTo = '/' }: AuthRouteProps) => {
-  const { authStatus } = useAuthStore();
-  
-  if (authStatus === 'checking') return null;
-  if (authStatus === 'authenticated') return <Navigate to={redirectTo} />;
-  
-  return children;
-};
-
-// 3. Componente unificado para protección por Roles
-interface RoleRouteProps extends PropsWithChildren {
-  isAllowed: boolean;
-  redirectTo?: string;
-}
-
-export const RoleRoute = ({ children, isAllowed, redirectTo = '/' }: RoleRouteProps) => {
-  const { authStatus } = useAuthStore();
-  
   if (authStatus === 'checking') return null;
   if (authStatus === 'not-authenticated') return <Navigate to='/auth/login' />;
-  if (!isAllowed) return <Navigate to={redirectTo} />;
-  
+
   return children;
+};
+
+export const NotAuthenticatedRoute = ({ children }: PropsWithChildren) => {
+  const authStatus = useAuthStore(state => state.authStatus);
+
+  if (authStatus === 'checking') return null;
+  if (authStatus === 'authenticated') return <RedirectPerRole />;
+
+  return children;
+};
+
+type UserRole = keyof ReturnType<typeof useUserRoles>;
+
+interface RoleRouteProps extends PropsWithChildren {
+  allowedRoles: UserRole[];
+}
+
+export const RoleRoute = ({ children, allowedRoles }: RoleRouteProps) => {
+  const roles = useUserRoles();
+  const isAllowed = allowedRoles.some(role => roles[role]);
+
+  if (!isAllowed) return <RedirectPerRole />;
+
+  return children;
+};
+
+export const RedirectPerRole = () => {
+  const {
+    isBoss,
+    isBossCC,
+    isCoordinator,
+    isPlaning,
+    isSecretaryCC,
+    isSuperAdmin,
+    isTechnician,
+  } = useUserRoles();
+
+  if (isSuperAdmin)  return <Navigate to='/' />;
+  if (isBossCC)      return <Navigate to='/' />;
+  if (isBoss)        return <Navigate to='/' />;
+  if (isCoordinator) return <Navigate to='/' />;
+  if (isPlaning)     return <Navigate to='/' />;
+  if (isSecretaryCC) return <Navigate to='/' />;
+  if (isTechnician)  return <Navigate to='/' />;
+
+  return <Navigate to='/auth/login' />;
 };

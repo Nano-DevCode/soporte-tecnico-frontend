@@ -1,3 +1,4 @@
+import { RoleRoute } from "@/auth/routes/ProtectedRoutes";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { lazy } from "react";
 
@@ -11,28 +12,36 @@ export const departmentRoutes = [
         index: true,
         element:
         <SuspenseWrapper>
-            <DepartmentPage />
+            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin"]}>
+                <DepartmentPage />
+            </RoleRoute>
         </SuspenseWrapper> 
     },
     {
         path: 'create',
         element: 
         <SuspenseWrapper>
-            <DepartmentCreatePage />
+            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin"]}>
+                <DepartmentCreatePage />
+            </RoleRoute>
         </SuspenseWrapper>
     },
     {
         path: 'edit/:id',
         element: 
         <SuspenseWrapper>
-            <DepartmentEditPage />
+            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin"]}>
+                <DepartmentEditPage />
+            </RoleRoute>
         </SuspenseWrapper>
     },
     {
         path: ':id',
         element:
         <SuspenseWrapper>
-            <DepartmentDetailsPage />
+            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin"]}>
+                <DepartmentDetailsPage />
+            </RoleRoute>
         </SuspenseWrapper>
     }
 ];
