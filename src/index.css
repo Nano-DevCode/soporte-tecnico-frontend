@@ -125,3 +125,7 @@
 @theme {
   --font-montserrat: 'Montserrat Alternates', sans-serif;
 }
+
+[data-sileo-content="true"] {
+  content-visibility: visible;
+}

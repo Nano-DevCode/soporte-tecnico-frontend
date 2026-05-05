@@ -138,7 +138,7 @@ export const CustomDepartmentForm = ({
 
       {/* BOTONES FINALES */}
       <div className="mt-8 flex flex-col sm:flex-row justify-end gap-3 border-t border-border pt-6">
-        <Button 
+        <Button  
           type="button" 
           variant="outline" 
           onClick={() => navigate('/department')}

@@ -27,5 +27,4 @@ export const CustomTitleCard = memo(({title, description, icon: Icon}: Props) =>
   )
 });
 
-// Le damos su nombre para que React Scan lo identifique bonito
 CustomTitleCard.displayName = "CustomTitleCard";

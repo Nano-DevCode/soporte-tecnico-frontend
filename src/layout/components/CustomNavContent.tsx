@@ -17,6 +17,7 @@ import {
   Tickets,
   CalendarRange,
   ShieldUser,
+  Hammer
 } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { cn } from "@/lib/utils";
@@ -89,6 +90,14 @@ export const CustomNavContent = memo(() => {
             </CollapsibleContent>
           </Collapsible>)
         }
+
+        {(isSuperAdmin || isCoordinator || isBossCC) &&
+          (<Link to="/tools" className={getItemClass(pathname === '/tools')}>
+            <Hammer className="h-5 w-5 shrink-0" />
+            <span className="flex-1">{t("custom_nav_content_subitem_list_tickets")}</span>
+          </Link>)
+        }
+
 
         <Collapsible className="group/collapsible" defaultOpen={pathname.startsWith("/user") || pathname.startsWith("/department")}>
           <CollapsibleTrigger asChild>

@@ -11,6 +11,7 @@ import { departmentRoutes } from "./Departments/departments.routes";
 import { TicketsRoutes } from "./tickets/tickets.router";
 import { authRoutes } from "./auth/auth.router";
 import { equipmentRoutes } from "./Equipments/equipments.routes";
+import { toolRoutes } from "./tools/tools.router";
 
 
 const PanelLayout = lazy(() => import("./layout/PanelLayout"))
@@ -55,6 +56,10 @@ export const appRouter = createBrowserRouter([
             {
                 path: 'equipment',
                 children: equipmentRoutes,
+            },
+            {
+                path: 'tools',
+                children: toolRoutes,
             }
         ],
     },

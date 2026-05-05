@@ -45,7 +45,7 @@ export const CustomDepartmentMobileCard = memo(({ departments, handleDownClick }
               {department.name}
             </p>
 
-            {/* Detalles: Folio */}
+            {/* Folio */}
             {department.folio && (
               <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
                 <Hash className="h-3.5 w-3.5 shrink-0 mt-0.5" />
@@ -55,7 +55,7 @@ export const CustomDepartmentMobileCard = memo(({ departments, handleDownClick }
               </div>
             )}
 
-            {/* Detalles: Prioridad */}
+            {/* Prioridad */}
             {department.priority && (
               <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
                 <Tag className="h-3.5 w-3.5 shrink-0 mt-0.5" />
