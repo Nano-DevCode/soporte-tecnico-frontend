@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 export function ToolPage() {
 
   const { isLoading, tools, changeStatusAsync, isChangingStatus, meta } = useTools();
-  console.log(tools);
 
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [toolSelect, setToolSeleccionado] = useState<Tool | null>(null);
@@ -87,7 +86,7 @@ export function ToolPage() {
       />
 
       <Link to="/tools/new">
-        <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
+        <Button>
           <Plus className="mr-2 h-4 w-4" />
           Crear Herramienta
         </Button>

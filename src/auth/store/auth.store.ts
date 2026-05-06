@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { AppRoles, type AuthResponse } from '../interfaces/authResponse.interface'
 import { loginAction } from '../actions/login.action';
 import { checkAuthAction } from '../actions/check-auth.action';
+import { logoutAction } from '../actions/logout';
 
 type AuthStatus = 'authenticated' | 'not-authenticated' | 'checking';
 
@@ -10,7 +11,7 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 type AuthState = {
   // Properties
   user: AuthResponse | null,
-  token: string | null,
+  // token: string | null,
   authStatus: AuthStatus,
   lastCheck: number | null,
 
@@ -25,7 +26,7 @@ type AuthState = {
 
   // Actions
   login: (email: string, password: string) => Promise<boolean>,
-  logout: () => void,
+  logout: () => Promise<void>,
   checkAuthStatus: () => Promise<boolean>,
 }
 
@@ -33,7 +34,6 @@ const getRole = (get: () => AuthState): string => get().user?.role?.name ?? '';
 
 export const useAuthStore = create<AuthState>()((set, get) => ({
   user: null,
-  token: null,
   authStatus: 'checking',
   lastCheck: null,
 
@@ -50,19 +50,22 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   login: async (email, password) => {
     try {
       const data = await loginAction(email, password);
-      localStorage.setItem('token', data.token);
-      set({ user: data, token: data.token, authStatus: 'authenticated', lastCheck: Date.now() });
+      set({ user: data, authStatus: 'authenticated', lastCheck: Date.now() });
       return true;
     } catch {
-      set({ user: null, token: null, authStatus: 'not-authenticated', lastCheck: null });
-      localStorage.removeItem('token');
+      set({ user: null, authStatus: 'not-authenticated', lastCheck: null });
       return false;
     }
   },
 
-  logout: () => {
-    localStorage.removeItem('token');
-    set({ user: null, token: null, authStatus: 'not-authenticated', lastCheck: null });
+  logout: async () => {
+    try {
+      await logoutAction();
+    } catch (error) {
+      console.error('Error al cerrar sesión', error);
+    } finally {
+      set({ user: null, authStatus: 'not-authenticated', lastCheck: null });
+    }
   },
 
   checkAuthStatus: async () => {
@@ -74,10 +77,10 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
     try {
       const data = await checkAuthAction();
-      set({ user: data, token: data.token, authStatus: 'authenticated', lastCheck: Date.now() });
+      set({ user: data, authStatus: 'authenticated', lastCheck: Date.now() });
       return true;
     } catch {
-      set({ user: null, token: null, authStatus: 'not-authenticated', lastCheck: null });
+      set({ user: null, authStatus: 'not-authenticated', lastCheck: null });
       return false;
     }
   },

@@ -1,8 +1,6 @@
 import {
   Monitor, Printer, Network, Box, Edit, Trash2,
-  ArrowLeft, Cpu, Hash, User, Fingerprint,
-  UserIcon,
-  Mail
+  ArrowLeft, Cpu, Hash, User,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,16 +9,6 @@ import { cn } from "@/lib/utils";
 import { useEquipment } from "../hooks/useEquipment";
 import { useNavigate } from "react-router";
 import { CustomSkeletonInformation } from "@/components/custom/CustomSkeletonInformation";
-import type { Equipment, EquipmentCategory } from "../interfaces/equipment.interface";
-import { CheckIcon } from 'lucide-react';
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Separator } from "radix-ui";
-
-interface Props {
-  equipments: Equipment[];
-  category: EquipmentCategory | 'all'; // Soporta vista general
-  onDelete: (id: string) => void;
-}
 
 export const EquipmentDetailsPage = () => {
   const navigate = useNavigate();

@@ -22,7 +22,6 @@ export const TicketDocuments = ({ currentState, documents }: Props) => {
     const { mutate: openResponsePdf, isPending: isPendingResponse } = useGetTicketResponsePdf();
 
     const handleOpenDocument = (documentType: TYPE_DOCUMENT_NAME) => {
-        console.log(documentType);
         const filename = documents.find((doc) =>
             doc.type_document.name === documentType)?.name ?? undefined
 

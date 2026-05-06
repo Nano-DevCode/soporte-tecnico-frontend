@@ -1,12 +1,12 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import type { Tools } from "../interfaces/toolsResponse";
+import type { Tool } from "../interfaces/toolsResponse";
 
 interface ChangeStatusOptions {
   id: string;
   status: boolean;
 }
 
-export const changeStatusToolAction = async ({ id, status }: ChangeStatusOptions): Promise<Tools> => {
-    const { data } = await soporteTecnicoApi.patch<Tools>(`/tools/change-status/${id}`, { status });
+export const changeStatusToolAction = async ({ id, status }: ChangeStatusOptions): Promise<Tool> => {
+    const { data } = await soporteTecnicoApi.patch<Tool>(`/tools/change-status/${id}`, { status });
     return data;
 };

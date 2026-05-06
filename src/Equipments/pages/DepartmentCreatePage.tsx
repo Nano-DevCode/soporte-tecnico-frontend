@@ -11,8 +11,8 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCreateDepartment } from "../hooks/useCreateDepartment";
 import { isAxiosError } from "axios";
+import { useCreateDepartment } from "@/Departments/hooks/useCreateDepartment";
 
 interface DepartmentFormData {
   name: string;

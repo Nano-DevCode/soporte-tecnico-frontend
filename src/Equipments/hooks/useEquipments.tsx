@@ -4,7 +4,7 @@
 import { useSearchParams } from "react-router";
 import { getEquipmentsAction } from '../actions/get-equipments.action';
 import type{ EquipmentCategory } from '../interfaces/equipment.interface';
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery} from "@tanstack/react-query";
 
 export const useEquipments = () => {
   const [searchParams] = useSearchParams();

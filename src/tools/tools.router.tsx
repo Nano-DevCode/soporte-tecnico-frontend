@@ -1,11 +1,11 @@
 import { lazy } from "react";
-import { ToolCreatePage } from "./pages/ToolCreatePage";
-import { ToolUpdatePage } from "./pages/ToolUpdatePage";
-import { ToolDetailsPage } from "./pages/ToolDetailsPage";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { RoleRoute } from "@/auth/routes/ProtectedRoutes";
 
 const ToolPage = lazy(() => import('./pages/ToolPage').then(m => ({ default: m.ToolPage })));
+const ToolCreatePage = lazy(() => import('./pages/ToolCreatePage').then(m => ({ default: m.ToolCreatePage })));
+const ToolUpdatePage = lazy(() => import('./pages/ToolUpdatePage').then(m => ({ default: m.ToolUpdatePage })));
+const ToolDetailsPage = lazy(() => import('./pages/ToolDetailsPage').then(m => ({ default: m.ToolDetailsPage })));
 
 export const toolRoutes = [
     {

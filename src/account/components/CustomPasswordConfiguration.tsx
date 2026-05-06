@@ -68,6 +68,7 @@ export const CustomPasswordConfiguration = () => {
             <div className="relative">
               <Input
                 id="password"
+                autoComplete="off"
                 type={showNew ? "text" : "password"}
                 className={`pr-10 h-11 bg-muted/20 transition-colors ${
                   errors.password ? "border-destructive focus-visible:ring-destructive" : "focus:bg-background"
@@ -110,6 +111,7 @@ export const CustomPasswordConfiguration = () => {
             <div className="relative">
               <Input
                 id="confirmPassword"
+                autoComplete="off"
                 type={showConfirm ? "text" : "password"} 
                 className={`pr-10 h-11 bg-muted/20 transition-colors ${
                   errors.confirmPassword ? "border-destructive focus-visible:ring-destructive" : "focus:bg-background"

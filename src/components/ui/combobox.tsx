@@ -69,21 +69,38 @@ function ComboboxInput({
     const input = groupRef.current?.querySelector<HTMLInputElement>("input")
     if (!input) return
 
+    // Elimina aria-hidden en cuanto Base UI lo pone y restaura foco
     const observer = new MutationObserver(() => {
-      if (
-        input.getAttribute("aria-hidden") === "true" &&
-        document.activeElement === input
-      ) {
-        input.blur()
+      if (input.getAttribute("aria-hidden") === "true") {
+        input.removeAttribute("aria-hidden")
+        requestAnimationFrame(() => {
+          if (document.activeElement !== input) {
+            input.focus()
+          }
+        })
       }
     })
 
-    observer.observe(input, { attributes: true, attributeFilter: ["aria-hidden"] })
-    return () => observer.disconnect()
+    observer.observe(input, {
+      attributes: true,
+      attributeFilter: ["aria-hidden"],
+    })
+
+    // Bloquea blur() mientras el popup está abierto
+    const originalBlur = input.blur.bind(input)
+    input.blur = () => {
+      if (input.getAttribute("aria-expanded") === "true") return
+      originalBlur()
+    }
+
+    return () => {
+      observer.disconnect()
+      input.blur = originalBlur
+    }
   }, [])
 
   return (
-    <div ref={groupRef} className="contents"> {/* 👈 div invisible, no afecta estilos */}
+    <div ref={groupRef} className="contents">
       <InputGroup className={cn("w-auto", className)}>
         <ComboboxPrimitive.Input
           render={<InputGroupInput disabled={disabled} />}

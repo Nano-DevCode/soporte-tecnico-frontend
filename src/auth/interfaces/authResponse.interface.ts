@@ -19,7 +19,7 @@ export interface AuthResponse {
     status: boolean;
     role:   Role;
     staff:  Staff;
-    token:  string;
+    // token:  string;
 }
 
 export interface Role {

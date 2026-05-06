@@ -5,7 +5,7 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table } from "@
 // import { Settings2, User, Monitor, Printer, Network } from "lucide-react";
 import { CustomEquipmentActionsMenu } from "./CustomEquipmentActionsMenu";
 import type { Equipment, EquipmentCategory } from "../interfaces/equipment.interface";
-import { Box, Monitor, Network, Printer, Settings2 } from "lucide-react";
+import { Box, Monitor, Network, Printer } from "lucide-react";
 
 
 interface Props {

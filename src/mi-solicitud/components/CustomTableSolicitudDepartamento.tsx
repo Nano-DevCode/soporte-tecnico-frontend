@@ -69,7 +69,6 @@ export const CustomTableSolicitudDepartamento = ({ users }: UserProps) => {
     try {
       console.log('Confirmar baja del usuario:', userSeleccionado?.id);
       await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Baja del usuario confirmada exitosamente');
       setBajaDialogOpen(false)
     } catch (error) {
       console.error('Error al dar de baja:', error)

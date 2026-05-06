@@ -1,0 +1,21 @@
+services:
+  frontend:
+    build:
+      context: .  # Usa la carpeta donde está tu código de React
+      dockerfile: Dockerfile
+    container_name: react_frontend
+    restart: always
+    ports:
+      - "8080:80"
+    networks:
+      - global_net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+networks:
+  global_net:
+    external: true
+    name: ticketing_global_net # Detecta automáticamente la red del backend

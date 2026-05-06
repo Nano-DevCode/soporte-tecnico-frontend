@@ -1,15 +1,15 @@
 import axios from 'axios';
 
 const soporteTecnicoApi = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
+  withCredentials: true, 
 });
 
 soporteTecnicoApi.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
+  const currentLang = localStorage.getItem('i18nextLng') || 'es';
+  config.headers['Accept-Language'] = currentLang;
+
+  return config;
 });
 
-export { soporteTecnicoApi }
+export { soporteTecnicoApi };
