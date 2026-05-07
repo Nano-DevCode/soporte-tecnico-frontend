@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { CustomCreateButtonElement } from "@/components/custom/CustomCreateButtonElement";
 import { CustomListTickets } from "@/tickets/components/CustomListTickets";
 import { Can } from "@/common/permission/Can";
+import { CustomFilterTickets } from "@/tickets/components/CustomFilterTickets";
 
 export function ListTicketPage() {
 
@@ -29,7 +30,7 @@ export function ListTicketPage() {
         </div>
       </Can>
 
-      {/* <CustomFilterCenterManagers /> */}
+      <CustomFilterTickets />
 
       <CustomListTickets />
     </div>

@@ -370,7 +370,8 @@
           "active": "Activos",
           "inactive": "Inactivos"
         }
-      }
+      },
+      "search": "Buscar..."
     },
     "state": {
       "active": "Activo",
