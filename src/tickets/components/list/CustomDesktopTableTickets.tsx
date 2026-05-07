@@ -22,7 +22,7 @@ export const CustomDesktopTableTickets = (
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-25">
+                    <TableHead className="w-40">
                         {t("tickets.list_page.table.headers.folio")}
                     </TableHead>
 

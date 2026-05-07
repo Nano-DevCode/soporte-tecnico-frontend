@@ -8,6 +8,7 @@ import { useCenterManager } from "../hooks/useCenterManager";
 import { useEffect } from "react";
 import { sileo } from "sileo";
 import { CenterManagerDetails } from "../components/CenterManagerDetails";
+import { Can } from "@/common/permission/Can";
 
 export const ViewCenterManagerPage = () => {
     const { id } = useParams();
@@ -46,12 +47,14 @@ export const ViewCenterManagerPage = () => {
                     description={t('center_managers.view_page.description')}
                 />
 
-                <Button asChild className="w-full sm:w-auto">
-                    <Link to={`/center-managers/${manager.id}/edit`}>
-                        <Edit className="mr-2 h-4 w-4" />
-                        {t('common.buttons.edit')}
-                    </Link>
-                </Button>
+                <Can permission="EDIT_MANAGER">
+                    <Button asChild className="w-full sm:w-auto">
+                        <Link to={`/center-managers/${manager.id}/edit`}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            {t('common.buttons.edit')}
+                        </Link>
+                    </Button>
+                </Can>
             </div>
 
             <CenterManagerDetails manager={manager} />

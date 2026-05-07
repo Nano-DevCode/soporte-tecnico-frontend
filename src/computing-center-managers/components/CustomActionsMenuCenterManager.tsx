@@ -4,6 +4,7 @@ import { Ban, CircleCheck, Eye, MoreHorizontal, Pencil } from 'lucide-react'
 import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next';
 import type { CenterManager } from '../interfaces/center-manager.interface';
+import { Can } from '@/common/permission/Can';
 
 interface Props {
   centerManager: CenterManager;
@@ -30,38 +31,46 @@ export const CustomActionsMenuCenterManagers = (
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
 
-        <DropdownMenuItem asChild>
-          <Link to={`/center-managers/${centerManager.id}`}>
-            <Eye className="h-4 w-4" />
-            {t('common.buttons.view')}
-          </Link>
-        </DropdownMenuItem>
+        <Can permission='WATCH_MANAGER'>
+          <DropdownMenuItem asChild>
+            <Link to={`/center-managers/${centerManager.id}`}>
+              <Eye className="h-4 w-4" />
+              {t('common.buttons.view')}
+            </Link>
+          </DropdownMenuItem>
+        </Can>
 
-        <DropdownMenuItem asChild>
-          <Link to={`/center-managers/${centerManager.id}/edit`}>
-            <Pencil className="h-4 w-4" />
-            {t('common.buttons.edit')}
-          </Link>
-        </DropdownMenuItem>
+        <Can permission='EDIT_MANAGER'>
+          <DropdownMenuItem asChild>
+            <Link to={`/center-managers/${centerManager.id}/edit`}>
+              <Pencil className="h-4 w-4" />
+              {t('common.buttons.edit')}
+            </Link>
+          </DropdownMenuItem>
+        </Can>
 
         <DropdownMenuSeparator />
 
-        {!centerManager.is_active && (
-          <DropdownMenuItem onClick={() => handleActivateClick(centerManager)}>
-            <CircleCheck className="h-4 w-4" />
-            {t('center_managers.list_page.actions.activate')}
-          </DropdownMenuItem>
-        )}
+        <Can permission='ACTIVATE_MANAGER'>
+          {!centerManager.is_active && (
+            <DropdownMenuItem onClick={() => handleActivateClick(centerManager)}>
+              <CircleCheck className="h-4 w-4" />
+              {t('center_managers.list_page.actions.activate')}
+            </DropdownMenuItem>
+          )}
+        </Can>
 
-        {centerManager.is_active && (
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={() => handleDeactivateClick(centerManager)}
-          >
-            <Ban className="h-4 w-4" />
-            {t('center_managers.list_page.actions.deactivate')}
-          </DropdownMenuItem>
-        )}
+        <Can permission='DEACTIVATE_MANAGER'>
+          {centerManager.is_active && (
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={() => handleDeactivateClick(centerManager)}
+            >
+              <Ban className="h-4 w-4" />
+              {t('center_managers.list_page.actions.deactivate')}
+            </DropdownMenuItem>
+          )}
+        </Can>
       </DropdownMenuContent>
     </DropdownMenu>
   )

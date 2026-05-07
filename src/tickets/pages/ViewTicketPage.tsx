@@ -17,6 +17,7 @@ import { getAxiosErrorMessage } from '@/lib/helpers/getAxiosErrorMessage';
 import { TicketActions } from '../components/details/TicketActions';
 import { TechnicalReportsAccordion } from '../components/details/TechnicalReportsAccordion';
 import { TicketDocuments } from '../components/details/TicketDocuments';
+import { Can } from '@/common/permission/Can';
 
 export const ViewTicketPage = () => {
     const { id } = useParams();
@@ -136,9 +137,12 @@ export const ViewTicketPage = () => {
 
                 <div className="lg:col-span-2 order-1 lg:order-2 space-y-4">
                     <DetailsTicket ticket={ticket} />
-                    {
-                        canWatchTechnicalReports && <TechnicalReportsAccordion ticketId={ticket.id} />
-                    }
+
+                    <Can permission='WATCH_TECHNICAL_REPORT'>
+                        {
+                            canWatchTechnicalReports && <TechnicalReportsAccordion ticketId={ticket.id} />
+                        }
+                    </Can>
 
 
                     <TicketDocuments

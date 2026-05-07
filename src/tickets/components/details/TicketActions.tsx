@@ -1,3 +1,5 @@
+import { Can } from '@/common/permission/Can';
+import type { PermissionsTypes } from '@/common/permission/permissions';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { getAvailableActions, TicketEvent, type TicketStatus } from '@/tickets/utils/ticket-state-machine';
@@ -12,6 +14,7 @@ interface EventUIConfig {
     label: string;
     icon: LucideIcon;
     variant: Variants;
+    permission: PermissionsTypes;
     behavior: ActionBehavior;
     route?: (id: string) => string;
     confirmTitle?: string;
@@ -23,6 +26,7 @@ const EVENT_UI_CONFIG: Partial<Record<TicketEvent, EventUIConfig>> = {
         label: 'Recibir Ticket',
         icon: Inbox,
         variant: 'default',
+        permission: 'CREATE_TICKET',
         behavior: 'navigate',
         route: () => '/tickets/create'
     },
@@ -30,6 +34,7 @@ const EVENT_UI_CONFIG: Partial<Record<TicketEvent, EventUIConfig>> = {
         label: 'Editar',
         icon: Edit3,
         variant: 'outline',
+        permission: 'EDIT_TICKET',
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/edit`
     },
@@ -37,6 +42,7 @@ const EVENT_UI_CONFIG: Partial<Record<TicketEvent, EventUIConfig>> = {
         label: 'Rechazar',
         icon: XCircle,
         variant: 'destructive',
+        permission: 'REJECT_TICKET',
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/reject`
     },
@@ -44,6 +50,7 @@ const EVENT_UI_CONFIG: Partial<Record<TicketEvent, EventUIConfig>> = {
         label: 'Canalizar',
         icon: Send,
         variant: 'default',
+        permission: 'ROUTE_TICKET',
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/route`
     },
@@ -51,6 +58,7 @@ const EVENT_UI_CONFIG: Partial<Record<TicketEvent, EventUIConfig>> = {
         label: 'Asignar Técnicos',
         icon: UserPlus,
         variant: 'default',
+        permission: 'ASSIGN_TICKET',
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/assign`
     },
@@ -58,6 +66,7 @@ const EVENT_UI_CONFIG: Partial<Record<TicketEvent, EventUIConfig>> = {
         label: 'Comenzar a Atender',
         icon: Wrench,
         variant: 'default',
+        permission: 'ATTEND_TICKET',
         behavior: 'confirm',
         confirmTitle: '¿Iniciar atención del ticket?',
         confirmMessage: 'Se registrará tu hora de inicio y se notificará al usuario que vas en camino a revisar el equipo.'
@@ -66,6 +75,7 @@ const EVENT_UI_CONFIG: Partial<Record<TicketEvent, EventUIConfig>> = {
         label: 'Finalizar Trabajo',
         icon: Flag,
         variant: 'default',
+        permission: 'FINISH_TICKET',
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/finish`
     },
@@ -73,6 +83,7 @@ const EVENT_UI_CONFIG: Partial<Record<TicketEvent, EventUIConfig>> = {
         label: 'Cerrar Ticket',
         icon: Lock,
         variant: 'outline',
+        permission: 'CLOSE_TICKET',
         behavior: 'confirm',
         confirmTitle: '¿Cerrar solicitud?',
         confirmMessage: 'Confirme la recepción de la orden de trabajo para dar por terminada la solicitud.'
@@ -81,6 +92,7 @@ const EVENT_UI_CONFIG: Partial<Record<TicketEvent, EventUIConfig>> = {
         label: 'Mover al Archivo',
         icon: Archive,
         variant: 'secondary',
+        permission: 'ARCHIVE_TICKET',
         behavior: 'confirm',
         confirmTitle: '¿Archivar esta solicitud?',
         confirmMessage: 'Confirme la recepción de los formatos de la solicitud.'
@@ -89,6 +101,7 @@ const EVENT_UI_CONFIG: Partial<Record<TicketEvent, EventUIConfig>> = {
         label: 'Registrar Bitácora',
         icon: Edit3,
         variant: 'default',
+        permission: 'INTERVENE_TICKET',
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/intervene`
     },
@@ -140,20 +153,21 @@ export function TicketActions({ currentState, pendingEvent, ticketId, onDirectAc
                     };
 
                     return (
-                        <Button
-                            key={event}
-                            variant={config.variant}
-                            disabled={!!pendingEvent}
-                            onClick={handleClick}
-                            className='flex-1 md:flex-initial transition-all'
-                        >
-                            {isThisActionPending ? (
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            ) : (
-                                <ActionIcon className="w-4 h-4 mr-2" />
-                            )}
-                            {config.label}
-                        </Button>
+                        <Can key={event} permission={config.permission}>
+                            <Button
+                                variant={config.variant}
+                                disabled={!!pendingEvent}
+                                onClick={handleClick}
+                                className='flex-1 md:flex-initial transition-all'
+                            >
+                                {isThisActionPending ? (
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                ) : (
+                                    <ActionIcon className="w-4 h-4 mr-2" />
+                                )}
+                                {config.label}
+                            </Button>
+                        </Can>
                     );
                 })}
             </div>

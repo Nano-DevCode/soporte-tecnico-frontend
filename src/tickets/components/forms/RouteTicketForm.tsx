@@ -88,54 +88,53 @@ export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault
                                     <FormLabel>
                                         {t('tickets.form.route.fields.coordinator.label')}
                                     </FormLabel>
-                                    <Combobox
-                                        items={coordinators}
-                                        itemToStringLabel={(coordinator) =>
-                                            `${coordinator.name} ${coordinator.paternalSurname} ${coordinator.maternalSurname}`
-                                        }
-                                        value={coordinators.find((c) => c.id === field.value) || null}
-                                        onValueChange={(selectedCoordinator) => {
-                                            field.onChange(selectedCoordinator ? selectedCoordinator.id : undefined);
-                                        }}
-                                        disabled={isPending}
-                                        autoHighlight
-                                    >
-                                        <FormControl>
-                                            <ComboboxInput
+                                    <FormControl>
+                                        <Combobox
+                                            items={coordinators}
+                                            itemToStringLabel={(coordinator) =>
+                                                `${coordinator.name} ${coordinator.paternalSurname} ${coordinator.maternalSurname}`
+                                            }
+                                            value={coordinators.find((c) => c.id === field.value) || null}
+                                            onValueChange={(selectedCoordinator) => {
+                                                field.onChange(selectedCoordinator ? selectedCoordinator.id : undefined);
+                                            }}
+                                            disabled={isPending}
+                                            autoHighlight
+                                        >
+                                            <ComboboxInput autoFocus
                                                 placeholder={t('tickets.form.route.fields.coordinator.placeholder')}
                                             />
-                                        </FormControl>
 
-                                        <ComboboxContent>
-                                            <ComboboxEmpty>
-                                                {t('tickets.form.route.fields.coordinator.not_found')}
-                                            </ComboboxEmpty>
-                                            <ComboboxList>
-                                                {(coordinator) => (
-                                                    <ComboboxItem
-                                                        key={coordinator.id}
-                                                        value={coordinator}
-                                                        className="flex flex-col items-start py-2 px-3"
-                                                    >
-                                                        <div className="flex items-center w-full">
-                                                            <span className="font-medium text-foreground">
-                                                                {getFullName(coordinator.name, coordinator.paternalSurname, coordinator.maternalSurname)}
-                                                            </span>
-                                                        </div>
+                                            <ComboboxContent>
+                                                <ComboboxEmpty>
+                                                    {t('tickets.form.route.fields.coordinator.not_found')}
+                                                </ComboboxEmpty>
+                                                <ComboboxList>
+                                                    {(coordinator) => (
+                                                        <ComboboxItem
+                                                            key={coordinator.id}
+                                                            value={coordinator}
+                                                            className="flex flex-col items-start py-2 px-3"
+                                                        >
+                                                            <div className="flex items-center w-full">
+                                                                <span className="font-medium text-foreground">
+                                                                    {getFullName(coordinator.name, coordinator.paternalSurname, coordinator.maternalSurname)}
+                                                                </span>
+                                                            </div>
 
-                                                        {/* Detalles extra (Email y Rol) debajo del nombre */}
-                                                        <div className="flex gap-2 text-xs text-muted-foreground mt-1">
-                                                            <span className="font-semibold bg-secondary px-1.5 rounded">
-                                                                {coordinator.user.role.name}
-                                                            </span>
-                                                            {/* <span className="truncate">{coordinator.user.email}</span> */}
-                                                        </div>
-                                                    </ComboboxItem>
-                                                )}
-                                            </ComboboxList>
-                                        </ComboboxContent>
-                                    </Combobox>
-
+                                                            {/* Detalles extra (Email y Rol) debajo del nombre */}
+                                                            <div className="flex gap-2 text-xs text-muted-foreground mt-1">
+                                                                <span className="font-semibold bg-secondary px-1.5 rounded">
+                                                                    {coordinator.user.role.name}
+                                                                </span>
+                                                                {/* <span className="truncate">{coordinator.user.email}</span> */}
+                                                            </div>
+                                                        </ComboboxItem>
+                                                    )}
+                                                </ComboboxList>
+                                            </ComboboxContent>
+                                        </Combobox>
+                                    </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -153,6 +152,7 @@ export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault
                                         </span>
                                     </FormLabel>
                                     <Select
+                                        name={field.name}
                                         disabled={isPending}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value ? String(field.value) : undefined}

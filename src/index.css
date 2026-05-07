@@ -129,3 +129,9 @@
 [data-sileo-content="true"] {
   content-visibility: visible;
 }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Esto asesina cualquier intento del navegador de hacer scroll global */
+}

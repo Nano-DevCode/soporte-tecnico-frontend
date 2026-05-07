@@ -503,7 +503,7 @@
   },
   "tickets": {
     "data": {
-      "affected_name": "Nombre del afectado",
+      "affected_name": "Responsable directo del equipo",
       "sender_name": "Nombre del remitente",
       "department": "Departamento",
       "email": "Correo electrónico",
@@ -864,7 +864,7 @@
       },
       "fields": {
         "affected_name": {
-          "label": "Nombre del afectado",
+          "label": "Nombre del responsable directo del equipo",
           "placeholder": "Ej. Juan Pérez"
         },
         "contact_email": {
@@ -896,7 +896,7 @@
       "errors": {
         "description_required": "La descripción del problema es obligatoria.",
         "description_max": "La descripción no puede exceder los 1000 caracteres.",
-        "affected_name_required": "El nombre de la persona afectada es obligatorio.",
+        "affected_name_required": "El nombre del responsable directo del equipo es obligatorio.",
         "affected_name_max": "El nombre no puede exceder los 100 caracteres.",
         "evidence_url_format": "Ingresa una URL válida que comience con http:// o https://.",
         "contact_email_required": "El correo electrónico de contacto es obligatorio.",

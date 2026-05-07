@@ -5,6 +5,7 @@ import { CustomCreateButtonElement } from "@/components/custom/CustomCreateButto
 import { CustomFilterCenterManagers } from "../components/CustomFilterCenterManagers";
 import { CustomListCenterManagers } from "../components/CustomListCenterManagers";
 import { CenterManagerActionDialog } from "../components/CenterManagerActionDialog";
+import { Can } from "@/common/permission/Can";
 
 export function CenterManagersPage() {
 
@@ -21,10 +22,12 @@ export function CenterManagersPage() {
         description={t("center_managers.list_page.title")} />
 
       <div className="flex flex-col items-end">
-        <CustomCreateButtonElement
-          label={t("center_managers.list_page.actions.new")}
-          to="/center-managers/new"
-        />
+        <Can permission="CREATE_MANAGER">
+          <CustomCreateButtonElement
+            label={t("center_managers.list_page.actions.new")}
+            to="/center-managers/new"
+          />
+        </Can>
       </div>
 
       <CustomFilterCenterManagers />
