@@ -1,56 +1,47 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Equipment } from "../interfaces/equipment.interface";
+import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 
-// Usamos Partial para que todos los campos sean opcionales al actualizar
-export interface UpdateEquipmentDTO {
-  // DATOS DEL EQUIPO PADRE
-  num_inventario?: string;
-  id_model?: string;
-  id_type_equipment?: string;
-  id_responsable?: string;
-  status?: boolean;
-
-  // DATOS HIJO: COMPUTADORA
-  id_type_equipment_computer?: string;
-  id_type_storage?: string;
-  id_type_operating_system?: string;
-  id_processor?: string;
-  ram?: string;
-  capacity_storage?: string;
-  available_storage?: string;
-
-  // DATOS HIJO: IMPRESORA
-  id_type_printing?: string;
-  id_type_function?: string;
-  color?: string;
-  model_toner?: string;
-
-  // DATOS HIJO: RED
-  id_type_equipment_network?: string;
-  number_ports?: number;
-  PoE?: boolean;
-}
-
-/**
- * Actualiza un equipo existente mediante su ID.
- * @param id - UUID del equipo a modificar.
- * @param equipment - Campos a actualizar.
- */
-export const equipmentUpdateAction = async (
-  id: string, 
-  equipment: UpdateEquipmentDTO
-): Promise<Equipment> => {
+export const equipmentUpdateAction = async (id: string, dto: any): Promise<Equipment> => {
   try {
-    const { data } = await soporteTecnicoApi.patch<Equipment>(`/equipments/${id}`, equipment);
-    return data;
-  } catch (error: any) {
-    const errorMessage = error.response?.data?.message;
-    
-    // Si NestJS devuelve un array de errores de validación, los unimos
-    if (Array.isArray(errorMessage)) {
-      throw new Error(errorMessage.join(", "));
+    const cleanPayload = { ...dto };
+
+    const idFields = ['id_brand', 'id_model', 'id_responsable', 'id_departament', 'id_type_equipment'];
+    idFields.forEach(field => {
+      if (cleanPayload[field] && typeof cleanPayload[field] === 'object') {
+        cleanPayload[field] = cleanPayload[field].id;
+      }
+    });
+    const typeName = dto.id_type_equipment_obj?.name?.toLowerCase() || "";
+
+    if (typeName.includes("computadora")) {
+      delete cleanPayload.printer;
+      delete cleanPayload.network;
+      if (cleanPayload.computer) {
+        cleanPayload.computer.ram = Number(cleanPayload.computer.ram);
+      }
+    } else if (typeName.includes("impresora")) {
+      delete cleanPayload.computer;
+      delete cleanPayload.network;
+    } else if (typeName.includes("red")) {
+      delete cleanPayload.computer;
+      delete cleanPayload.printer;
+      if (cleanPayload.network) {
+        cleanPayload.network.number_ports = Number(cleanPayload.network.number_ports);
+      }
     }
-    
-    throw new Error(errorMessage || "Error al intentar actualizar el equipo.");
+    delete cleanPayload.id_type_equipment_obj;
+
+    const { data } = await soporteTecnicoApi.patch<Equipment>(`/equipments/${id}`, cleanPayload);
+    return data;
+
+  } catch (error: any) {
+    console.error("Update Action Error:", error);
+    const errorMessage = error.response?.data?.message;
+    throw new Error(
+      Array.isArray(errorMessage) 
+        ? errorMessage.join(" | ") 
+        : errorMessage || "Error al actualizar el equipo"
+    );
   }
 };

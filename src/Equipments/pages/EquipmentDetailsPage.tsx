@@ -1,14 +1,36 @@
 import {
-  Monitor, Printer, Network, Box, Edit, Trash2,
-  ArrowLeft, Cpu, Hash, User,
+  Monitor, Printer, Network, Box,
+  Cpu, User,
+  Mail,
+  Briefcase,
+  IdCard,
+  MapPinned,
+  Info,
+  MonitorCloud,
+  MemoryStick,
+  ServerIcon,
+  ServerCog,
+  PrinterCheck,
+  FileArchive,
+  FileImage,
+  EthernetPortIcon,
+  Router,
+  PowerCircle,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useEquipment } from "../hooks/useEquipment";
 import { useNavigate } from "react-router";
 import { CustomSkeletonInformation } from "@/components/custom/CustomSkeletonInformation";
+// import type { Equipment, EquipmentCategory } from "../interfaces/equipment.interface";
+import { CustomBackToList } from "@/components/custom/CustomBackToList";
+
+// interface Props {
+//   equipments: Equipment[];
+//   category: EquipmentCategory | 'all'; // Soporta vista general
+//   onDelete: (id: string) => void;
+// }
 
 export const EquipmentDetailsPage = () => {
   const navigate = useNavigate();
@@ -22,192 +44,268 @@ export const EquipmentDetailsPage = () => {
     );
   }
 
-  // Configuración visual por tipo de equipo
-  // Usamos la presencia de los objetos técnicos para determinar el tipo
   const getTypeConfig = () => {
     if (equipment?.computer)
-      return { icon: Monitor, color: "bg-blue-100 text-blue-700", label: "Computadora" };
+      return { type: 'computer', icon: Monitor, color: "bg-blue-100 text-blue-700", label: "Computadora" };
     if (equipment?.printer)
-      return { icon: Printer, color: "bg-purple-100 text-purple-700", label: "Impresora" };
+      return { type: 'printer', icon: Printer, color: "bg-purple-100 text-purple-700", label: "Impresora" };
     if (equipment?.network)
-      return { icon: Network, color: "bg-amber-100 text-amber-700", label: "Red" };
-    return { icon: Box, color: "bg-slate-100 text-slate-700", label: "Equipo" };
+      return { type: 'network', icon: Network, color: "bg-amber-100 text-amber-700", label: "Red" };
+    return { type: 'special', icon: Box, color: "bg-slate-100 text-slate-700", label: equipment?.type || "Equipo" };
+  };
+  const typestatus = () => {
+    if (equipment?.status === true)
+      return { color: "bg-emerald-100 text-emerald-700", label: "Activo" };
+    if (equipment?.status === false)
+      return { color: "bg-red-100 text-red-700", label: "Inactivo" };
+
   };
 
+  const estado = typestatus()
   const config = getTypeConfig();
   const TypeIcon = config.icon;
 
+
   return (
-    <div className="mx-auto w-full max-w-5xl space-y-6 p-4 md:p-6">
+    <div className="mx-auto w-full max-w-4xl space-y-4">
 
-      {/* HEADER: Navegación y Acciones */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <button
-          onClick={() => navigate('/inventory/equipments')}
-          className="group flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-        >
-          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-          Regresar al Inventario
-        </button>
+      <CustomBackToList onBack={() => navigate('/equipments')} backLabel={"regreso"} actionUrl="equipments" />
 
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="h-9" onClick={() => navigate(`edit`)}>
-            <Edit className="h-4 w-4 mr-2" /> Editar
-          </Button>
-          <Button variant="destructive" size="sm" className="h-9">
-            <Trash2 className="h-4 w-4 mr-2" /> Eliminar
-          </Button>
-        </div>
-      </div>
-
-      {/* TARJETA PRINCIPAL: Identidad del Equipo */}
       <Card>
+
         <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-6">
 
           <div className="flex items-center gap-4">
-            <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full border shadow-sm", config.color)}>
-              <TypeIcon className="h-6 w-6" />
+            <div className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-full border shadow-sm", config.color)}>
+              <TypeIcon className="h-8 w-8" />
             </div>
 
             <div className="space-y-1">
-              {/* Agregué los ?. por seguridad */}
-              <h1 className="text-2xl font-bold leading-none tracking-tigh text-[15px]">
-                Numero de inventario: {equipment?.num_inventario}
+              <h1 className="text-2xl font-bold leading-none tracking-tight">
+                # {equipment?.num_inventario ?? 'S/N'}
               </h1>
-              <p className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground font-black font-mono">
-                <Box className="h-3.5 w-3.5" />
-                {equipment.id_model?.name}
+
+              <p className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+                <Info className="h-3.5 w-3.5" />
+                {/* AJUSTE AQUÍ: Se agregó el ? después de id_model */}
+                {equipment?.id_model?.id_brand?.name ?? 'Sin marca'} - {equipment?.id_model?.name ?? 'Sin modelo'}
               </p>
             </div>
-            <div>
-              <Badge className={cn("w-fit mx-auto sm:mx-0 font-bold uppercase", config.color)}>
-                {config.label}
-              </Badge>
-              </div>
           </div>
 
-          {/* <div className="flex flex-col items-end gap-2">
+          <div className="flex flex-col items-end gap-2">
 
-            <Badge 
-              variant={user.status ? "default" : "destructive"} 
-              className={user.status ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100/80 dark:bg-emerald-900/30 dark:text-emerald-400" : ""}
-            >
-              {user.status ? "Cuenta Activa" : "Cuenta Suspendida"}
-            </Badge>
+            <div className="space-y-2">
+              <div>
+              <Badge className={cn("w-fit mx-auto sm:mx-0 font-bold uppercase text-[12.5px] ")}>
+                {equipment.id_departament?.name}
+              </Badge>
+              </div>
+              <Badge className={cn("w-fit mx-auto sm:mx-0 font-bold uppercase text-[12.5  px]", config?.color)}>
+                {config?.label}
+              </Badge>
 
-            <Badge 
-              variant="secondary" 
-              className="gap-1 bg-blue-100 text-blue-700 hover:bg-blue-100/80 dark:bg-blue-900/30 dark:text-blue-400"
-            >
-              <ShieldCheck className="h-3 w-3" />
-              {user.role?.name || "Sin Rol"}
-            </Badge>
-          </div> */}
+              <Badge className={cn("w-fit mx-auto sm:mx-0 font-bold uppercase text-[12.5  px]", estado?.color)}>
+                <PowerCircle className="h-3.5 w-3.5" /> {estado?.label}
+              </Badge>
+
+
+
+            </div>
+          </div>
         </CardHeader>
 
-      </Card>
-      <div className="rounded-xl border bg-card p-6 shadow-sm">
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-          <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border shadow-sm", config.color)}>
-            <TypeIcon className="h-6 w-6" />
-          </div>
-
-          <div className="flex-1 text-center sm:text-left space-y-2">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-              <Badge className={cn("w-fit mx-auto sm:mx-0 font-bold uppercase", config.color)}>
-                {config.label}
-              </Badge>
-              <div className="min-w-[180px] ">
-                {equipment?.id_model?.name || 'Modelo no especificado'}
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-1 pt-2">
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
+                <Briefcase className="h-5 w-5 text-muted-foreground " />
+                Datos del responsable del equipo
+              </h4>
+              <div className="space-y-1">
+                <dt className="font-medium text-muted-foreground">Nombre del responsable</dt>
+                <dd className="font-semibold flex items-center gap-1.5">
+                  <User className="h-4 w-4 text-muted-foreground " />
+                  {equipment.responsable_equipo?.name} {equipment?.responsable_equipo?.first_name} {equipment?.responsable_equipo?.last_name}
+                </dd>
+              </div>
+              <div className="space-y-1">
+                <dt className="font-medium text-muted-foreground">Número de empleado </dt>
+                <dd className="font-semibold flex items-center gap-1.5">
+                  <IdCard className="h-4 w-4 text-muted-foreground " />
+                  {equipment.responsable_equipo?.num_employe}
+                </dd>
+              </div>
+              <div className="space-y-1">
+                <dt className="font-medium text-muted-foreground">Correo </dt>
+                <dd className="font-semibold flex items-center gap-1.5">
+                  <Mail className="h-4 w-4 text-muted-foreground " />
+                  {equipment?.responsable_equipo?.mail}
+                </dd>
+              </div>
+              <div className="space-y-1">
+                <dt className="font-medium text-muted-foreground">Área de traabajo </dt>
+                <dd className="font-semibold flex items-center gap-1.5">
+                  <MapPinned className="h-4 w-4 text-muted-foreground " />
+                  {equipment?.responsable_equipo?.area}
+                </dd>
               </div>
             </div>
-            <div className="flex flex-wrap justify-center sm:justify-start items-center gap-x-4 gap-y-2 text-muted-foreground">
-              <span className="flex items-center gap-1.5 text-sm font-mono">
-                <Hash className="h-4 w-4" /> Número de inventario : {equipment?.num_inventario}
-              </span>
-
-            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-6 border-t">
-          <InfoItem icon={User} label="Responsable" value="Departamento TI" />
-          <InfoItem icon={Monitor} label="Estado" value="Operativo" isStatus status={true} />
-        </div>
-      </div>
+          <div className="  gap-2 ">
+            {/* CASO: COMPUTADORA */}
+            <h4 className="text-sm font-semibold border-l-2 border-primary pl-2 flex items-center gap-3">
+              <div className={cn("flex h-7 w-7 shrink-0 items-center justify-center rounded-full border shadow-sm ", config.color)}>
+                <TypeIcon className="h-5 w-5" />
+              </div>
+              Datos específicos del equipo
+            </h4>
+            {/* Espacio  */}
+            <br></br>
 
-      {/* SECCIÓN DINÁMICA: Especificaciones Técnicas */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Cpu className="h-5 w-5 text-primary" /> Especificaciones Técnicas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {getTypeConfig().type === 'special' && (
+              <div className="col-span-2 space-y-1">
+                <dt className="font-medium text-muted-foreground">  Descripción del equipo</dt>
+                <dd className="font-semibold flex items-top gap-1.5 text-justify flex-row">
+                  <Info className="h-9 w-9 text-muted-foreground " />
+                  {equipment?.description || "Sin descripción técnica disponible."}
+                </dd>
+              </div>
+            )}
 
-              {/* CASO: COMPUTADORA */}
-              {equipment?.computer && (
-                <>
-                  <DetailBlock
-                    label="Procesador"
-                    value={`${equipment.computer.id_processor.brand} ${equipment.computer.id_processor.model} (${equipment.computer.id_processor.description})`}
-                  />
-                  <DetailBlock label="Memoria RAM" value={equipment.computer.ram} />
-                  <DetailBlock label="Sistema Operativo" value={equipment.computer.id_type_operating_system.name} />
-                  <DetailBlock label="Almacenamiento" value={equipment.computer.capacity_storage} />
-                </>
-              )}
+            {equipment?.computer && (
+              <>
+                <div className="grid grid-cols-2 gap-2 space-y-3">
+                  <div className="space-y-1 ">
+                    <dt className="font-medium text-muted-foreground">Tipo de Equipo de Cómputo </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <MonitorCloud className="h-4 w-4 text-muted-foreground " />
+                      {equipment?.computer?.id_type_equipment_computer?.name}
+                    </dd>
+                  </div>
+                  <div className="space-y-1 ">
+                    <dt className="font-medium text-muted-foreground">Sistema Operativo </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <MonitorCloud className="h-4 w-4 text-muted-foreground " />
+                      {equipment?.computer?.id_type_operating_system?.name}
+                    </dd>
+                  </div>
+                  <div className="space-y-1">
+                    <dt className="font-medium text-muted-foreground">Procesador </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <Cpu className="h-4 w-4 text-muted-foreground " />
+                      {equipment.computer.id_processor?.brand} {equipment.computer.id_processor?.model} {equipment?.computer.id_processor?.description}
+                    </dd>
+                  </div>
 
-              {/* CASO: IMPRESORA */}
-              {equipment?.printer && (
-                <>
-                  <DetailBlock label="Función" value={equipment.printer.id_type_function.name} />
-                  <DetailBlock label="Tipo de Impresión" value={equipment.printer.id_type_printing.name} />
-                  <DetailBlock label="Modelo de Tóner" value={equipment.printer.model_toner} />
-                  <DetailBlock label="Color" value={equipment.printer.color} />
-                </>
-              )}
+                  <div className="space-y-1">
+                    <dt className="font-medium text-muted-foreground">Memoria RAM </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <MemoryStick className="h-4 w-4 text-muted-foreground " />
+                      {equipment?.computer?.ram}
+                    </dd>
+                  </div>
+                  <div className="space-y-1">
+                    <dt className="font-medium text-muted-foreground">Tipo de almacenamiento </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <ServerIcon className="h-4 w-4 text-muted-foreground " />
+                      {equipment?.computer.id_type_storage?.name}
+                    </dd>
+                  </div>
+                  <div className="space-y-1">
+                    <dt className="font-medium text-muted-foreground">Almacenamiento total </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <ServerCog className="h-4 w-4 text-muted-foreground " />
+                      {equipment?.computer?.capacity_storage}
+                    </dd>
+                  </div>
+                  <div className="space-y-1">
+                    <dt className="font-medium text-muted-foreground">Almacenamiento disponible </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <ServerCog className="h-4 w-4 text-muted-foreground " />
+                      {equipment?.computer?.available_storage}
+                    </dd>
+                  </div>
+                </div>
+              </>
+              // </div>
+            )}
 
-              {/* CASO: RED */}
-              {equipment?.network && (
-                <>
-                  <DetailBlock label="Tipo de Dispositivo" value={equipment.network.id_type_equipment_network.name} />
-                  <DetailBlock label="Número de Puertos" value={equipment.network.number_ports} />
-                  <DetailBlock label="Soporte PoE" value={equipment.network.PoE ? "Sí" : "No"} />
-                </>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+            {/* CASO: IMPRESORA */}
+            {equipment?.printer && (
+              <>
+                <div className="grid grid-cols-2 gap-2 space-y-3 ">
+                  <div className="space-y-1 ">
+                    <dt className="font-medium text-muted-foreground">Funcionalidad </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <PrinterCheck className="h-4 w-4 text-muted-foreground " />
+                      {equipment?.printer.id_type_function?.name}
+                    </dd>
+                  </div>
+                  <div className="space-y-1 ">
+                    <dt className="font-medium text-muted-foreground">Tipo de impresión </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <FileArchive className="h-4 w-4 text-muted-foreground " />
+                      {equipment?.printer.id_type_printing?.name}
+                    </dd>
+                  </div>
+                  <div className="space-y-1 ">
+                    <dt className="font-medium text-muted-foreground">Modelo de toner </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <Printer className="h-4 w-4 text-muted-foreground " />
+                      <div className="w-[10ch] break-all">
+                        {equipment?.printer?.model_toner}
+                      </div>
+                    </dd>
+                  </div>
+                  <div className="space-y-1 ">
+                    <dt className="font-medium text-muted-foreground">¿Imprime a color? </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <FileImage className="h-4 w-4 text-muted-foreground " />
+                      {/* {equipment?.printer?.color} */}
+                      <span className={equipment?.printer?.color ? "text-green-600 font-bold" : "text-gray-800"}>
+                        {equipment?.printer?.color ? "Sí, Impresiones a Color y B/N" : "No, impresiones a Blanco y Negro"}
+                      </span>
+                    </dd>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* CASO: RED */}
+            {equipment?.network && (
+              <>
+                <div className="grid grid-cols-2 gap-2 space-y-3">
+                  <div className="space-y-1 ">
+                    <dt className="font-medium text-muted-foreground">Tipo de equipo </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <Router className="h-4 w-4 text-muted-foreground " />
+                      {equipment?.network?.id_type_equipment_network?.name}
+                    </dd>
+                  </div>
+                  <div className="space-y-1 ">
+                    <dt className="font-medium text-muted-foreground">Número de puertos </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <EthernetPortIcon className="h-4 w-4 text-muted-foreground " />
+                      {equipment?.network?.number_ports}
+                    </dd>
+                  </div>
+                  <div className="space-y-1">
+                    <dt className="font-medium text-muted-foreground">¿El equipo es PoE (Power over Ethernet)? </dt>
+                    <dd className="font-semibold flex items-center gap-1.5">
+                      <PowerCircle className="h-4 w-4 text-muted-foreground " />
+                      <EthernetPortIcon className="h-4 w-4 text-muted-foreground " />
+                      {equipment?.network?.PoE ? "Sí" : "No"}
+                    </dd>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+        </CardContent >
+      </Card >
+    </div >
   );
 };
-
-/* --- SUB-COMPONENTES --- */
-
-const InfoItem = ({ icon: Icon, label, value, isStatus, status }: any) => (
-  <div className="flex flex-col gap-1 p-3 rounded-lg bg-muted/30 border border-transparent hover:border-border transition-colors">
-    <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-      <Icon className="h-3.5 w-3.5" /> {label}
-    </span>
-    {isStatus ? (
-      <span className={cn("text-sm font-bold", status ? "text-emerald-600" : "text-amber-600")}>
-        {value}
-      </span>
-    ) : (
-      <span className="text-sm font-semibold text-foreground">{value || '---'}</span>
-    )}
-  </div>
-);
-
-const DetailBlock = ({ label, value }: { label: string, value: any }) => (
-  <div className="space-y-1">
-    <p className="text-xs font-medium text-muted-foreground">{label}</p>
-    <p className="text-sm font-bold text-foreground bg-muted/40 p-2 rounded-md border border-border/50">
-      {value || 'No especificado'}
-    </p>
-  </div>
-);

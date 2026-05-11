@@ -3,23 +3,23 @@ import { useParams } from "react-router";
 import { getEquipmentByIdAction } from "../actions/get-equipment.actions";
 
 export const useEquipment = () => {
-  // 1. Obtenemos el ID directamente de la URL
   const { id } = useParams<{ id: string }>();
 
+  // Verificamos que sea un UUID o ID válido y no la palabra "new"
+  const isEditing = !!id && id !== "new";
+
   const equipmentQuery = useQuery({
-    // 2. IMPORTANTE: El ID debe estar en la queryKey para que 
-    // React Query sepa que si el ID cambia, debe disparar la petición.
-    queryKey: ['equipment', id],
-    
-    // 3. Pasamos el ID a la función del action
+    queryKey: ["equipment", id],
     queryFn: () => getEquipmentByIdAction(id!),
     
-    // 4. Solo ejecutar si el ID existe en la URL
-    enabled: !!id,
+    // Ajuste: Solo ejecuta si hay ID Y no es la palabra "new"
+    enabled: isEditing,
     
-    // Opcional: forzar que los datos se consideren "viejos" para 
-    // que siempre intente traer los nuevos al entrar
-    staleTime: 0, 
+    // Evita que al re-enfocar la ventana del navegador se dispare la petición
+    refetchOnWindowFocus: false, 
+    
+    // Tiempo en que los datos se mantienen en memoria antes de ser eliminados
+    gcTime: 1000 * 60 * 10, // 10 minutos
   });
 
   return {
@@ -27,5 +27,7 @@ export const useEquipment = () => {
     isLoading: equipmentQuery.isLoading,
     isError: equipmentQuery.isError,
     error: equipmentQuery.error,
+    // Devolvemos este flag para que el FormContainer sepa si está editando o creando
+    isEditing, 
   };
 };
