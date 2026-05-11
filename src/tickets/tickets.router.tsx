@@ -1,3 +1,4 @@
+import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { ListTicketPage } from "./pages/admin/ListTicketsPage";
 import { AssignTicketPage } from "./pages/AssignTicketPage";
 import { CreateTicketPage } from "./pages/CreateTicketPage";
@@ -7,43 +8,90 @@ import { InterveneTicketPage } from "./pages/InterveneTicketPage";
 import { RejectTicketPage } from "./pages/RejectTicketPage";
 import { RouteTicketPage } from "./pages/RouteTicketPage";
 import { ViewTicketPage } from "./pages/ViewTicketPage";
+import { CanRoute } from "@/common/permission/CanRoute";
 
 
 export const TicketsRoutes = [
     {
         index: true,
-        element: <ListTicketPage />
+        element:
+
+            <SuspenseWrapper>
+                <CanRoute permission="WATCH_TICKET_LIST">
+                    <ListTicketPage />
+                </CanRoute>
+            </SuspenseWrapper >
     },
     {
         path: 'new',
-        element: <CreateTicketPage />
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="CREATE_TICKET">
+                    <CreateTicketPage />
+                </CanRoute>
+            </SuspenseWrapper >
     },
     {
         path: ':id',
-        element: <ViewTicketPage />
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="WATCH_TICKET">
+                    <ViewTicketPage />
+                </CanRoute>
+            </SuspenseWrapper >
     },
     {
         path: ':id/edit',
-        element: <EditTicketPage />
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="EDIT_TICKET">
+                    <EditTicketPage />
+                </CanRoute>
+            </SuspenseWrapper >
     },
     {
         path: ':id/route',
-        element: <RouteTicketPage />
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="ROUTE_TICKET">
+                    <RouteTicketPage />
+                </CanRoute>
+            </SuspenseWrapper >
     },
     {
         path: ':id/assign',
-        element: <AssignTicketPage />
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="ASSIGN_TICKET">
+                    <AssignTicketPage />
+                </CanRoute>
+            </SuspenseWrapper >
     },
     {
         path: ':id/intervene',
-        element: <InterveneTicketPage />
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="INTERVENE_TICKET">
+                    <InterveneTicketPage />
+                </CanRoute>
+            </SuspenseWrapper >
     },
     {
         path: ':id/finish',
-        element: <FinishTicketPage />
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="FINISH_TICKET">
+                    <FinishTicketPage />
+                </CanRoute>
+            </SuspenseWrapper >
     },
     {
         path: ':id/reject',
-        element: <RejectTicketPage />
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="REJECT_TICKET">
+                    <RejectTicketPage />
+                </CanRoute>
+            </SuspenseWrapper >
     },
 ];

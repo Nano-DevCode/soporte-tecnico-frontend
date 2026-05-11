@@ -16,6 +16,7 @@ interface Props {
     documents: Document[];
 }
 
+// TODO: agrgear el watch response a la maquina de estados.
 export const TicketDocuments = ({ currentState, documents }: Props) => {
     const { t } = useTranslation();
     const { mutate: openRequestPdf, isPending: isPendingRequest } = useGetTicketPdf();

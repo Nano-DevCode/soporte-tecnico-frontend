@@ -137,7 +137,7 @@ export const AssignTicketForm = ({ onSubmit, isPending, onCancel, ticket }: Prop
                                                                 {values.map((value) => (
                                                                     <ComboboxChip key={value.value}>{value.label}</ComboboxChip>
                                                                 ))}
-                                                                <ComboboxChipsInput placeholder={t('tickets.form.assign.fields.technicians.placeholder')} />
+                                                                <ComboboxChipsInput autoFocus placeholder={t('tickets.form.assign.fields.technicians.placeholder')} />
                                                             </React.Fragment>
                                                         )}
                                                     </ComboboxValue>

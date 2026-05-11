@@ -1,0 +1,157 @@
+import { memo, useMemo } from "react";
+import { Link, useLocation } from "react-router"; // <-- Cuidado aquí, en React Router v6 suele ser 'react-router-dom'
+import { useTranslation } from 'react-i18next';
+import { useUserRoles } from "@/auth/hooks/useUserRoles";
+import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Hammer, Archive } from "lucide-react";
+
+// Types para la configuración
+type NavSubItem = {
+  title: string;
+  path: string;
+  show: boolean;
+};
+type NavItem = {
+  title: string;
+  icon: React.ElementType;
+  path?: string;
+  subItems?: NavSubItem[];
+  show: boolean;
+};
+
+export const CustomSidebarNavContent = memo(() => {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const { isSuperAdmin, isBossCC, isCoordinator, isBoss, isPlaning, isSecretaryCC, isTechnician } = useUserRoles();
+
+  const navItems: NavItem[] = useMemo(() => [
+    {
+      title: t("start"),
+      icon: Home,
+      path: "/",
+      show: true,
+    },
+    {
+      title: t("dashboard"),
+      icon: LayoutDashboard,
+      path: "/dashboard",
+      show: true,
+    },
+    {
+      title: t("users"),
+      icon: Users,
+      show: isSuperAdmin || isCoordinator || isBossCC,
+      subItems: [
+        { title: t("custom_nav_content_users"), path: "/users", show: true },
+        { title: t("custom_nav_content_depatment"), path: "/departments", show: true },
+      ]
+    },
+    {
+      title: t("custom_nav_content_subitem_list_tickets"),
+      icon: Hammer,
+      path: "/tools",
+      show: isSuperAdmin || isCoordinator || isBossCC,
+    },
+    {
+      title: t("inventory", "Inventarios"),
+      icon: Archive,
+      show: true,
+      subItems: [
+        { title: t("equipment_list", "Lista de equipos"), path: "/equipment", show: true },
+        { title: t("materials_list", "Lista de materiales"), path: "/materials", show: true },
+      ]
+    },
+    {
+      title: t("custom_nav_content_subitem_list_tickets"),
+      icon: Ticket,
+      path: "/tickets",
+      show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
+    },
+    {
+      title: t("custom_nav_content_subitem_list_school_periods"),
+      icon: CalendarRange,
+      path: "/school-period",
+      show: isSuperAdmin || isBossCC || isSecretaryCC,
+    },
+    {
+      title: t("custom_nav_content_subitem_list_center_managers"),
+      icon: ShieldUser,
+      path: "/center-managers",
+      show: isSuperAdmin || isBossCC || isSecretaryCC,
+    },
+    {
+      title: t("settings"),
+      icon: Cog,
+      show: true,
+      subItems: [
+        { title: t("general"), path: "/settings/general", show: true },
+        { title: t("notifications"), path: "/settings/notifications", show: true },
+      ]
+    }
+  ], [t, isSuperAdmin, isBossCC, isCoordinator, isBoss, isPlaning, isSecretaryCC, isTechnician]);
+
+  const getItemClass = (isActive: boolean) => cn(
+    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
+    isActive
+      ? "bg-primary text-primary-foreground shadow-sm"
+      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+  );
+
+  const getSubItemClass = (isActive: boolean) => cn(
+    "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors",
+    isActive
+      ? "font-medium text-foreground bg-muted"
+      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+  );
+
+  const getTriggerClass = (isActiveGroup: boolean) => cn(
+    "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer group/collapsible",
+    isActiveGroup
+      ? "text-foreground bg-slate-50 dark:bg-slate-800/50"
+      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+  );
+
+  return (
+    <ScrollArea className="flex-1 min-h-0 px-3 py-4">
+      <nav className="flex flex-col gap-1">
+        {navItems.filter(item => item.show).map((item, index) => {
+
+          if (item.subItems) {
+            const isActiveGroup = item.subItems.some(sub => pathname.startsWith(sub.path));
+
+            return (
+              <Collapsible key={index} className="group/collapsible" defaultOpen={isActiveGroup}>
+                <CollapsibleTrigger asChild>
+                  <button className={getTriggerClass(isActiveGroup)}>
+                    <item.icon className="h-5 w-5 shrink-0" />
+                    <span className="flex-1 text-left">{item.title}</span>
+                    <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </button>
+                </CollapsibleTrigger>
+
+                <CollapsibleContent>
+                  <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
+                    {item.subItems.filter(sub => sub.show).map((sub, subIdx) => (
+                      <Link key={subIdx} to={sub.path} className={getSubItemClass(pathname.startsWith(sub.path))}>
+                        <List className="h-4 w-4" /> {sub.title}
+                      </Link>
+                    ))}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            );
+          }
+
+          return (
+            <Link key={index} to={item.path!} className={getItemClass(pathname === item.path)}>
+              <item.icon className="h-5 w-5 shrink-0" />
+              <span className="flex-1">{item.title}</span>
+            </Link>
+          );
+        })}
+      </nav>
+    </ScrollArea>
+  );
+});

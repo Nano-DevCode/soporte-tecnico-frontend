@@ -3,6 +3,8 @@ import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { useTranslation } from "react-i18next";
 import { CustomCreateButtonElement } from "@/components/custom/CustomCreateButtonElement";
 import { CustomListTickets } from "@/tickets/components/CustomListTickets";
+import { Can } from "@/common/permission/Can";
+import { CustomFilterTickets } from "@/tickets/components/CustomFilterTickets";
 
 export function ListTicketPage() {
 
@@ -19,14 +21,16 @@ export function ListTicketPage() {
         title={t("tickets.list_page.title")}
         description={t("tickets.list_page.description")} />
 
-      <div className="flex flex-col items-end">
-        <CustomCreateButtonElement
-          label={t("tickets.list_page.actions.new")}
-          to="/tickets/new"
-        />
-      </div>
+      <Can permission={"CREATE_TICKET"} >
+        <div className="flex flex-col items-end">
+          <CustomCreateButtonElement
+            label={t("tickets.list_page.actions.new")}
+            to="/tickets/new"
+          />
+        </div>
+      </Can>
 
-      {/* <CustomFilterCenterManagers /> */}
+      <CustomFilterTickets />
 
       <CustomListTickets />
     </div>
