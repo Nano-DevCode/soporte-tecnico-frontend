@@ -59,8 +59,8 @@ export const CustomSidebarNavContent = memo(() => {
       icon: Archive,
       show: true,
       subItems: [
-        { title: t("equipment_list", "Lista de equipos"), path: "/equipment", show: true },
-        { title: t("materials_list", "Lista de materiales"), path: "/materials", show: true },
+        { title: t("equipment_list", "Lista de equipos"), path: "/equipments", show: true },
+        // { title: t("materials_list", "Lista de materiales"), path: "/tools", show: true },
       ]
     },
     {

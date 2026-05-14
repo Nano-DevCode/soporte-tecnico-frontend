@@ -15,12 +15,12 @@ export const getNetworkTypesAction = async (): Promise<typeNetwork[]> => {
     }
 };
 
-export const getNetworkTypeByIdAction = async (id: string): Promise<typeNetwork> => {
-    try {
-        const { data } = await soporteTecnicoApi.get<typeNetwork>(`/typenetworks/${id}`);
-        return data;
-    } catch (error: any) {
-        const message = error.response?.data?.message || "No se encontró el tipo de red";
-        throw new Error(message);
-    }
+export const getNetworkTypeByIdAction = async (idOrObject: string | { id: string }) => {
+    // Si es un objeto, extraemos el id; si no, usamos el valor directamente
+    const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
+
+    if (!id) return null;
+
+    const { data } = await soporteTecnicoApi.get<typeNetwork>(`/typenetworks/${id}`);
+    return data;
 };

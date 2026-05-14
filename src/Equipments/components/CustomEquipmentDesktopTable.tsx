@@ -2,7 +2,7 @@ import { memo } from "react";
 import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table } from "@/components/ui/table";
 import { CustomEquipmentActionsMenu } from "./CustomEquipmentActionsMenu";
 import type { Equipment, EquipmentCategory } from "../interfaces/equipment.interface";
-import { Box, Monitor, Network, Printer, type LucideIcon} from "lucide-react";
+import { Box, Monitor, Network, Printer, type LucideIcon } from "lucide-react";
 
 
 interface Props {
@@ -43,7 +43,7 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
         <TableHeader>
           <TableRow className="bg-muted/50">
             <TableHead className=" text-center font-bold min-w-27.5 max-w-30">N° Inventario</TableHead>
-            <TableHead className="min-w-27.5 max-w-30" >Tipo</TableHead>
+            <TableHead className="min-w-27.5 max-w-50" >Tipo</TableHead>
             <TableHead className="min-w-27.5 max-w-50">Marca - Modelo</TableHead>
             <TableHead className="min-w-27.5 max-w-30">Departamento</TableHead>
             <TableHead className="min-w-27.5 max-w-30">Responsable</TableHead>
@@ -82,7 +82,7 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
               <TableRow key={eq.id} className="group transition-colors hover:bg-muted/30">
                 <TableCell className="text-center">{eq.folio}</TableCell>
 
-                <TableCell className="max-w-64">
+                <TableCell className="max-w-50 text-center"> {/* Centrado de la celda */}
                   {(() => {
                     const config: Record<string, { bg: string, text: string, icon: LucideIcon, label: string }> = {
                       computadora: { bg: "bg-blue-100", text: "text-blue-800", icon: Monitor, label: "Computadora" },
@@ -93,12 +93,22 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
                       network: { bg: "bg-amber-100", text: "text-amber-800", icon: Network, label: "Red" },
                       default: { bg: "bg-slate-100", text: "text-slate-700", icon: Box, label: eq.type || "Otro" },
                     };
+
                     const item = config[eq.type?.toLowerCase()] || config.default;
                     const Icon = item.icon;
+
                     return (
-                      <div className={`flex w-fit gap-2 px-2  rounded-full  ${item.bg} ${item.text}`}>
-                        <Icon className="h-3.5 w-3.5" />
-                        <span className="">{item.label}</span>
+                      <div className="flex justify-center w-full"> {/* Contenedor para centrar el badge en la celda */}
+                        <div className={`
+                              flex items-center justify-center 
+                              py-1 px-3 gap-2 
+                              rounded-full w-fit
+                              text-[11px] font-bold uppercase tracking-wider
+                              ${item.bg} ${item.text}
+                            `}>
+                          <Icon className="h-3.5 w-3.5" />
+                          <span className="leading-none">{item.label}</span>
+                        </div>
                       </div>
                     );
                   })()}
@@ -106,11 +116,11 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
 
                 <TableCell className="">{eq.model}</TableCell>
                 <TableCell
-                    className="font-bold text-[12px]"
-                    style={{ maxWidth: '90px' }}
-                  >
-                    {formatLongText(eq.departamento || '')}
-                  </TableCell>
+                  className="font-bold text-[12px]"
+                  style={{ maxWidth: '90px' }}
+                >
+                  {formatLongText(eq.departamento || '')}
+                </TableCell>
                 <TableCell className="">{eq.responsableName}</TableCell>
 
                 <TableCell>

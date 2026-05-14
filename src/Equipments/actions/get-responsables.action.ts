@@ -23,16 +23,31 @@ export const getResponsiblesAction = async (): Promise<Responsible[]> => {
         if (Array.isArray(data)) return data;
 
         // Si la respuesta tiene una propiedad 'data' anidada (común en algunas configs de axios)
-        if (data && typeof data === 'object' && Array.isArray((data as any).data)) {
-            return (data as any).data;
+        if (data && typeof data === 'object' && 'data' in data && Array.isArray((data as { data: Responsible[] }).data)) {
+            return (data as { data: Responsible[] }).data;
         }
 
         return [];
-    } catch (error: any) {
-        console.error("Error en getResponsiblesAction:", error.message);
+    } catch (error: unknown) {
+        console.error("Error en getResponsiblesAction:", error instanceof Error ? error.message : error);
 
         // IMPORTANTE: Siempre retornar un array vacío en el catch.
         // Esto garantiza que el componente que hace el .map() no lance un TypeError.
         return [];
     }
+};
+
+
+export const getResponsibleByIdAction = async (idOrObject: string | { id: string }) => {
+    const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
+    if (!id) return null;
+
+    const { data } = await soporteTecnicoApi.get<Responsible>(`/responsibleequipments/${id}`);
+    
+    // IMPORTANTE: Devolvemos un objeto que tenga 'id' y 'name'
+    return {
+        id: data.id,
+        // Construimos el nombre completo aquí
+        name: `${data.name || ''} ${data.first_name || ''} ${data.last_name || ''}`.trim()
+    };
 };

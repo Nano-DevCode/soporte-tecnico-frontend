@@ -15,12 +15,12 @@ export const getOperatingSystemsAction = async (): Promise<OperatingSystem[]> =>
     }
 };
 
-export const getOperatingSystemByIdAction = async (id: string): Promise<OperatingSystem > => {
-    try {
-        const { data } = await soporteTecnicoApi.get<OperatingSystem>(`/operatingsystems/${id}`);
-        return data;
-    } catch (error: any) {
-        const message = error.response?.data?.message || "No se encontró el sistema operativo";
-        throw new Error(message);
-    }
+export const getOperatingSystemByIdAction = async (idOrObject: string | { id: string }) => {
+    // Si es un objeto, extraemos el id; si no, usamos el valor directamente
+    const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
+
+    if (!id) return null;
+
+    const { data } = await soporteTecnicoApi.get<OperatingSystem>(`/operatingsystems/${id}`);
+    return data;
 };

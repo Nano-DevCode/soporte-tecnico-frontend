@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Monitor, Printer, Network, User, Cpu, Layers, Box, Info, MonitorCloud, PrinterCheck, FileArchive, Router, EthernetPortIcon, Power, PowerIcon, type LucideIcon } from "lucide-react";
+import { Monitor, Printer, Network, User, Cpu, Layers, Box, Info, MonitorCloud, PrinterCheck, FileArchive, Router, EthernetPortIcon, Power, PowerIcon, type LucideIcon, SchoolIcon } from "lucide-react";
 import { CustomEquipmentActionsMenu } from "./CustomEquipmentActionsMenu";
 import type { Equipment, EquipmentCategory } from "../interfaces/equipment.interface";
 
@@ -56,17 +56,17 @@ export const CustomEquipmentMobileCard = memo(({ equipments, category }: Props) 
               {/* El menú ahora solo recibe el equipo */}
               <CustomEquipmentActionsMenu equipment={eq} />
             </div>
-
             {/* Cuerpo de la Card */}
             <div className="space-y-2 border-t border-border pt-3">
-              <div  className="border-amber-300  border-2 rounded-full text-xs text- text-center ">
-                <strong>{eq.departamento}{eq.departamentStatus}</strong>
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <SchoolIcon className="h-3.5 w-3.5 text-blue-500 shrink-0" />
+                <span>Deparatamento: <strong className="text-foreground/80">{eq.departamento || "Sin asignar"}</strong></span>
               </div>
-
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <User className="h-3.5 w-3.5 text-blue-500 shrink-0" />
                 <span>Responsable: <strong className="text-foreground/80">{eq.responsableName || "Sin asignar"}</strong></span>
               </div>
+
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <PowerIcon className={`h-3.5 w-3.5 shrink-0 ${eq.status ? 'text-emerald-500' : 'text-red-500'}`} />
                 <span>Estado: <strong className={eq.status ? 'text-emerald-600' : 'text-red-600'}>{eq.status ? 'Activo' : 'Inactivo'}</strong></span>

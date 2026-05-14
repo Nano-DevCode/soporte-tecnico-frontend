@@ -16,12 +16,12 @@ export const getEquipmentTypesAction  = async (): Promise<EquipmentType[]> => {
     }
 };
 
-export const getEquipmentTypeByIdAction = async (id: string): Promise<EquipmentType > => {
-    try {
-        const { data } = await soporteTecnicoApi.get<EquipmentType>(`/equipmenttypes/${id}`);
-        return data;
-    } catch (error: unknown) {
-        const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message || "No se encontró el tipo de equipo";
-        throw new Error(message);
-    }
+export const getEquipmentTypeByIdAction= async (idOrObject: string | { id: string }) => {
+    // Si es un objeto, extraemos el id; si no, usamos el valor directamente
+    const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
+
+    if (!id) return null;
+
+    const { data } = await soporteTecnicoApi.get<EquipmentType>(`/equipmenttypes/${id}`);
+    return data;
 };

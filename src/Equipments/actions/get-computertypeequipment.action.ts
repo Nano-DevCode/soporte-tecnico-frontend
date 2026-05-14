@@ -24,12 +24,12 @@ export const getComputerTypeEquipmentsAction = async (): Promise<ComputerTypeEqu
 /**
  * Obtiene un tipo de equipo de computadora específico por su ID (UUID).
  */
-export const getComputerTypeEquipmentByIdAction = async (id: string): Promise<ComputerTypeEquipment> => {
-    try {
-        const { data } = await soporteTecnicoApi.get<ComputerTypeEquipment>(`/computerequipmenttypes/${id}`);
-        return data;
-    } catch (error: any) {
-        const message = error.response?.data?.message || "No se encontró el tipo de equipo de computadora";
-        throw new Error(message);
-    }
+export const getComputerTypeEquipmentByIdAction = async (idOrObject: string | { id: string }) => {
+    // Si es un objeto, extraemos el id; si no, usamos el valor directamente
+    const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
+
+    if (!id) return null;
+
+    const { data } = await soporteTecnicoApi.get<ComputerTypeEquipment>(`/computerequipmenttypes/${id}`);
+    return data;
 };

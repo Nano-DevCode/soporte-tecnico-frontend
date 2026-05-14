@@ -11,12 +11,17 @@ export const getProcessorsAction = async (): Promise<Processor[]> => {
     }
 };
     
-export const getProcessorByIdAction = async (id: string): Promise<Processor > => {
-    try {
-        const { data } = await soporteTecnicoApi.get<Processor>(`/computerprocessors/${id}`);
-        return data;
-    } catch (error: unknown) {
-        const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message || "No se encontró el procesador";
-        throw new Error(message);
-    }
+export const getProcessorByIdAction = async (idOrObject: string | { id: string }) => {
+    const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
+    if (!id) return null;
+
+    const { data } = await soporteTecnicoApi.get<Processor>(`/computerprocessors/${id}`);
+    
+    // Devolvemos el objeto procesado para que el selector lo entienda directo
+    return {
+        ...data,
+        id: data.id,
+        // Combinamos Brand + Model + Description para el display
+        name: `${data.brand || ''} ${data.model || ''} ${data.description || ''}`.trim()
+    };
 };

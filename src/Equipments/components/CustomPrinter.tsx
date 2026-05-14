@@ -15,30 +15,34 @@ import {
 interface PrinterFieldsProps {
     control: Control<any>;
     register: UseFormRegister<any>;
+    disabled:boolean;
 }
 
-export const PrinterFields = ({ control, register }: PrinterFieldsProps) => {
-    // 1. Instanciamos los hooks (el factory maneja estados internos)
+export const PrinterFields = ({ control, register , disabled}: PrinterFieldsProps) => {
+    // 1. Instanciamos los hooks
     const functionsHook = usePrinterFunctions();
     const typesHook = usePrintingTypes();
 
     return (
-        <div className="mt-6 p-6 border border-purple-200 rounded-xl bg-purple-100/50 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <h3 className="col-span-full font-bold text-purple-700 flex items-center gap-2 border-b border-purple-200 pb-2">
-                <Printer size={18} className="text-purple-600" /> Detalles de Impresión
+        <div className="mt-6 p-6 border border-purple-200 rounded-xl bg-purple-200/5 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h3 className="col-span-full font-bold flex items-center gap-2 border-b border-purple-200 pb-3">
+                <Printer size={18} className="text-purple-600" /> Especificaciones de Impresora
             </h3>
 
             {/* Función de Impresora (Multifuncional, Láser, etc.) */}
             <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase text-slate-500">Función *</Label>
+                <Label className="text-xs font-bold uppercase ">Función <span className="text-red-600">*</span></Label>
                 <Controller
                     name="printer.id_type_function"
                     control={control}
                     render={({ field }) => (
                         <CatalogSelector
                             hook={functionsHook}
-                            value={functionsHook.options.find((f: any) => f.id === field.value) || null}
-                            onChange={(val) => field.onChange(val?.id)}
+                            // AJUSTE: Soporta tanto el string (ID) como el objeto completo para edición
+                            value={typeof field.value === 'string' ? { id: field.value, name: "" } : field.value}
+                            // AJUSTE: Guardamos el objeto completo en el form state
+                            onChange={(val) => field.onChange(val)}
+                            disabled={disabled}
                             placeholder="Seleccionar función..."
                         />
                     )}
@@ -47,15 +51,17 @@ export const PrinterFields = ({ control, register }: PrinterFieldsProps) => {
 
             {/* Tecnología de Impresión */}
             <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase text-slate-500">Tecnología de Impresión *</Label>
+                <Label className="text-xs font-bold uppercase ">Tipo de Impresión <span className="text-red-600">*</span></Label>
                 <Controller
                     name="printer.id_type_printing"
                     control={control}
                     render={({ field }) => (
                         <CatalogSelector
                             hook={typesHook}
-                            value={typesHook.options.find((t: any) => t.id === field.value) || null}
-                            onChange={(val) => field.onChange(val?.id)}
+                            // AJUSTE: Misma lógica para hidratación correcta
+                            value={typeof field.value === 'string' ? { id: field.value, name: "" } : field.value}
+                            onChange={(val) => field.onChange(val)}
+                            disabled={disabled}
                             placeholder="Inyección, Térmica..."
                         />
                     )}
@@ -64,11 +70,12 @@ export const PrinterFields = ({ control, register }: PrinterFieldsProps) => {
 
             {/* Modelo de Tóner */}
             <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase text-slate-500">Modelo de Tóner / Cartucho</Label>
+                <Label className="text-xs font-bold uppercase ">Modelo de Tóner / Cartucho</Label>
                 <Input
                     {...register("printer.model_toner")}
+                    disabled={disabled}
                     placeholder="Ej. HP 85A"
-                    className="bg-white border-zinc-300 focus:ring-green-500"
+                    className="bg-white border-zinc-300 focus:ring-purple-500"
                 />
             </div>
 
@@ -81,15 +88,17 @@ export const PrinterFields = ({ control, register }: PrinterFieldsProps) => {
                         <div className="flex items-center space-x-2">
                             <Checkbox
                                 id="is-color"
-                                checked={field.value}
+                                // Aseguramos un valor booleano puro
+                                checked={!!field.value}
                                 onCheckedChange={field.onChange}
-                                className="border-zinc-400 data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600"
+                                disabled={disabled}
+                                className="border-zinc-400 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
                             />
                             <Label
                                 htmlFor="is-color"
-                                className="text-sm font-medium leading-none cursor-pointer text-slate-700"
+                                className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                ¿Impresión a Color?
+                                ¿Imprime a color  a Color?
                             </Label>
                         </div>
                     )}

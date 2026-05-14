@@ -126,28 +126,28 @@ export const EquipmentDetailsPage = () => {
                 <dt className="font-medium text-muted-foreground">Nombre del responsable</dt>
                 <dd className="font-semibold flex items-center gap-1.5">
                   <User className="h-4 w-4 text-muted-foreground " />
-                  {equipment.responsable_equipo?.name} {equipment?.responsable_equipo?.first_name} {equipment?.responsable_equipo?.last_name}
+                  {equipment.id_responsable?.name} {equipment?.id_responsable?.first_name} {equipment?.id_responsable?.last_name}
                 </dd>
               </div>
               <div className="space-y-1">
                 <dt className="font-medium text-muted-foreground">Número de empleado </dt>
                 <dd className="font-semibold flex items-center gap-1.5">
                   <IdCard className="h-4 w-4 text-muted-foreground " />
-                  {equipment.responsable_equipo?.num_employe}
+                  {equipment.id_responsable?.num_employe}
                 </dd>
               </div>
               <div className="space-y-1">
                 <dt className="font-medium text-muted-foreground">Correo </dt>
                 <dd className="font-semibold flex items-center gap-1.5">
                   <Mail className="h-4 w-4 text-muted-foreground " />
-                  {equipment?.responsable_equipo?.mail}
+                  {equipment?.id_responsable?.mail}
                 </dd>
               </div>
               <div className="space-y-1">
                 <dt className="font-medium text-muted-foreground">Área de traabajo </dt>
                 <dd className="font-semibold flex items-center gap-1.5">
                   <MapPinned className="h-4 w-4 text-muted-foreground " />
-                  {equipment?.responsable_equipo?.area}
+                  {equipment?.id_responsable?.area}
                 </dd>
               </div>
             </div>

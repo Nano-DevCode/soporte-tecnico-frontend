@@ -24,12 +24,12 @@ export const getBrandsAction = async (): Promise<Brand[]> => {
 /**
  * Obtiene una marca específica por su ID (UUID).
  */
-export const getBrandByIdAction = async (id: string): Promise<Brand> => {
-    try {
-        const { data } = await soporteTecnicoApi.get<Brand>(`/brands/${id}`);
-        return data;
-    } catch (error: unknown) {
-        const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message || "No se encontró la marca";
-        throw new Error(message);
-    }
+export const getBrandByIdAction = async (idOrObject: string | { id: string }) => {
+    // Si es un objeto, extraemos el id; si no, usamos el valor directamente
+    const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
+
+    if (!id) return null;
+
+    const { data } = await soporteTecnicoApi.get<Brand>(`/brands/${id}`);
+    return data;
 };

@@ -117,10 +117,6 @@ export const CustomNavContent = memo(() => {
                 <List className="h-4 w-4" /> Lista de equipos
               </Link>
 
-              <Link to='/department' className={getItemClass(pathname.startsWith("/department"))}>
-                <List className="h-4 w-4" /> Lista de materiales
-              </Link>
-
 
             </div>
           </CollapsibleContent>

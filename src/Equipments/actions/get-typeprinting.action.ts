@@ -15,12 +15,12 @@ export const getTypePrintingsAction = async (): Promise<TypePrinting[]> => {
     }
 };
 
-export const getTypePrintingByIdAction = async (id: string): Promise<TypePrinting > => {
-    try {
-        const { data } = await soporteTecnicoApi.get<TypePrinting>(`/printingtypes/${id}`);
-        return data;
-    } catch (error: any) {
-        const message = error.response?.data?.message || "No se encontró el tipo de impresión";
-        throw new Error(message);
-    }
+export const getTypePrintingByIdAction  = async (idOrObject: string | { id: string }) => {
+    // Si es un objeto, extraemos el id; si no, usamos el valor directamente
+    const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
+
+    if (!id) return null;
+
+    const { data } = await soporteTecnicoApi.get<TypePrinting>(`/printingtypes/${id}`);
+    return data;
 };
