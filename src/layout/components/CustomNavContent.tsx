@@ -113,7 +113,7 @@ export const CustomNavContent = memo(() => {
           <CollapsibleContent>
             <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
 
-              <Link to='/equipment' className={getItemClass(pathname.startsWith("/equipment"))}>
+              <Link to='/equipments' className={getItemClass(pathname.startsWith("/equipments"))}>
                 <List className="h-4 w-4" /> Lista de equipos
               </Link>
 

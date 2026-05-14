@@ -54,7 +54,7 @@ export const appRouter = createBrowserRouter([
                 children: departmentRoutes,
             },
             {
-                path: 'equipment',
+                path: 'equipments',
                 children: equipmentRoutes,
             }
         ],

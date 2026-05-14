@@ -17,3 +17,4 @@ export const deleteEquipmentAction = async (id: string): Promise<void> => {
         throw new Error("Error al intentar eliminar el equipo.");
     }
 };
+// este metodo esta pendiente de verificar 
