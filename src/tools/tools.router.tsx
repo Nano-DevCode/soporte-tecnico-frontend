@@ -4,7 +4,7 @@ import { RoleRoute } from "@/auth/routes/ProtectedRoutes";
 
 const ToolPage = lazy(() => import('./pages/ToolPage').then(m => ({ default: m.ToolPage })));
 const ToolCreatePage = lazy(() => import('./pages/ToolCreatePage').then(m => ({ default: m.ToolCreatePage })));
-const ToolUpdatePage = lazy(() => import('./pages/ToolUpdatePage').then(m => ({ default: m.ToolUpdatePage })));
+const ToolEditPage = lazy(() => import('./pages/ToolUpdatePage').then(m => ({ default: m.ToolEditPage })));
 const ToolDetailsPage = lazy(() => import('./pages/ToolDetailsPage').then(m => ({ default: m.ToolDetailsPage })));
 
 export const toolRoutes = [
@@ -31,7 +31,7 @@ export const toolRoutes = [
         element: 
         <SuspenseWrapper>
             <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}>
-                <ToolUpdatePage />
+                <ToolEditPage />
             </RoleRoute >
         </SuspenseWrapper>
     },

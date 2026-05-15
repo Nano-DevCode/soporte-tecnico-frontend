@@ -37,7 +37,7 @@ export const CustomToolMobileCard = memo(({ tools, handleDownClick }: Props) => 
 
             {/* ID Completo */}
             <p className="text-[10px] font-mono text-muted-foreground/60 break-all leading-tight">
-              ID: {tool.id}
+              {t("tools.listMobile.idTitle")} {tool.id}
             </p>
 
             {/* Nombre/Descripción Principal */}
@@ -57,7 +57,7 @@ export const CustomToolMobileCard = memo(({ tools, handleDownClick }: Props) => 
             <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
               <Layers className="h-3.5 w-3.5 shrink-0 mt-0.5 opacity-70" />
               <span className="whitespace-normal break-words leading-relaxed">
-                Marca: {tool.model.brand.name}
+                {t("tools.listMobile.brandTitle")} {tool.model.brand.name}
               </span>
             </div>
 
@@ -92,10 +92,10 @@ export const CustomToolMobileCard = memo(({ tools, handleDownClick }: Props) => 
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card py-16">
           <Building2 className="h-10 w-10 text-muted-foreground/40" />
           <p className="mt-3 text-sm font-medium text-muted-foreground">
-            {t("custom_department_desktop_table_not_found")}
+            {t("generic_not_found_list")}
           </p>
           <p className="mt-1 text-xs text-muted-foreground/70 text-center px-4">
-            {t("custom_department_desktop_table_setting_filters")}
+            {t("generic_not_found_list_description")}
           </p>
         </div>
       )}

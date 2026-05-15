@@ -925,7 +925,6 @@
   "equipment_form_new_model_placeholder": "Nombre del nuevo modelo",
   "equipment_form_responsible_section": "Responsable Asignado",
   "equipment_form_new_responsible_title": "Nuevo Responsable",
-  "field_required": "Este campo es obligatorio",
   
   "description":"Descripción",
   "custom_userEq_form_n_control": "N° Empleado",
@@ -940,10 +939,6 @@
   "only_numbers_allowed": "Solo se permiten números enteros (GB)",
   "computer_type": "TIPO DE EQUIPO",
   "processor": "PROCESADOR",
-  "os": "SISTEMA OPERATIVO",
-  "ram_capacity": "CAPACIDAD DE MEMORIA RAM (GB)",
-  "total_storage": "CAPACIDAD TOTAL DE ALMACENAMIENTO (GB)",
-  "available_storage": "ALMACENAMIENTO DISPONIBLE (GB)",
   "new_entry_title": "NUEVO REGISTRO",
 
 
@@ -958,14 +953,11 @@
   "ram_capacity": "CAPACIDAD MEMORIA RAM (GB)",
   "total_storage": "CAPACIDAD ALMACENAMIENTO (GB)",
   "available_storage": "ALMACENAMIENTO DISPONIBLE (GB)",
-  "only_numbers": "SOLO NÚMEROS ENTEROS",
   "new_entry": "NUEVO REGISTRO",
   "placeholder_name": "Nombre (Ej. Windows 11, SSD, etc.)",
-  "placeholder_numbers": "Ej. 16",
   "printer_data": "Datos específicos de la Impresora",
   "is_color": "¿Imprime a color?",
   "toner_model": "Modelo de Tóner",
-  "toner_placeholder": "Ej. HP 85A o Canon G-2100",
   "printer_function": "Funcionalidad de la impresora",
   "printing_type": "Tipo de impresión",
   "new_function": "Nueva Funcionalidad",
@@ -978,6 +970,82 @@
   "only_numbers": "Solo se permiten números",
   "field_required": "Este campo es obligatorio",
   "placeholder_numbers": "Ej. 500",
-  "toner_placeholder": "Ej. HP-85A"
+  "toner_placeholder": "Ej. HP-85A",
+
+  "tools" : {
+    "create": {
+      "sileo": {
+        "loading": {
+          "title": "Registrando herramienta.."
+        },
+        "success": {
+          "title": "¡Herramienta registrada!",
+          "description": "La herramienta se guardó correctamente."
+        },
+        "error": {
+          "title": "Error al registrar herramienta"
+        }
+      },
+      "logs": {
+        "error": "Error en la creación:"
+      }
+    },
+    "edit": {
+      "sileo": {
+        "loading": {
+          "title":  "Actualizando..."
+        },
+        "success": {
+          "title": "¡Actualizado!",
+          "description": "Los cambios se guardaron correctamente."
+        },
+        "error": {
+          "title": "Error al editar herramienta"
+        }
+      },
+      "logs": {
+        "error": "Error en la actualización:"
+      }
+    },
+    "details": {
+      "brand": "Marca:",
+      "quantity": "Cantidad:",
+      "subTitle": "Detalles de la Herramienta",
+      "idTitle": "ID del Registro",
+      "typeTitle": "Tipo",
+      "brandTitle": "Marca",
+      "modelTitle": "Modelo",
+      "descriptionTitle": "Descripción / Notas",
+      "nonDescription": "Sin descripción adicional.",
+      "moreInformation": "Información Adicional",
+      "statusTitle": "Estado",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "dateCreateTitle": "Fecha de Creación",
+      "dateEditTitle": "Última Modificación"
+    },
+    "listMobile": {
+      "idTitle": "ID:",
+      "brandTitle": "Marca:"
+    },
+    "listTable": {
+      
+    },
+    "backList": {
+      "backLabel": "Lista de Herramientas"
+    },
+    "notFound" : {
+      "title": "No se encontro la herramienta"
+    }
+  },
+
+  "generic_error_backend_message": "Revisa los datos e intenta de nuevo.",
+  "generic_status": {
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "generic_not_found_list": "No se encontro ninguna concidencia",
+  "generic_not_found_list_description": "Ajuste los filtros de búsqueda"
+  
 
 }
