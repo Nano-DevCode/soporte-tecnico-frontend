@@ -69,7 +69,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   },
 
   checkAuthStatus: async () => {
-    const { lastCheck, authStatus } = get();
+    const { lastCheck, authStatus, logout } = get();
 
     if (authStatus === 'authenticated' && lastCheck && Date.now() - lastCheck < FIVE_MINUTES) {
       return true;
@@ -80,7 +80,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
       set({ user: data, authStatus: 'authenticated', lastCheck: Date.now() });
       return true;
     } catch {
-      set({ user: null, authStatus: 'not-authenticated', lastCheck: null });
+      await logout(); 
       return false;
     }
   },

@@ -1,12 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams, useSearchParams } from "react-router";
+
+// Importaciones de tus actions
 import { getToolsActions } from '../actions/get-tools';
 import { changeStatusToolAction } from '../actions/change-status-tool';
 import { createToolsActions } from '../actions/create-tools';
 import { updateToolsActions } from '../actions/update-tools';
 import { getOneToolActions } from '../actions/get-tool';
+import { getToolsByIdsAction } from '../actions/post-toolsById';
 
-export const useTools = () => {
+// Agregamos bagIds como parámetro opcional con un arreglo vacío por defecto
+export const useTools = (bagIds: string[] = []) => {
   const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
 
@@ -16,14 +20,15 @@ export const useTools = () => {
   const page = Number(searchParams.get('page')) || 1;
   const offset = (page - 1) * limit;
   const status = searchParams.get('status') || undefined; 
-  const query = searchParams.get("search")?.trim() || undefined; 
+  const query = searchParams.get("query")?.trim() || undefined; 
   
   const brandId = searchParams.get("brandId")?.trim() || undefined; 
   const typeId = searchParams.get("typeId")?.trim() || undefined; 
+  const haveInternalId = searchParams.get("haveInternalId")?.trim() || undefined;
 
   const toolsQuery = useQuery({
-    queryKey: ['tools', { limit, offset, status, query, brandId, typeId }],
-    queryFn: () => getToolsActions({ limit, offset, status, query, brandId, typeId }),
+    queryKey: ['tools', { limit, offset, status, query, brandId, typeId, haveInternalId }],
+    queryFn: () => getToolsActions({ limit, offset, status, query, brandId, typeId, haveInternalId }),
     staleTime: 1000 * 60 * 5,
     select: (response) => ({
       tools: response.tools,
@@ -36,6 +41,13 @@ export const useTools = () => {
     queryFn: () => getOneToolActions({ id: id! }),
     staleTime: 1000 * 60 * 5,
     enabled: !!id,
+  });
+
+  const getByIdsQuery = useQuery({
+    queryKey: ['tools', 'bag', bagIds], 
+    queryFn: () => getToolsByIdsAction({ ids: bagIds }),
+    staleTime: 1000 * 60 * 5, // Mantiene la caché por 5 minutos
+    enabled: bagIds.length > 0,
   });
 
   const changeStatusMutation = useMutation({
@@ -65,6 +77,7 @@ export const useTools = () => {
       if (id) {
         queryClient.invalidateQueries({ queryKey: ['tool', id] });
       }
+      queryClient.invalidateQueries({ queryKey: ['tools', 'bag'] });
     },
     onError: (error) => {
       console.error("Error al guardar la Herramienta:", error);
@@ -72,18 +85,22 @@ export const useTools = () => {
   });
   
   return {
-    // Datos
+    // Datos Catálogo
     tools: toolsQuery.data?.tools ?? [],
     meta: toolsQuery.data?.meta,
-
-    tool: getOneQuery.data,
-    toolLoading: getOneQuery.isLoading,
-
-    // Estados
     isLoading: toolsQuery.isLoading,
     isFetching: toolsQuery.isFetching,
     error: toolsQuery.error,
     refetch: toolsQuery.refetch,
+
+    // Dato Individual
+    tool: getOneQuery.data,
+    toolLoading: getOneQuery.isLoading,
+
+    // NUEVO: Datos de la Bolsa
+    bagTools: getByIdsQuery.data ?? [],
+    isBagLoading: getByIdsQuery.isLoading,
+    isBagFetching: getByIdsQuery.isFetching,
 
     // Crear Herramienta
     createToolAsync: createToolMutation.mutateAsync,

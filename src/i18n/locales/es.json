@@ -1024,18 +1024,68 @@
       "dateCreateTitle": "Fecha de Creación",
       "dateEditTitle": "Última Modificación"
     },
+    "mainPage": {
+      "sileo": {
+        "loading": {
+          "title": "Cargando herramientas..."
+        },
+        "success": {
+          "title": "¡Actualizado!",
+          "description": "Los cambios de estado se guardaron correctamente."
+        },
+        "error": {
+          "title": "Error al al actualizar"
+        }
+      },
+      "dialog" : {
+        "model": "Modelo:",
+        "brand": "Marca:",
+        "id": "Id:",
+        "textDescriptionUp": "Esta acción impedirá que la herramienta sea asignado a nuevos registros.",
+        "textDescriptionDown": "Esta acción permitirá que la herramienta vuelva a aparecer en las listas de selección.",
+        "titleDown": "Confirmar Baja",
+        "titleUp": "Confirmar Alta",
+        "buttonConfirmDown": "Sí, dar de baja",
+        "buttonConfirmUp": "Sí, dar de alta",
+        "buttonCancel": "Cancelar"
+      },
+      "titleCard": {
+        "title":"Herramientas",
+        "description": "Gestión de herramientas"
+      },
+      "buttonCreate": {
+        "label": "Crear Herramienta"
+      }
+    },
     "listMobile": {
       "idTitle": "ID:",
       "brandTitle": "Marca:"
     },
     "listTable": {
-      
+      "id": "Id",
+      "type": "Tipo",
+      "quantity": "Cantidad",
+      "brand": "Marca",
+      "status": "Estado",
+      "actions": "Acciones",
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "form": {
+
     },
     "backList": {
       "backLabel": "Lista de Herramientas"
     },
     "notFound" : {
-      "title": "No se encontro la herramienta"
+      "title": "No se encontro la herramienta",
+      "description": "Verifica tus filtros"
+    },
+    "actionsMenu": {
+      "view": "Ver Detalles",
+      "edit": "Editar",
+      "up": "Dar de Alta",
+      "down": "Dar de Baja"
     }
   },
 

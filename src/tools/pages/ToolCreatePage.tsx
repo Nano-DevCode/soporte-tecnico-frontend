@@ -4,7 +4,6 @@ import { isAxiosError } from "axios";
 
 // Hooks y Componentes
 import { useTools } from "../hooks/useTools";
-
 import { CustomBackToList } from "@/components/custom/CustomBackToList";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { CustomToolForm, type ToolFormValues } from "../components/CustomToolForm";
@@ -15,13 +14,19 @@ export const ToolCreatePage = () => {
   const { createToolAsync, isCreating } = useTools();
 
   const handleCreate = async (data: ToolFormValues) => {
-    if (!data.model?.id || !data.type?.id) return;
+    // 1. Añadimos la validación para asegurar que exista la imagen
+    if (!data.model?.id || !data.type?.id || !data.image || data.image.length === 0) {
+      return;
+    }
 
+    // 2. Agregamos al payload SOLO los datos que espera NestJS (sin quantity)
     const payload = {
-      quantity: Number(data.quantity),
       description: data.description,
       modelId: data.model.id,
       typeId: data.type.id,
+      // Si el usuario escribió algo, lo mandamos. Si no, lo omitimos.
+      idInternal: data.idInternal ? data.idInternal : undefined,
+      image: data.image[0], 
     };
 
     try {

@@ -46,9 +46,9 @@ export const CustomDialogConfirm = memo(({
   };
 
   const buttonStyles = {
-    danger: "bg-red-600 hover:bg-red-700 shadow-sm shadow-red-200 dark:shadow-none",
-    primary: "bg-primary hover:bg-primary/90 shadow-sm shadow-primary/20",
-    warning: "bg-amber-600 hover:bg-amber-700 shadow-sm",
+    danger: "bg-red-600 hover:bg-red-700 text-white shadow-sm shadow-red-200 dark:bg-red-600 dark:hover:bg-red-500 dark:shadow-none",
+    primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-200 dark:bg-blue-600 dark:hover:bg-blue-500 dark:shadow-none",
+    warning: "bg-amber-600 hover:bg-amber-700 text-white shadow-sm dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-amber-950",
   };
 
   return (
@@ -90,7 +90,7 @@ export const CustomDialogConfirm = memo(({
             }}
             disabled={isLoading}
             className={cn(
-              "sm:flex-1 rounded-xl font-bold text-white transition-all active:scale-95", 
+              "sm:flex-1 rounded-xl font-bold text-black transition-all active:scale-95", 
               buttonStyles[variant]
             )}
           >

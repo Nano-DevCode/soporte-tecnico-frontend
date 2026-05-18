@@ -1,6 +1,8 @@
 import { useNavigate, useParams } from "react-router";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
+
+// Hooks y Componentes
 import { useTools } from "../hooks/useTools";
 import { CustomToolForm, type ToolFormValues } from "../components/CustomToolForm";
 import { CustomBackToList } from "@/components/custom/CustomBackToList";
@@ -25,10 +27,12 @@ export const ToolEditPage = () => {
 
     const payload = {
       id: id,
-      quantity: Number(data.quantity),
       description: data.description,
       modelId: data.model.id,
       typeId: data.type.id,
+      idInternal: data.idInternal ? data.idInternal : undefined,
+
+      image: data.image && data.image.length > 0 ? data.image[0] : undefined,
     };
 
     try {
@@ -49,6 +53,11 @@ export const ToolEditPage = () => {
             title: t("tools.edit.sileo.error.title"), 
             description: backendMessage,
             duration: 5000,
+            fill: "#18181b",
+            styles: {
+              title: "text-red-500! font-semibold!",
+              description: "text-zinc-400!",
+            }
           };
         }
       });

@@ -1,10 +1,11 @@
 import { memo, useRef, useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FilterX } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { FilterX, Search } from "lucide-react";
 import { useSearchParams } from "react-router";
 import { t } from "i18next";
-import { InfiniteScrollSelect } from "./infinite-scroll-select";
+import { InfiniteScrollSelect } from "../../components/custom/infinite-scroll-select";
 import { useToolTypes } from "../hooks/useToolTypes";
 import { useToolBrands } from "../hooks/useToolBrands";
 
@@ -12,19 +13,23 @@ export const CustomToolFilters = memo(() => {
   const [searchParams, setSearchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // 1. Lectura de parámetros de la URL
   const statusFilter = searchParams.get("status") || "all";
+  const haveInternalIdFilter = searchParams.get("haveInternalId") || "all";
   const brandFilterId = searchParams.get("brandId");
   const typeFilterId = searchParams.get("typeId");
+  const queryFilter = searchParams.get("query") || "";
 
-  // --- Estados EXCLUSIVOS para las barras de búsqueda internas de los Selects ---
-  // (Esto no va en la URL para no cambiar la ruta con cada letra que tecleas)
+  // Estados locales para las búsquedas
   const [searchBrand, setSearchBrand] = useState("");
   const [debouncedBrand, setDebouncedBrand] = useState("");
 
   const [searchType, setSearchType] = useState("");
   const [debouncedType, setDebouncedType] = useState("");
 
-  // Efectos de Debounce para la búsqueda
+  const [globalSearch, setGlobalSearch] = useState(queryFilter);
+
+  // Efectos de Debounce
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedBrand(searchBrand), 500);
     return () => clearTimeout(timer);
@@ -35,6 +40,16 @@ export const CustomToolFilters = memo(() => {
     return () => clearTimeout(timer);
   }, [searchType]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (globalSearch !== queryFilter) {
+        updateFilters("query", globalSearch);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [globalSearch, queryFilter]);
+
+  // Actualizar la URL
   const updateFilters = (key: string, value: string | undefined | null) => {
     const newParams = new URLSearchParams(searchParams);
 
@@ -48,13 +63,16 @@ export const CustomToolFilters = memo(() => {
     setSearchParams(newParams);
   };
 
+  // Lógica completa de Limpiar Filtros
   const resetFilters = () => {
-    setSearchParams({});
-    setSearchBrand("");
-    setSearchType("");
+    setSearchParams({}); // Limpia la URL
+    setSearchBrand(""); // Limpia el buscador interno de marcas
+    setSearchType(""); // Limpia el buscador interno de tipos
+    setGlobalSearch(""); // Limpia el input text global
     if (inputRef.current) inputRef.current.value = "";
   };
 
+  // Fetch de data
   const {
     toolBrands,
     fetchNextPage: fetchNextBrandPage,
@@ -71,10 +89,9 @@ export const CustomToolFilters = memo(() => {
     isLoading: isLoadingTypes,
   } = useToolTypes(debouncedType);
 
-  // --- 2. Reconstruir los objetos para el Select basados en el ID de la URL ---
+  // Reconstrucción de objetos para el Select
   const selectedTypeObj = useMemo(() => {
     if (!typeFilterId) return null;
-    // Busca el nombre real en la lista, si no está (ej: recargó página), muestra un texto genérico
     return toolTypes?.find(t => t.id === typeFilterId) || { id: typeFilterId, name: "Seleccionado..." };
   }, [typeFilterId, toolTypes]);
 
@@ -83,61 +100,105 @@ export const CustomToolFilters = memo(() => {
     return toolBrands?.find(b => b.id === brandFilterId) || { id: brandFilterId, name: "Seleccionado..." };
   }, [brandFilterId, toolBrands]);
 
-  const hasActiveFilters = statusFilter !== "all" || brandFilterId || typeFilterId;
+  // Mostrar el botón "Limpiar" solo si hay CUALQUIER filtro activo
+  const hasActiveFilters = 
+    statusFilter !== "all" || 
+    haveInternalIdFilter !== "all" || 
+    brandFilterId || 
+    typeFilterId || 
+    queryFilter.length > 0;
 
   return (
-    <div className="flex flex-col gap-3 p-4 rounded-xl border border-border bg-card/50 shadow-sm md:flex-row md:items-center">
+    <div className="flex flex-col gap-3 p-4 rounded-xl border border-border bg-card/50 shadow-sm">
       
-      <div className="flex flex-col gap-2 w-full sm:flex-row sm:items-center">
-        
+      {/* --- FILA 1: Búsqueda y Estado --- */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        {/* Barra de Búsqueda Global */}
+        <div className="relative w-full sm:flex-1">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            ref={inputRef}
+            type="text"
+            placeholder="Buscar herramienta..."
+            className="w-full pl-9 bg-background/60 h-10"
+            value={globalSearch}
+            onChange={(e) => setGlobalSearch(e.target.value)}
+          />
+        </div>
+
         {/* Filtro Estado (Status) */}
         <Select value={statusFilter} onValueChange={(v) => updateFilters("status", v)}>
-          <SelectTrigger className="w-full sm:w-[150px] h-10 bg-background/60">
+          <SelectTrigger className="w-full sm:w-[200px] h-10 bg-background/60">
             <SelectValue placeholder="Estado" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("custom_department_filters_all_status")}</SelectItem>
-            <SelectItem value="true">{t("custom_department_filters_active_status")}</SelectItem>
-            <SelectItem value="false">{t("custom_department_filters_inactive_status")}</SelectItem>
+            <SelectItem value="all">{t("custom_department_filters_all_status") || "Todos"}</SelectItem>
+            <SelectItem value="true">{t("custom_department_filters_active_status") || "Activos"}</SelectItem>
+            <SelectItem value="false">{t("custom_department_filters_inactive_status") || "Inactivos"}</SelectItem>
           </SelectContent>
         </Select>
+      </div>
 
-        <InfiniteScrollSelect
-          options={toolTypes}
-          value={selectedTypeObj} // Pasa el objeto calculado de la URL
-          onChange={(val) => updateFilters("typeId", val?.id)} // Guarda directo en URL
-          onSearch={setSearchType}
-          fetchNextPage={fetchNextTypePage}
-          hasNextPage={!!hasNextTypePage}
-          isFetchingNextPage={isFetchingNextType}
-          isLoading={isLoadingTypes}
-          placeholder="Buscar tipo de herramienta..."
-        />
+      {/* --- FILA 2: ID Interno, Tipo, Marca y Limpiar --- */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        
+        {/* Filtro ID Interno */}
+        <div className="w-full sm:flex-1">
+          <Select value={haveInternalIdFilter} onValueChange={(v) => updateFilters("haveInternalId", v)}>
+            <SelectTrigger className="w-full h-10 bg-background/60">
+              <SelectValue placeholder="ID Interno" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos</SelectItem>
+              <SelectItem value="true">Con ID Interno</SelectItem>
+              <SelectItem value="false">Sin ID Interno</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-        <InfiniteScrollSelect
-          options={toolBrands}
-          value={selectedBrandObj} // Pasa el objeto calculado de la URL
-          onChange={(val) => updateFilters("brandId", val?.id)} // Guarda directo en URL
-          onSearch={setSearchBrand}
-          fetchNextPage={fetchNextBrandPage}
-          hasNextPage={!!hasNextBrandPage}
-          isFetchingNextPage={isFetchingNextBrand}
-          isLoading={isLoadingBrands}
-          placeholder="Buscar marca..."
-        />
+        {/* Select de Tipos */}
+        <div className="w-full sm:flex-1">
+          <InfiniteScrollSelect
+            options={toolTypes}
+            value={selectedTypeObj} 
+            onChange={(val) => updateFilters("typeId", val?.id)} 
+            onSearch={setSearchType}
+            fetchNextPage={fetchNextTypePage}
+            hasNextPage={!!hasNextTypePage}
+            isFetchingNextPage={isFetchingNextType}
+            isLoading={isLoadingTypes}
+            placeholder="Buscar tipo..."
+          />
+        </div>
+
+        {/* Select de Marcas */}
+        <div className="w-full sm:flex-1">
+          <InfiniteScrollSelect
+            options={toolBrands}
+            value={selectedBrandObj} 
+            onChange={(val) => updateFilters("brandId", val?.id)} 
+            onSearch={setSearchBrand}
+            fetchNextPage={fetchNextBrandPage}
+            hasNextPage={!!hasNextBrandPage}
+            isFetchingNextPage={isFetchingNextBrand}
+            isLoading={isLoadingBrands}
+            placeholder="Buscar marca..."
+          />
+        </div>
 
         {/* Botón Limpiar Filtros */}
         {hasActiveFilters && (
           <Button
             variant="ghost"
             onClick={resetFilters}
-            className="h-10 px-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all border border-transparent hover:border-destructive/20 shrink-0"
+            className="w-full sm:w-auto h-10 px-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all border border-transparent hover:border-destructive/20 shrink-0"
           >
             <FilterX className="h-4 w-4 mr-2" />
-            <span>{t("clear")}</span>
+            <span>{t("clear") || "Limpiar"}</span>
           </Button>
         )}
       </div>
+      
     </div>
   );
 });

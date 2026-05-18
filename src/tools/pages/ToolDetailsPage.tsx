@@ -4,14 +4,14 @@ import {
   CalendarDays,
   Tag,
   Layers,
-  Boxes,
-  Info
+  Info,
+  Image as ImageIcon
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { t } from "i18next";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 // Acciones y Componentes Custom
@@ -46,9 +46,12 @@ export const ToolDetailsPage = () => {
         <Card>
           <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-6">
             <div className="flex items-center gap-4">
-              <Avatar className="h-14 w-14">
+              
+              {/* AVATAR DINÁMICO */}
+              <Avatar className="h-16 w-16 border border-muted-foreground/20">
+                <AvatarImage src={tool?.imageUrl || ''} className="object-cover" />
                 <AvatarFallback className="bg-primary/10 text-primary">
-                  <Wrench className="h-7 w-7" />
+                  <Wrench className="h-8 w-8" />
                 </AvatarFallback>
               </Avatar>
               
@@ -70,20 +73,13 @@ export const ToolDetailsPage = () => {
               >
                 {tool?.status ? t("generic_status.active") : t("generic_status.inactive")}
               </Badge>
-
-              <Badge 
-                variant="secondary" 
-                className="gap-1 bg-blue-100 text-blue-700 hover:bg-blue-100/80 dark:bg-blue-900/30 dark:text-blue-400"
-              >
-                <Boxes className="h-3 w-3" />
-                {t("tools.details.quantity")} {tool?.quantity}
-              </Badge>
+              {/* Se eliminó el Badge de Quantity */}
             </div>
           </CardHeader>
 
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
             
-            {/* Datos de la herramienta */}
+            {/* COLUMNA 1: Datos de la herramienta */}
             <div className="space-y-6">
               <div>
                 <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
@@ -128,14 +124,38 @@ export const ToolDetailsPage = () => {
               </div>
             </div>
 
-            {/* COLUMNA 2: Estado del Sistema e Historial */}
-            <div className="space-y-6">
+            {/* COLUMNA 2: Foto, Estado del Sistema e Historial */}
+            <div className="space-y-6 flex flex-col">
+              
+              {/* IMAGEN DE LA HERRAMIENTA */}
               <div>
+                <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
+                  <ImageIcon className="h-4 w-4 text-muted-foreground" />
+                  Fotografía de la Herramienta
+                </h4>
+                <div className="relative h-64 w-full overflow-hidden rounded-xl border-2 border-dashed border-primary/20 bg-muted/30 shadow-sm flex items-center justify-center p-2">
+                  {tool?.imageUrl ? (
+                    <img 
+                      src={tool.imageUrl} 
+                      alt="Foto de la herramienta" 
+                      className="h-full w-full object-contain" 
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center text-muted-foreground/50">
+                      <ImageIcon className="h-12 w-12 mb-2" />
+                      <span className="text-xs font-semibold uppercase tracking-wider">Sin imagen</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* INFORMACIÓN ADICIONAL */}
+              <div className="mt-4">
                 <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
                   <CalendarDays className="h-4 w-4 text-muted-foreground" />
                   Información Adicional
                 </h4>
-                <dl className="grid grid-cols-1 gap-y-5 text-sm">
+                <dl className="grid grid-cols-1 gap-y-4 text-sm">
                   
                   <div className="rounded-lg bg-muted/30 p-3 border border-border/50">
                     <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">Estado</dt>
@@ -144,7 +164,7 @@ export const ToolDetailsPage = () => {
                     </dd>
                   </div>
 
-                  <div className="rounded-lg bg-muted/30 p-3 border border-border/50 space-y-4">
+                  <div className="rounded-lg bg-muted/30 p-3 border border-border/50 space-y-3">
                     <div>
                       <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">{t("tools.details.dateCreateTitle")}</dt>
                       <dd className="font-semibold flex items-center gap-1.5 text-base">
@@ -153,7 +173,7 @@ export const ToolDetailsPage = () => {
                       </dd>
                     </div>
                     
-                    <div className="border-t pt-3">
+                    <div className="border-t border-border/50 pt-3">
                       <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">{t("tools.details.dateEditTitle")}</dt>
                       <dd className="font-semibold flex items-center gap-1.5 text-base">
                         <CalendarDays className="h-4 w-4 text-muted-foreground" />
@@ -164,6 +184,7 @@ export const ToolDetailsPage = () => {
 
                 </dl>
               </div>
+
             </div>
 
           </CardContent>

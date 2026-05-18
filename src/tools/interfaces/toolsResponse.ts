@@ -9,9 +9,11 @@ export interface ToolsResponse {
 
 export interface Tool {
     id:          string;
+    idInternal:  string;
     status:      boolean;
     description: string;
-    quantity:    number;
+    imageUrl:    string | null;
+    inUse:       boolean;
     model:       ToolModel;
     type:        ToolTypes;
     createdAt:   Date;
