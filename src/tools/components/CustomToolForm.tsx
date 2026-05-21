@@ -1,24 +1,29 @@
 import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { sileo } from "sileo";
 import { useNavigate } from "react-router";
 import { isAxiosError } from "axios";
+import { Wrench, Save, X, Image as ImageIcon } from "lucide-react";
 
-// Iconos y UI
-import { Wrench, Save, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 
-// Hooks y Componentes
 import { useToolBrands } from "../hooks/useToolBrands";
 import { useToolModels } from "../hooks/useToolModels";
 import { useToolTypes } from "../hooks/useToolTypes";
-import { InfiniteScrollSelect } from "./infinite-scroll-select";
-
-// Interfaces
+import { InfiniteScrollSelect } from "../../components/custom/infinite-scroll-select";
 import type { Tool } from "../interfaces/toolsResponse"; 
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 
@@ -26,8 +31,9 @@ export interface ToolFormValues {
   type: { id: string; name: string } | null;
   brand: { id: string; name: string } | null;
   model: { id: string; name: string } | null;
-  quantity: number;
+  idInternal: string;
   description: string;
+  image: FileList | null;
 }
 
 interface CustomToolFormProps {
@@ -41,7 +47,6 @@ export const CustomToolForm = ({ mode, initialData, onSubmitCallback, isMutating
   const navigate = useNavigate();
   const isEditMode = mode === "update";
 
-  // Estados de Búsqueda
   const [searchBrand, setSearchBrand] = useState("");
   const [debouncedBrand, setDebouncedBrand] = useState("");
   const [searchModel, setSearchModel] = useState("");
@@ -49,19 +54,35 @@ export const CustomToolForm = ({ mode, initialData, onSubmitCallback, isMutating
   const [searchType, setSearchType] = useState("");
   const [debouncedType, setDebouncedType] = useState("");
 
-  const { control, handleSubmit, setValue, watch, register, formState: { errors } } = useForm<ToolFormValues>({
+  const [previewUrl, setPreviewUrl] = useState<string | null>(initialData?.imageUrl || null);
+
+  const form = useForm<ToolFormValues>({
     defaultValues: { 
       type: initialData?.type ? { id: initialData.type.id, name: initialData.type.name } : null,
       brand: initialData?.model?.brand ? { id: initialData.model.brand.id, name: initialData.model.brand.name } : null,
       model: initialData?.model ? { id: initialData.model.id, name: initialData.model.name } : null,
-      quantity: initialData?.quantity ?? 1, 
-      description: initialData?.description ?? "" 
+      idInternal: initialData?.idInternal ?? "",
+      description: initialData?.description ?? "",
+      image: null
     },
   });
 
-  const selectedBrand = watch("brand");
+  const selectedBrand = form.watch("brand");
+  const selectedImage = form.watch("image");
 
-  // Debounces
+  useEffect(() => {
+    if (selectedImage && selectedImage.length > 0) {
+      const file = selectedImage[0];
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    } else if (initialData?.imageUrl) {
+      setPreviewUrl(initialData.imageUrl);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [selectedImage, initialData]);
+
   useEffect(() => {
     const handler = setTimeout(() => setDebouncedBrand(searchBrand), 250);
     return () => clearTimeout(handler);
@@ -77,12 +98,10 @@ export const CustomToolForm = ({ mode, initialData, onSubmitCallback, isMutating
     return () => clearTimeout(handler);
   }, [searchType]);
 
-  // Hooks de Catálogos
   const { toolBrands, fetchNextPage: fetchNextBrandPage, hasNextPage: hasNextBrandPage, isFetchingNextPage: isFetchingNextBrand, isLoading: isLoadingBrands, createBrand } = useToolBrands(debouncedBrand);
   const { toolModels, fetchNextPage: fetchNextModelPage, hasNextPage: hasNextModelPage, isFetchingNextPage: isFetchingNextModel, isLoading: isLoadingModels, createModel } = useToolModels(debouncedModel, selectedBrand?.id || "");
   const { toolTypes, fetchNextPage: fetchNextTypePage, hasNextPage: hasNextTypePage, isFetchingNextPage: isFetchingNextType, isLoading: isLoadingTypes, createType } = useToolTypes(debouncedType);
 
-  // --- Handlers de Creación Rápida ---
   const handleCreateBrand = async (newBrandName: string) => {
     const payload = { name: newBrandName.trim() };
     try {
@@ -97,8 +116,8 @@ export const CustomToolForm = ({ mode, initialData, onSubmitCallback, isMutating
           return { title: "Error al crear", description: backendMessage, duration: 5000 };
         }
       });
-      setValue("brand", newBrandFromDB, { shouldValidate: true });
-      setValue("model", null);
+      form.setValue("brand", newBrandFromDB, { shouldValidate: true });
+      form.setValue("model", null);
       setSearchBrand("");
     } catch (error) { console.error(error); }
   };
@@ -118,7 +137,7 @@ export const CustomToolForm = ({ mode, initialData, onSubmitCallback, isMutating
           return { title: "Error al crear", description: backendMessage, duration: 5000 };
         }
       });
-      setValue("model", newModelFromDB, { shouldValidate: true });
+      form.setValue("model", newModelFromDB, { shouldValidate: true });
       setSearchModel("");
     } catch (error) { console.error(error); }
   };
@@ -137,183 +156,258 @@ export const CustomToolForm = ({ mode, initialData, onSubmitCallback, isMutating
           return { title: "Error al crear", description: backendMessage, duration: 5000 };
         }
       });
-      setValue("type", newTypeFromDB, { shouldValidate: true });
+      form.setValue("type", newTypeFromDB, { shouldValidate: true });
       setSearchType(""); 
     } catch (error) { console.error(error); }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmitCallback)} className="rounded-xl border border-border bg-card p-6 shadow-sm">
-      
-      {/* ENCABEZADO DINÁMICO */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-6">
-        <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-            <Wrench className="h-6 w-6" />
-          </div>
-          <div className="space-y-1">
-            <h3 className="text-xl font-bold text-foreground leading-none">
-              {isEditMode ? "Editar Herramienta" : "Nueva Herramienta"}
-            </h3>
-            <p className="text-sm font-medium text-muted-foreground">
-              {isEditMode 
-                ? "Modifica los detalles de la herramienta seleccionada."
-                : "Ingresa los datos para registrar una nueva herramienta."}
-            </p>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmitCallback)} className="rounded-xl border border-border bg-card p-6 shadow-sm">
+        
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-6">
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Wrench className="h-6 w-6" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-xl font-bold text-foreground leading-none">
+                {isEditMode ? "Editar Herramienta" : "Nueva Herramienta"}
+              </h3>
+              <p className="text-sm font-medium text-muted-foreground">
+                {isEditMode 
+                  ? "Modifica los detalles de la herramienta seleccionada."
+                  : "Ingresa los datos para registrar una nueva herramienta."}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* CAMPOS DEL FORMULARIO */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6">
-        
-        {/* Tipo */}
-        <div className="space-y-2">
-          <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.type && "text-red-500")}>
-            Tipo <span className="text-red-500">*</span>
-          </Label>
-          <Controller
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6">
+          
+          <FormField
+            control={form.control}
             name="type"
-            control={control}
             rules={{ required: "Selecciona un tipo de herramienta" }}
             render={({ field }) => (
-              <InfiniteScrollSelect
-                options={toolTypes}
-                value={field.value}
-                onChange={field.onChange}
-                onSearch={setSearchType}
-                fetchNextPage={fetchNextTypePage}
-                hasNextPage={!!hasNextTypePage}
-                isFetchingNextPage={isFetchingNextType}
-                isLoading={isLoadingTypes}
-                placeholder="Buscar o crear tipo..."
-                allowCreate={true}
-                onCreate={handleCreateType}
-              />
+              <FormItem className="space-y-2">
+                <FormLabel className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Tipo <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <InfiniteScrollSelect
+                    options={toolTypes}
+                    value={field.value}
+                    onChange={field.onChange}
+                    onSearch={setSearchType}
+                    fetchNextPage={fetchNextTypePage}
+                    hasNextPage={!!hasNextTypePage}
+                    isFetchingNextPage={isFetchingNextType}
+                    isLoading={isLoadingTypes}
+                    placeholder="Buscar o crear tipo..."
+                    allowCreate={true}
+                    onCreate={handleCreateType}
+                  />
+                </FormControl>
+                <FormMessage className="text-xs font-medium text-red-500" />
+              </FormItem>
             )}
           />
-          {errors.type && <p className="text-xs font-medium text-red-500">{errors.type.message}</p>}
-        </div>
 
-        {/* Marca */}
-        <div className="space-y-2">
-          <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.brand && "text-red-500")}>
-            Marca <span className="text-red-500">*</span>
-          </Label>
-          <Controller
+          <FormField
+            control={form.control}
             name="brand"
-            control={control}
             rules={{ required: "Selecciona una marca" }}
             render={({ field }) => (
-              <InfiniteScrollSelect
-                options={toolBrands}
-                value={field.value}
-                onChange={(val) => {
-                  field.onChange(val);
-                  setValue("model", null); // Limpieza segura
-                }}
-                onSearch={setSearchBrand}
-                fetchNextPage={fetchNextBrandPage}
-                hasNextPage={!!hasNextBrandPage}
-                isFetchingNextPage={isFetchingNextBrand}
-                isLoading={isLoadingBrands}
-                placeholder="Buscar o crear marca..."
-                allowCreate={true}
-                onCreate={handleCreateBrand}
-              />
+              <FormItem className="space-y-2">
+                <FormLabel className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Marca <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <InfiniteScrollSelect
+                    options={toolBrands}
+                    value={field.value}
+                    onChange={(val) => {
+                      field.onChange(val);
+                      form.setValue("model", null);
+                    }}
+                    onSearch={setSearchBrand}
+                    fetchNextPage={fetchNextBrandPage}
+                    hasNextPage={!!hasNextBrandPage}
+                    isFetchingNextPage={isFetchingNextBrand}
+                    isLoading={isLoadingBrands}
+                    placeholder="Buscar o crear marca..."
+                    allowCreate={true}
+                    onCreate={handleCreateBrand}
+                  />
+                </FormControl>
+                <FormMessage className="text-xs font-medium text-red-500" />
+              </FormItem>
             )}
           />
-          {errors.brand && <p className="text-xs font-medium text-red-500">{errors.brand.message}</p>}
-        </div>
 
-        {/* Modelo */}
-        <div className="space-y-2">
-          <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.model && "text-red-500")}>
-            Modelo <span className="text-red-500">*</span>
-          </Label>
-          <Controller
+          <FormField
+            control={form.control}
             name="model"
-            control={control}
             rules={{ required: "Selecciona un modelo" }}
             render={({ field }) => (
-              <InfiniteScrollSelect
-                disabled={!selectedBrand} 
-                options={toolModels}
-                value={field.value}
-                onChange={field.onChange}
-                onSearch={setSearchModel}
-                fetchNextPage={fetchNextModelPage}
-                hasNextPage={!!hasNextModelPage}
-                isFetchingNextPage={isFetchingNextModel}
-                isLoading={isLoadingModels}
-                placeholder={selectedBrand ? "Buscar o crear modelo..." : "Selecciona una marca primero"}
-                allowCreate={true}
-                onCreate={handleCreateModel}
-              />
+              <FormItem className="space-y-2">
+                <FormLabel className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Modelo <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <InfiniteScrollSelect
+                    disabled={!selectedBrand} 
+                    options={toolModels}
+                    value={field.value}
+                    onChange={field.onChange}
+                    onSearch={setSearchModel}
+                    fetchNextPage={fetchNextModelPage}
+                    hasNextPage={!!hasNextModelPage}
+                    isFetchingNextPage={isFetchingNextModel}
+                    isLoading={isLoadingModels}
+                    placeholder={selectedBrand ? "Buscar o crear modelo..." : "Selecciona una marca primero"}
+                    allowCreate={true}
+                    onCreate={handleCreateModel}
+                  />
+                </FormControl>
+                <FormMessage className="text-xs font-medium text-red-500" />
+              </FormItem>
             )}
           />
-          {errors.model && <p className="text-xs font-medium text-red-500">{errors.model.message}</p>}
-        </div>
 
-        {/* Cantidad */}
-        <div className="space-y-2">
-          <Label htmlFor="quantity" className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.quantity && "text-red-500")}>
-            Cantidad <span className="text-red-500">*</span>
-          </Label>
-          <Input 
-            id="quantity"
-            type="number"
-            min={1}
-            className={cn("bg-muted/10", errors.quantity && "border-red-500 focus-visible:ring-red-500")}
-            {...register("quantity", { 
-              required: "La cantidad es obligatoria", 
-              min: { value: 1, message: "La cantidad debe ser al menos 1" } 
-            })}
-            placeholder="Ej. 5"
+          <FormField
+            control={form.control}
+            name="idInternal"
+            render={({ field }) => (
+              <FormItem className="space-y-2">
+                <FormLabel className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  ID Interno <span className="text-muted-foreground/50 font-normal normal-case ml-1">(Opcional)</span>
+                </FormLabel>
+                <FormControl>
+                  <Input 
+                    {...field}
+                    className="bg-muted/10 font-mono"
+                    placeholder="Ej. HER-001"
+                  />
+                </FormControl>
+                <FormMessage className="text-xs font-medium text-red-500" />
+              </FormItem>
+            )}
           />
-          {errors.quantity && <p className="text-xs font-medium text-red-500">{errors.quantity.message}</p>}
-        </div>
 
-        {/* Descripción / Notas */}
-        <div className="sm:col-span-2 space-y-2">
-          <Label htmlFor="description" className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.description && "text-red-500")}>
-            Descripción / Notas <span className="text-red-500">*</span>
-          </Label>
-          <Textarea 
-            id="description"
-            className={cn("bg-muted/10 resize-none", errors.description && "border-red-500 focus-visible:ring-red-500")}
-            {...register("description", { required: "Añade una breve descripción" })}
-            placeholder="Estado general de la herramienta, color, etc."
-            rows={3}
+          <FormField
+            control={form.control}
+            name="image"
+            render={() => (
+              <FormItem className="space-y-2 sm:col-span-2">
+                <FormLabel className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                  <ImageIcon className="h-4 w-4" /> Imagen de la Herramienta {!isEditMode && <span className="text-red-500">*</span>}
+                </FormLabel>
+                <FormControl>
+                  <Label 
+                    htmlFor="image-upload" 
+                    className={cn(
+                      "flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-primary/50 bg-primary/5 px-3 py-2 text-sm text-primary font-medium hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                      form.formState.errors.image && "border-red-500 text-red-500 bg-red-500/5 border-solid"
+                    )}
+                  >
+                    <ImageIcon className="h-4 w-4" />
+                    Seleccionar foto de la herramienta
+                    <Input 
+                      id="image-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden" 
+                      {...form.register("image", { 
+                        required: !isEditMode ? "La imagen es obligatoria" : false,
+                        validate: {
+                          maxSize: (files) => {
+                            if (!files || files.length === 0) return true;
+                            return files[0].size <= 5 * 1024 * 1024 || "La imagen no puede superar los 5MB";
+                          }
+                        }
+                      })}
+                    />
+                  </Label>
+                </FormControl>
+                <div className="flex flex-col gap-1">
+                  <FormDescription className="text-[11px] text-muted-foreground">
+                    Formatos soportados: JPG, PNG, WEBP (Máx. 5MB).
+                  </FormDescription>
+                  <FormMessage className="text-xs font-medium text-red-500" />
+                </div>
+              </FormItem>
+            )}
           />
-          {errors.description && <p className="text-xs font-medium text-red-500">{errors.description.message}</p>}
+
+          <FormField
+            control={form.control}
+            name="description"
+            rules={{ required: "Añade una breve descripción" }}
+            render={({ field }) => (
+              <FormItem className="sm:col-span-2 space-y-2">
+                <FormLabel className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Descripción / Notas <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Textarea 
+                    {...field}
+                    className="bg-muted/10 resize-none"
+                    placeholder="Estado general de la herramienta, color, etc."
+                    rows={3}
+                  />
+                </FormControl>
+                <FormMessage className="text-xs font-medium text-red-500" />
+              </FormItem>
+            )}
+          />
+
+          {previewUrl && (
+            <div className="sm:col-span-2 flex flex-col items-center justify-center pt-4">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                Vista Previa de la Imagen
+              </span>
+              <div className={cn(
+                "relative h-56 w-56 overflow-hidden rounded-xl border-2 border-dashed bg-muted/30 shadow-sm flex items-center justify-center p-2",
+                form.formState.errors.image 
+                  ? "border-red-500 bg-red-500/5" 
+                  : "border-primary/20"
+              )}>
+                <img 
+                  src={previewUrl} 
+                  alt="Previsualización de herramienta" 
+                  className="h-full w-full object-contain" 
+                />
+              </div>
+            </div>
+          )}
+
         </div>
 
-      </div>
-
-      {/* BOTONES FINALES */}
-      <div className="mt-8 flex flex-col sm:flex-row justify-end gap-3 border-t border-border pt-6">
-        <Button  
-          type="button" 
-          variant="outline" 
-          onClick={() => navigate('/tools')}
-          className="w-full sm:w-auto"
-          disabled={isMutating}
-        >
-          <X className="mr-2 h-4 w-4" /> Cancelar
-        </Button>
-        
-        <Button 
-          type="submit" 
-          className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 text-white"
-          disabled={isMutating} 
-        >
-          <Save className="mr-2 h-4 w-4" />
-          {isMutating 
-            ? (isEditMode ? "Actualizando..." : "Guardando...") 
-            : (isEditMode ? "Guardar Cambios" : "Guardar Herramienta")}
-        </Button>
-      </div>
-    </form>
+        <div className="mt-8 flex flex-col sm:flex-row justify-end gap-3 border-t border-border pt-6">
+          <Button  
+            type="button" 
+            variant="outline" 
+            onClick={() => navigate('/tools')}
+            className="w-full sm:w-auto"
+            disabled={isMutating}
+          >
+            <X className="mr-2 h-4 w-4" /> Cancelar
+          </Button>
+          
+          <Button 
+            type="submit" 
+            className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 text-white"
+            disabled={isMutating} 
+          >
+            <Save className="mr-2 h-4 w-4" />
+            {isMutating 
+              ? (isEditMode ? "Actualizando..." : "Guardando...") 
+              : (isEditMode ? "Guardar Cambios" : "Guardar Herramienta")}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 };

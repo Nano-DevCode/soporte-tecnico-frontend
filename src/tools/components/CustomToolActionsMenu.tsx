@@ -4,6 +4,7 @@ import { Eye, MoreHorizontal, Pencil, PowerOff, CheckCircle } from "lucide-react
 import { Link } from "react-router";
 import { cn } from "@/lib/utils";
 import type { Tool } from "../interfaces/toolsResponse";
+import { t } from "i18next";
 
 interface Props {
   tool: Tool;
@@ -33,14 +34,14 @@ export const CustomToolActionsMenu = ({
           <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
             <Link to={`/tools/${tool.id}`}>
               <Eye className="h-4 w-4 text-muted-foreground" />
-              Ver Detalles
+              {t("tools.actionsMenu.view")}
             </Link>
           </DropdownMenuItem>
           
           <Link to={`/tools/edit/${tool.id}`}>
             <DropdownMenuItem className="gap-2 cursor-pointer">
               <Pencil className="h-4 w-4 text-muted-foreground" />
-              Editar
+              {t("tools.actionsMenu.edit")}
             </DropdownMenuItem>
           </Link>
           
@@ -58,12 +59,12 @@ export const CustomToolActionsMenu = ({
             {isActive ? (
               <>
                 <PowerOff className="h-4 w-4" />
-                Dar de baja
+                {t("tools.actionsMenu.down")}
               </>
             ) : (
               <>
                 <CheckCircle className="h-4 w-4" />
-                Dar de alta
+                {t("tools.actionsMenu.up")}
               </>
             )}
           </DropdownMenuItem>

@@ -1,30 +1,37 @@
 import { useEffect } from 'react';
 import { useAuthStore } from '../store/auth.store';
 
-
+// 2 horas en milisegundos
 const HOURS_MS = 2 * 60 * 60 * 1000;
 
 export const SessionTimer = () => {
   const { authStatus, lastCheck, logout, checkAuthStatus } = useAuthStore();
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
+    if (authStatus !== 'authenticated' || !lastCheck) return;
 
-    if (authStatus === 'authenticated' && lastCheck) {
-      timer = setTimeout(() => {
+    const interval = setInterval(() => {
+      const timeElapsed = Date.now() - lastCheck;
+      
+      if (timeElapsed >= HOURS_MS) {
         logout();
-      }, HOURS_MS);
-    }
+      }
+    }, 60000);
 
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
+    return () => clearInterval(interval);
   }, [authStatus, lastCheck, logout]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && authStatus === 'authenticated') {
-        checkAuthStatus();
+      if (document.visibilityState === 'visible' && authStatus === 'authenticated' && lastCheck) {
+        
+        const timeElapsed = Date.now() - lastCheck;
+
+        if (timeElapsed >= HOURS_MS) {
+          logout();
+        } else {
+          checkAuthStatus();
+        }
       }
     };
 
@@ -33,7 +40,7 @@ export const SessionTimer = () => {
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [authStatus, checkAuthStatus]);
+  }, [authStatus, lastCheck, logout, checkAuthStatus]);
 
   return null;
 };
