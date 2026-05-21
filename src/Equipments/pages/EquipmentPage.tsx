@@ -45,10 +45,7 @@ export const EquipmentPage = () => {
         <Button asChild className="bg-blue-700 hover:bg-blue-800">
           <Link to={currentCategory === 'all' ? '/equipments/create' : `/equipments/create?category=${currentCategory}`}>
             <Plus className="mr-2 h-4 w-4" />
-            {currentCategory === 'all'
-              ? 'Agregar Equipo'
-              : `Agregar un Equipo ${currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1)}`
-            }
+            Agregar un Equipo
           </Link>
         </Button>
       </div>

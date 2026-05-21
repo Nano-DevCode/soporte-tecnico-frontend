@@ -2,7 +2,7 @@ import { useCatalogFactory } from "./use-catalog-factory";
 
 // --- IMPORTACIONES DE ACCIONES ---
 import { getBrandsAction, getBrandByIdAction } from "../actions/get-brand.action";
-import { getModelsByBrandAction, getModelByIdAction,  } from "../actions/get-model.action"; // Asegúrate de tener getModelByIdAction
+import { getModelsByBrandAction, getModelByIdAction, } from "../actions/get-model.action"; // Asegúrate de tener getModelByIdAction
 import { getResponsiblesAction, getResponsibleByIdAction } from "../actions/get-responsables.action";
 import { getEquipmentTypesAction, getEquipmentTypeByIdAction } from "../actions/get-equipmentType.action";
 import { getProcessorsAction, getProcessorByIdAction } from "../actions/get-processor.action";
@@ -38,14 +38,26 @@ export const useProcessors = () =>
 
 // 2. Modelos (Ajuste en fetchFn y getByIdFn)
 export const useModels = (brandId: string) =>
-    useCatalogFactory({ 
-        queryKey: `models-${brandId}`, 
-        fetchFn: () => getModelsByBrandAction(brandId), 
-        createFn: (data) => createModelAction(data, brandId),
-        getByIdFn: getModelByIdAction, // Debe ser una acción que reciba solo el ID del modelo
+    useCatalogFactory({
+        queryKey: `models-${brandId}`,
+        
+        // 1. CORREGIDO: Recibe los parámetros del factory y pásalos a la acción
+        // para que funcionen el Scroll Infinito y el Buscador por texto.
+        fetchFn: () => 
+            getModelsByBrandAction(brandId),
+        
+        // 2. CORREGIDO: Limpia el objeto para enviar únicamente lo que el DTO espera.
+        createFn: (data) => {
+            // Si viene del formulario como objeto { name, brandId }, extraemos solo el string del name
+            const modelName = typeof data === "string" ? data : data.name;
+            
+            // Enviamos un objeto limpio { name } y la marca por separado
+            return createModelAction({ name: modelName }, brandId);
+        },
+        
+        getByIdFn: getModelByIdAction, 
         enabled: !!brandId,
     });
-
 // 3. Catálogos de Cómputo
 export const useComputerTypes = () =>
     useCatalogFactory({ queryKey: "computer-types", fetchFn: getComputerTypeEquipmentsAction, createFn: createComputerTypeEquipmentAction, getByIdFn: getComputerTypeEquipmentByIdAction });

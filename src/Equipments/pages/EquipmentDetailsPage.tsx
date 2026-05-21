@@ -46,18 +46,18 @@ export const EquipmentDetailsPage = () => {
 
   const getTypeConfig = () => {
     if (equipment?.computer)
-      return { type: 'computer', icon: Monitor, color: "bg-blue-100 text-blue-700", label: "Computadora" };
+      return { type: 'computer', icon: Monitor, color: "bg-blue-100 text-blue-700" };
     if (equipment?.printer)
-      return { type: 'printer', icon: Printer, color: "bg-purple-100 text-purple-700", label: "Impresora" };
+      return { type: 'printer', icon: Printer, color: "bg-purple-100 text-purple-700" };
     if (equipment?.network)
-      return { type: 'network', icon: Network, color: "bg-amber-100 text-amber-700", label: "Red" };
-    return { type: 'special', icon: Box, color: "bg-slate-100 text-slate-700", label: equipment?.type || "Equipo" };
+      return { type: 'network', icon: Network, color: "bg-amber-100 text-amber-700" };
+    return { type: 'special', icon: Box, color: "bg-slate-100 text-slate-700" };
   };
   const typestatus = () => {
     if (equipment?.status === true)
-      return { color: "bg-emerald-100 text-emerald-700", label: "Activo" };
+      return { color: "bg-green-600/100 text-white", label: "Activo" };
     if (equipment?.status === false)
-      return { color: "bg-red-100 text-red-700", label: "Inactivo" };
+      return { color: "bg-red-600/100 text-white", label: "Inactivo" };
 
   };
 
@@ -69,7 +69,7 @@ export const EquipmentDetailsPage = () => {
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
 
-      <CustomBackToList onBack={() => navigate('/equipments')} backLabel={"regreso"} actionUrl="equipments" />
+      <CustomBackToList onBack={() => navigate('/equipments')} backLabel={"Listar Equipos"} actionUrl="equipments" />
 
       <Card>
 
@@ -93,29 +93,24 @@ export const EquipmentDetailsPage = () => {
             </div>
           </div>
 
-          <div className="flex flex-col items-end gap-2">
-
-            <div className="space-y-2">
-              <div>
-              <Badge className={cn("w-fit mx-auto sm:mx-0 font-bold uppercase text-[12.5px] ")}>
-                {equipment.id_departament?.name}
-              </Badge>
+          <div className="flex flex-col items-end gap-10">
+            <div className="flex flex-col items-end gap-2">
+              <div className="bg-blue-900/90 border-white py-1.5 px-3 rounded-4xl flex items-center gap-3 text-white ">
+                <div className="flex flex-col">
+                  <span className=" uppercase font-bold text-center text-[12.5px]">{equipment.id_departament?.name}</span>
+                </div>
               </div>
-              <Badge className={cn("w-fit mx-auto sm:mx-0 font-bold uppercase text-[12.5  px]", config?.color)}>
-                {config?.label}
+              <Badge className={cn("w-fit mx-auto sm:mx-0 font-bold uppercase text-[12.5px] space-x-10", config?.color)}>
+                {equipment.id_type_equipment?.name}
               </Badge>
-
-              <Badge className={cn("w-fit mx-auto sm:mx-0 font-bold uppercase text-[12.5  px]", estado?.color)}>
+              <Badge className={cn("w-fit mx-auto sm:mx-0 font-bold uppercase text-[12.5px]", estado?.color)}>
                 <PowerCircle className="h-3.5 w-3.5" /> {estado?.label}
               </Badge>
-
-
-
             </div>
           </div>
         </CardHeader>
 
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-1 pt-2">
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-1 pt-2 space-y-5">
           <div className="space-y-6">
             <div className="space-y-4">
               <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
@@ -153,7 +148,7 @@ export const EquipmentDetailsPage = () => {
             </div>
           </div>
 
-          <div className="  gap-2 ">
+          <div className="  gap-2 space-y-2 ">
             {/* CASO: COMPUTADORA */}
             <h4 className="text-sm font-semibold border-l-2 border-primary pl-2 flex items-center gap-3">
               <div className={cn("flex h-7 w-7 shrink-0 items-center justify-center rounded-full border shadow-sm ", config.color)}>
@@ -164,15 +159,14 @@ export const EquipmentDetailsPage = () => {
             {/* Espacio  */}
             <br></br>
 
-            {getTypeConfig().type === 'special' && (
+            
               <div className="col-span-2 space-y-1">
                 <dt className="font-medium text-muted-foreground">  Descripción del equipo</dt>
                 <dd className="font-semibold flex items-top gap-1.5 text-justify flex-row">
-                  <Info className="h-9 w-9 text-muted-foreground " />
-                  {equipment?.description || "Sin descripción técnica disponible."}
+                  {equipment?.description || "No hay notas adicionales."}
                 </dd>
               </div>
-            )}
+            
 
             {equipment?.computer && (
               <>
@@ -203,7 +197,7 @@ export const EquipmentDetailsPage = () => {
                     <dt className="font-medium text-muted-foreground">Memoria RAM </dt>
                     <dd className="font-semibold flex items-center gap-1.5">
                       <MemoryStick className="h-4 w-4 text-muted-foreground " />
-                      {equipment?.computer?.ram}
+                      {equipment?.computer?.ram}<span className="font-bold ">GB</span>
                     </dd>
                   </div>
                   <div className="space-y-1">
@@ -217,14 +211,14 @@ export const EquipmentDetailsPage = () => {
                     <dt className="font-medium text-muted-foreground">Almacenamiento total </dt>
                     <dd className="font-semibold flex items-center gap-1.5">
                       <ServerCog className="h-4 w-4 text-muted-foreground " />
-                      {equipment?.computer?.capacity_storage}
+                      {equipment?.computer?.capacity_storage} <span className="font-bold ">GB</span>
                     </dd>
                   </div>
                   <div className="space-y-1">
                     <dt className="font-medium text-muted-foreground">Almacenamiento disponible </dt>
                     <dd className="font-semibold flex items-center gap-1.5">
                       <ServerCog className="h-4 w-4 text-muted-foreground " />
-                      {equipment?.computer?.available_storage}
+                      {equipment?.computer?.available_storage} <span className="font-bold ">GB</span>
                     </dd>
                   </div>
                 </div>
@@ -264,8 +258,8 @@ export const EquipmentDetailsPage = () => {
                     <dd className="font-semibold flex items-center gap-1.5">
                       <FileImage className="h-4 w-4 text-muted-foreground " />
                       {/* {equipment?.printer?.color} */}
-                      <span className={equipment?.printer?.color ? "text-green-600 font-bold" : "text-gray-800"}>
-                        {equipment?.printer?.color ? "Sí, Impresiones a Color y B/N" : "No, impresiones a Blanco y Negro"}
+                      <span className={equipment?.printer?.color ? "text-blue-700 font-bold" : "text-gray-800"}>
+                        {equipment?.printer?.color ? "Sí - Color y B/N" : "No - Blanco y Negro"}
                       </span>
                     </dd>
                   </div>

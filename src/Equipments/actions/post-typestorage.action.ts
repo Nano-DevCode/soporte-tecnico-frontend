@@ -33,31 +33,3 @@ export const createTypeStorageAction = async (payload: string | { name: string }
         throw new Error(errorMessage || "Error al registrar el tipo de almacenamiento.");
     }
 };
-
-// import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-// import type { Brand } from "./get-brand.action";
-// import type { TypeStorage } from "./get-typestorage.action";
-
-// export const createTypeStorageAction = async (name: string): Promise<TypeStorage> => {
-//     try {
-//         // Normalizamos un poco en el front antes de enviar, 
-//         // aunque el back tiene su propia función cleanString
-//         const cleanedName = name.trim();
-
-//         const { data } = await soporteTecnicoApi.post<Brand>('/storagetypes', {
-//             name: cleanedName
-//         });
-
-//         return data;
-//     } catch (error: any) {
-//         // Captura BadRequestException, ConflictException e InternalServerErrorException
-//         const errorMessage = error.response?.data?.message;
-
-//         if (Array.isArray(errorMessage)) {
-//             throw new Error(errorMessage.join(", "));
-//         }
-
-//         // Aquí capturamos el ConflictException: `El tipo de almacenamiento "${normalizedName}" ya existe.`
-//         throw new Error(errorMessage || "Error al registrar el tipo de almacenamiento.");
-//     }
-// };

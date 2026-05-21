@@ -22,8 +22,8 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
 
   const getStatusStyles = (status: boolean) => {
     return status
-      ? { color: "bg-emerald-100 text-emerald-700 border-emerald-200", label: "Activo" }
-      : { color: "bg-red-100 text-red-700 border-red-200", label: "Inactivo" };
+      ? { color: "bg-gray-950/100 rounded-4lx p-3  py-1.5 border-white bd-2 text-white uppercase", label: "Activo" }
+      : { color: "bg-red-700/100 rounded-4lx  p-3 py-1 border-white bd-2  text-white uppercase", label: "Inactivo" };
   };
 
   const formatLongText = (text: string, wordsPerLine = 5, maxWords = 18) => {
@@ -47,14 +47,14 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
             <TableHead className="min-w-27.5 max-w-50">Marca - Modelo</TableHead>
             <TableHead className="min-w-27.5 max-w-30">Departamento</TableHead>
             <TableHead className="min-w-27.5 max-w-30">Responsable</TableHead>
-            <TableHead className="min-w-27.5 max-w-30">Status</TableHead>
+            <TableHead className="min-w-27.5 max-w-50">Status</TableHead>
 
             {isDiferent && <TableHead className="">Descripción</TableHead>}
 
             {isComputer && (
               <>
                 <TableHead className="min-w-27.5 max-w-30">Procesador</TableHead>
-                <TableHead className="min-w-27.5 max-w-30">RAM</TableHead>
+                <TableHead className="min-w-27.5 max-w-10">RAM</TableHead>
                 <TableHead className="min-w-27.5 max-w-30">SO</TableHead>
               </>
             )}
@@ -124,7 +124,7 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
                 <TableCell className="">{eq.responsableName}</TableCell>
 
                 <TableCell>
-                  <span className={`px-3 py-1 rounded-full text-[12px] font-bold border ${getStatusStyles(eq.status).color}`}>
+                  <span className={`px-3 py-1 rounded-full text-[10px] font-extrabold border ${getStatusStyles(eq.status).color}`}>
                     {getStatusStyles(eq.status).label}
                   </span>
                 </TableCell>
@@ -133,8 +133,7 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
                   <TableCell
                     className="text-justify whitespace-pre-line leading-relaxed text-[12px] py-4"
                     style={{ maxWidth: '250px' }}
-                  >
-                    {/* CORRECCIÓN: Llamamos a la función formatLongText */}
+                  > 
                     {formatLongText(eq.description || '')}
                   </TableCell>
                 )}

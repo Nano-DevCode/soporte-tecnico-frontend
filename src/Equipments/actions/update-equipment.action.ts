@@ -1,24 +1,27 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import type { Equipment } from "../interfaces/equipment.interface";
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import type { EquipmentPayload } from "./post-equipment.action";
+import { isAxiosError } from "axios";
 
-export const equipmentUpdateAction = async (id: string, dto: any): Promise<Equipment> => {
+export const equipmentUpdateAction = async (id: string, dto: Partial<EquipmentPayload> & Record<string, unknown>): Promise<Equipment> => {
   try {
-    const cleanPayload = { ...dto };
+    const cleanPayload = { ...dto } as Record<string, unknown>;
 
     const idFields = ['id_brand', 'id_model', 'id_responsable', 'id_departament', 'id_type_equipment'];
     idFields.forEach(field => {
-      if (cleanPayload[field] && typeof cleanPayload[field] === 'object') {
-        cleanPayload[field] = cleanPayload[field].id;
+      if (cleanPayload[field] && typeof cleanPayload[field] === 'object' && 'id' in (cleanPayload[field] as object)) {
+        cleanPayload[field] = (cleanPayload[field] as { id: string }).id;
       }
     });
-    const typeName = dto.id_type_equipment_obj?.name?.toLowerCase() || "";
+  const typeName = (dto.id_type_equipment_obj as { name?: string })?.name?.toLowerCase() || "";
 
     if (typeName.includes("computadora")) {
       delete cleanPayload.printer;
       delete cleanPayload.network;
-      if (cleanPayload.computer) {
-        cleanPayload.computer.ram = Number(cleanPayload.computer.ram);
+      if (cleanPayload.computer && typeof cleanPayload.computer === 'object') {
+        const computer = cleanPayload.computer as Record<string, unknown>;
+        computer.ram = Number(computer.ram);
       }
     } else if (typeName.includes("impresora")) {
       delete cleanPayload.computer;
@@ -26,8 +29,9 @@ export const equipmentUpdateAction = async (id: string, dto: any): Promise<Equip
     } else if (typeName.includes("red")) {
       delete cleanPayload.computer;
       delete cleanPayload.printer;
-      if (cleanPayload.network) {
-        cleanPayload.network.number_ports = Number(cleanPayload.network.number_ports);
+      if (cleanPayload.network && typeof cleanPayload.network === 'object') {
+        const network = cleanPayload.network as Record<string, unknown>;
+        network.number_ports = Number(network.number_ports);
       }
     }
     delete cleanPayload.id_type_equipment_obj;
@@ -35,9 +39,9 @@ export const equipmentUpdateAction = async (id: string, dto: any): Promise<Equip
     const { data } = await soporteTecnicoApi.patch<Equipment>(`/equipments/${id}`, cleanPayload);
     return data;
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Update Action Error:", error);
-    const errorMessage = error.response?.data?.message;
+    const errorMessage = isAxiosError(error) ? error.response?.data?.message : null;
     throw new Error(
       Array.isArray(errorMessage) 
         ? errorMessage.join(" | ") 
@@ -45,3 +49,4 @@ export const equipmentUpdateAction = async (id: string, dto: any): Promise<Equip
     );
   }
 };
+

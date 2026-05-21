@@ -33,30 +33,3 @@ export const createTypePrintingAction = async (payload: string | { name: string 
         throw new Error(errorMessage || "Error al registrar el tipo de impresión.");
     }
 };
-
-// import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-// import type { TypePrinting } from "./get-typeprinting.action";
-
-// export const createTypePrintingAction = async (name: string): Promise<TypePrinting> => {
-//     try {
-//         // Normalizamos un poco en el front antes de enviar, 
-//         // aunque el back tiene su propia función cleanString
-//         const cleanedName = name.trim();
-
-//         const { data } = await soporteTecnicoApi.post<TypePrinting>('/printingtypes', {
-//             name: cleanedName
-//         });
-
-//         return data;
-//     } catch (error: any) {
-//         // Captura BadRequestException, ConflictException e InternalServerErrorException
-//         const errorMessage = error.response?.data?.message;
-
-//         if (Array.isArray(errorMessage)) {
-//             throw new Error(errorMessage.join(", "));
-//         }
-
-//         // Aquí capturamos el ConflictException: `El tipo de equipo de computadora "${cleanedName}" ya existe.`
-//         throw new Error(errorMessage || "Error al registrar el tipo de impresión.");
-//     }
-// };

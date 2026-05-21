@@ -15,11 +15,12 @@ export const useEquipments = (equipmentId?: string) => {
   const page = Number(searchParams.get('page')) || 1;
   const offset = (page - 1) * limit;
   const category = (searchParams.get('category') || 'all') as EquipmentCategory | 'all';
-  const query = searchParams.get("search")?.trim() || undefined; 
+  const query = searchParams.get("search")?.trim() || undefined;
+  const status = searchParams.get("status") || 'all';
 
   const equipmentsQuery = useQuery({
-    queryKey: ['equipments', { category, limit, offset, query }],
-    queryFn: () => getEquipmentsAction({ category, limit, offset, search: query }),
+    queryKey: ['equipments', { category,  query, status, limit, offset }],
+    queryFn: () => getEquipmentsAction({ category, search: query, status: status !== 'all' ? status : undefined, limit, offset, }),
     staleTime: 1000 * 60 * 5,
     select: (response) => ({
       equipments: response.data,
@@ -69,60 +70,3 @@ export const useEquipments = (equipmentId?: string) => {
     isUpdating: updateMutation.isPending,
   };
 };
-
-// // hooks/useEquipments.ts
-// import { useMutation, useQueryClient } from '@tanstack/react-query';
-// import { createEquipmentAction, updateEquipmentAction } from '../actions/equipment-actions';
-
-// export const useEquipments = () => {
-//   const queryClient = useQueryClient();
-
-//   const createMutation = useMutation({
-//     mutationFn: createEquipmentAction,
-//     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['equipments'] }),
-//   });
-
-//   const updateMutation = useMutation({
-//     mutationFn: ({ id, data }: { id: string; data: any }) => updateEquipmentAction(id, data),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['equipments'] });
-//       queryClient.invalidateQueries({ queryKey: ['equipment'] });
-//     },
-//   });
-
-//   return {
-//     createEquipmentAsync: createMutation.mutateAsync,
-//     isCreating: createMutation.isPending,
-//     updateEquipmentAsync: updateMutation.mutateAsync,
-//     isUpdating: updateMutation.isPending,
-//   };
-// };
-
-
-// export const useEquipments = () => {
-//   const [searchParams] = useSearchParams();
-//   const queryClient = useQueryClient();
-
-//   const limit = Number(searchParams.get('limit')) || 10;
-//   const page = Number(searchParams.get('page')) || 1;
-//   const offset = (page - 1) * limit;
-//   const category = (searchParams.get('category') || 'all') as EquipmentCategory | 'all';
-//   const query = searchParams.get("search")?.trim() || undefined; 
-
-//   const equipmentsQuery = useQuery({
-//     queryKey: ['equipments', { category, limit, offset, query }],
-//     queryFn: () => getEquipmentsAction({ category, limit, offset, search: query }),
-//     staleTime: 1000 * 60 * 5,
-//     // Ahora 'response' siempre tendrá data y meta gracias al paso anterior
-//     select: (response) => ({
-//       equipments: response.data,
-//       meta: response.meta,
-//     }),
-//   });
-
-//   return {
-//     equipments: equipmentsQuery.data?.equipments ?? [],
-//     meta: equipmentsQuery.data?.meta,
-//     isLoading: equipmentsQuery.isLoading,
-//   };
-// };

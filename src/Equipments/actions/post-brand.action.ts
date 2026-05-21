@@ -34,23 +34,3 @@ export const createBrandAction = async (payload: string | { name: string }): Pro
         );
     }
 };
-
-// import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-// import type { Brand } from "./get-brand.action";
-
-
-// export const createBrandAction = async (name: string): Promise<Brand> => {
-//     try {
-//         const cleanedName = name.trim().replace(/\s+/g, ' ');
-
-//         // Solo enviamos el name. El backend genera el ID.
-//         const { data } = await soporteTecnicoApi.post<Brand>('/brands', {
-//             name: cleanedName
-//         });
-
-//         return data;
-//     } catch (error: any) {
-//         const errorMessage = error.response?.data?.message;
-//         throw new Error(Array.isArray(errorMessage) ? errorMessage.join(", ") : errorMessage || "Error al registrar la marca.");
-//     }
-// };

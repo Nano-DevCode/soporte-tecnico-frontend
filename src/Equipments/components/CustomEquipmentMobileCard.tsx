@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Monitor, Printer, Network, User, Cpu, Layers, Box, Info, MonitorCloud, PrinterCheck, FileArchive, Router, EthernetPortIcon, Power, PowerIcon, type LucideIcon, SchoolIcon } from "lucide-react";
+import { Monitor, Printer, Network, User, Cpu, Layers, Box, Info, MonitorCloud, PrinterCheck, FileArchive, Router, EthernetPortIcon, Power, PowerIcon, type LucideIcon, SchoolIcon, FileImage, LucideBadgeInfo } from "lucide-react";
 import { CustomEquipmentActionsMenu } from "./CustomEquipmentActionsMenu";
 import type { Equipment, EquipmentCategory } from "../interfaces/equipment.interface";
 
@@ -59,6 +59,10 @@ export const CustomEquipmentMobileCard = memo(({ equipments, category }: Props) 
             {/* Cuerpo de la Card */}
             <div className="space-y-2 border-t border-border pt-3">
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <LucideBadgeInfo className="h-3.5 w-3.5 text-blue-500 shrink-0" />
+                <span>Tipo de equipo : <strong className="text-foreground/80">{eq.type || "Sin asignar"}</strong></span>
+              </div>
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <SchoolIcon className="h-3.5 w-3.5 text-blue-500 shrink-0" />
                 <span>Deparatamento: <strong className="text-foreground/80">{eq.departamento || "Sin asignar"}</strong></span>
               </div>
@@ -117,6 +121,11 @@ export const CustomEquipmentMobileCard = memo(({ equipments, category }: Props) 
                     <FileArchive className="h-3.5 w-3.5 text-orange-500" />
                     <span className="text-muted-foreground">Tipo:</span>
                     <span className="font-medium">{eq.typeprinting || 'N/A'}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FileImage className="h-3.5 w-3.5 text-purple-500" />
+                    <span className="text-muted-foreground">Color:</span>
+                    <span className="font-medium"> {eq.color ? "Sí - Color y B/N" : "No - Blanco y Negro"}</span>
                   </div>
                 </div>
               )}

@@ -1,23 +1,67 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // components/equipment/NetworkFields.tsx
 import { Label } from "@/components/ui/label";
 import { Network } from "lucide-react";
-import { Controller, type Control, type UseFormRegister } from "react-hook-form";
+import { Controller, type Control, type FieldErrors, type FieldValues, type UseFormRegister, type UseFormSetValue, type FieldError } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CatalogSelector } from "../hooks/useCatalogs";
+import { sileo } from "sileo";
+import { isAxiosError } from "axios";
+
 // Hook de Catálogo de Red
 import { useNetworkTypes } from "../hooks/use-equipment-catalog";
+import type { BackendError } from "@/interfaces/backendError.interfaces";
 
 interface NetworkFieldsProps {
-    control: Control<any>;
-    register: UseFormRegister<any>;
+    control: Control<FieldValues>;
+    register: UseFormRegister<FieldValues>;
+    setValue: UseFormSetValue<FieldValues>;
     disabled: boolean;
+    errors: FieldErrors<FieldValues>;
 }
 
-export const NetworkFields = ({ control, register, disabled}: NetworkFieldsProps) => {
+export const NetworkFields = ({ control, register, setValue, disabled, errors }: NetworkFieldsProps) => {
     // 1. Instanciamos el hook
     const networkHook = useNetworkTypes();
+
+    // --- Manejador genérico de errores para Axios ---
+    const getBackendErrorMessage = (err: unknown, defaultMsg: string): string => {
+        if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
+            const msg = err.response.data.message;
+            return Array.isArray(msg) ? msg.join(", ") : msg;
+        }
+        if (err instanceof Error) return err.message.replace(/^Error:\s*/i, "");
+        if (typeof err === "string") return err;
+        return defaultMsg;
+    };
+
+    // --- Handler de Creación Rápida Inline con Sileo ---
+    const handleCreateNetworkType = async (name: string) => {
+        try {
+            const newItem = await sileo.promise(networkHook.onCreate({ name: name.trim() }), {
+                loading: { title: "Creando tipo de red..." },
+                success: {
+                    title: "¡Tipo de red creado!",
+                    description: `El tipo "${name}" se guardó correctamente.`,
+                    duration: 4000
+                },
+                error: (err) => ({
+                    title: "Error al crear",
+                    description: getBackendErrorMessage(err, "No se pudo crear el tipo de red."),
+                    duration: 5000
+                })
+            });
+
+            if (newItem) {
+                setValue("network.id_type_equipment_network", newItem, { shouldValidate: true });
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    // Helper rápido para obtener los errores anidados de la propiedad network
+    const networkErrors = errors?.network as Record<string, FieldError> | undefined;
 
     return (
         <div className="mt-6 p-6 border border-orange-200 rounded-xl bg-orange-200/5 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -25,61 +69,73 @@ export const NetworkFields = ({ control, register, disabled}: NetworkFieldsProps
                 <Network size={18} className="text-orange-600" /> Especificaciones de Red
             </h3>
 
-            {/* Tipo de Red (LAN, WLAN, VPN, etc.) */}
+            {/* Tipo de Red */}
             <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase ">Tipo de Red <span className="text-red-600">*</span></Label>
+                <Label className="text-xs font-bold uppercase">Tipo de Red <span className="text-red-600">*</span></Label>
                 <Controller
                     name="network.id_type_equipment_network"
                     control={control}
+                    rules={{ required: "El tipo de equipo de red es obligatorio" }}
                     render={({ field }) => (
                         <CatalogSelector
                             hook={networkHook}
-                            // AJUSTE: Si field.value es string, creamos el objeto mínimo. 
-                            // Si ya es un objeto (porque viene de la edición), lo pasamos tal cual.
                             value={typeof field.value === 'string' ? { id: field.value, name: "" } : field.value}
-                            // AJUSTE: Pasamos el objeto completo al form state
                             onChange={(val) => field.onChange(val)}
                             disabled={disabled}
-                            placeholder="Seleccionar tipo..."
+                            placeholder="Seleccionar tipo (Switch, Router...)"
+                            allowCreate={true}
+                            onCreate={handleCreateNetworkType}
                         />
                     )}
                 />
+                {networkErrors?.id_type_equipment_network && (
+                    <span className="text-xs font-medium text-red-500 block">
+                        {networkErrors.id_type_equipment_network.message}
+                    </span>
+                )}
             </div>
 
             {/* Número de Puertos */}
             <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase ">Número de Puertos <span className="text-red-600">*</span></Label>
+                <Label className="text-xs font-bold uppercase">Número de Puertos <span className="text-red-600">*</span></Label>
                 <Input
                     type="number"
-                    {...register("network.number_ports", { valueAsNumber: true })}
+                    {...register("network.number_ports", {
+                        required: "El número de puertos es obligatorio",
+                        
+                        min: { value: 1, message: "Debe tener al menos 1 puerto" }
+                    })}
                     placeholder="Ej. 24"
                     disabled={disabled}
                     className="bg-white border-zinc-300 focus:ring-orange-500"
                 />
+                {networkErrors?.number_ports && (
+                    <span className="text-xs font-medium text-red-500 block">
+                        {networkErrors.number_ports.message}
+                    </span>
+                )}
             </div>
 
-            {/* PoE Checkbox */}
-            <div className="flex items-center space-x-4">
+            {/* PoE Checkbox (No requiere validación obligatoria) */}
+            <div className="flex items-center space-x-4 md:col-span-2 pt-2">
                 <Controller
                     name="network.PoE"
                     control={control}
                     render={({ field }) => (
                         <div className="flex items-center space-x-5">
-                            <Label 
-                                htmlFor="is-poe" 
+                            <Label
+                                htmlFor="is-poe"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
                                 ¿Tiene función PoE (Power over Ethernet)?
                             </Label>
                             <Checkbox
                                 id="is-poe"
-                                // Aseguramos que el valor sea booleano para el componente Checkbox
                                 checked={!!field.value}
                                 onCheckedChange={field.onChange}
                                 disabled={disabled}
                                 className="border-zinc-400 data-[state=checked]:bg-orange-600 data-[state=checked]:border-orange-600"
                             />
-
                         </div>
                     )}
                 />

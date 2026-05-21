@@ -7,8 +7,7 @@ export interface Equipment {
   model: string;
   responsableName: string;
   status: boolean;
-  departamento?: string;
-  departamentStatus:string; // Agregado para mostrar en la tabla, coincide con eq.departamento mapeado
+  departamento?: string;// Agregado para mostrar en la tabla, coincide con eq.departamento mapeado
        // Agregado para mostrar el departamento en la tabla
   description?: string;   // Solo para mostrar en la tabla si es diferente
 
@@ -31,15 +30,6 @@ export interface Equipment {
   numberPorts?: number;
   PoE?: boolean;          
 }
-export interface Meta {
-  total: number;
-  page: number;
-  lastPage: number; 
-}
 
-export interface EquipmentResponse {
-  data: Equipment[];
-  meta: Meta;
-}
 
 

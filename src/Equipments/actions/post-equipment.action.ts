@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { isAxiosError } from "axios";
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 
@@ -6,56 +6,42 @@ export interface EquipmentPayload {
     id?: string;
     num_inventario?: string;
     id_model?: string;
-    id_type_equipment?: string | number; // Cambiado a string|number por la flexibilidad del form
-    id_departament?: string; // Corregido el typo 'departament' a 'department' si coincide con tu back
+    id_brand?: string;
+
+    id_type_equipment?: string | number;
+    id_departament?: string;
     id_responsable?: string;
     description?: string;
     status?: boolean;
-
-    computer?: {
-        id_processor?: string;
-        ram?: string;
-        capacity_storage?: string;
-        id_type_operating_system?: string;
-        id_type_storage?: string;
-        id_type_equipment_computer?: string;
-        available_storage: string; // Añadido si lo usas en el form
-    };
-    printer?: {
-        id_type_function?: string;
-        id_type_printing: string;
-        color?: boolean;
-        model_toner?: string;
-    };
-    network?: {
-        id_type_equipment_network?: string;
-        number_ports: number;
-        PoE: boolean;
-    };
+    computer?: Record<string, unknown>;
+    printer?: Record<string, unknown>;
+    network?: Record<string, unknown>;
 }
 
-/**
- * Función auxiliar para limpiar el payload según el tipo de equipo
- */
-const cleanEquipmentPayload = (payload: any): any => {
-    // Aseguramos que sea string para la comparación
+const cleanEquipmentPayload = (payload: EquipmentPayload): EquipmentPayload => {
+    // Protección contra payloads vacíos o corruptos
+    if (!payload || !payload.id_type_equipment) {
+        return payload;
+    }
+
     const typeId = String(payload.id_type_equipment);
     const cleaned = { ...payload };
 
-    // Eliminamos metadatos que el backend no espera en el body
     delete cleaned.id;
     delete cleaned.id_brand;
-    // Eliminar objetos de relación si el backend solo espera strings (doble seguridad)
-    if (typeof cleaned.id_model === 'object') cleaned.id_model = cleaned.id_model.id;
 
-    // Lógica de exclusión según tipo
-    if (typeId === "1") { // Computer
+    // Validación segura: si es un objeto extrae el ID, si no conserva lo que tenga de forma segura
+    if (cleaned.id_model && typeof cleaned.id_model === 'object' && 'id' in cleaned.id_model) {
+        cleaned.id_model = (cleaned.id_model as { id: string }).id;
+    }
+
+    if (typeId === "1") {
         delete cleaned.printer;
         delete cleaned.network;
-    } else if (typeId === "3") { // Printer
+    } else if (typeId === "3") {
         delete cleaned.computer;
         delete cleaned.network;
-    } else if (typeId === "2") { // Network
+    } else if (typeId === "2") {
         delete cleaned.computer;
         delete cleaned.printer;
     } else {
@@ -63,12 +49,12 @@ const cleanEquipmentPayload = (payload: any): any => {
         delete cleaned.printer;
         delete cleaned.network;
     }
+    
     if (cleaned.status === undefined) cleaned.status = true;
     return cleaned;
 };
-/**
- * Acción para crear un nuevo equipo
- */
+
+
 export const createEquipmentAction = async (payload: EquipmentPayload) => {
     try {
         const dataToSend = cleanEquipmentPayload(payload);
@@ -77,7 +63,10 @@ export const createEquipmentAction = async (payload: EquipmentPayload) => {
     } catch (error) {
         if (isAxiosError(error)) {
             console.error("Server Error (Create):", error.response?.data);
-            throw error.response?.data; // Lanzamos el error del server para que el Hook lo capture
+            
+            // IMPORTANTE: Lanza el error completo, NO solo el .data
+            // Esto permite que Sileo y el utilitario handleBackendFormErrors identifiquen que es un error de Axios
+            throw error.response?.data; 
         }
         throw error;
     }
@@ -85,23 +74,14 @@ export const createEquipmentAction = async (payload: EquipmentPayload) => {
 
 export const updateEquipmentAction = async (id: string, payload: Partial<EquipmentPayload>) => {
     try {
-        // 1. Clonamos para evitar mutar el estado original del formulario
         const dataToProcess = { ...payload };
-
-        // 2. IMPORTANTE: El ID no debe viajar en el cuerpo del PATCH si el backend es estricto
         delete dataToProcess.id;
 
-        // 3. Limpiamos y filtramos según el tipo de equipo
-        // Esto evita enviar specs de 'printer' si estás editando una 'computer'
         const dataToSend = cleanEquipmentPayload(dataToProcess);
-
-        // 4. Petición al endpoint específico
         const { data } = await soporteTecnicoApi.patch(`/equipments/${id}`, dataToSend);
-
         return data;
     } catch (error) {
         if (isAxiosError(error)) {
-            // Loguear el error detallado ayuda mucho durante el desarrollo del "Proyecto Tickets"
             console.error("Update Error Details:", error.response?.data);
             throw error.response?.data;
         }

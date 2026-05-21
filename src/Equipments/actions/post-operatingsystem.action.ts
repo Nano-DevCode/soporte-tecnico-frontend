@@ -33,30 +33,3 @@ export const createOperatingSystemAction = async (payload: string | { name: stri
         throw new Error(errorMessage || "Error al registrar el Sistema Operativo.");
     }
 };
-
-// import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-// import type { OperatingSystem } from "./get-operatingsystem.action";
-
-// export const createOperatingSystemAction = async (name: string): Promise<OperatingSystem> => {
-//     try {
-//         // Normalizamos un poco en el front antes de enviar, 
-//         // aunque el back tiene su propia función cleanString
-//         const cleanedName = name.trim();
-
-//         const { data } = await soporteTecnicoApi.post<OperatingSystem>('/operatingsystems', {
-//             name: cleanedName
-//         });
-
-//         return data;
-//     } catch (error: any) {
-//         // Captura BadRequestException, ConflictException e InternalServerErrorException
-//         const errorMessage = error.response?.data?.message;
-
-//         if (Array.isArray(errorMessage)) {
-//             throw new Error(errorMessage.join(", "));
-//         }
-
-//         // Aquí capturamos el ConflictException: `El tipo de equipo de computadora "${cleanedName}" ya existe.`
-//         throw new Error(errorMessage || "Error al registrar el Sistema Operativo.");
-//     }
-// };
