@@ -1,27 +1,19 @@
-# Etapa 1: Construcción
 FROM node:22-bookworm-slim AS builder
 WORKDIR /app
 
-# Instalamos pnpm globalmente
-RUN npm install -g pnpm
+ENV CI=true
 
-# Copiamos package.json, el nuevo pnpm-lock.yaml y la configuración de pnpm
-COPY package.json pnpm-lock.yaml .npmrc* ./
+RUN npm install -g pnpm@11.2.2
 
-# Instalamos dependencias de forma limpia y bloqueada (equivalente a npm ci)
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml* .npmrc* ./
 RUN pnpm install --frozen-lockfile
 
-# Copiamos el código y generamos los archivos estáticos
 COPY . .
 RUN pnpm build
 
-# Etapa 2: Producción con Nginx
-FROM nginx:alpine AS runner
+FROM nginx:1.30-alpine AS runner
 
-# Copiamos los archivos compilados (Vite usa la carpeta 'dist')
 COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copiamos tu configuración de Nginx para React Router
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

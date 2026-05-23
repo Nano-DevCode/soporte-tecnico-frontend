@@ -30,7 +30,7 @@ export const ToolEditPage = () => {
       description: data.description,
       modelId: data.model.id,
       typeId: data.type.id,
-      idInternal: data.idInternal ? data.idInternal : undefined,
+      idInternal: data.idInternal,
 
       image: data.image && data.image.length > 0 ? data.image[0] : undefined,
     };

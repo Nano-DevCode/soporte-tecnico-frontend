@@ -45,7 +45,7 @@ export const CustomUserForm = ({
     watch,
     formState: { errors } 
   } = useForm<UserFormData>({
-    defaultValues: {
+    values: {
       email: user?.email || "",
       password: "", // Siempre vacío al inicio
       name: user?.staff?.name || "",
@@ -161,7 +161,7 @@ export const CustomUserForm = ({
               name="roleId"
               rules={{ required: t("custom_user_form_role_required") }}
               render={({ field }) => (
-                <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                <Select name={field.name} onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                   <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.roleId && "border-red-500")}>
                     <SelectValue placeholder={t("custom_user_form_role_placeholder")} />
                   </SelectTrigger>
@@ -183,7 +183,7 @@ export const CustomUserForm = ({
               name="departmentId"
               rules={{ required: t("custom_user_form_department_required") }}
               render={({ field }) => (
-                <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                <Select name={field.name} onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                   <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.departmentId && "border-red-500")}>
                     <SelectValue placeholder={t("custom_user_form_department_placeholder")} />
                   </SelectTrigger>
