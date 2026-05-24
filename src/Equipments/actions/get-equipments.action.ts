@@ -1,60 +1,53 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 import { getEquipmentTypesAction, type EquipmentType } from "./get-equipmentType.action";
+import { t } from "i18next";
 
 export const getEquipmentsAction = async (options: {
-  category: string,
-  search?: string,
-  status?: string,
-  limit: number,
-  offset: number,
+  category: string;
+  search?: string;
+  status?: string;
+  limit: number;
+  offset: number;
 }) => {
   const { category, limit, offset, search, status } = options;
 
   try {
     let url = '/equipments';
 
-    // Lógica de categorías existente
     if (category !== 'all') {
-      const types = await getEquipmentTypesAction();
+      const responseTypes = await getEquipmentTypesAction({ limit: 100, offset: 0 });
+      const types = responseTypes?.equipmentTypes || [];
+
       const currentType = types.find((t: EquipmentType) =>
         t.name.toLowerCase() === category.toLowerCase()
       );
 
-      if (!currentType) return { data: [], meta: { total: 0, lastPage: 1 } };
-      url = `/equipments/type/${category}/${currentType.id}`;
+      if (!currentType) return { data: [], meta: { total: 0, lastPage: 1, page: 1 } };
+      
+      url = `/equipments/type/${category.toLowerCase()}/${currentType.id}`; 
     }
 
-    // --- AJUSTE EN PARÁMETROS ---
-    // Forzamos a que solo viaje al backend si es explícitamente "true" o "false" en string
     const isStatusValid = status === 'true' || status === 'false';
 
-    const { data } = await soporteTecnicoApi.get(url, {
+    const response = await soporteTecnicoApi.get(url, {
       params: { 
         query: search && search.trim() !== '' ? search.trim() : undefined,
         category: category !== 'all' ? category : undefined,
         status: isStatusValid ? status : undefined,
+        limit,
+        offset,
       }
     });
-
-    // Validamos la estructura del arreglo que regresa el backend mapeado
-    const rawItems = Array.isArray(data) ? data : (data.items || []);
-    
-    // Calculamos la paginación en el frontend basándonos en los datos ya filtrados por el QueryBuilder del Backend
-    const totalItems = rawItems.length;
-    const paginatedData = rawItems.slice(offset, offset + limit);
-    const lastPage = Math.ceil(totalItems / limit);
+    const responseData = response.data?.data || [];
+    const responseMeta = response.data?.meta || { total: 0, page: 1, lastPage: 1 };
 
     return {
-      data: paginatedData,
-      meta: {
-        total: totalItems,
-        page: Math.floor(offset / limit) + 1,
-        lastPage: lastPage || 1
-      }
+      data: responseData,
+      meta: responseMeta
     };
 
   } catch (error) {
-    console.error("Error en getEquipmentsAction:", error);
-    return { data: [], meta: { total: 0, lastPage: 1 } };
+    console.error(t("api_equipments_fetch_error"), error);
+    return { data: [], meta: { total: 0, lastPage: 1, page: 1 } };
   }
 };

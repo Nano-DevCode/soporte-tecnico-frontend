@@ -9,11 +9,6 @@ interface HandleErrorsArgs {
     defaultTitle?: string;
 }
 
-/**
- * Manejador centralizado de errores del Backend (NestJS / TypeORM).
- * Extrae los mensajes de error exactos del servidor y los muestra de inmediato
- * a través de una notificación flotante de Sileo.
- */
 export const handleBackendFormErrors = ({
     error,
     defaultTitle = "Error en el servidor",
@@ -22,7 +17,6 @@ export const handleBackendFormErrors = ({
     let backendMessages: string[] = [];
     let globalMessage = "Ocurrió un error inesperado.";
 
-    // 1. Extraer el arreglo de mensajes del backend (NestJS/Axios)
     if (isAxiosError<BackendError>(error) && error.response?.data?.message) {
         const msg = error.response.data.message;
         backendMessages = Array.isArray(msg) ? msg : [msg];
@@ -33,12 +27,10 @@ export const handleBackendFormErrors = ({
         globalMessage = error;
     }
 
-    // 2. Si son múltiples mensajes de class-validator, los unimos con saltos de línea
     if (backendMessages.length > 1) {
         globalMessage = backendMessages.join("\n");
     }
 
-    // 3. Lanzar la notificación de Sileo con el mensaje real extraído
     sileo.error({
         title: defaultTitle,
         description: globalMessage,
@@ -77,7 +69,6 @@ export const handleBackendFormErrorsEq = <T extends FieldValues>(
         const unmappedErrors: string[] = [];
 
         message.forEach((msg) => {
-            // Buscar si el string contiene el nombre de alguna de tus propiedades clave del formulario
             const matchedField = Object.keys(setError as unknown as object).find((field) =>
                 msg.toLowerCase().includes(field.toLowerCase())
             );
@@ -98,7 +89,6 @@ export const handleBackendFormErrorsEq = <T extends FieldValues>(
         return;
     }
 
-    // Caso 2: El backend devuelve un objeto indexado por campos (Ej: { num_inventario: "Ya existe" })
     else if (typeof message === "object" && message !== null) {
         Object.entries(message).forEach(([key, val]) => {
             setError(key as Path<T>, {
@@ -116,7 +106,6 @@ export const handleBackendFormErrorsEq = <T extends FieldValues>(
             });
         }
 
-        // Ejecutar la alerta visual global en Sileo además de pintar el input
     else if (onGlobalError) {
             onGlobalError(message);
         }

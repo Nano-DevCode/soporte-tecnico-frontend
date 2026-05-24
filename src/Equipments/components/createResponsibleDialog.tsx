@@ -1,4 +1,3 @@
-
 import { useForm, type FieldValues, type UseFormSetError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -7,63 +6,63 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { UserPlus, Hash, MapPin, Mail, AlertCircle } from "lucide-react";
-import { handleBackendFormErrors} from "../utils/backendFormHandlers";
+import { handleBackendFormErrors } from "../utils/backendFormHandlers";
+import { t } from "i18next";
 
-const responsibleSchema = z.object({
+const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+
+// 1. Convertimos el esquema en una función que se ejecute en tiempo de renderizado
+const getResponsibleSchema = () => z.object({
     num_employe: z
         .string()
         .trim()
-        .min(2, "El número de empleado es requerido minímo 2 caracteres")
-        .max(100,"Máximo 100 caracteres")
-        .regex(/^[a-zA-Z0-9-]+$/, "Solo se permiten letras, números y guiones"),
+        .min(2, t("valid_responsible_num_min"))
+        .max(100, t("valid_responsible_num_max"))
+        .regex(/^[a-zA-Z0-9-]+$/, t("valid_responsible_num_regex")),
     name: z
         .string()
         .trim()
-        .min(2, "El nombre es requerido minímo 2 caracteres")
-        .max(120, "Máximo 50 caracteres")
-        .regex(/^[a-zA-Z]+$/, "Solo se permiten letras"),
+        .min(2, t("valid_responsible_name_min"))
+        .max(50, t("valid_responsible_name_max"))
+        .regex(nameRegex, t("valid_responsible_name_regex")),
     first_name: z
         .string()
         .trim()
-        .min(2, "El apellido paterno es requerido minímo 2 caracteres")
-        .max(120, "Máximo 50 caracteres")
-        .regex(/^[a-zA-Z]+$/, "Solo se permiten letras"),
+        .min(2, t("valid_responsible_firstname_min"))
+        .max(50, t("valid_responsible_firstname_max"))
+        .regex(nameRegex, t("valid_responsible_name_regex")),
     last_name: z
         .string()
         .trim()
-        .min(2, "El apellido materno es requerido minímo 2 caracteres")
-        .max(120, "Máximo 50 caracteres")
-        .regex(/^[a-zA-Z]+$/, "Solo se permiten letras"),
+        .min(2, t("valid_responsible_lastname_min"))
+        .max(50, t("valid_responsible_lastname_max"))
+        .regex(nameRegex, t("valid_responsible_name_regex")),
     area: z
         .string()
         .trim()
-        .min(2, "El área es requerida minímo 2 caracteres")
-        .max(150,"Máximo 150 caracteres"),
+        .min(2, t("valid_responsible_area_min"))
+        .max(150, t("valid_responsible_area_max")),
     mail: z
         .string()
         .trim()
-        .min(2, "El correo es requerido")
-        .email("Escribe una dirección de correo válida"),
+        .min(1, t("valid_responsible_mail_min")) // Cambiado a 1 para que salte si está vacío
+        .email(t("valid_responsible_mail_email")),
 });
 
-type ResponsibleFormValues = z.infer<typeof responsibleSchema>;
+// Extraemos el tipo dinámicamente si lo necesitas fuera
+type ResponsibleFormValues = z.infer<ReturnType<typeof getResponsibleSchema>>;
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (data: ResponsibleFormValues, setError: UseFormSetError<FieldValues>) => Promise<void>;
+    onSave: (data: ResponsibleFormValues, setError: UseFormSetError<FieldValues>) => Promise<void | unknown>;
     isSubmitting: boolean;
 }
 
-export const CreateResponsibleModal = ({
-    isOpen,
-    onClose,
-    onSave,
-    isSubmitting
-}: Props) => {
-
+export const CreateResponsibleModal = ({ isOpen, onClose, onSave, isSubmitting }: Props) => {
+    // 2. Pasamos el esquema ejecutado en el resolver para garantizar que i18n ya esté listo
     const { register, handleSubmit, formState: { errors }, setError, reset } = useForm<ResponsibleFormValues>({
-        resolver: zodResolver(responsibleSchema),
+        resolver: zodResolver(getResponsibleSchema()), 
         defaultValues: {
             num_employe: "",
             name: "",
@@ -76,140 +75,157 @@ export const CreateResponsibleModal = ({
 
     const onSubmit = async (data: ResponsibleFormValues) => {
         try {
-            await onSave(data, setError as UseFormSetError<FieldValues>);
-            reset();
-            onClose();
+            const result = await onSave(data, setError as unknown as UseFormSetError<FieldValues>);
+            if (result) {
+                reset();
+                onClose();
+            }
         } catch (error) {
             handleBackendFormErrors({
                 error,
-                defaultTitle: "Error al crear responsable"
+                defaultTitle: t("ui_responsible_error_title")
             });
         }
     };
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-400px max-h-[60vh] flex flex-col gap-0 p-0 overflow-hidden">
-                <DialogHeader className="p-6 pb-2">
-                    <DialogTitle className="flex gap-2 font-bold items-center">
-                        <UserPlus className="h-5 w-5 text-blue-400" />
-                        REGISTRAR NUEVO RESPONSABLE
+            <DialogContent className="sm:max-w-420px max-h-[65vh] md:max-h-none flex flex-col gap-0 p-0 overflow-y-auto md:overflow-visible custom-scrollbar">
+                <DialogHeader className="p-6 pb-4 border-b">
+                    <DialogTitle className="flex gap-2 font-bold items-center text-sm md:text-base ">
+                        <UserPlus className="h-5 w-5 text-blue-600" />
+                        {t("ui_responsible_modal_title")}
                     </DialogTitle>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col flex-1 overflow-hidden">
-                    
-                    <div className="flex-1 overflow-y-auto px-6 py-2 max-h-[60vh] sm:max-h-none">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-2">
+                <form 
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleSubmit(onSubmit)(e);
+                    }} 
+                    className="flex flex-col flex-1"
+                >
+                    <div className="flex-1 px-6 py-4 space-y-4">
+                        {/* Nº Empleado */}
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold  flex items-center gap-1 ">
+                                <Hash className="h-3.5 w-3.5 text-zinc-400" /> {t("ui_responsible_num_label")}
+                            </Label>
+                            <Input
+                                {...register("num_employe")}
+                                className={errors.num_employe ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
+                                placeholder={t("ui_responsible_num_placeholder")}
+                                disabled={isSubmitting}
+                            />
+                            {errors.num_employe && (
+                                <p className="text-[11px] text-red-500 font-semibold  flex items-center gap-1 mt-1">
+                                    <AlertCircle size={12} className="shrink-0" /> {errors.num_employe.message}
+                                </p>
+                            )}
+                        </div>
 
-                            {/* Número de Empleado */}
-                            <div className="md:col-span-2 space-y-2">
-                                <Label className="text-xs font-bold uppercase flex items-center gap-1">
-                                    <Hash className="h-3 w-3 text-zinc-400" /> Nº Empleado
-                                </Label>
-                                <Input
-                                    {...register("num_employe")}
-                                    className={errors.num_employe ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
-                                    placeholder="Ej. EMP-202601"
-                                />
-                                {errors.num_employe && (
-                                    <p className="text-[10px] text-red-500 font-semibold uppercase flex items-center gap-1 mt-1">
-                                        <AlertCircle size={12} className="shrink-0" /> {errors.num_employe.message}
-                                    </p>
-                                )}
-                            </div>
-                            {/* Nombre */}
-                            <div className="md:col-span-2 space-y-2">
-                                <Label className="text-xs font-bold uppercase">Nombre(s)</Label>
-                                <Input
-                                    {...register("name")}
-                                    className={errors.name ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
-                                    placeholder="Ej. Juan Carlos"
-                                />
-                                {errors.name && (
-                                    <p className="text-[10px] text-red-500 font-semibold uppercase flex items-center gap-1 mt-1">
-                                        <AlertCircle size={12} className="shrink-0" /> {errors.name.message}
-                                    </p>
-                                )}
-                            </div>
+                        {/* Nombre */}
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold  ">{t("ui_responsible_name_label")}</Label>
+                            <Input
+                                {...register("name")}
+                                className={errors.name ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
+                                placeholder={t("ui_responsible_name_placeholder")}
+                                disabled={isSubmitting}
+                            />
+                            {errors.name && (
+                                <p className="text-[11px] text-red-500 font-semibold  flex items-center gap-1 mt-1">
+                                    <AlertCircle size={12} className="shrink-0" /> {errors.name.message}
+                                </p>
+                            )}
+                        </div>
 
-                            {/* Apellido Paterno */}
-                            <div className="space-y-2">
-                                <Label className="text-xs font-bold uppercase">Apellido Paterno</Label>
-                                <Input
-                                    {...register("first_name")}
-                                    className={errors.first_name ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
-                                    placeholder="Ej. Pérez"
-                                />
-                                {errors.first_name && (
-                                    <p className="text-[10px] text-red-500 font-semibold uppercase flex items-center gap-1 mt-1">
-                                        <AlertCircle size={12} className="shrink-0" /> {errors.first_name.message}
-                                    </p>
-                                )}
-                            </div>
+                        {/* Apellido Paterno */}
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold  ">{t("ui_responsible_firstname_label")}</Label>
+                            <Input
+                                {...register("first_name")}
+                                className={errors.first_name ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
+                                placeholder={t("ui_responsible_firstname_placeholder")}
+                                disabled={isSubmitting}
+                            />
+                            {errors.first_name && (
+                                <p className="text-[11px] text-red-500 font-semibold  flex items-center gap-1 mt-1">
+                                    <AlertCircle size={12} className="shrink-0" /> {errors.first_name.message}
+                                </p>
+                            )}
+                        </div>
 
-                            {/* Apellido Materno */}
-                            <div className="space-y-2">
-                                <Label className="text-xs font-bold uppercase">Apellido Materno</Label>
-                                <Input
-                                    {...register("last_name")}
-                                    className={errors.last_name ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
-                                    placeholder="Ej. Gómez"
-                                />
-                                {errors.last_name && (
-                                    <p className="text-[10px] text-red-500 font-semibold uppercase flex items-center gap-1 mt-1">
-                                        <AlertCircle size={12} className="shrink-0" /> {errors.last_name.message}
-                                    </p>
-                                )}
-                            </div>
+                        {/* Apellido Materno */}
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold  ">{t("ui_responsible_lastname_label")}</Label>
+                            <Input
+                                {...register("last_name")}
+                                className={errors.last_name ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
+                                placeholder={t("ui_responsible_lastname_placeholder")}
+                                disabled={isSubmitting}
+                            />
+                            {errors.last_name && (
+                                <p className="text-[11px] text-red-500 font-semibold  flex items-center gap-1 mt-1">
+                                    <AlertCircle size={12} className="shrink-0" /> {errors.last_name.message}
+                                </p>
+                            )}
+                        </div>
 
-                            {/* Área */}
-                            <div className="space-y-2">
-                                <Label className="text-xs font-bold uppercase flex items-center gap-1">
-                                    <MapPin className="h-3 w-3 text-zinc-400" /> Área
-                                </Label>
-                                <Input
-                                    {...register("area")}
-                                    className={errors.area ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
-                                    placeholder="Sistemas, RH, Finanzas..."
-                                />
-                                {errors.area && (
-                                    <p className="text-[10px] text-red-500 font-semibold uppercase flex items-center gap-1 mt-1">
-                                        <AlertCircle size={12} className="shrink-0" /> {errors.area.message}
-                                    </p>
-                                )}
-                            </div>
+                        {/* Área */}
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold  flex items-center gap-1 ">
+                                <MapPin className="h-3.5 w-3.5 text-zinc-400" /> {t("ui_responsible_area_label")}
+                            </Label>
+                            <Input
+                                {...register("area")}
+                                className={errors.area ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
+                                placeholder={t("ui_responsible_area_placeholder")}
+                                disabled={isSubmitting}
+                            />
+                            {errors.area && (
+                                <p className="text-[11px] text-red-500 font-semibold  flex items-center gap-1 mt-1">
+                                    <AlertCircle size={12} className="shrink-0" /> {errors.area.message}
+                                </p>
+                            )}
+                        </div>
 
-                            {/* Correo */}
-                            <div className="space-y-2">
-                                <Label className="text-xs font-bold uppercase flex items-center gap-1">
-                                    <Mail className="h-3 w-3 text-zinc-400" /> Correo Electrónico
-                                </Label>
-                                <Input
-                                    {...register("mail")}
-                                    className={errors.mail ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
-                                    placeholder="ejemplo@empresa.com"
-                                />
-                                {errors.mail && (
-                                    <p className="text-[10px] text-red-500 font-semibold uppercase flex items-center gap-1 mt-1">
-                                        <AlertCircle size={12} className="shrink-0" /> {errors.mail.message}
-                                    </p>
-                                )}
-                            </div>
+                        {/* Correo */}
+                        <div className="space-y-2">
+                            <Label className="text-xs font-bold  flex items-center gap-1 ">
+                                <Mail className="h-3.5 w-3.5 text-zinc-400" /> {t("ui_responsible_mail_label")}
+                            </Label>
+                            <Input
+                                {...register("mail")}
+                                className={errors.mail ? "border-red-500 bg-red-50/10 focus-visible:ring-red-500" : ""}
+                                placeholder={t("ui_responsible_mail_placeholder")}
+                                disabled={isSubmitting}
+                            />
+                            {errors.mail && (
+                                <p className="text-[11px] text-red-500 font-semibold  flex items-center gap-1 mt-1">
+                                    <AlertCircle size={12} className="shrink-0" /> {errors.mail.message}
+                                </p>
+                            )}
                         </div>
                     </div>
 
-                    <DialogFooter className="p-6 pt-4 border-t border-zinc-100 bg-zinc-50/50 gap-2 sm:gap-0">
-                        <Button type="button" variant="ghost" onClick={onClose} className="text-zinc-400" disabled={isSubmitting}>
-                            Cancelar
+                    <DialogFooter className="p-6 pt-4 border-t flex flex-row justify-end gap-2 mt-auto">
+                        <Button 
+                            type="button" 
+                            variant="ghost" 
+                            onClick={onClose} 
+                            className="text-zinc-500 hover:text-zinc-700" 
+                            disabled={isSubmitting}
+                        >
+                            {t("ui_btn_cancel")}
                         </Button>
-
                         <Button
                             type="submit"
                             disabled={isSubmitting}
                             className="bg-blue-700 hover:bg-blue-800 text-white font-bold transition-colors"
                         >
-                            {isSubmitting ? "Guardando..." : "Guardar Responsable"}
+                            {isSubmitting ? t("ui_responsible_saving") : t("ui_responsible_save")}
                         </Button>
                     </DialogFooter>
                 </form>

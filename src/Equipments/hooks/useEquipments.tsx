@@ -1,72 +1,30 @@
+import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getEquipmentsAction } from '../actions/get-equipments.action';
-// Importa tus nuevas acciones
-// import { createEquipmentAction } from '../actions/create-equipment.action';
-// import { updateEquipmentAction } from '../actions/update-equipment.action';
-import type { EquipmentCategory } from '../interfaces/equipment.interface';
+import { getEquipmentsAction } from "../actions/get-equipments.action";
 
-export const useEquipments = (equipmentId?: string) => {
+export const useEquipments = () => {
   const [searchParams] = useSearchParams();
-  const queryClient = useQueryClient();
+
+  // Lee los filtros de la URL
+  const category = searchParams.get("category") || "all";
+  const search = searchParams.get("search") || "";
+  const status = searchParams.get("status") || "all";
   
-  // --- LÓGICA DE LISTADO (GET ALL) ---
-  const limit = Number(searchParams.get('limit')) || 10;
-  const page = Number(searchParams.get('page')) || 1;
+  // Lee paginación desde URL y calcula el offset para mandarlo al backend
+  const page = Math.max(1, Number(searchParams.get("page") || "1"));
+  const limit = Number(searchParams.get("limit") || "10");
   const offset = (page - 1) * limit;
-  const category = (searchParams.get('category') || 'all') as EquipmentCategory | 'all';
-  const query = searchParams.get("search")?.trim() || undefined;
-  const status = searchParams.get("status") || 'all';
 
-  const equipmentsQuery = useQuery({
-    queryKey: ['equipments', { category,  query, status, limit, offset }],
-    queryFn: () => getEquipmentsAction({ category, search: query, status: status !== 'all' ? status : undefined, limit, offset, }),
-    staleTime: 1000 * 60 * 5,
-    select: (response) => ({
-      equipments: response.data,
-      meta: response.meta,
-    }),
-  });
-
-  // --- LÓGICA DE EQUIPO ÚNICO (Para Edición) ---
-  const singleEquipmentQuery = useQuery({
-    queryKey: ['equipment', equipmentId],
-    queryFn: () => {}, // Sustituir por getEquipmentByIdAction(equipmentId!)
-    enabled: !!equipmentId, // Solo se ejecuta si hay un ID
-  });
-
-  // --- MUTACIONES (POST / PATCH) ---
-  
-  const createMutation = useMutation({
-    mutationFn: () => Promise.resolve(), // Sustituir por createEquipmentAction(data)
-    onSuccess: () => {
-      // Refrescar la lista de equipos globalmente
-      queryClient.invalidateQueries({ queryKey: ['equipments'] });
-    },
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: (params: { id: string; data: unknown }) => Promise.resolve(params), // Sustituir por updateEquipmentAction(id, data)
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['equipments'] });
-      queryClient.invalidateQueries({ queryKey: ['equipment', variables.id] });
-    },
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["equipments", { category, search, status, limit, offset }],
+    queryFn: () => getEquipmentsAction({ category, search, status, limit, offset }),
   });
 
   return {
-    // Datos de listado
-    equipments: equipmentsQuery.data?.equipments ?? [],
-    meta: equipmentsQuery.data?.meta,
-    isLoading: equipmentsQuery.isLoading,
-
-    // Datos de edición
-    equipment: singleEquipmentQuery.data,
-    isFetchingSingle: singleEquipmentQuery.isLoading,
-
-    // Acciones de formulario
-    createEquipmentAsync: createMutation.mutateAsync,
-    updateEquipmentAsync: updateMutation.mutateAsync,
-    isCreating: createMutation.isPending,
-    isUpdating: updateMutation.isPending,
+    // Retornamos directamente .data mapeándolo a equipments para no romper tu EquipmentPage
+    equipments: data?.data || [], 
+    meta: data?.meta || { total: 0, page: 1, lastPage: 1 },
+    isLoading,
+    isError,
   };
 };

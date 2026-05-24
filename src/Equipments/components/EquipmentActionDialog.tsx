@@ -1,10 +1,11 @@
-import { useEquipmentStatus } from '../hooks/useEquipmentStatus'; // Hook que creamos antes// Debes crear este store
+import { useEquipmentStatus } from '../hooks/useEquipmentStatus';
 import { useEquipmentDialogStore } from '../store/equipment-dialog.store';
 
 import { getAxiosErrorMessage } from '../../lib/helpers/getAxiosErrorMessage';
 import { AlertTriangle, CheckCircle, Dot } from 'lucide-react';
 import { CustomDialogConfirm } from '@/components/custom/CustomDialogCorfirm';
 import { sileo } from 'sileo';
+import { t } from 'i18next';
 
 export const EquipmentActionDialog = () => {
     // Usamos las mutaciones de equipo que configuramos
@@ -16,13 +17,13 @@ export const EquipmentActionDialog = () => {
         activateMutation.mutate(selectedEquipment.id, {
             onSuccess: (data) => {
                 sileo.success({
-                    title: data.message || `El equipo ${selectedEquipment.folio} ha sido activado.`
+                    title: data.message || `${t("eq_dialog_toast_activate_success_1")} ${selectedEquipment.folio} ${t("eq_dialog_toast_activate_success_2")}`
                 });
                 closeDialog();
             },
             onError: (error) => {
                 sileo.error({
-                    title: 'No se pudo activar',
+                    title: t("eq_dialog_toast_activate_error"),
                     description: getAxiosErrorMessage(error)
                 });
             }
@@ -34,13 +35,13 @@ export const EquipmentActionDialog = () => {
         deactivateMutation.mutate(selectedEquipment.id, {
             onSuccess: (data) => {
                 sileo.success({
-                    title: data.message || `El equipo ${selectedEquipment.folio} ha sido desactivado.`
+                    title: data.message || `${t("eq_dialog_toast_deactivate_success_1")} ${selectedEquipment.folio} ${t("eq_dialog_toast_deactivate_success_2")}`
                 });
                 closeDialog();
             },
             onError: (error) => {
                 sileo.error({
-                    title: 'Error al desactivar',
+                    title: t("eq_dialog_toast_deactivate_error"),
                     description: getAxiosErrorMessage(error)
                 });
             }
@@ -50,16 +51,16 @@ export const EquipmentActionDialog = () => {
     const getDialogConfig = () => {
         const configs = {
             activate: {
-                title: "¿Activar este equipo?",
-                description: `¿Estás seguro de que deseas activar el equipo con folio ${selectedEquipment?.folio}?`,
+                title: t("eq_dialog_activate_title"),
+                description: `${t("eq_dialog_activate_desc_1")} ${selectedEquipment?.folio || ''}?`,
                 icon: CheckCircle,
                 isLoading: activateMutation.isPending,
                 onConfirm: handleConfirmActivate,
                 variant: 'primary' as const,
             },
             deactivate: {
-                title: "¿Desactivar este equipo?",
-                description: `¿Estás seguro de que deseas desactivar el equipo con folio ${selectedEquipment?.folio}? Esta acción no eliminará los datos.`,
+                title: t("eq_dialog_deactivate_title"),
+                description: `${t("eq_dialog_deactivate_desc_1")} ${selectedEquipment?.folio || ''}? ${t("eq_dialog_deactivate_desc_2")}`,
                 icon: AlertTriangle,
                 isLoading: deactivateMutation.isPending,
                 onConfirm: handleConfirmDeactive,

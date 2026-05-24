@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CatalogSelector } from "../hooks/useCatalogs";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
+import { t } from "i18next";
 
 // Hook de Catálogo de Red
 import { useNetworkTypes } from "../hooks/use-equipment-catalog";
@@ -39,15 +40,15 @@ export const NetworkFields = ({ control, register, setValue, disabled, errors }:
     const handleCreateNetworkType = async (name: string) => {
         try {
             const newItem = await sileo.promise(networkHook.onCreate({ name: name.trim() }), {
-                loading: { title: "Creando tipo de red..." },
+                loading: { title: t("eq_network_toast_loading") },
                 success: {
-                    title: "¡Tipo de red creado!",
-                    description: `El tipo "${name}" se guardó correctamente.`,
+                    title: t("eq_network_toast_success_title"),
+                    description: `${t("eq_network_toast_success_desc_1")} "${name}" ${t("eq_network_toast_success_desc_2")}`,
                     duration: 4000
                 },
                 error: (err) => ({
-                    title: "Error al crear",
-                    description: getBackendErrorMessage(err, "No se pudo crear el tipo de red."),
+                    title: t("eq_network_toast_error_title"),
+                    description: getBackendErrorMessage(err, t("eq_network_toast_error_desc")),
                     duration: 5000
                 })
             });
@@ -66,23 +67,23 @@ export const NetworkFields = ({ control, register, setValue, disabled, errors }:
     return (
         <div className="mt-6 p-6 border border-orange-200 rounded-xl bg-orange-200/5 grid grid-cols-1 md:grid-cols-2 gap-6">
             <h3 className="col-span-full font-bold flex items-center gap-2 border-b border-orange-200 pb-2">
-                <Network size={18} className="text-orange-600" /> Especificaciones de Red
+                <Network size={18} className="text-orange-600" /> {t("eq_network_section_title")}
             </h3>
 
             {/* Tipo de Red */}
             <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase">Tipo de Red <span className="text-red-600">*</span></Label>
+                <Label className="text-xs font-bold uppercase">{t("eq_network_label_type")} <span className="text-red-600">*</span></Label>
                 <Controller
                     name="network.id_type_equipment_network"
                     control={control}
-                    rules={{ required: "El tipo de equipo de red es obligatorio" }}
+                    rules={{ required: t("eq_network_error_type_required") }}
                     render={({ field }) => (
                         <CatalogSelector
                             hook={networkHook}
                             value={typeof field.value === 'string' ? { id: field.value, name: "" } : field.value}
                             onChange={(val) => field.onChange(val)}
                             disabled={disabled}
-                            placeholder="Seleccionar tipo (Switch, Router...)"
+                            placeholder={t("eq_network_placeholder_type")}
                             allowCreate={true}
                             onCreate={handleCreateNetworkType}
                         />
@@ -97,13 +98,12 @@ export const NetworkFields = ({ control, register, setValue, disabled, errors }:
 
             {/* Número de Puertos */}
             <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase">Número de Puertos <span className="text-red-600">*</span></Label>
+                <Label className="text-xs font-bold uppercase">{t("eq_network_label_ports")} <span className="text-red-600">*</span></Label>
                 <Input
                     type="number"
                     {...register("network.number_ports", {
-                        required: "El número de puertos es obligatorio",
-                        
-                        min: { value: 1, message: "Debe tener al menos 1 puerto" }
+                        required: t("eq_network_error_ports_required"),
+                        min: { value: 1, message: t("eq_network_error_ports_min") }
                     })}
                     placeholder="Ej. 24"
                     disabled={disabled}
@@ -116,7 +116,7 @@ export const NetworkFields = ({ control, register, setValue, disabled, errors }:
                 )}
             </div>
 
-            {/* PoE Checkbox (No requiere validación obligatoria) */}
+            {/* PoE Checkbox */}
             <div className="flex items-center space-x-4 md:col-span-2 pt-2">
                 <Controller
                     name="network.PoE"
@@ -127,7 +127,7 @@ export const NetworkFields = ({ control, register, setValue, disabled, errors }:
                                 htmlFor="is-poe"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                ¿Tiene función PoE (Power over Ethernet)?
+                                {t("eq_network_label_poe_question")}
                             </Label>
                             <Checkbox
                                 id="is-poe"

@@ -1,5 +1,6 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 import type { OperatingSystem } from "./get-operatingsystem.action";
+import { t } from "i18next";
 
 /**
  * Ajustamos el payload para manejar tanto el string directo como el objeto { name: string }.
@@ -11,7 +12,7 @@ export const createOperatingSystemAction = async (payload: string | { name: stri
         const nameValue = typeof payload === 'string' ? payload : payload.name;
 
         if (!nameValue) {
-            throw new Error("El nombre del sistema operativo es requerido.");
+            throw new Error(t("api_operating_system_name_required"));
         }
 
         const cleanedName = nameValue.trim();
@@ -30,6 +31,6 @@ export const createOperatingSystemAction = async (payload: string | { name: stri
             throw new Error(errorMessage.join(", "));
         }
 
-        throw new Error(errorMessage || "Error al registrar el Sistema Operativo.");
+        throw new Error(errorMessage || t("api_operating_system_create_error"));
     }
 };

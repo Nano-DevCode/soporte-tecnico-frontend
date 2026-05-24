@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { CatalogSelector } from "../hooks/useCatalogs";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
+import { t } from "i18next";
 
 // Hooks de Catálogos simplificados
 import {
@@ -43,15 +44,15 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
     const handleCreatePrinterFunction = async (name: string) => {
         try {
             const newItem = await sileo.promise(functionsHook.onCreate({ name: name.trim() }), {
-                loading: { title: "Creando función de impresora..." },
+                loading: { title: t("eq_printer_toast_func_loading") },
                 success: {
-                    title: "¡Función creada!",
-                    description: `La función "${name}" se guardó correctamente.`,
+                    title: t("eq_printer_toast_func_success_title"),
+                    description: `${t("eq_printer_toast_func_success_desc_1")} "${name}" ${t("eq_printer_toast_func_success_desc_2")}`,
                     duration: 4000
                 },
                 error: (err) => ({
-                    title: "Error al crear",
-                    description: getBackendErrorMessage(err, "No se pudo crear la función."),
+                    title: t("eq_printer_toast_func_error_title"),
+                    description: getBackendErrorMessage(err, t("eq_printer_toast_func_error_desc")),
                     duration: 5000
                 })
             });
@@ -66,15 +67,15 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
     const handleCreatePrintingType = async (name: string) => {
         try {
             const newItem = await sileo.promise(typesHook.onCreate({ name: name.trim() }), {
-                loading: { title: "Creando tipo de impresión..." },
+                loading: { title: t("eq_printer_toast_type_loading") },
                 success: {
-                    title: "¡Tipo de impresión creado!",
-                    description: `El tipo "${name}" se guardó correctamente.`,
+                    title: t("eq_printer_toast_type_success_title"),
+                    description: `${t("eq_printer_toast_type_success_desc_1")} "${name}" ${t("eq_printer_toast_type_success_desc_2")}`,
                     duration: 4000
                 },
                 error: (err) => ({
-                    title: "Error al crear",
-                    description: getBackendErrorMessage(err, "No se pudo crear el tipo de impresión."),
+                    title: t("eq_printer_toast_type_error_title"),
+                    description: getBackendErrorMessage(err, t("eq_printer_toast_type_error_desc")),
                     duration: 5000
                 })
             });
@@ -92,23 +93,23 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
     return (
         <div className="mt-6 p-6 border border-purple-200 rounded-xl bg-purple-200/5 grid grid-cols-1 md:grid-cols-2 gap-6">
             <h3 className="col-span-full font-bold flex items-center gap-2 border-b border-purple-200 pb-3">
-                <Printer size={18} className="text-purple-600" /> Especificaciones de Impresora
+                <Printer size={18} className="text-purple-600" /> {t("eq_printer_section_title")}
             </h3>
 
             {/* Función de Impresora */}
             <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase">Función <span className="text-red-600">*</span></Label>
+                <Label className="text-xs font-bold uppercase">{t("eq_printer_label_function")} <span className="text-red-600">*</span></Label>
                 <Controller
                     name="printer.id_type_function"
                     control={control}
-                    rules={{ required: "La función de la impresora es obligatoria" }}
+                    rules={{ required: t("eq_printer_error_func_required") }}
                     render={({ field }) => (
                         <CatalogSelector
                             hook={functionsHook}
                             value={typeof field.value === 'string' ? { id: field.value, name: "" } : field.value}
                             onChange={(val) => field.onChange(val)}
                             disabled={disabled}
-                            placeholder="Seleccionar función (Multifuncional...)"
+                            placeholder={t("eq_printer_placeholder_function")}
                             allowCreate={true}
                             onCreate={handleCreatePrinterFunction}
                         />
@@ -123,18 +124,18 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
 
             {/* Tecnología / Tipo de Impresión */}
             <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase">Tipo de Impresión <span className="text-red-600">*</span></Label>
+                <Label className="text-xs font-bold uppercase">{t("eq_printer_label_print_type")} <span className="text-red-600">*</span></Label>
                 <Controller
                     name="printer.id_type_printing"
                     control={control}
-                    rules={{ required: "El tipo de impresión es obligatorio" }}
+                    rules={{ required: t("eq_printer_error_type_required") }}
                     render={({ field }) => (
                         <CatalogSelector
                             hook={typesHook}
                             value={typeof field.value === 'string' ? { id: field.value, name: "" } : field.value}
                             onChange={(val) => field.onChange(val)}
                             disabled={disabled}
-                            placeholder="Inyección, Térmica, Láser..."
+                            placeholder={t("eq_printer_placeholder_print_type")}
                             allowCreate={true}
                             onCreate={handleCreatePrintingType}
                         />
@@ -149,14 +150,14 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
 
             {/* Modelo de Tóner (Opcional - Sin asterisco) */}
             <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase">Modelo de Tóner / Cartucho</Label>
+                <Label className="text-xs font-bold uppercase">{t("eq_printer_label_toner")}</Label>
                 <Input
-                    {...register("printer.model_toner",
-                        {
-                            required: "Este campo es requerido",
-                            minLength: { value: 3, message: "Mínimo 3 caracteres" },
-                            maxLength: { value: 150, message: "Máximo 150 caracteres" }
-                        })}
+                    {...register("printer.model_toner", {
+                        required: t("eq_printer_error_toner_required"),
+                        minLength: { value: 3, message: t("eq_printer_error_toner_min") },
+                        maxLength: { value: 150, message: t("eq_printer_error_toner_max") }
+                    })}
+                    placeholder="Ej. HP 85A, TN-2410"
                     disabled={disabled}
                     className={`bg-slate-50/50 border-zinc-300 focus:ring-0 ${printerErrors?.model_toner ? 'border-red-500 bg-red-50/20' : ''}`}
                 />
@@ -167,7 +168,7 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
                 )}
             </div>
 
-            {/* Checkbox de Color (Opcional - Sin validación requerida) */}
+            {/* Checkbox de Color */}
             <div className="flex items-center space-x-4 md:pt-8">
                 <Controller
                     name="printer.color"
@@ -185,7 +186,7 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
                                 htmlFor="is-color"
                                 className="text-sm font-medium leading-none cursor-pointer"
                             >
-                                ¿Imprime a Color?
+                                {t("eq_printer_label_color_question")}
                             </Label>
                         </div>
                     )}

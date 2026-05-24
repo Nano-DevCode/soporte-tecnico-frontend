@@ -1,26 +1,71 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { t } from "i18next";
 
+// --- INTERFACES ---
 export interface PrinterTypeFunction {
     id: string;
     name: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
-export const getPrinterTypeFunctionAction = async (): Promise<PrinterTypeFunction[]> => {
+export interface PrinterTypeFunctionsResponse {
+    printerTypeFunctions: PrinterTypeFunction[];
+    meta: {
+        total: number;
+        page: number;
+        lastPage: number;
+    };
+}
+
+export interface Options {
+    limit?: number | string;
+    offset?: number | string;
+    query?: string;
+}
+
+export const getPrinterTypeFunctionAction = async (
+    options: Options = {}
+): Promise<PrinterTypeFunctionsResponse> => {
+    const { limit = 10, offset = 0, query = undefined } = options;
+
     try {
-        const { data } = await soporteTecnicoApi.get<PrinterTypeFunction[]>('/printerfunctiontypes');
-        return Array.isArray(data) ? data : [];
+        const { data } = await soporteTecnicoApi.get<PrinterTypeFunctionsResponse>('/printerfunctiontypes', {
+            params: {
+                limit: isNaN(Number(limit)) ? 10 : Number(limit),
+                offset: isNaN(Number(offset)) ? 0 : Number(offset),
+                // Reemplazamos los símbolos '+' por espacios en blanco por consistencia con el buscador del Front
+                query: query?.replaceAll('+', ' '),
+            },
+        });
+
+        return data;
     } catch (error) {
-        console.error("Error al obtener tipos de función de impresora:", error);
-        return []; // Retorno seguro para evitar que .map() falle en la UI
+        console.error(t("api_printer_functions_fetch_error"), error);
+
+        return {
+            printerTypeFunctions: [],
+            meta: {
+                total: 0,
+                page: 1,
+                lastPage: 1,
+            },
+        };
     }
 };
 
-export const getPrintertypeFunctionByIdAction = async (idOrObject: string | { id: string }) => {
-    // Si es un objeto, extraemos el id; si no, usamos el valor directamente
-    const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
+export const getPrinterTypeFunctionByIdAction = async (
+    idOrObject: string | { id: string }
+): Promise<PrinterTypeFunction | null> => {
+    const id = typeof idOrObject === 'object' ? idOrObject?.id : idOrObject;
 
     if (!id) return null;
 
-    const { data } = await soporteTecnicoApi.get<PrinterTypeFunction>(`/printerfunctiontypes/${id}`);
-    return data;
+    try {
+        const { data } = await soporteTecnicoApi.get<PrinterTypeFunction>(`/printerfunctiontypes/${id}`);
+        return data;
+    } catch (error) {
+        console.error(`${t("api_printer_function_by_id_error")} ${id}:`, error);
+        return null;
+    }
 };

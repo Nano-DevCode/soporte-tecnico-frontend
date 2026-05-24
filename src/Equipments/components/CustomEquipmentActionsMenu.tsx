@@ -10,6 +10,7 @@ import { Ban, CircleCheck, Eye, MoreHorizontal, Pencil } from "lucide-react";
 import { Link } from "react-router"; // Asegúrate de que sea react-router-dom
 import type { Equipment } from "../interfaces/equipment.interface";
 import { useEquipmentDialogStore } from "../store/equipment-dialog.store";
+import { t } from "i18next";
 
 interface Props {
   equipment: Equipment;
@@ -32,24 +33,22 @@ export const CustomEquipmentActionsMenu = ({ equipment }: Props) => {
 
       <DropdownMenuContent align="end" className="w-48 rounded-xl shadow-lg border-border">
         <div className="px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">
-          Opciones de Equipo
+          {t("ui_menu_equipment_options")}
         </div>
 
         {/* VER DETALLES */}
         <DropdownMenuItem className="gap-2 cursor-pointer py-2.5" asChild>
-          {/* Ajustado a la ruta plural 'equipments' */}
           <Link to={`/equipments/details/${equipment.id}`}>
             <Eye className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm">Ver Detalles</span>
+            <span className="text-sm">{t("ui_menu_view_details")}</span>
           </Link>
         </DropdownMenuItem>
 
         {/* EDITAR */}
         <DropdownMenuItem className="gap-2 cursor-pointer py-2.5" asChild>
-          {/* CORRECCIÓN: Cambiado de /equipment/ a /equipments/ para coincidir con tus rutas */}
           <Link to={`/equipments/edit/${equipment.id}`}>
             <Pencil className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm">Editar Registro</span>
+            <span className="text-sm">{t("ui_menu_edit_record")}</span>
           </Link>
         </DropdownMenuItem>
 
@@ -62,7 +61,7 @@ export const CustomEquipmentActionsMenu = ({ equipment }: Props) => {
             onClick={() => openDialog(equipment, 'activate')}
           >
             <CircleCheck className="h-4 w-4" />
-            <span className="text-sm">Activar equipo</span>
+            <span className="text-sm">{t("ui_menu_activate_equipment")}</span>
           </DropdownMenuItem>
         )}
 
@@ -73,7 +72,7 @@ export const CustomEquipmentActionsMenu = ({ equipment }: Props) => {
             onClick={() => openDialog(equipment, 'deactivate')}
           >
             <Ban className="h-4 w-4" />
-            <span className="text-sm">Desactivar equipo</span>
+            <span className="text-sm">{t("ui_menu_deactivate_equipment")}</span>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

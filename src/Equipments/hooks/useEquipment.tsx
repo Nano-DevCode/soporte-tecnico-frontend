@@ -22,7 +22,6 @@ export const useEquipment = () => {
     isLoading: equipmentQuery.isLoading,
     isError: equipmentQuery.isError,
     error: equipmentQuery.error,
-    // Devolvemos este flag para que el FormContainer sepa si está editando o creando
     isEditing, 
   };
 };

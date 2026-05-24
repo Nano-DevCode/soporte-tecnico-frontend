@@ -1,27 +1,67 @@
-
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { t } from "i18next";
 
+// --- INTERFACES ---
 export interface EquipmentType {
-    id: string;
-    name: string;
+  id: string;
+  name: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
-export const getEquipmentTypesAction  = async (): Promise<EquipmentType[]> => {
-    try {
-        const { data } = await soporteTecnicoApi.get<EquipmentType[]>('/equipmenttypes');
-        return Array.isArray(data) ? data : [];
-    } catch (error) {
-        console.error("Error al obtener tipos de equipos:", error);
-        return []; // Retorno seguro para evitar que .map() falle en la UI
-    }
+export interface EquipmentTypesResponse {
+  equipmentTypes: EquipmentType[];
+  meta: {
+    total: number;
+    page: number;
+    lastPage: number;
+  };
+}
+
+interface FilterOptions {
+  limit?: number | string;
+  offset?: number | string;
+  query?: string;
+}
+export const getEquipmentTypesAction = async (options: FilterOptions): Promise<EquipmentTypesResponse> => {
+  const { limit = 10, offset = 0, query = undefined } = options;
+
+  try {
+    const { data } = await soporteTecnicoApi.get<EquipmentTypesResponse>('/equipmenttypes', {
+      params: {
+        limit: isNaN(Number(limit)) ? 10 : Number(limit),
+        offset: isNaN(Number(offset)) ? 0 : Number(offset),
+        query: query?.replaceAll('+', ' '),
+      },
+    });
+
+    return data;
+  } catch (error) {
+    console.error(t("api_equipment_types_fetch_error"), error);
+    
+    return {
+      equipmentTypes: [],
+      meta: {
+        total: 0,
+        page: 1,
+        lastPage: 1,
+      },
+    };
+  }
 };
 
-export const getEquipmentTypeByIdAction= async (idOrObject: string | { id: string }) => {
-    // Si es un objeto, extraemos el id; si no, usamos el valor directamente
-    const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
+export const getEquipmentTypeByIdAction = async (
+  idOrObject: string | { id: string }
+): Promise<EquipmentType | null> => {
+  const id = typeof idOrObject === 'object' ? idOrObject?.id : idOrObject;
 
-    if (!id) return null;
+  if (!id) return null;
 
+  try {
     const { data } = await soporteTecnicoApi.get<EquipmentType>(`/equipmenttypes/${id}`);
     return data;
+  } catch (error) {
+    console.error(`${t("api_equipment_type_by_id_error")} ${id}:`, error);
+    return null;
+  }
 };

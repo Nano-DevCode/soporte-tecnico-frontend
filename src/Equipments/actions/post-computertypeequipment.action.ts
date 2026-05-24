@@ -1,5 +1,6 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 import type { ComputerTypeEquipment } from './get-computertypeequipment.action';
+import { t } from "i18next";
 
 // Definimos una interfaz para el DTO que espera el Backend
 interface CreateComputerTypeDto {
@@ -11,7 +12,7 @@ export const createComputerTypeEquipmentAction = async (payload: string | Create
         // 1. Extraemos el nombre sin importar si viene como string o como objeto { name: '...' }
         const nameValue = typeof payload === 'string' ? payload : payload.name;
         
-        if (!nameValue) throw new Error("El nombre es requerido");
+        if (!nameValue) throw new Error(t("api_computer_type_name_required"));
 
         const cleanedName = nameValue.trim();
 
@@ -28,6 +29,6 @@ export const createComputerTypeEquipmentAction = async (payload: string | Create
             throw new Error(errorMessage.join(", "));
         }
 
-        throw new Error(errorMessage || "Error al registrar el tipo de equipo de computadora.");
+        throw new Error(errorMessage || t("api_computer_type_create_error"));
     }
 };

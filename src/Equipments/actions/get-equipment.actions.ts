@@ -1,15 +1,6 @@
-
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-// import type { Equipment } from "../interfaces/equipment.interface";
+import { t } from "i18next";
 
-/**
- * Obtiene la información detallada de un equipo específico por su ID.
- * @param id - El UUID del equipo.
- * @returns Una promesa con los datos del equipo.
- */
-/**
- * Obtiene la información detallada de un equipo específico por su ID.
- */
 export const getEquipmentByIdAction = async (idOrObject: string | { id: string }) => {
   try {
     const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
@@ -19,8 +10,8 @@ export const getEquipmentByIdAction = async (idOrObject: string | { id: string }
     const { data } = await soporteTecnicoApi.get(`/equipments/${id}`);
     return data;
   } catch (error) {
-    console.error("Error fetching equipment:", error);
+    console.error(t("api_equipments_by_id_console_error"), error);
     // Lanzamos el error para que useQuery sepa que falló
-    throw new Error("No se pudo cargar la información del equipo");
+    throw new Error(t("api_equipments_by_id_ui_error"));
   }
 };

@@ -8,6 +8,7 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox";
+import { t } from "i18next";
 
 interface Option {
   id: string;
@@ -38,7 +39,7 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
   hasNextPage,
   isFetchingNextPage,
   isLoading,
-  placeholder = "Seleccionar...",
+  placeholder = t("eq_select_default_placeholder"),
   allowCreate = false,
   onCreate,
   disabled = false,
@@ -113,11 +114,11 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
           {isLoading ? (
             <div className="flex items-center justify-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
-              <span className="text-muted-foreground">Buscando...</span>
+              <span className="text-muted-foreground">{t("eq_select_searching")}</span>
             </div>
           ) : (
             <p className="text-muted-foreground italic">
-              {showCreateOption ? "Presiona abajo para crear" : "Sin resultados"}
+              {showCreateOption ? t("eq_select_press_to_create") : t("eq_select_no_results")}
             </p>
           )}
         </ComboboxEmpty>
@@ -136,7 +137,7 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
               <div className="flex items-center justify-center h-6 w-6 rounded-md bg-primary/10 group-hover/create:bg-primary/20 transition-colors">
                 <Plus className="h-4 w-4" />
               </div>
-              <span className="truncate text-sm">Crear "{inputValue.trim()}"</span>
+              <span className="truncate text-sm">{t("eq_select_create_prefix")} "{inputValue.trim()}"</span>
             </ComboboxItem>
           )}
 
@@ -144,7 +145,7 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
             <div className="flex items-center justify-center gap-2 py-4 border-t border-zinc-900 bg-zinc-950/50">
               <Loader2 className="h-3 w-3 animate-spin text-primary" />
               <span className="text-[10px] uppercase font-bold text-muted-foreground">
-                Cargando más
+                {t("eq_select_loading_more")}
               </span>
             </div>
           )}
@@ -153,11 +154,11 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
         {!hasNextPage && options.length > 0 && !showCreateOption && (
           <div className="py-2 border-t border-zinc-900 bg-zinc-900/20 text-center">
             <span className="text-[10px] text-zinc-500 font-medium">
-              FIN DEL CATÁLOGO
+              {t("eq_select_end_of_catalog")}
             </span>
           </div>
         )}
       </ComboboxContent>
     </Combobox>
   );
-}); 
+});

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useWatch, Controller, type FieldValues } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { sileo } from "sileo";
@@ -26,8 +26,8 @@ import {
 } from "../hooks/use-equipment-catalog";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 
-// IMPORTACIÓN DEL MANEJADOR DE ERRORES DEL BACKEND
 import { handleBackendFormErrorsEq } from "../utils/backendFormHandlers";
+import { t } from "i18next";
 
 interface Props {
     mode: "create" | "update";
@@ -42,7 +42,7 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
     const isReadOnly = initialData?.status === false;
 
     const { control, register, setValue, handleSubmit, setError, formState: { errors } } = useForm<FieldValues>({
-        defaultValues: {
+        values: {
             id_type_equipment: initialData?.id_type_equipment
                 ? { id: initialData.id_type_equipment.id, name: initialData.id_type_equipment.name }
                 : undefined,
@@ -67,7 +67,7 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
             computer: initialData?.computer ? {
                 ...initialData.computer,
                 id_processor: initialData.computer.id_processor
-                    ? { id: initialData.computer.id_processor.id, name: initialData.computer.id_processor.brand + ' ' + initialData.computer.id_processor.model + ' ' + initialData.computer.id_processor.description } : undefined,
+                    ? { id: initialData.computer.id_processor.id, name: `${initialData.computer.id_processor.brand || ''} ${initialData.computer.id_processor.model || ''} ${initialData.computer.id_processor.description || ''}`.trim() } : undefined,
                 id_type_operating_system: initialData.computer.id_type_operating_system
                     ? { id: initialData.computer.id_type_operating_system.id, name: initialData.computer.id_type_operating_system.name } : undefined,
                 id_type_storage: initialData.computer.id_type_storage
@@ -89,20 +89,24 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
             } : {}
         }
     });
-
-    // Hooks de Catálogos
     const eqTypesHook = useEquipmentTypes();
     const brandsHook = useBrands();
     const responsiblesHook = useResponsibles();
     const departmentsHook = useDepartments();
 
-    // Observadores
     const watchedBrand = useWatch({ control, name: "id_brand" });
-    const selectedBrandId = watchedBrand?.id;
     const watchedType = useWatch({ control, name: "id_type_equipment" });
+    
+    const selectedBrandId = watchedBrand?.id;
     const typeId = String(watchedType?.id || "");
 
     const modelsHook = useModels(selectedBrandId);
+
+    useEffect(() => {
+        if (initialData?.id_responsable?.id) {
+            responsiblesHook.setSelectedId(initialData.id_responsable.id);
+        }
+    }, [initialData]);
 
     const getBackendErrorMessage = (err: unknown, defaultMsg: string): string => {
         if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
@@ -114,19 +118,18 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
         return defaultMsg;
     };
 
-    // Handlers de Creación Rápida
     const handleCreateTypeEquipment = async (name: string) => {
         if (!name || name.trim() === "") {
-            sileo.error({ title: "Campo vacío", description: "El nombre del tipo de equipo no puede contener solo espacios." });
+            sileo.error({ title: t("eq_form_alert_empty_title"), description: t("eq_form_alert_type_empty_desc") });
             return;
         }
         try {
             const newItem = await sileo.promise(eqTypesHook.onCreate({ name: name.trim() }), {
-                loading: { title: "Creando tipo de equipo..." },
-                success: { title: "¡Tipo creado!", description: `El tipo "${name.trim()}" se guardó correctamente.`, duration: 4000 },
+                loading: { title: t("eq_form_sileo_type_loading") },
+                success: { title: t("eq_form_sileo_type_success"), description: t("eq_form_sileo_type_success_desc", { name: name.trim() }), duration: 4000 },
                 error: (err) => ({
-                    title: "Error al crear",
-                    description: getBackendErrorMessage(err, "No se pudo crear el tipo."),
+                    title: t("eq_form_sileo_error_title"),
+                    description: getBackendErrorMessage(err, t("eq_form_sileo_type_error_desc")),
                     duration: 5000
                 })
             });
@@ -136,42 +139,43 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
 
     const handleCreateBrand = async (name: string) => {
         if (!name || name.trim() === "") {
-            sileo.error({ title: "Campo vacío", description: "El nombre de la marca no puede contener solo espacios." });
+            sileo.error({ title: t("eq_form_alert_empty_title"), description: t("eq_form_alert_brand_empty_desc") });
             return;
         }
         try {
             const newItem = await sileo.promise(brandsHook.onCreate({ name: name.trim() }), {
-                loading: { title: "Creando marca..." },
-                success: { title: "¡Marca creada!", description: `La marca "${name.trim()}" se guardó correctamente.`, duration: 4000 },
+                loading: { title: t("eq_form_sileo_brand_loading") },
+                success: { title: t("eq_form_sileo_brand_success"), description: t("eq_form_sileo_brand_success_desc", { name: name.trim() }), duration: 4000 },
                 error: (err) => ({
-                    title: "Error al crear",
-                    description: getBackendErrorMessage(err, "No se pudo crear la marca."),
+                    title: t("eq_form_sileo_error_title"),
+                    description: getBackendErrorMessage(err, t("eq_form_sileo_brand_error_desc")),
                     duration: 5000
                 })
             });
             if (newItem) {
                 setValue("id_brand", newItem, { shouldValidate: true });
-                setValue("id_model", undefined);
+                // Limpia el modelo de forma explícita al crear una marca nueva
+                setValue("id_model", null, { shouldValidate: true });
             }
         } catch (e) { console.error(e); }
     };
 
     const handleCreateModel = async (newModelName: string) => {
         if (!newModelName || newModelName.trim() === "") {
-            sileo.error({ title: "Campo vacío", description: "El nombre del modelo no puede contener solo espacios." });
+            sileo.error({ title: t("eq_form_alert_empty_title"), description: t("eq_form_alert_model_empty_desc") });
             return;
         }
         if (!selectedBrandId) {
-            sileo.error({ title: "Error", description: "Debes seleccionar una marca primero." });
+            sileo.error({ title: t("eq_form_sileo_error_title"), description: t("eq_form_alert_model_no_brand") });
             return;
         }
         try {
             const newModelFromDB = await sileo.promise(modelsHook.onCreate({ name: newModelName.trim(), brandId: selectedBrandId }), {
-                loading: { title: "Creando modelo..." },
-                success: { title: "¡Modelo creado!", description: `El modelo "${newModelName.trim()}" se guardó correctamente.`, duration: 4000 },
+                loading: { title: t("eq_form_sileo_model_loading") },
+                success: { title: t("eq_form_sileo_model_success"), description: t("eq_form_sileo_model_success_desc", { name: newModelName.trim() }), duration: 4000 },
                 error: (err) => ({
-                    title: "Error al crear",
-                    description: getBackendErrorMessage(err, "No se pudo crear el modelo."),
+                    title: t("eq_form_sileo_error_title"),
+                    description: getBackendErrorMessage(err, t("eq_form_sileo_model_error_desc")),
                     duration: 5000
                 })
             });
@@ -179,7 +183,6 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
         } catch (error) { console.error(error); }
     };
 
-    // INTERCEPTACIÓN REDISEÑADA PARA AMBOS CASOS (CREATE Y UPDATE)
     const onFormSubmit = async (data: FieldValues) => {
         const toId = (obj: string | { id: string } | undefined) =>
             (obj && typeof obj === 'object' && 'id' in obj ? obj.id : obj);
@@ -212,7 +215,8 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
             } : undefined
         };
 
-        delete (formattedData as Partial<FieldValues>).id_brand;
+        const updateData = formattedData as Partial<FieldValues>;
+        delete updateData.id_brand;
 
         if (formattedData.computer) {
             delete formattedData.computer.id;
@@ -231,25 +235,21 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
         }
 
         try {
-            // Esperamos a que la página procese la acción asíncrona
             await onSubmit(formattedData);
-            
-            // Si todo sale bien en Create o Update, redirige al catálogo
             navigate("/equipments");
         } catch (error) {
-            // El formulario intercepta el error aquí y pinta en rojo el input inválido (ej. num_inventario)
             handleBackendFormErrorsEq(error, setError);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit(onFormSubmit)} className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-6">
+        <form onSubmit={handleSubmit(onFormSubmit)} className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-2">
             {isReadOnly && (
                 <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg flex items-center gap-3 text-red-800 animate-in fade-in duration-10">
                     <AlertCircle size={22} />
                     <div className="flex flex-col">
-                        <span className="uppercase font-extrabold text-center">ACTUALMENTE ESTE EQUIPO ESTA INACTIVO</span>
-                        <p className="text-xs font-medium">La edición ha sido deshabilitada</p>
+                        <span className="uppercase font-extrabold text-center">{t("eq_form_readonly_title")}</span>
+                        <p className="text-xs font-medium"> {t("eq_form_readonly_desc")}</p>
                     </div>
                 </div>
             )}
@@ -261,8 +261,8 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                             <Edit className="h-6 w-6" />
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold mb-4">Editar Equipo - {initialData?.id_type_equipment?.name}</h1>
-                            <p className="text-sm font-medium text-muted-foreground">Modifique los campos necesarios del equipo seleccionado.</p>
+                            <h1 className="text-2xl font-bold mb-4">{t("eq_form_mode_update_title")} - {initialData?.id_type_equipment?.name}</h1>
+                            <p className="text-sm font-medium text-muted-foreground">{t("eq_form_mode_update_desc")}</p>
                         </div>
                     </div>
                 ) : (
@@ -271,8 +271,8 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                             <Server className="h-6 w-6" />
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold mb-4">Registrar Nuevo Equipo</h1>
-                            <p className="text-sm font-medium text-muted-foreground">Ingrese los datos para registrar un nuevo equipo.</p>
+                            <h1 className="text-2xl font-bold mb-4">{t("eq_form_mode_create_title")}</h1>
+                            <p className="text-sm font-medium text-muted-foreground">{t("eq_form_mode_create_desc")}</p>
                         </div>
                     </div>
                 )}
@@ -280,18 +280,18 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <Label className="text-xs font-bold uppercase">Tipo de equipo<span className="text-red-600">*</span></Label>
+                    <Label className="text-xs font-bold uppercase">{t("eq_form_label_type")}<span className="text-red-600">*</span></Label>
                     <Controller
                         name="id_type_equipment"
                         control={control}
-                        rules={{ required: "El tipo de equipo es obligatorio" }}
+                        rules={{ required: t("eq_form_validate_type_required") }}
                         render={({ field }) => (
                             <CatalogSelector
                                 hook={eqTypesHook}
                                 disabled={!!initialData || isReadOnly}
                                 value={field.value}
                                 onChange={(val) => field.onChange(val)}
-                                placeholder="Selecciona tipo..."
+                                placeholder={t("eq_form_placeholder_type")}
                                 allowCreate={true}
                                 onCreate={handleCreateTypeEquipment}
                             />
@@ -300,7 +300,7 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                     {initialData && (
                         <div className="flex items-center gap-1.5 text-[10px] text-amber-600 font-bold uppercase mt-1">
                             <AlertCircle size={12} />
-                            <span>El tipo de equipo no se puede modificar</span>
+                            <span>{t("eq_form_warning_type_uneditable")}</span>
                         </div>
                     )}
                     {errors.id_type_equipment && (
@@ -311,12 +311,12 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                 </div>
 
                 <div className="space-y-2">
-                    <Label className="text-xs font-bold uppercase">Número de Inventario</Label>
+                    <Label className="text-xs font-bold uppercase">{t("eq_form_label_inventory")}</Label>
                     <Input
                         {...register("num_inventario", {
-                            required: "Este campo es requerido",
-                            minLength: { value: 3, message: "Mínimo 3 caracteres" },
-                            maxLength: { value: 150, message: "Máximo 150 caracteres" }
+                            required: t("eq_form_validate_inventory_required"),
+                            minLength: { value: 3, message: t("eq_form_validate_min_chars", { count: 3 }) },
+                            maxLength: { value: 150, message: t("eq_form_validate_max_chars", { count: 150 }) }
                         })}
                         disabled={isReadOnly}
                         className={`bg-slate-50/50 border-zinc-300 focus:ring-0 ${errors.num_inventario ? 'border-red-500 bg-red-50/20' : ''}`}
@@ -331,12 +331,13 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* CONFIGURACIÓN DE MARCA */}
                 <div className="space-y-2">
-                    <Label className="text-xs font-bold uppercase tracking-wider">Marca<span className="text-red-600">*</span></Label>
+                    <Label className="text-xs font-bold uppercase tracking-wider">{t("eq_form_label_brand")}<span className="text-red-600">*</span></Label>
                     <Controller
                         name="id_brand"
                         control={control}
-                        rules={{ required: "La marca es obligatoria" }}
+                        rules={{ required: t("eq_form_validate_brand_required") }}
                         render={({ field }) => (
                             <CatalogSelector
                                 hook={brandsHook}
@@ -344,7 +345,7 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                                 disabled={isReadOnly}
                                 onChange={(val) => {
                                     field.onChange(val);
-                                    setValue("id_model", undefined);
+                                    setValue("id_model", null, { shouldValidate: true });
                                 }}
                                 placeholder="HP, Dell, Cisco..."
                                 allowCreate={true}
@@ -359,20 +360,23 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                     )}
                 </div>
 
+                {/* CONFIGURACIÓN DE MODELO */}
                 <div className="space-y-2">
-                    <Label className="text-xs font-bold uppercase tracking-wider">Modelo<span className="text-red-600">*</span></Label>
+                    <Label className="text-xs font-bold uppercase tracking-wider">{t("eq_form_label_model")}<span className="text-red-600">*</span></Label>
                     <Controller
                         name="id_model"
                         control={control}
-                        rules={{ required: "El modelo es obligatorio" }}
+                        rules={{ required: t("eq_form_validate_model_required") }}
                         render={({ field }) => (
                             <CatalogSelector
                                 hook={modelsHook}
                                 value={field.value}
-                                onChange={field.onChange}
+                                onChange={(val) => {
+                                    field.onChange(val); 
+                                }}
                                 disabled={!selectedBrandId || isReadOnly}
-                                placeholder={!selectedBrandId ? "Primero elige una marca" : "Selecciona modelo..."}
-                                allowCreate={true}
+                                placeholder={!selectedBrandId ? t("eq_form_placeholder_model_no_brand") : t("eq_form_placeholder_model")}
+                                allowCreate={true} 
                                 onCreate={handleCreateModel}
                             />
                         )}
@@ -388,7 +392,7 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-b pb-6">
                 <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                        <Label className="text-xs font-bold uppercase tracking-wider">Responsable<span className="text-red-600">*</span></Label>
+                        <Label className="text-xs font-bold uppercase tracking-wider">{t("eq_form_label_responsible")}<span className="text-red-600">*</span></Label>
                         <Button
                             type="button"
                             variant="link"
@@ -396,40 +400,52 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                             disabled={isReadOnly}
                             onClick={() => setIsRespModalOpen(true)}
                         >
-                            <PlusCircle size={14} /> Agregar
+                            <PlusCircle size={14} /> {t("eq_form_btn_add")}
                         </Button>
                     </div>
-                    <Controller
-                        name="id_responsable"
-                        control={control}
-                        rules={{ required: "El responsable es obligatorio" }}
-                        render={({ field }) => {
-                            const selectedValue = field.value;
-                            let displayValue = null;
+                        <Controller
+                            name="id_responsable"
+                            control={control}
+                            rules={{ required: t("eq_form_validate_responsible_required") }}
+                            render={({ field }) => {
+                                const selectedValue = field.value;
+                                let displayValue = null;
 
-                            if (selectedValue) {
-                                if (typeof selectedValue === 'object') {
-                                    displayValue = {
-                                        id: selectedValue.id,
-                                        name: selectedValue.name || `${selectedValue.name || ''} ${selectedValue.first_name || ''} ${selectedValue.last_name || ''} `.trim()
-                                    };
-                                } else {
-                                    displayValue = { id: selectedValue, name: "" };
+                                if (selectedValue) {
+                                    if (typeof selectedValue === 'object') {
+                                        const currentId = selectedValue.id_res || selectedValue.id;
+                                        
+                                        let fullName = "";
+                                        if (selectedValue.name && (selectedValue.first_name || selectedValue.last_name)) {
+                                            fullName = `${selectedValue.name || ''} ${selectedValue.first_name || ''} ${selectedValue.last_name || ''}`.replace(/\s+/g, ' ').trim();
+                                            if (selectedValue.area) {
+                                                fullName += ` - ${t("eq_form_label_area")}: ${selectedValue.area}`;
+                                            }
+                                        } else {
+                                            fullName = selectedValue.name || "";
+                                        }
+
+                                        displayValue = {
+                                            id: currentId,
+                                            name: fullName
+                                        };
+                                    } else {
+                                        displayValue = { id: selectedValue, name: "" };
+                                    }
                                 }
-                            }
 
-                            return (
-                                <CatalogSelector
-                                    hook={responsiblesHook}
-                                    allowCreate={false}
-                                    value={displayValue}
-                                    onChange={field.onChange}
-                                    disabled={isReadOnly}
-                                    placeholder="Nombre del responsable..."
-                                />
-                            );
-                        }}
-                    />
+                                return (
+                                    <CatalogSelector
+                                        hook={responsiblesHook}
+                                        allowCreate={false}
+                                        value={displayValue}
+                                        onChange={field.onChange}
+                                        disabled={isReadOnly}
+                                        placeholder={t("eq_form_placeholder_responsible")}
+                                    />
+                                );
+                            }}
+                        />
                     {errors.id_responsable && (
                         <p className="text-xs font-semibold text-red-500 mt-1 flex items-center gap-1">
                             <AlertCircle size={12} /> {String(errors.id_responsable.message)}
@@ -438,18 +454,18 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                 </div>
 
                 <div className="space-y-2">
-                    <Label className="text-xs font-bold uppercase tracking-wider">Departamento<span className="text-red-600">*</span></Label>
+                    <Label className="text-xs font-bold uppercase tracking-wider">{t("eq_form_label_department")}<span className="text-red-600">*</span></Label>
                     <Controller
                         name="id_departament"
                         control={control}
-                        rules={{ required: "El departamento es obligatorio" }}
+                        rules={{ required: t("eq_form_validate_department_required") }}
                         render={({ field }) => (
                             <CatalogSelector
                                 hook={departmentsHook}
                                 value={field.value}
                                 onChange={field.onChange}
                                 disabled={isReadOnly}
-                                placeholder="Sistemas, RH, etc ..."
+                                placeholder={t("eq_form_placeholder_department")}
                                 allowCreate={false}
                             />
                         )}
@@ -481,31 +497,31 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
 
                 <div className="space-y-5">
                     <div className="flex items-center gap-2">
-                        <Label className="text-xs font-bold uppercase tracking-wider">Descripción / Notas Adicionales</Label>
+                        <Label className="text-xs font-bold uppercase tracking-wider">{t("eq_form_label_description")}</Label>
                         <span className={`text-[12px] py-.1 px-5 rounded-sm font-bold uppercase ${["1", "2", "3"].includes(typeId) ? "bg-amber-50 text-amber-700" : "bg-blue-50 text-blue-700"}`}>
-                            {["1", "2", "3"].includes(typeId) ? "Opcional" : "Obligatorio"}
+                            {["1", "2", "3"].includes(typeId) ? t("eq_form_badge_optional") : t("eq_form_badge_required")}
                         </span>
                     </div>
 
                     <Textarea
                         {...register("description", {
-                            required: !["1", "2", "3"].includes(typeId) ? "Este campo es requerido" : false,
+                            required: !["1", "2", "3"].includes(typeId) ? t("eq_form_validate_description_required") : false,
                             validate: (value) => {
                                 const isOptional = ["1", "2", "3"].includes(typeId);
-                                const hasValue = value && value.trim() !== " ";
+                                const hasValue = value && value.trim() !== "";
 
                                 if (isOptional && !hasValue) return true;
                                 if (!isOptional && !hasValue) {
-                                    return "La descripción es obligatoria para este tipo de equipo";
+                                    return t("eq_form_validate_description_fallback");
                                 }
 
-                                if (value.length < 3) return "Mínimo 3 caracteres";
-                                if (value.length > 500) return "Máximo 500 caracteres";
+                                if (value.length < 3) return t("eq_form_validate_min_chars", { count: 3 });
+                                if (value.length > 500) return t("eq_form_validate_max_chars", { count: 500 });
 
                                 return true;
                             }
                         })}
-                        placeholder="Especificaciones técnicas u observaciones..."
+                        placeholder={t("eq_form_placeholder_description")}
                         disabled={isReadOnly}
                         className={`min-h-100px resize-none ${errors.description ? 'border-red-500 bg-red-50/20' : 'border-zinc-300'}`}
                     />
@@ -526,17 +542,17 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                     disabled={isSubmitting || isReadOnly}
                     className="w-full sm:w-auto px-6 font-bold"
                 >
-                    <X size={18} className="mr-2" /> CANCELAR
+                    <X size={18} className="mr-2" /> {t("eq_form_btn_cancel")}
                 </Button>
                 <Button
                     type="submit"
                     disabled={isSubmitting || isReadOnly}
                     className="w-full sm:w-auto px-8 font-bold gap-2 bg-blue-700 hover:bg-blue-800 text-white"
                 >
-                    {isSubmitting ? "Guardando..." : (
+                    {isSubmitting ? t("eq_form_btn_saving") : (
                         <>
                             <Save size={18} />
-                            {mode === "update" ? "ACTUALIZAR REGISTRO" : "REGISTRAR EQUIPO"}
+                            {mode === "update" ? t("eq_form_btn_submit_update") : t("eq_form_btn_submit_create")}
                         </>
                     )}
                 </Button>
@@ -545,36 +561,44 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
             <CreateResponsibleModal
                 isOpen={isRespModalOpen}
                 onClose={() => setIsRespModalOpen(false)}
-                isSubmitting={responsiblesHook.isCreating}
-                onSave={async (data) => {
-                    const newResp = await sileo.promise(responsiblesHook.onCreate(data), {
-                        loading: { title: "Creando responsable..." },
-                        success: {
-                            title: "¡Responsable creado!",
-                            description: "El registro se vinculó correctamente al equipo.",
-                            duration: 4000
-                        },
-                        error: (err) => {
-                            const errorDesc = getBackendErrorMessage(err, "Revisa los datos del responsable e intenta de nuevo.");
-                            return {
-                                title: "Error al crear responsable",
-                                description: errorDesc,
-                                duration: 5000
-                            };
+                onSave={async (dataFromModal) => {
+                    try {
+                        const newResp = await sileo.promise(responsiblesHook.onCreate(dataFromModal), {
+                            loading: { title: t("eq_form_sileo_resp_loading") },
+                            success: {
+                                title: t("eq_form_sileo_resp_success"),
+                                description: t("eq_form_sileo_resp_success_desc"),
+                                duration: 4000
+                            },
+                            error: (err) => {
+                                const errorDesc = getBackendErrorMessage(err, t("eq_form_sileo_resp_error_desc"));
+                                return {
+                                    title: t("eq_form_sileo_resp_error_title"),
+                                    description: errorDesc,
+                                    duration: 5000
+                                };
+                            }
+                        });
+
+                        if (newResp) {
+                            const formattedName = `${newResp.name || ''} ${newResp.first_name || ''} ${newResp.last_name || ''}`.replace(/\s+/g, ' ').trim();
+                            const areaString = newResp.area ? ` - ${t("eq_form_label_area")}: ${newResp.area}` : '';
+
+                            setValue("id_responsable", {
+                                id: newResp.id,
+                                name: `${formattedName}${areaString}`
+                            }, { shouldValidate: true });
+
+                            responsiblesHook.setSelectedId(newResp.id);
+                            
+                            return newResp; 
                         }
-                    });
-
-                    if (newResp) {
-                        const fullName = `${newResp.name} ${newResp.first_name} ${newResp.last_name} - Área: ${newResp.area || ""}`.trim();
-                        setValue("id_responsable", {
-                            id: newResp.id,
-                            name: fullName
-                        }, { shouldValidate: true });
-
-                        responsiblesHook.setSelectedId(newResp.id);
-                        setIsRespModalOpen(false);
+                    } catch (error) {
+                        console.error("Error en la creación independiente del responsable:", error);
+                        throw error; 
                     }
-                }}
+                }} 
+                isSubmitting={isSubmitting}
             />
         </form>
     );

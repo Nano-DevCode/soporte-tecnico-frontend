@@ -1,35 +1,52 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-
+import { t } from "i18next";
 export interface Brand {
-    id: string;
-    name: string;
-    // Añade otros campos si tu entidad Brand los tiene
+  id: string;
+  name: string;
+  created_at?: string;
+  updated_at?: string;
 }
+export interface BrandsResponse {
+  brands: Brand[];
+  meta: {
+    total: number;
+    page: number;
+    lastPage: number;
+  };
+}
+export interface Options {
+  limit?: number | string;
+  offset?: number | string;
+  query?: string;
 
-/**
- * Obtiene todas las marcas ordenadas alfabéticamente (según el backend).
- */
-export const getBrandsAction = async (): Promise<Brand[]> => {
-    try {
-        const { data } = await soporteTecnicoApi.get<Brand[]>('/brands');
-
-        // Validamos que sea un array
-        return Array.isArray(data) ? data : [];
-    } catch (error) {
-        console.error("Error al obtener marcas:", error);
-        return []; // Retorno seguro para evitar que .map() falle en la UI
-    }
+}
+export const getBrandsAction = async (options: Options = {}): Promise<BrandsResponse> => {
+  const { limit = 10, offset = 0, query = undefined } = options;
+  try {
+    const { data } = await soporteTecnicoApi.get<BrandsResponse>('/brands', {
+      params: {
+        limit: isNaN(Number(limit)) ? 10 : Number(limit),
+        offset: isNaN(Number(offset)) ? 0 : Number(offset),
+        query: query?.replaceAll('+', ' '),
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error(t("api_brands_fetch_error"), error);
+    return {
+      brands: [],
+      meta: {
+        total: 0,
+        page: 1,
+        lastPage: 1
+      }
+    };
+  }
 };
 
-/**
- * Obtiene una marca específica por su ID (UUID).
- */
 export const getBrandByIdAction = async (idOrObject: string | { id: string }) => {
-    // Si es un objeto, extraemos el id; si no, usamos el valor directamente
     const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
-
     if (!id) return null;
-
     const { data } = await soporteTecnicoApi.get<Brand>(`/brands/${id}`);
     return data;
 };

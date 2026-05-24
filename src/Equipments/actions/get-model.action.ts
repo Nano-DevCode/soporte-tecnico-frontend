@@ -1,27 +1,97 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { t } from "i18next";
 
+// --- INTERFACES ---
 export interface Model {
     id: string;
     name: string;
     id_brand: { id: string; name: string };
+    created_at?: string;
+    updated_at?: string;
 }
 
-// 1. Obtener modelos filtrados por marca
-// export const getModelByIdAction = async (idOrObject: string | { id: string }) => {
-//     // Si es un objeto, extraemos el id; si no, usamos el valor directamente
-//     const id = typeof idOrObject === 'object' ? idOrObject.id : idOrObject;
+export interface ModelsResponse {
+    models: Model[]; 
+    meta: {
+        total: number;
+        page: number;
+        lastPage: number;
+    };
+}
 
-//     if (!id) return null;
+export interface Options {
+    limit?: number | string;
+    offset?: number | string;
+    query?: string;
+}
 
-//     const { data } = await soporteTecnicoApi.get<Model>(`/models/${id}`);
-//     return data;
-// };
-// actions/get-model.action.ts
-export const getModelByIdAction = async (id: string): Promise<Model> => {
-    const { data } = await soporteTecnicoApi.get<Model>(`/models/${id}`);
-    return data; // Esto debe traer { id, name, id_brand: { id, name } }
+export const getModelsAction = async (options: Options = {}): Promise<ModelsResponse> => {
+    const { limit = 10, offset = 0, query = undefined } = options;
+
+    try {
+        const { data } = await soporteTecnicoApi.get<ModelsResponse>('/models', {
+            params: {
+                limit: isNaN(Number(limit)) ? 10 : Number(limit),
+                offset: isNaN(Number(offset)) ? 0 : Number(offset),
+                query: query?.replaceAll('+', ' '),
+            },
+        });
+
+        return data;
+    } catch (error) {
+        console.error(t("api_models_fetch_error"), error);
+        return {
+            models: [],
+            meta: { total: 0, page: 1, lastPage: 1 }
+        };
+    }
 };
 
+export const getModelsByBrandAction = async (
+    brandIdOrObj: string | { id: string } | null | undefined,
+    options: Options = {}
+): Promise<ModelsResponse> => {
+    const brandId = typeof brandIdOrObj === 'object' ? brandIdOrObj?.id : brandIdOrObj;
+    const { limit = 50, offset = 0, query = undefined } = options;
+
+    if (!brandId || typeof brandId !== 'string' || brandId === "[object Object]") {
+        return { models: [], meta: { total: 0, page: 1, lastPage: 1 } };
+    }
+
+    try {
+        const { data } = await soporteTecnicoApi.get<ModelsResponse>(`/models/brand/${brandId}`, {
+            params: {
+                limit: isNaN(Number(limit)) ? 50 : Number(limit),
+                offset: isNaN(Number(offset)) ? 0 : Number(offset),
+                query: query?.replaceAll('+', ' '),
+            }
+        });
+
+        return data;
+    } catch (error) {
+        console.error(`${t("api_models_by_brand_error")} ${brandId}:`, error);
+        return {
+            models: [],
+            meta: { total: 0, page: 1, lastPage: 1 }
+        };
+    }
+};
+
+export const getModelByIdAction = async (
+    idOrObject: string | { id: string }
+): Promise<Model | null> => {
+    const id = typeof idOrObject === 'object' ? idOrObject?.id : idOrObject;
+
+    if (!id) return null;
+
+    try {
+        const { data } = await soporteTecnicoApi.get<Model>(`/models/${id}`);
+        return data;
+    } catch (error) {
+        console.error(`${t("api_model_by_id_error")} ${id}:`, error);
+        return null;
+    }
+};
 
 export const createModelAction = async (name: string, brandId: string): Promise<Model> => {
     try {
@@ -32,24 +102,6 @@ export const createModelAction = async (name: string, brandId: string): Promise<
         return data;
     } catch (error: unknown) {
         const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
-        throw new Error(Array.isArray(message) ? message.join(", ") : message || "Error al crear modelo");
-    }
-};
-
-export const getModelsByBrandAction = async (brandIdOrObj: string | { id: string; } | null | undefined) => {
-    // Extraemos el ID del objeto de la marca
-    const brandId = typeof brandIdOrObj === 'object' ? brandIdOrObj?.id : brandIdOrObj;
-
-    // Si no hay ID (ej. marca no seleccionada), devolvemos array vacío en vez de tirar error
-    if (!brandId || typeof brandId !== 'string' || brandId === "[object Object]") {
-        return [];
-    }
-
-    try {
-        const { data } = await soporteTecnicoApi.get(`/models/brand/${brandId}`);
-        return Array.isArray(data) ? data : [];
-    } catch (error) {
-        console.error("Error al obtener modelos por marca:", error);
-        return [];
+        throw new Error(Array.isArray(message) ? message.join(", ") : message || t("api_model_create_error"));
     }
 };

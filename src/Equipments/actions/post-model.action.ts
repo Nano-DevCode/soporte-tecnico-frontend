@@ -1,4 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { t } from "i18next";
 
 // Definimos la interfaz para el DTO de NestJS
 interface CreateModelDto {
@@ -11,8 +12,8 @@ export const createModelAction = async (payload: string | { name: string }, id_b
         // 1. Extraemos el nombre (manejamos string o el objeto que envía el factory)
         const nameValue = typeof payload === 'string' ? payload : payload.name;
 
-        if (!nameValue) throw new Error("El nombre del modelo es requerido");
-        if (!id_brand) throw new Error("Se requiere una marca para registrar el modelo");
+        if (!nameValue) throw new Error(t("api_model_name_required"));
+        if (!id_brand) throw new Error(t("api_model_brand_required"));
 
         const cleanedName = nameValue.trim().replace(/\s+/g, ' ');
 
@@ -24,25 +25,7 @@ export const createModelAction = async (payload: string | { name: string }, id_b
 
         return data; 
     } catch (error: unknown) {
-        const errorMessage = (error as { response?: { data?: { message?: string } } }).response?.data?.message || "Error al registrar el modelo";
+        const errorMessage = (error as { response?: { data?: { message?: string } } }).response?.data?.message || t("api_model_create_error");
         throw new Error(Array.isArray(errorMessage) ? errorMessage.join(", ") : errorMessage);
     }
 };
-
-// // actions/post-model.action.ts
-// import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-
-// export const createModelAction = async (name: string, id_brand: string) => {
-//     try {
-//         // Verifica que los nombres de los campos coincidan con tu DTO de NestJS
-//         // Normalmente el backend espera { name: string, id_brand: string }
-//         const { data } = await soporteTecnicoApi.post('/models', { 
-//             name, 
-//             id_brand 
-//         });
-//         return data; // Debe retornar { id: "...", name: "..." }
-//     } catch (error: any) {
-//         const errorMessage = error.response?.data?.message || "Error al registrar el modelo";
-//         throw new Error(Array.isArray(errorMessage) ? errorMessage.join(", ") : errorMessage);
-//     }
-// };

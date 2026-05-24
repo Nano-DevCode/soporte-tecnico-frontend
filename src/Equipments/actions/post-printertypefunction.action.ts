@@ -1,5 +1,6 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 import type { PrinterTypeFunction } from "./get-printertypefuction.action";
+import { t } from "i18next";
 
 /**
  * Ajustamos el payload para manejar tanto el string directo como el objeto { name: string }.
@@ -11,7 +12,7 @@ export const createPrinterTypeFunctionAction = async (payload: string | { name: 
         const nameValue = typeof payload === 'string' ? payload : payload.name;
 
         if (!nameValue) {
-            throw new Error("El nombre de la función de impresora es requerido.");
+            throw new Error(t("api_printer_function_name_required"));
         }
 
         const cleanedName = nameValue.trim();
@@ -30,6 +31,6 @@ export const createPrinterTypeFunctionAction = async (payload: string | { name: 
             throw new Error(errorMessage.join(", "));
         }
 
-        throw new Error(errorMessage || "Error al registrar el Tipo de Función de Impresora.");
+        throw new Error(errorMessage || t("api_printer_function_create_error"));
     }
 };

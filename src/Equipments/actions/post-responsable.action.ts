@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 
 export interface Responsible {
@@ -10,26 +11,20 @@ export interface Responsible {
     mail: string;
 }
 
-/**
- * Ajustamos el payload para que sea flexible:
- * 1. Si es string: Creación rápida desde el select.
- * 2. Si es objeto: Creación completa desde un formulario/modal.
- */
 export const createResponsibleAction = async (payload: string | Omit<Responsible, 'id'>): Promise<Responsible> => {
     try {
         let cleanedData: Omit<Responsible, 'id'>;
 
         if (typeof payload === 'string') {
             // CASO RÁPIDO: El usuario escribió un nombre en el buscador
-            // Generamos datos temporales para cumplir con el DTO de NestJS
             const nameParts = payload.trim().split(" ");
             cleanedData = {
-                name: nameParts[0] || "Nuevo",
-                first_name: nameParts[1] || "Responsable",
-                last_name: nameParts.slice(2).join(" ") || "S/A",
-                num_employe: `TEMP-${Date.now()}`, // Número temporal
-                area: "Por asignar",
-                mail: `temp.${Date.now()}@soporte.com`, // Email temporal para evitar conflictos
+                name: nameParts[0] || t("api_responsible_quick_name"),
+                first_name: nameParts[1] || t("api_responsible_quick_firstname"),
+                last_name: nameParts.slice(2).join(" ") || t("api_responsible_quick_lastname"),
+                num_employe: `TEMP-${Date.now()}`,
+                area: t("api_responsible_quick_area"),
+                mail: `temp.${Date.now()}@soporte.com`,
             };
         } else {
             // CASO COMPLETO: Viene del Modal con todos los campos
@@ -52,6 +47,6 @@ export const createResponsibleAction = async (payload: string | Omit<Responsible
             throw new Error(errorMessage.join(", "));
         }
 
-        throw new Error(errorMessage || "No se pudo registrar el responsable.");
+        throw new Error(errorMessage || t("api_responsible_create_error"));
     }
 };
