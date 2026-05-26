@@ -1,130 +1,14 @@
 services:
-  backend:
+  frontend:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nestjs_backend
+    container_name: react_frontend
     restart: always
-    env_file:
-      - .env
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      minio:
-        condition: service_healthy
+    ports:
+      - "8081:80"
     networks:
       - global_net
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    deploy:
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 1G
-
-  minio:
-    image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z
-    container_name: minio_server
-    restart: always
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      MINIO_BROWSER: "on"
-    volumes:
-      - minio_data:/data
-    command: server /data --address ":9000" --console-address ":9001"
-    networks:
-      - global_net
-    healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 15s
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    deploy:
-      resources:
-        limits:
-          cpus: '2.0'
-          memory: 2G
-
-  minio_init:
-    image: minio/mc:RELEASE.2025-04-16T18-13-26Z
-    restart: "no"
-    depends_on:
-      minio:
-        condition: service_healthy
-    networks:
-      - global_net
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-    entrypoint: >
-      /bin/sh -c "
-      /usr/bin/mc alias set local_server http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD};
-      /usr/bin/mc mb --ignore-existing local_server/images;
-      /usr/bin/mc mb --ignore-existing local_server/pdfs-response;
-      /usr/bin/mc mb --ignore-existing local_server/pdfs-request;
-      /usr/bin/mc mb --ignore-existing local_server/pdfs;
-      /usr/bin/mc mb --ignore-existing local_server/images-tickets;
-      /usr/bin/mc mb --ignore-existing local_server/avatars;
-      /usr/bin/mc mb --ignore-existing local_server/excels;
-      /usr/bin/mc mb --ignore-existing local_server/tools-images;
-      exit 0;
-      "
-
-  db:
-    image: postgres:17
-    container_name: soportetecnicodb
-    restart: always
-    environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - global_net
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    deploy:
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 512M
-
-  redis:
-    image: redis:8-alpine
-    container_name: redis_server
-    restart: always
-    command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes
-    volumes:
-      - redis_data:/data
-    networks:
-      - global_net
-    healthcheck:
-      test: ["CMD-SHELL", "redis-cli -a $$REDIS_PASSWORD ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     logging:
       driver: "json-file"
       options:
@@ -134,27 +18,9 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: 256M
-
-  tunnel:
-    container_name: cloudflare_tunnel
-    image: cloudflare/cloudflared:2025.4.0
-    restart: always
-    environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
-    command: tunnel run
-    networks:
-      - global_net
+          memory: 512M
 
 networks:
   global_net:
+    external: true
     name: ticketing_global_net
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.30.0.0/16
-
-volumes:
-  minio_data:
-  redis_data:
-  postgres_data:
