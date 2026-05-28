@@ -12,6 +12,7 @@ import { TicketsRoutes } from "./tickets/tickets.router";
 import { authRoutes } from "./auth/auth.router";
 import { equipmentRoutes } from "./Equipments/equipments.routes";
 import { toolRoutes } from "./tools/tools.router";
+import { itAssetRoutes } from "./it-assets/it-assets.router";
 
 
 // const PanelLayout = lazy(() => import("./layout/PanelLayout"))
@@ -61,6 +62,10 @@ export const appRouter = createBrowserRouter([
             {
                 path: 'tools',
                 children: toolRoutes,
+            },
+            {
+                path: 'it-assets',
+                children: itAssetRoutes,
             }
         ],
     },

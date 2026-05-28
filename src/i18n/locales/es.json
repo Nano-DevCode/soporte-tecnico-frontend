@@ -1461,7 +1461,41 @@
   "eq_update_fetching_info": "Cargando información del equipo...",
   "eq_update_not_found_title": "Equipo no encontrado",
   "eq_update_not_found_desc": "El registro que intentas editar no existe o no se pudo recuperar.",
-  "eq_update_back_list_btn": "Listar Equipos"
+  "eq_update_back_list_btn": "Listar Equipos",
 
-
+  "itAssets": {
+    "mainPage": {
+      "titleCard": {
+        "title": "Activos de TI",
+        "description": "Administra el catálogo de equipos de cómputo, componentes y periféricos."
+      },
+      "buttonCreate": {
+        "label": "Nuevo Activo"
+      },
+      "dialog": {
+        "titleDown": "Dar de baja el activo",
+        "titleUp": "Dar de alta el activo",
+        "model": "Modelo:",
+        "brand": "Marca:",
+        "id": "ID Inventario:",
+        "textDescriptionDown": "¿Estás seguro de que deseas deshabilitar este activo? Ya no aparecerá como disponible para asignaciones o préstamos.",
+        "textDescriptionUp": "¿Estás seguro de que deseas reactivar este activo? Volverá a estar disponible en el catálogo principal.",
+        "buttonConfirmDown": "Sí, dar de baja",
+        "buttonConfirmUp": "Sí, reactivar",
+        "buttonCancel": "Cancelar"
+      },
+      "sileo": {
+        "loading": {
+          "title": "Actualizando el estado del activo..."
+        },
+        "success": {
+          "title": "Estado actualizado",
+          "description": "El activo ha cambiado de estado correctamente en la base de datos."
+        },
+        "error": {
+          "title": "No se pudo actualizar"
+        }
+      }
+    }
+  }
 }
