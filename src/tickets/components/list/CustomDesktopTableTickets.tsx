@@ -27,15 +27,15 @@ export const CustomDesktopTableTickets = (
                     </TableHead>
 
                     <TableHead className="w-75">
-                        {t("tickets.list_page.table.headers.manager")}
+                        {t("tickets.list_page.table.headers.department_manager")}
                     </TableHead>
 
                     <TableHead className="w-50">
-                        {t("tickets.list_page.table.headers.issue")}
+                        {t("tickets.list_page.table.headers.issue_type")}
                     </TableHead>
 
                     <TableHead className="w-45">
-                        {t("tickets.list_page.table.headers.date")}
+                        {t("tickets.list_page.table.headers.created_at")}
                     </TableHead>
 
                     <TableHead className="w-35">

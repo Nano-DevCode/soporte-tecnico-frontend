@@ -3,14 +3,15 @@ import { useLocation, useNavigate, useParams } from "react-router";
 import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 import { sileo } from "sileo";
-import type { TicketFormOutput } from "../shcemas/ticket.schema";
+import type { TicketFormOutput } from "../schemas/ticket.schema";
 import { CreateTicketForm } from "../components/forms/CreateTicketForm";
 import { useEditTicket } from "../hooks/useEditTicket";
 import { useGetTicketById } from "../hooks/useGetTicketById";
 import { useEffect } from "react";
-import { CustomFullScreenLoading } from "@/components/custom/CustomFullScreenLoading";
 import { RejectionReportDetails } from "../components/details/RejectionReportDetails";
 import { getAvailableActions, TicketEvent } from "../utils/ticket-state-machine";
+import { useAllIssueTypes } from "@/IssueTypes/hooks/useAllIssueTypes";
+import { TicketFormSkeleton } from "../components/Skeletons/TicketFormSkeleton";
 
 
 export const EditTicketPage = () => {
@@ -19,22 +20,36 @@ export const EditTicketPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { isLoading, isError, data: ticket } = useGetTicketById(id);
-
-    const { mutate, isPending } = useEditTicket();
-
     const previousPage = location.state?.from;
 
+    const { data: issueTypes, isLoading: isLoadingIssues, isError: isErrorIssue } = useAllIssueTypes();
+    const { data: ticket, isLoading: isLoadingTicket, isError: isErrorTicket } = useGetTicketById(id);
+    const { mutate, isPending, isSuccess } = useEditTicket();
+
+    const isLoading = isLoadingIssues || isLoadingTicket;
+
     useEffect(() => {
-        if (!isLoading && (isError || !ticket)) {
+        if (isLoading) return;
+
+        if (isErrorTicket || !ticket) {
             sileo.error({
                 title: t('tickets.not_found.title'),
                 description: t('tickets.not_found.message'),
                 duration: 6000,
             });
             navigate(previousPage || `/tickets`, { replace: true });
+            return;
         }
-    }, [isError, isLoading, ticket, navigate, t, previousPage]);
+
+        if (isErrorIssue || !issueTypes) {
+            sileo.error({
+                title: t('common.fetch_error.title'),
+                description: t('common.fetch_error.description'),
+                duration: 6000,
+            });
+            navigate(previousPage || `/tickets`, { replace: true });
+        }
+    }, [isLoading, isErrorTicket, ticket, isErrorIssue, issueTypes, navigate, previousPage, t]);
 
     const handleSubmit = (values: TicketFormOutput) => {
         if (!id) return;
@@ -63,8 +78,18 @@ export const EditTicketPage = () => {
         navigate(previousPage || `/tickets`);
     };
 
-    if (isLoading) return <CustomFullScreenLoading />;
-    if (!ticket) return null;
+    if (isLoading || !ticket || !issueTypes) {
+        return (
+            <div className="mx-auto max-w-4xl space-y-5">
+                <CustomTitlePageWithBack
+                    backLink={previousPage || `/tickets`}
+                    title={t('tickets.edit_page.title')}
+                    description={t('tickets.edit_page.description')}
+                />
+                <TicketFormSkeleton />
+            </div>
+        );
+    }
 
     const canWatchRejectionReport =
         getAvailableActions(ticket.currentStatusCode).includes(TicketEvent.WATCH_REJECTION_REPORT);
@@ -72,7 +97,7 @@ export const EditTicketPage = () => {
     return (
         <div className="mx-auto max-w-4xl space-y-5">
             <CustomTitlePageWithBack
-                backLink={previousPage || `/tickets/${ticket.id}`}
+                backLink={previousPage || `/tickets`}
                 title={t('tickets.edit_page.title')}
                 description={t('tickets.edit_page.description')}
             />
@@ -81,10 +106,11 @@ export const EditTicketPage = () => {
             )}
             <CreateTicketForm
                 ticket={ticket}
-                isPending={isPending}
+                isPending={isPending || isSuccess}
                 titleButton={t('common.buttons.save_changes')}
                 onSubmit={handleSubmit}
                 onCancel={handleCancel}
+                issueTypes={issueTypes}
             />
         </div>
     );

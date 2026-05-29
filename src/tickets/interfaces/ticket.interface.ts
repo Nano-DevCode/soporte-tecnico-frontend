@@ -1,12 +1,14 @@
 export interface Ticket {
-    id:         string;
-    folio:      string;
-    status:     string;
-    status_code:string;
-    priority:   number;
-    jefe_depto: JefeDepto;
-    issue_type: IssueType;
-    created_at: Date;
+    id:            string;
+    folio:         string;
+    status:        string;
+    status_code:   string;
+    priority:      number;
+    description:   string;
+    jefe_depto:    JefeDepto;
+    issue_type:    IssueType;
+    school_period: SchoolPeriod;
+    created_at:    Date;
 }
 
 export interface IssueType {
@@ -18,4 +20,15 @@ export interface JefeDepto {
     id:        string;
     full_name: string;
     email:     string;
+    department: Department;
+}
+
+export interface Department {
+    id:       string;
+    name:     string;
+}
+
+export interface SchoolPeriod {
+    name: string;
+    id:   string;
 }

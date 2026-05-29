@@ -346,7 +346,9 @@
       "delete": "Eliminar",
       "cancel": "Cancelar",
       "save_changes": "Guardar cambios",
-      "view": "Detalles"
+      "view": "Detalles",
+      "refresh": "Recargar",
+      "retry": "Reintentar"
     },
     "date": {
       "no_date": "Sin fecha"
@@ -356,7 +358,8 @@
       "updated_at": "Última Actualización"
     },
     "notifications": {
-      "error_title": "Ocurrió un error"
+      "error_title": "Ocurrió un error",
+      "empty_list": "No hay resultados"
     },
     "warnings": {
       "discard_changes": "Tienes cambios sin guardar. ¿Seguro que deseas salir?"
@@ -371,13 +374,28 @@
           "inactive": "Inactivos"
         }
       },
-      "search": "Buscar..."
+      "search": "Buscar...",
+      "columns": "Columnas",
+      "more_filters": "Ver mas filtros",
+      "less_filters": "Ocultar filtros"
     },
     "state": {
       "active": "Activo",
       "inactive": "Inactivo"
+    },
+    "list": {
+      "totalData": "{{totalData}} resultados"
+    },
+    "fetch_error": {
+      "title": "Información no disponible",
+      "description": "Hubo un problema al conectar con el servidor. Te hemos redirigido a la lista principal por seguridad."
+    },
+    "inputs": {
+      "optional": "(Opcional)"
     }
   },
+
+
   "center_managers": {
     "list_page": {
       "title": "Gestión de los Jefes del Centro de Cómputo",
@@ -502,6 +520,8 @@
       }
     }
   },
+
+
   "tickets": {
     "data": {
       "affected_name": "Responsable directo del equipo",
@@ -515,6 +535,15 @@
       "coordinator": "Coordinador",
       "asigned_to": "Asignado a: ",
       "canalized_to": "Canalizado a: "
+    },
+    "data_default": {
+      "department": "Sin departamento",
+      "school_period": "N/A",
+      "issue_type": "General"
+    },
+    "filters": {
+      "status": "Estado",
+      "priority": "Prioridad"
     },
     "status": {
       "RECIBIDA": {
@@ -650,17 +679,23 @@
       "table": {
         "headers": {
           "folio": "Folio",
-          "manager": "Jefe de Departamento",
-          "issue": "Problema",
-          "date": "Fecha de Creación",
+          "department_manager": "Jefe de Departamento",
+          "department": "Departamento",
+          "issue_type": "Problema",
+          "created_at": "Fecha",
           "status": "Estatus",
           "priority": "Prioridad",
+          "school_period": "Periodo",
           "actions": "Acciones"
         }
       },
       "empty": {
         "title": "No se encontraron Solicitudes",
         "description": "Intenta ajustar los filtros de busqueda"
+      },
+      "error": {
+        "title": "No se pudieron cargar los tickets",
+        "description": "Hubo un problema de conexión con el servidor. Por favor, intenta de nuevo."
       }
     },
     "create_page": {
@@ -675,6 +710,34 @@
         "message": "Ocurrió un error al enviar la solicitud de soporte técnico."
       }
     },
+    "assign_page": {
+      "title": "Asignar técnicos a la solicitud",
+      "description": "Asigna a los técnicos que atenderan la solicitud.",
+      "success": {
+        "title": "Asignación exitosa",
+        "message": "Técnicos asignados."
+      },
+      "error": {
+        "title": "Error al asignar",
+        "message": "Ocurrió un error al asignar a los técnicos."
+      },
+      "fetch_error": {
+        "title": "Información no disponible",
+        "description": "Hubo un problema al conectar con el servidor. Te hemos redirigido a la lista principal por seguridad."
+      }
+    },
+    "finish_page": {
+      "title": "Registrar orden de trabajo",
+      "description": "Registra los detalles de la orden de trabajo para finalizar esta solicitud de soporte técnico.",
+      "success": {
+        "title": "Solicitud finalizada",
+        "message": "La solicitud ha sido finalizada exitosamente."
+      },
+      "error": {
+        "title": "Error al finalizar la solicitud",
+        "message": "Ocurrió un error al intentar finalizar la solicitud, por favor intentelo nuevamente."
+      }
+    },
     "intervene_page": {
       "title": "Registrar bitácora de intervención",
       "description": "Documenta el avance en la atención de esta solicitud.",
@@ -685,20 +748,6 @@
       "error": {
         "title": "Error al guardar",
         "message": "Ocurrió un error al enviar la solicitud de soporte técnico."
-      }
-    },
-    
-    "rejection_report": {
-      "header": {
-        "title": "Reporte de Rechazo",
-        "description": "Motivo por el cual la solicitud no procedió."
-      },
-      "sections": {
-        "details": "Rrporte de Rechazo"
-      },
-      "data": {
-        "date": "Fecha de rechazo",
-        "justification": "Motivo del rechazo"
       }
     },
 
@@ -748,13 +797,29 @@
             "description": "Si no utilizaste ni requieres ninguna refacción o material extra, puedes dejar este campo en blanco."
           },
           "is_resolved": {
-            "label": "¿El problema quedó solucionado?",
-            "description": "Activa esta opción si el equipo o servicio quedó completamente operativo. Si el problema persiste o requiere seguimiento, déjalo apagado."
+            "label": "¿El problema de la solicitud fue solucionado?",
+            "options": {
+              "yes": {
+                "label": "Sí, problema resuelto",
+                "description": "El incidente fue solucionado exitosamente y el equipo o servicio opera con normalidad."
+              },
+              "no": {
+                "label": "No, requiere seguimiento",
+                "description": "El problema persiste. Requiere refacciones, tiempo o una segunda revisión."
+              }
+            }
           },
+
           "tags": {
             "label": "Etiquetas de clasificación",
             "placeholder": "Añadir etiqueta...",
-            "description": "Escribe y presiona Enter para crear nuevas clasificaciones."
+            "description": "Escribe y presiona Enter para crear nuevas clasificaciones.",
+            "create": {
+              "label": "Crear etiqueta"
+            },
+            "not_found": {
+              "label": "No se encontraron etiquetas." 
+            }
           }
         },
         "buttons": {
@@ -769,7 +834,7 @@
           "work_performed_max": "La descripción del trabajo no puede exceder los 2000 caracteres.",
           "materials_required": "El campo de materiales es obligatorio (puede ir vacío).",
           "materials_max": "La lista de materiales no puede exceder los 500 caracteres.",
-          "is_resolved_required": "Debes indicar si el ticket fue solucionado o no.",
+          "is_resolved_required": "Debes indicar si la solicitud fue solucionada o no.",
           "is_resolved_invalid": "El valor de resolución debe ser verdadero o falso.",
           "tags_invalid": "La etiqueta debe ser un texto válido.",
           "tags_min": "Las etiquetas deben tener al menos 2 caracteres.",
@@ -779,8 +844,8 @@
       },
       "finish": {
         "header": {
-          "title": "Finalizar Trabajo",
-          "description": "Completa la información técnica final para cerrar formalmente esta intervención."
+          "title": "Orden de trabajo",
+          "description": "Completa la información de la orden de trabajo."
         },
         "fields": {
           "diagnosis": {
@@ -911,6 +976,116 @@
       }
     }
   },
+
+  "rejection_reports": {
+    "header": {
+      "title": "Registrar Reporte de Rechazo",
+      "description": "Motivo por el cual la solicitud no procedió."
+    },
+    "sections": {
+      "details": "Rrporte de Rechazo"
+    },
+    "data": {
+      "date": "Fecha de rechazo",
+      "justification": "Motivo del rechazo"
+    },
+    "not_found": {
+      "title": "Reporte no encontrado",
+      "message": "El Reporte al que intentas acceder no existe o fue eliminado."
+    },
+    "error": {
+      "title": "Error al cargar",
+      "description": "No se pudo obtener el reporte de rechazo. Revisa tu conexión."
+    }
+  },
+
+  "technical_reports": {
+    "data": {
+      "is_resolved": {
+        "true": "Solucionado",
+        "false": "No solucionado"
+      }
+    },
+    "menu_item": {
+      "title": "Bitácoras"
+    },
+    "list_page": {
+      "title": "Bitácoras",
+      "description": "Visualiza y gestiona todas las bitácoras registradas en el sistema",
+      "actions": {
+      },
+      "table": {
+        "headers": {
+          
+        }
+      },
+      "empty": {
+        "title": "No se encontraron Bitácoras",
+        "description": "Intenta ajustar los filtros de busqueda"
+      }
+    }
+  }
+
+,
+  "equipment_form_new": "Nuevo Registro de Equipo",
+  "equipment_form_description": "Complete la información técnica y administrativa del activo",
+  "equipment_form_type": "Tipo de Equipo",
+  "equipment_form_inventory": "Número de Inventario",
+  "equipment_form_inventory_req": "El número de inventario es obligatorio",
+  "equipment_form_brand_model_section": "Marca y Modelo del Equipo",
+  "equipment_form_brand": "Marca",
+  "equipment_form_model": "Modelo",
+  "equipment_form_new_brand_placeholder": "Nombre de la nueva marca",
+  "equipment_form_new_model_placeholder": "Nombre del nuevo modelo",
+  "equipment_form_responsible_section": "Responsable Asignado",
+  "equipment_form_new_responsible_title": "Nuevo Responsable",
+  
+  "description":"Descripción",
+  "custom_userEq_form_n_control": "N° Empleado",
+  "custom_userEq_form_names": "Nombre(s)",
+  "custom_userEq_form_first_last_name": "Primer Apellido",
+  "custom_userEq_form_second_last_name": "Segundo Apellido",
+  "custom_userEq_form_department": "Área o Departamento",
+  "custom_userEq_form_email": "Correo Electrónico",
+
+  "equipment_specific_data": "DATOS ESPECÍFICOS DEL EQUIPO",
+  "select_equipment_type": "Selecciona un tipo de equipo para continuar",
+  "only_numbers_allowed": "Solo se permiten números enteros (GB)",
+  "computer_type": "TIPO DE EQUIPO",
+  "processor": "PROCESADOR",
+  "new_entry_title": "NUEVO REGISTRO",
+
+
+  
+  "computer_data_title": "DATOS ESPECÍFICOS DEL EQUIPO",
+  "select_type": "TIPO DE EQUIPO",
+  "processor_brand": "MARCA DE PROCESADOR",
+  "processor_model": "MODELO",
+  "processor_description": "DATOS DE VELOCIDAD",
+  "storage_type": "TIPO DE ALMACENAMIENTO",
+  "os": "SISTEMA OPERATIVO",
+  "ram_capacity": "CAPACIDAD MEMORIA RAM (GB)",
+  "total_storage": "CAPACIDAD ALMACENAMIENTO (GB)",
+  "available_storage": "ALMACENAMIENTO DISPONIBLE (GB)",
+  "new_entry": "NUEVO REGISTRO",
+  "placeholder_name": "Nombre (Ej. Windows 11, SSD, etc.)",
+  "printer_data": "Datos específicos de la Impresora",
+  "is_color": "¿Imprime a color?",
+  "toner_model": "Modelo de Tóner",
+  "printer_function": "Funcionalidad de la impresora",
+  "printing_type": "Tipo de impresión",
+  "new_function": "Nueva Funcionalidad",
+  "new_printing_type": "Nuevo Tipo de Impresión",
+  "type_equipment_computer":"Nuevo Equipo de Computo",
+  "min_3_chars": "Mínimo 3 caracteres",
+  "max_200_chars": "Maximo 200 caracteres",
+  "max_description_chars": "Maximo 250 caracteres",
+  "invalid_email": "Correo electrónico no válido",
+  "only_numbers": "Solo se permiten números",
+  "field_required": "Este campo es obligatorio",
+  "placeholder_numbers": "Ej. 500",
+  "toner_placeholder": "Ej. HP-85A",
+
   "tools" : {
     "create": {
       "sileo": {

@@ -1,38 +1,37 @@
-import { ShieldUser } from "lucide-react";
+import { Plus, ShieldUser } from "lucide-react";
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { useTranslation } from "react-i18next";
-import { CustomCreateButtonElement } from "@/components/custom/CustomCreateButtonElement";
 import { CustomListTickets } from "@/tickets/components/CustomListTickets";
 import { Can } from "@/common/permission/Can";
-import { CustomFilterTickets } from "@/tickets/components/CustomFilterTickets";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
 export function ListTicketPage() {
 
   const { t } = useTranslation();
 
-  // TODO: agregar dialogs si es necesario
-  // TODO: agregar los filtros
   return (
-    <div className="space-y-3 md:space-y-6">
-
-      {/* <CenterManagerActionDialog /> */}
-
+    <>
       <CustomTitleCard icon={ShieldUser}
         title={t("tickets.list_page.title")}
         description={t("tickets.list_page.description")} />
+      <div className="space-y-3 md:space-y-6">
 
-      <Can permission={"CREATE_TICKET"} >
-        <div className="flex flex-col items-end">
-          <CustomCreateButtonElement
-            label={t("tickets.list_page.actions.new")}
-            to="/tickets/new"
-          />
-        </div>
-      </Can>
 
-      <CustomFilterTickets />
+        <Can permission={"CREATE_TICKET"} >
+          <div className="flex justify-end">
+            <Link to="/tickets/new">
+              <Button>
+                <Plus className="h-4 w-4" />
+                {t("tickets.list_page.actions.new")}
 
-      <CustomListTickets />
-    </div>
+              </Button>
+            </Link>
+          </div>
+        </Can >
+
+        <CustomListTickets />
+      </div >
+    </>
   );
 }

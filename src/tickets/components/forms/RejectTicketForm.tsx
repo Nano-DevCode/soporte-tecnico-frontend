@@ -16,7 +16,7 @@ import { useMemo } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
-import { RejectTicketSchema, type RejectTicketFormInput, type RejectTicketFormOutput } from "@/tickets/shcemas/reject-ticket.schema";
+import { RejectTicketSchema, type RejectTicketFormInput, type RejectTicketFormOutput } from "@/tickets/schemas/reject-ticket.schema";
 import { Textarea } from "@/components/ui/textarea";
 
 interface Props {

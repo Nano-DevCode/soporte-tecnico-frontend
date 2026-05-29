@@ -1,105 +1,81 @@
 import { useTranslation } from "react-i18next";
-import { Item, ItemActions, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
-import { Badge } from "@/components/ui/badge";
+import { Item } from "@/components/ui/item";
 import { CustomEmptyListState } from "@/components/custom/CustomEmptyListState";
 import { CustomActionsMenuTicket } from "./CustomActionsMenuTicket";
 import { toFormatLocalDateString } from "@/lib/helpers/to-format-local-date-string";
-import { cn } from "@/lib/utils";
-import { CalendarDays, TicketIcon, Wrench } from "lucide-react";
+import { Building2, TicketIcon } from "lucide-react";
 import type { Ticket } from "@/tickets/interfaces/ticket.interface";
+import { TicketStatusBadge } from "../TicketStatusBadge";
+import { TicketPriorityBadge } from "../TicketPriorityBadge";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { SkeletonMobileCardTickets } from "../Skeletons/SkeletonMobileCardTickets";
 
 interface Props {
     tickets: Ticket[];
     handleCardClick: (id: string) => void;
+    isLoading: boolean
 }
 
-export const CustomMobileCardsTickets = ({ tickets, handleCardClick }: Props) => {
+export const CustomMobileCardsTickets = ({ tickets, handleCardClick, isLoading }: Props) => {
     const { t, i18n } = useTranslation();
 
-    // Reutilizamos la misma lógica de colores que tienes en la tabla Desktop
-    const getStatusBadgeStyles = (status: string) => {
-        const s = status.toLowerCase();
-        if (s.includes("abierto") || s.includes("pendiente") || s.includes("nuevo")) {
-            return "bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300 border-yellow-200 dark:border-yellow-900";
-        }
-        if (s.includes("progreso") || s.includes("asignado")) {
-            return "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-blue-200 dark:border-blue-900";
-        }
-        if (s.includes("resuelto") || s.includes("cerrado") || s.includes("completado")) {
-            return "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300 border-green-200 dark:border-green-900";
-        }
-        return "bg-gray-50 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700";
-    };
+    if (isLoading) return <SkeletonMobileCardTickets />
 
     return (
         <div className="space-y-3">
             {tickets.map((ticket) => (
-                <Item
-                    variant='muted'
-                    key={ticket.id}
-                    role="button"
-                    tabIndex={0}
-                    className="cursor-pointer transition-all active:scale-[0.98] hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                <Card
+                    className="transition-all hover:bg-muted/50 active:scale-[0.98] cursor-pointer p-4 flex flex-col gap-3 shadow-sm"
                     onClick={() => handleCardClick(ticket.id)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            handleCardClick(ticket.id);
-                        }
-                    }}
+                    key={ticket.id}
                 >
-                    {/* Avatar ancla visual del ticket */}
-                    <ItemMedia className="h-10 w-10 rounded-full bg-primary/10 ">
-                        <TicketIcon className="h-5 w-5" />
-                    </ItemMedia>
+                    <div className="flex items-start justify-between gap-2">
 
-                    <ItemContent>
-                        {/* Título: Quién solicita el soporte */}
-                        <ItemTitle className="truncate text-base">
-                            {ticket.jefe_depto.full_name}
-                        </ItemTitle>
-
-                        <div className="flex flex-col gap-2">
-
-                            <div className="flex flex-wrap gap-2">
-                                <Badge variant="secondary" className="flex items-center gap-1.5 px-2 py-0.5">
-                                    <span className="font-mono font-bold tracking-wider uppercase text-foreground">
-                                        #{ticket.folio}
-                                    </span>
-                                </Badge>
-
-                                <Badge
-                                    variant="outline"
-                                    className={cn("px-2.5 py-0.5 font-semibold", getStatusBadgeStyles(ticket.status))}
-                                >
-                                    {ticket.status}
-                                </Badge>
+                        <div className="flex items-center gap-2 overflow-hidden">
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground">
+                                <Building2 className="h-4 w-4" />
                             </div>
 
-                            {/* Fila 2: Detalles técnicos con iconos de contexto */}
-                            <div className="flex flex-col gap-1 text-xs text-muted-foreground">
-                                <div className="flex items-center gap-1.5">
-                                    <Wrench className="h-3.5 w-3.5 shrink-0 opacity-70" />
-                                    <span className="line-clamp-1">{ticket.issue_type.name}</span>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <CalendarDays className="h-3.5 w-3.5 shrink-0 opacity-70" />
-                                    <span>{toFormatLocalDateString(ticket.created_at, i18n.language, "PPP")}</span>
-                                </div>
+                            <div className="flex flex-col">
+                                <span className="text-sm font-semibold leading-none text-foreground truncate">
+                                    {ticket.jefe_depto?.department?.name || t('tickets.data_default.department')}
+                                </span>
+                                <span className="text-xs font-mono text-muted-foreground mt-1">
+                                    #{ticket.folio}
+                                </span>
                             </div>
                         </div>
-                    </ItemContent>
 
-                    {/* Acciones */}
-                    <ItemActions className="shrink-0">
-                        <div onClick={(e) => e.stopPropagation()}>
-                            <CustomActionsMenuTicket ticket={ticket} />
+                        <div className="flex items-center gap-3 shrink-0">
+                            <span className="text-xs text-muted-foreground">
+                                {toFormatLocalDateString(ticket.created_at, i18n.language, "MMM d")}
+                            </span>
+                            <div onClick={(e) => e.stopPropagation()} className="-mr-2">
+                                <CustomActionsMenuTicket ticket={ticket} />
+                            </div>
                         </div>
-                    </ItemActions>
-                </Item>
+                    </div>
+
+                    <div className="flex flex-col gap-1 pl-10">
+                        <h3 className="text-sm font-bold text-foreground line-clamp-1">
+                            {ticket.issue_type?.name || t('tickets.data_default.issue_type')}
+                        </h3>
+                        <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                            {ticket.description}
+                        </p>
+                    </div>
+
+                    <div className="flex items-center gap-2 mt-1 pl-10 flex-wrap">
+                        <TicketStatusBadge statusCode={ticket.status_code} />
+                        <TicketPriorityBadge priority={ticket.priority} />
+                        <Badge variant="outline" className="text-muted-foreground">
+                            {ticket.school_period?.name || t('tickets.data_default.school_period')}
+                        </Badge>
+                    </div>
+                </Card>
             ))}
 
-            {/* Estado Vacío */}
             {tickets.length === 0 && (
                 <Item variant='muted' className="pointer-events-none">
                     <CustomEmptyListState

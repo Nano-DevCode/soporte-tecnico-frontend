@@ -16,7 +16,7 @@ import { useEffect, useMemo } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
-import { RouteTicketSchema, type RouteTicketFormInput, type RouteTicketFormOutput } from "@/tickets/shcemas/route-ticket.schema";
+import { RouteTicketSchema, type RouteTicketFormInput, type RouteTicketFormOutput } from "@/tickets/schemas/route-ticket.schema";
 import { sileo } from "sileo";
 import { useNavigate } from "react-router";
 import { CustomFullScreenLoading } from "@/components/custom/CustomFullScreenLoading";

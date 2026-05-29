@@ -85,27 +85,6 @@ export const DetailsTicket = ({ ticket }: Props) => {
                         label={t('tickets.data.description')}
                         value={ticket.description}
                     />
-                    {/* <div>
-                        <p className="text-xs font-semibold text-muted-foreground uppercase mb-3">
-                            Fotografia o Evidencia
-                        </p>
-                        {ticket.evidence_url ? (
-                            <div className="grid gap-3 grid-cols-2 md:grid-cols-3">
-                                <div className="rounded-lg border overflow-hidden bg-slate-50">
-                                    <img
-                                        src={ticket.evidence_url || '/placeholder.svg'}
-                                        alt={`Evidencia`}
-                                        className="w-full h-32 object-cover"
-                                        crossOrigin="anonymous"
-                                    />
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
-                                <p className="text-sm text-muted-foreground">No hay fotografias adjuntas</p>
-                            </div>
-                        )}
-                    </div> */}
                 </div>
             </CardContent>
         </Card>

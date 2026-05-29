@@ -13,64 +13,49 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
 import type { TicketDetailsResponse } from "@/tickets/interfaces/ticket-details.response";
-import { TicketSchema, type TicketFormInput, type TicketFormOutput } from "@/tickets/shcemas/ticket.schema";
+import { TicketSchema, type TicketFormInput, type TicketFormOutput } from "@/tickets/schemas/ticket.schema";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useAllIssueTypes } from "@/IssueTypes/hooks/useAllIssueTypes";
-import { sileo } from "sileo";
-import { CustomFullScreenLoading } from "@/components/custom/CustomFullScreenLoading";
-import { useNavigate } from "react-router";
+import type { IssueType } from "@/IssueTypes/interfaces/issue-type";
 
 interface Props {
     ticket?: TicketDetailsResponse,
     isPending: boolean,
     titleButton: string,
+    issueTypes: IssueType[]
 
     onSubmit: (ticket: TicketFormOutput) => void,
     onCancel: () => void,
 
 }
 
-export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onCancel }: Props) => {
+export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onCancel, issueTypes }: Props) => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
-    const { data: issueTypes, isLoading, isError } = useAllIssueTypes();
+
     const schema = useMemo(() => TicketSchema(t), [t]);
 
-    useEffect(() => {
-        if (!isLoading && (isError || !issueTypes)) {
-            sileo.error({
-                title: t('center_managers.view_page.not_found.title'),
-                description: t('center_managers.view_page.not_found.message'),
-                duration: 6000,
-            });
-
-            navigate('/center-managers', { replace: true });
-        }
-    }, [isError, isLoading, issueTypes, navigate, t]);
+    const defaultFormValues = {
+        description: ticket?.description ?? "",
+        affected_name: ticket?.affected_name ?? "",
+        evidence_url: ticket?.evidence_url ?? "",
+        contact_email: ticket?.contact_email ?? "",
+        available_hours: ticket?.available_hours ?? "",
+        equipment_location: ticket?.equipment_location ?? "",
+        issue_type: ticket?.issue_type?.id ? String(ticket.issue_type.id) : "",
+    };
 
     const form = useForm<TicketFormInput, unknown, TicketFormOutput>({
         resolver: zodResolver(schema),
-        defaultValues: {
-            description: "",
-            affected_name: "",
-            evidence_url: "",
-            contact_email: "",
-            available_hours: "",
-            equipment_location: "",
-            issue_type: 0,
-        },
-        values: ticket ? {
-            ...ticket,
-            evidence_url: ticket.evidence_url ?? "",
-            issue_type: ticket.issue_type?.id ?? 0,
-        } : undefined,
+        defaultValues: defaultFormValues,
+        values: defaultFormValues
     });
+
+    const isBusy = isPending || form.formState.isSubmitting;
 
     const handleCancel = () => {
         if (form.formState.isDirty) {
@@ -79,10 +64,6 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
         }
         onCancel();
     };
-
-    if (isLoading) return <CustomFullScreenLoading />;
-
-    if (!issueTypes) return null;
 
     return (
         <Card>
@@ -97,8 +78,7 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
             <CardContent>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} id="form-ticket">
-                        <div className="grid grid-cols-1 gap-x-5 gap-y-6 md:grid-cols-2 items-start">
-                            {/* Fila 1: Afectado y Contacto */}
+                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 items-start">
                             <FormField
                                 control={form.control}
                                 name="affected_name"
@@ -109,7 +89,7 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                             <Input
                                                 autoFocus
                                                 placeholder={t('tickets.form.fields.affected_name.placeholder')}
-                                                disabled={isPending}
+                                                disabled={isBusy}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -128,7 +108,7 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                             <Input
                                                 type="email"
                                                 placeholder={t('tickets.form.fields.contact_email.placeholder')}
-                                                disabled={isPending}
+                                                disabled={isBusy}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -137,7 +117,6 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                 )}
                             />
 
-                            {/* Fila 2: Ubicación y Horarios */}
                             <FormField
                                 control={form.control}
                                 name="equipment_location"
@@ -148,7 +127,7 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                             <Textarea
                                                 placeholder={t('tickets.form.fields.equipment_location.placeholder')}
                                                 className="resize-none min-h-15"
-                                                disabled={isPending}
+                                                disabled={isBusy}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -167,7 +146,7 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                             <Textarea
                                                 placeholder={t('tickets.form.fields.available_hours.placeholder')}
                                                 className="resize-none min-h-15"
-                                                disabled={isPending}
+                                                disabled={isBusy}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -176,7 +155,6 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                 )}
                             />
 
-                            {/* Fila 3: Categoría (Select) y Evidencia */}
                             <FormField
                                 control={form.control}
                                 name="issue_type"
@@ -185,9 +163,9 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                         <FormLabel>{t('tickets.form.fields.issue_type.label')}</FormLabel>
                                         <Select
                                             name={field.name}
-                                            disabled={isPending}
+                                            disabled={isBusy}
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value ? String(field.value) : undefined}
+                                            value={field.value as string}
                                         >
                                             <FormControl>
                                                 <SelectTrigger className="w-full">
@@ -207,7 +185,6 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                 )}
                             />
 
-                            {/* Fila 4: Descripción del problema (Ocupa las 2 columnas) */}
                             <FormField
                                 control={form.control}
                                 name="description"
@@ -218,7 +195,7 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                             <Textarea
                                                 placeholder={t('tickets.form.fields.description.placeholder')}
                                                 className="resize-none min-h-30"
-                                                disabled={isPending}
+                                                disabled={isBusy}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -235,7 +212,7 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                 <Button
                     variant="outline"
                     type="button"
-                    disabled={isPending}
+                    disabled={isBusy}
                     onClick={handleCancel}
                     className="w-full sm:w-auto"
                 >
@@ -246,10 +223,10 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                 <Button
                     type="submit"
                     form="form-ticket"
-                    disabled={isPending || (!form.formState.isDirty && !!ticket)}
+                    disabled={isBusy || (!form.formState.isDirty && !!ticket)}
                     className="w-full sm:w-auto"
                 >
-                    {isPending ? (
+                    {isBusy ? (
                         <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
                     ) : (
                         <Save className="mr-1.5 h-4 w-4" />

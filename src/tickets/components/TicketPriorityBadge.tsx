@@ -3,8 +3,7 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { AlertOctagon, AlertTriangle, Clock, Info } from "lucide-react";
-
-export type TicketPriorityLevel = 1 | 2 | 3 | 4;
+import type { TicketPriorityLevel } from "../interfaces/ticket-priority-level.type";
 
 const PRIORITY_CONFIG: Record<TicketPriorityLevel, { className: string, icon: React.ElementType }> = {
     1: {
@@ -57,18 +56,18 @@ export const TicketPriorityBadge = ({ priority, className, showIcon = true }: Pr
             <TooltipTrigger asChild className="w-fit cursor-help">
                 <Badge
                     className={cn(
-                        "font-semibold px-2.5 py-0.5 tracking-wider text-[10px] sm:text-xs flex items-center gap-1.5 uppercase",
+                        "font-semibold px-2.5 py-0.5 tracking-wider text-[10px] sm:text-xs items-center uppercase",
                         config.className,
                         className
                     )}
                 >
-                    {showIcon && <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
+                    {showIcon && <Icon />}
                     {isValidPriority
                         ? t(`tickets.priority.${currentPriority}.name` as PriorityNameTranslationKey)
                         : t('tickets.priority.UNKNOWN.name', 'Desconocida')}
                 </Badge>
             </TooltipTrigger>
-            <TooltipContent side="top" className="max-w-xs text-center">
+            <TooltipContent side="left" className="max-w-xs text-center">
                 <p className="text-sm">
                     {isValidPriority
                         ? t(`tickets.priority.${currentPriority}.description` as PriorityDescTranslationKey)

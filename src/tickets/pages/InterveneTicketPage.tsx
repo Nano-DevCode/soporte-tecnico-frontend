@@ -4,8 +4,10 @@ import { sileo } from "sileo";
 import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 import { useInterveneTicket } from "../hooks/useInterveneTicket";
-import type { InterveneTicketFormOutput } from "../shcemas/intervene-ticket.schema";
+import type { InterveneTicketFormOutput } from "../schemas/intervene-ticket.schema";
 import { InterveneTicketForm } from "../components/forms/InterveneTicketForm";
+import { useGetTags } from "@/common/tags/hooks/useGetTags";
+import { useEffect } from "react";
 
 export const InterveneTicketPage = () => {
     const { id } = useParams();
@@ -13,14 +15,27 @@ export const InterveneTicketPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { mutate, isPending } = useInterveneTicket();
-
     const previousPage = location.state?.from;
 
-    const handleSubmit = (values: InterveneTicketFormOutput) => {
-        if (!id) {
-            return
+    const { mutate, isPending } = useInterveneTicket();
+    const { data: tags, isLoading, isError } = useGetTags();
+
+    useEffect(() => {
+        if (isLoading) return
+
+        if (isError || !tags) {
+            sileo.error({
+                title: t('common.fetch_error.title'),
+                description: t('common.fetch_error.description'),
+                duration: 6000,
+            });
+            navigate(previousPage || `/tickets`, { replace: true });
         }
+    }, [isError, isLoading, tags, navigate, t, previousPage]);
+
+
+    const handleSubmit = (values: InterveneTicketFormOutput) => {
+        if (!id) return
 
         mutate({ ticketId: id, interveneTicketPayload: values }, {
             onSuccess: () => {
@@ -33,12 +48,9 @@ export const InterveneTicketPage = () => {
             },
             onError: (error) => {
                 console.error("Error en la mutación:", error);
-
-                const errorMessage = getAxiosErrorMessage(error);
-
                 sileo.error({
                     title: t('tickets.intervene_page.error.title'),
-                    description: errorMessage,
+                    description: getAxiosErrorMessage(error),
                     duration: 7000,
                 });
             },
@@ -46,8 +58,21 @@ export const InterveneTicketPage = () => {
     };
 
     const handleCancel = () => {
-        navigate(previousPage || '/tickets')
+        navigate(previousPage || `/tickets`);
     };
+
+    if (isLoading || !tags) {
+        return (
+            <div className="mx-auto max-w-4xl space-y-5">
+                <CustomTitlePageWithBack
+                    backLink={previousPage || "/tickets"}
+                    title={t('tickets.intervene_page.title')}
+                    description={t('tickets.intervene_page.description')}
+                />
+                {/* <FinishTicketFormSkeleton /> */}
+            </div>
+        );
+    }
 
     return (
         <div className="mx-auto max-w-4xl space-y-5">
@@ -59,6 +84,7 @@ export const InterveneTicketPage = () => {
 
             <div>
                 <InterveneTicketForm
+                    tags={tags}
                     isPending={isPending}
                     onSubmit={handleSubmit}
                     onCancel={handleCancel}

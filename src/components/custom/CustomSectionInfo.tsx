@@ -1,3 +1,5 @@
+import { Skeleton } from "../ui/skeleton";
+
 interface Props {
     label: string;
 }
@@ -13,3 +15,10 @@ export const CustomSectionInfo = ({ label }: Props) => {
         </div>
     )
 }
+
+export const SkeletonSectionInfo = () => (
+    <div className="flex items-center h-6 gap-2">
+        <div className='bg-muted-foreground/30 h-full w-0.5 ' />
+        <Skeleton className="h-3 w-32" />
+    </div>
+);
