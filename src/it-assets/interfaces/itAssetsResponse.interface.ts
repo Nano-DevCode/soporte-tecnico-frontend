@@ -1,3 +1,5 @@
+import type { ItAssetsStatus } from "./itAssetsStatusResponse.interface";
+
 export interface ItAssetsResponse {
     itAssets: ItAsset[];
     meta:     Meta;
@@ -14,7 +16,7 @@ export interface ItAsset {
     createdAt:     Date;
     updatedAt:     Date;
     model:         Model;
-    itAssetStatus: ItAssetStatus;
+    itAssetStatus: ItAssetsStatus;
     itAssetsType:  ItAssetsType;
     invoice:       Invoice;
 }
@@ -24,14 +26,6 @@ export interface Invoice {
     idInternal: string;
     createdAt:  Date;
     updatedAt:  Date;
-}
-
-export interface ItAssetStatus {
-    id:          string;
-    name:        string;
-    description: string;
-    createdAt:   Date;
-    updatedAt:   Date;
 }
 
 export interface ItAssetsType {

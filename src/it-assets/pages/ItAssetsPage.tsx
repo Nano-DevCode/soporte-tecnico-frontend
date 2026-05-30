@@ -7,16 +7,14 @@ import { t } from "i18next";
 import { CustomDialogConfirm } from "@/components/custom/CustomDialogCorfirm";
 import { CustomSkeletonTableCard } from "@/components/custom/CustomSkeletonTableCard";
 import { CustomPagination } from "@/components/custom/CustomPagination";
-// Asegúrate de renombrar estos componentes en tu proyecto
-/* import { CustomItAssetFilters } from "../components/CustomItAssetFilters"; */
 import { CustomItAssetDesktopCatalog } from "../components/CustomItAssetDesktopCatalog";
-import type { ItAsset } from "../interfaces/itAssetsResponse"; // Ajusta la ruta a tu interfaz real
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { logError } from "@/utils/logger";
+import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
 
 export function ItAssetsPage() {
   const { isLoading, itAssets, changeStatusAsync, isChangingStatus, meta } = useItAssets();

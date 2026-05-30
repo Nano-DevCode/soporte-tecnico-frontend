@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Eye, MoreHorizontal, Pencil, PowerOff, CheckCircle } from "lucide-react";
 import { Link } from "react-router";
 import { cn } from "@/lib/utils";
-import type { ItAsset } from "../interfaces/itAssetsResponse";
 import { t } from "i18next";
+import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
 
 interface Props {
   asset: ItAsset;

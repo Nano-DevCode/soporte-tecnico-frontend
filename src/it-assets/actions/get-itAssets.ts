@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import type { ItAssetsResponse } from "../interfaces/itAssetsResponse";
+import type { ItAssetsResponse } from "../interfaces/itAssetsResponse.interface";
 
 interface Options {
   limit?: number | string;
