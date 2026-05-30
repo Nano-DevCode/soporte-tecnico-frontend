@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { TicketDetailsResponse } from "../interfaces/ticket-details.response";
 import { ticketsQueryKeys } from "../keys/tickets-query.keys";
 import { interveneTicketAction } from "../actions/intervene-ticket.action";
-import { technicalReportsQueryKeys } from "../keys/technical-reports-query.keys";
+import { technicalReportsQueryKeys } from "../../technical-reports/keys/technical-reports-query.keys";
 
 export const useInterveneTicket = () => {
     const queryClient = useQueryClient();

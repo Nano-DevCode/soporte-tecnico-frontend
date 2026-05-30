@@ -12,36 +12,28 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CustomFullScreenLoading } from "@/components/custom/CustomFullScreenLoading";
-import { useNavigate } from "react-router";
-import { sileo } from "sileo";
-import { useGetMaintenanceTypes } from "@/common/maintenance-type/hooks/useGetMaintenanceTypes";
-import { useGetServiceTypes } from "@/common/service-types/hooks/useGetServiceTypes";
-import { FinishTicketSchema, type FinishTicketFormInput, type FinishTicketFormOutput } from "@/tickets/shcemas/finish-ticket.schema";
+import { FinishTicketSchema, type FinishTicketFormInput, type FinishTicketFormOutput } from "@/tickets/schemas/finish-ticket.schema";
+import type { MaintenanceType } from "@/common/maintenance-type/interfaces/maintenance-type.interface";
+import type { ServiceType } from "@/common/service-types/interfaces/service-type.interface";
 
 
 interface Props {
     isPending: boolean;
+    maintenanceTypes: MaintenanceType[];
+    serviceTypes: ServiceType[];
     onSubmit: (data: FinishTicketFormOutput) => void;
     onCancel: () => void;
 }
 
-export const FinishTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
+export const FinishTicketForm = ({ onSubmit, isPending, onCancel, maintenanceTypes, serviceTypes }: Props) => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
     const schema = useMemo(() => FinishTicketSchema(t), [t]);
-
-    const { data: maintenanceTypes, isLoading: isMaintenanceLoading, isError: isMaintenanceError } = useGetMaintenanceTypes();
-    const { data: serviceTypes, isLoading: isServiceLoading, isError: isServiceError } = useGetServiceTypes();
-
-    const isLoading = isMaintenanceLoading || isServiceLoading;
-    const isError = isMaintenanceError || isServiceError;
 
     const form = useForm<FinishTicketFormInput, unknown, FinishTicketFormOutput>({
         resolver: zodResolver(schema),
@@ -53,16 +45,7 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
         },
     });
 
-    useEffect(() => {
-        if (!isLoading && isError) {
-            sileo.error({
-                title: t('common.errors.not_found_title', 'Error de Catálogos'),
-                description: t('common.errors.not_found_desc', 'No se pudieron cargar los tipos de mantenimiento o servicio.'),
-                duration: 6000,
-            });
-            navigate('/tickets', { replace: true });
-        }
-    }, [isError, isLoading, navigate, t]);
+    const isBusy = isPending || form.formState.isSubmitting;
 
     const handleCancel = () => {
         if (form.formState.isDirty) {
@@ -71,14 +54,6 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
         }
         onCancel();
     };
-
-    if (isLoading) {
-        return <CustomFullScreenLoading />;
-    }
-
-    if (!maintenanceTypes || !serviceTypes) {
-        return null;
-    }
 
     return (
         <Card>
@@ -105,7 +80,7 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
                                                 autoFocus
                                                 placeholder={t('tickets.form.finish.fields.diagnosis.placeholder')}
                                                 className="resize-none min-h-24"
-                                                disabled={isPending}
+                                                disabled={isBusy}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -124,7 +99,7 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
                                             <Textarea
                                                 placeholder={t('tickets.form.finish.fields.work_done.placeholder')}
                                                 className="resize-none min-h-24"
-                                                disabled={isPending}
+                                                disabled={isBusy}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -133,7 +108,7 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
                                 )}
                             />
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                                 <FormField
                                     control={form.control}
                                     name="maintenance_type_id"
@@ -141,9 +116,10 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
                                         <FormItem>
                                             <FormLabel>{t('tickets.form.finish.fields.maintenance_type.label')}</FormLabel>
                                             <Select
-                                                disabled={isPending}
+                                                disabled={isBusy}
                                                 onValueChange={field.onChange}
-                                                defaultValue={field.value}
+                                                value={field.value}
+                                                name={field.name}
                                             >
                                                 <FormControl>
                                                     <SelectTrigger className="w-full">
@@ -170,9 +146,10 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
                                         <FormItem>
                                             <FormLabel>{t('tickets.form.finish.fields.service_type.label')}</FormLabel>
                                             <Select
-                                                disabled={isPending}
+                                                disabled={isBusy}
                                                 onValueChange={field.onChange}
-                                                defaultValue={field.value}
+                                                value={field.value}
+                                                name={field.name}
                                             >
                                                 <FormControl>
                                                     <SelectTrigger className="w-full">
@@ -202,7 +179,7 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
                 <Button
                     variant="outline"
                     type="button"
-                    disabled={isPending}
+                    disabled={isBusy}
                     onClick={handleCancel}
                     className="w-full sm:w-auto"
                 >
@@ -213,10 +190,10 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
                 <Button
                     type="submit"
                     form="form-finish-ticket"
-                    disabled={isPending || !form.formState.isDirty}
+                    disabled={isBusy || !form.formState.isDirty}
                     className="w-full sm:w-auto"
                 >
-                    {isPending ? (
+                    {isBusy ? (
                         <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
                     ) : (
                         <Save className="mr-1.5 h-4 w-4" />

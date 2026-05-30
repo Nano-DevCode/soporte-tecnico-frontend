@@ -6,7 +6,7 @@ import { CustomFullScreenLoading } from "@/components/custom/CustomFullScreenLoa
 import { sileo } from "sileo";
 import { useEffect } from "react";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
-import type { RouteTicketFormOutput } from "../shcemas/route-ticket.schema";
+import type { RouteTicketFormOutput } from "../schemas/route-ticket.schema";
 import { RouteTicketForm } from "../components/forms/RouteTicketForm";
 import { useRouteTicket } from "../hooks/useRouteTicket";
 import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";

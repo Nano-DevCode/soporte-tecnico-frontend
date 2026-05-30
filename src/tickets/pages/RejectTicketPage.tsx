@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
 import { useRejectTicket } from "../hooks/useRejectTicket";
-import type { RejectTicketFormOutput } from "../shcemas/reject-ticket.schema";
+import type { RejectTicketFormOutput } from "../schemas/reject-ticket.schema";
 import { RejectTicketForm } from "../components/forms/RejectTicketForm";
 
 export const RejectTicketPage = () => {
