@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "react-router";
 import { getItAssetsAction } from "../actions/get-itAssets";
 import { getItAssetAction } from "../actions/get-itAsset";
-// import { changeItAssetStatusAction } from "../actions/changeItAssetStatus"; 
+import { createItAssetAction } from "../actions/create-itAsset";
 
 export const useItAssets = () => {
   const [searchParams] = useSearchParams();
@@ -16,7 +16,6 @@ export const useItAssets = () => {
   const offset = (page - 1) * limit;
   const query = searchParams.get("query")?.trim() || undefined;
 
-  // 1. Query para el Catálogo (Lista Completa)
   const assetsQuery = useQuery({
     queryKey: ['it-assets', { limit, offset, query }],
     queryFn: () => getItAssetsAction({ limit, offset, query }),
@@ -27,7 +26,6 @@ export const useItAssets = () => {
     }),
   });
 
-  // 2. Query para un Activo Específico (Detalle)
   const assetQuery = useQuery({
     queryKey: ['it-asset', id], 
     queryFn: () => getItAssetAction({ id: id! }), 
@@ -35,9 +33,15 @@ export const useItAssets = () => {
     staleTime: 1000 * 60 * 5,
   });
 
+  const createAssetMutation = useMutation({
+    mutationFn: createItAssetAction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['it-assets'] });
+    },
+  });
+
   const changeStatusMutation = useMutation({
     mutationFn: async () => {
-      // return await changeItAssetStatusAction(payload);
     },
     onSuccess: () => {
       // Invalidamos el catálogo general
@@ -48,6 +52,7 @@ export const useItAssets = () => {
       }
     },
   });
+  
 
   return {
     // Retornos de la lista (Catálogo)
@@ -67,5 +72,8 @@ export const useItAssets = () => {
     // Mutaciones
     changeStatusAsync: changeStatusMutation.mutateAsync,
     isChangingStatus: changeStatusMutation.isPending,
+
+    createAssetMutation: createAssetMutation,
+    isCreatingAsset: createAssetMutation.isPending,
   };
 }

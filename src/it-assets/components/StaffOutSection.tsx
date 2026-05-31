@@ -133,13 +133,15 @@ export const StaffOutSection = ({ isDisabled }: Props) => {
         )}
       />
 
-      {/* CAMPO: DESCRIPCIÓN (Solo aplica para salidas sin ticket) */}
+      {/* CAMPO: DESCRIPCIÓN (Ahora obligatorio) */}
       <FormField
         control={control}
         name="description"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Descripción de la salida (Opcional)</FormLabel>
+            <FormLabel>
+              Descripción de la salida <span className="text-red-500">*</span>
+            </FormLabel>
             <FormControl>
               <Textarea 
                 placeholder="Motivo de la asignación, detalles de entrega..." 

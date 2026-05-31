@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
-import type { ItAssetsResponse } from "../interfaces/itAssetsResponse.interface";
+import type { ItAssetsMovementIn } from "../interfaces/itAssetsMovementInResponse";
 
 interface Options {
   itAssetId: string;
@@ -7,13 +7,14 @@ interface Options {
   observations?: string;
 }
 
-export const createItAssetsMovementInAction = async(options: Options):Promise<ItAssetsResponse> => {
-  const { itAssetId, itAssetsStatusId, observations = undefined } = options;
-  const { data } = await soporteTecnicoApi.post<ItAssetsResponse>('/it-assets-movements-in',
+export const createItAssetsMovementInAction = async(options: Options): Promise<ItAssetsMovementIn> => {
+  const { itAssetId, itAssetsStatusId, observations } = options;
+  
+  const { data } = await soporteTecnicoApi.post<ItAssetsMovementIn>('/it-assets-movements-in',
     {
-      itAssetId: itAssetId,
-      itAssetsStatusId: itAssetsStatusId,
-      observations: observations
+      itAssetId,
+      itAssetsStatusId,
+      ...(observations && { observations }),
     }
   );  
   return data;

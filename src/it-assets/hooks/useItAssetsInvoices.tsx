@@ -1,23 +1,23 @@
 import { useMemo } from 'react';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getItAssetsTypesAction } from '../actions/get-itAssets-types';
-import { createItAssetsTypeAction } from '../actions/create-itAssets-type';
+import { getItAssetsInvoicesAction } from '../actions/get-itAssets-invoices';
+import { createItAssetsInvoiceAction } from '../actions/create-itAssets-invoice';
 
-export const useItAssetsTypes = (searchTerm: string = "") => {
+export const useItAssetsInvoices = (searchTerm: string = "") => {
   const queryClient = useQueryClient();
 
   // 1. Configuración del Infinite Query para lectura y paginación
   const query = useInfiniteQuery({
-    queryKey: ['itAssetsTypes', searchTerm],
+    queryKey: ['itAssetsInvoices', searchTerm],
     queryFn: ({ pageParam = 0 }) => 
-      getItAssetsTypesAction({ 
+      getItAssetsInvoicesAction({ 
         limit: 10, 
         offset: pageParam, 
         query: searchTerm 
       }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      // Calculamos el siguiente offset
+      // Calculamos el siguiente offset basado en la estructura de tu meta
       if (lastPage.meta.page >= lastPage.meta.lastPage) return undefined;
       return lastPage.meta.page * 10;
     },
@@ -26,23 +26,23 @@ export const useItAssetsTypes = (searchTerm: string = "") => {
 
   // 2. Configuración de la Mutación para creación
   const createMutation = useMutation({
-    mutationFn: createItAssetsTypeAction,
+    mutationFn: createItAssetsInvoiceAction,
     onSuccess: () => {
-      // Invalida la caché para forzar una recarga y mostrar el nuevo tipo creado
-      queryClient.invalidateQueries({ queryKey: ['itAssetsTypes'] });
+      // Invalida la caché para forzar una recarga y mostrar la nueva factura
+      queryClient.invalidateQueries({ queryKey: ['itAssetsInvoices'] });
     },
   });
 
   // 3. Aplanamos las páginas para obtener un solo arreglo continuo
-  const memorizedItAssetsTypes = useMemo(() => {
-    // IMPORTANTE: Verifica en tu interfaz `ItAssetsTypesResponse` cómo se llama el arreglo que devuelve.
-    // Aquí asumo que se llama "types" (page.types). Si se llama "data", "items", etc., cámbialo aquí.
-    return query.data?.pages.flatMap((page) => page.itAssetsTypes) ?? [];
+  const memorizedItAssetsInvoices = useMemo(() => {
+    // IMPORTANTE: Aquí asumo que tu interfaz ItAssetsInvoicesResponse tiene un arreglo llamado "invoices".
+    // Si se llama distinto (ej. "data", "items" o "facturas"), solo cambia "page.invoices" por ese nombre.
+    return query.data?.pages.flatMap((page) => page.invoices) ?? [];
   }, [query.data]); 
 
   return {
     // Datos de lectura
-    itAssetsTypes: memorizedItAssetsTypes, 
+    itAssetsInvoices: memorizedItAssetsInvoices, 
     meta: query.data?.pages.at(-1)?.meta,
     fetchNextPage: query.fetchNextPage,
     hasNextPage: query.hasNextPage,
@@ -52,7 +52,7 @@ export const useItAssetsTypes = (searchTerm: string = "") => {
     error: query.error,
     
     // Datos de escritura
-    createType: createMutation.mutateAsync,
+    createInvoice: createMutation.mutateAsync,
     isCreating: createMutation.isPending,
     createError: createMutation.error,
   };

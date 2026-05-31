@@ -5,16 +5,19 @@ import type { ItAsset } from '../interfaces/itAssetsResponse.interface'
 
 interface Props {
   itAsset: ItAsset;
+  // Agregamos esta propiedad para saber en qué formulario estamos
+  mode?: 'in' | 'out'; 
 }
 
-const CustomItAssetPreview = ({itAsset}: Props) => {
+const CustomItAssetPreview = ({ itAsset, mode = 'out' }: Props) => {
   return (
-    // CAMBIO AQUI: 'order-first' fuerza a que sea el primer elemento en móvil.
-    // En pantallas 'md' (tablets/escritorio) lo pasamos al final con 'md:order-last'
     <div className="order-first md:order-last md:col-span-5 lg:col-span-4">
         <Card className="overflow-hidden border-primary/20 shadow-md">
         <div className="bg-primary/5 p-4 border-b border-primary/10 flex items-center justify-between">
-            <h3 className="font-semibold text-primary">Equipo a despachar</h3>
+            <h3 className="font-semibold text-primary">
+              {/* Cambiamos el título dinámicamente */}
+              {mode === 'in' ? 'Equipo a recibir' : 'Equipo a despachar'}
+            </h3>
             <Badge variant="outline" className="bg-background shadow-sm font-mono text-[10px]">
             #{itAsset.idInventary ?? itAsset.id.substring(0, 8)}
             </Badge>
@@ -69,12 +72,24 @@ const CustomItAssetPreview = ({itAsset}: Props) => {
               </div>
             </div>
 
-            {itAsset.inUse && (
+            {/* LÓGICA CONDICIONAL DE ADVERTENCIAS */}
+            
+            {/* 1. Si es SALIDA y el equipo ya está en uso */}
+            {mode === 'out' && itAsset.inUse && (
             <div className="bg-amber-50 border border-amber-200 text-amber-800 p-3 rounded-md text-sm mt-4 dark:bg-amber-950/50 dark:border-amber-900/50 dark:text-amber-400">
                 <strong className="block mb-1">⚠️ Atención</strong>
                 Este equipo actualmente está marcado como <b>En Uso</b>. Por favor, asegúrate de registrar su entrada antes de asignarlo nuevamente.
             </div>
             )}
+
+            {/* 2. Si es ENTRADA y el equipo NO está en uso */}
+            {mode === 'in' && !itAsset.inUse && (
+            <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-md text-sm mt-4 dark:bg-blue-950/50 dark:border-blue-900/50 dark:text-blue-400">
+                <strong className="block mb-1">ℹ️ Aviso</strong>
+                Este equipo actualmente <b>no está marcado como en uso</b>. Verifica si realmente necesitas registrar una entrada.
+            </div>
+            )}
+
         </CardContent>
         </Card>
     </div>

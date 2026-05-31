@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createItAssetsMovementOutAction } from "../actions/create-itAssets-movement-out";
+import { createItAssetsMovementInAction } from "../actions/create-itAssets-movement-in";
 
 
 export const useItAssetsMovements = () => {
@@ -7,6 +8,14 @@ export const useItAssetsMovements = () => {
 
   const createMovementOutMutation = useMutation({
     mutationFn: createItAssetsMovementOutAction, 
+    
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['it-assets'] });
+    },
+  });
+
+  const createMovementInMutation = useMutation({
+    mutationFn: createItAssetsMovementInAction, 
     
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['it-assets'] });
@@ -21,6 +30,14 @@ export const useItAssetsMovements = () => {
 
     // Métodos para disparar la petición desde tus componentes
     createOutMovementAsync: createMovementOutMutation.mutateAsync,
-    createOutMovement: createMovementOutMutation.mutate,           
+    createOutMovement: createMovementOutMutation.mutate,  
+    
+    isCreatingIn: createMovementInMutation.isPending,
+    isSuccessIn: createMovementInMutation.isSuccess,
+    errorIn: createMovementInMutation.error,
+
+    createInMovementAsync: createMovementInMutation.mutateAsync,
+    createInMovement: createMovementInMutation.mutate,  
+  
   };
 };

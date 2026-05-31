@@ -1,4 +1,7 @@
+import type { Invoice } from "./itAssetsInvoicesResponse.interface";
+import type { Model } from "./itAssetsModelsResponse.interrface";
 import type { ItAssetsStatus } from "./itAssetsStatusResponse.interface";
+import type { ItAssetsType } from "./itAssetsTypesResponse.interface";
 
 export interface ItAssetsResponse {
     itAssets: ItAsset[];
@@ -18,29 +21,7 @@ export interface ItAsset {
     model:         Model;
     itAssetStatus: ItAssetsStatus;
     itAssetsType:  ItAssetsType;
-    invoice:       Invoice;
-}
-
-export interface Invoice {
-    id:         string;
-    idInternal: string;
-    createdAt:  Date;
-    updatedAt:  Date;
-}
-
-export interface ItAssetsType {
-    id:   string;
-    name: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-export interface Model {
-    id:    string;
-    name:  string;
-    brand: ItAssetsType;
-    createdAt: Date;
-    updatedAt: Date;
+    invoice:       Invoice | null;
 }
 
 export interface Meta {

@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
-import type { ItAssetsResponse } from "../interfaces/itAssetsResponse.interface";
+import type { ItAssetsMovementOut } from "../interfaces/itAssetsMovementOutResponse";
 
 interface Options {
   itAssetId: string;
@@ -11,18 +11,29 @@ interface Options {
   ticketId?: string;
 }
 
-export const createItAssetsMovementOutAction = async(options: Options):Promise<ItAssetsResponse> => {
-  const { itAssetId, itAssetsStatusId, observations = undefined, description = undefined, voucher = undefined, staffId = undefined, ticketId = undefined} = options;
-  const { data } = await soporteTecnicoApi.post<ItAssetsResponse>('/it-assets-movements-out',
+export const createItAssetsMovementOutAction = async(options: Options): Promise<ItAssetsMovementOut> => {
+  const { 
+    itAssetId, 
+    itAssetsStatusId, 
+    observations, 
+    description, 
+    voucher, 
+    staffId, 
+    ticketId 
+  } = options;
+
+  const { data } = await soporteTecnicoApi.post<ItAssetsMovementOut>(
+    '/it-assets-movements-out',
     {
-      itAssetId: itAssetId,
-      itAssetsStatusId: itAssetsStatusId,
-      observations: observations,
-      description: description,
-      voucher: voucher,
-      staffId: staffId,
-      ticketId: ticketId,
+      itAssetId,
+      itAssetsStatusId,
+      ...(observations && { observations }),
+      ...(description && { description }),
+      ...(voucher && { voucher }),
+      ...(staffId && { staffId }),
+      ...(ticketId && { ticketId }),
     }
   );  
+  
   return data;
 }

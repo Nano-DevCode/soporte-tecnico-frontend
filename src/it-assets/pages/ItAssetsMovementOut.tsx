@@ -3,65 +3,71 @@ import { useParams, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { LogOut, Loader2, ArrowLeft, Monitor, RefreshCw, Info } from "lucide-react";
+import { LogOut, Loader2, ArrowLeft, Monitor } from "lucide-react";
 import { sileo } from "sileo";
+import { isAxiosError } from "axios";
 
 // Componentes y Hooks Generales
 import { cn } from "@/lib/utils";
 import { useItAssets } from "../hooks/useItAssets";
-import useItAssetsStatus from "../hooks/useItAssetsStatus";
 import { useItAssetsMovements } from "../hooks/useItAssetsMovements";
+import type { BackendError } from "@/interfaces/backendError.interfaces";
 
 // UI Components
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 
 // Componentes Custom
 import CustomItAssetPreview from "../components/CustomItAssetPreview";
-import { CustomConfirmChangeStatusItAsset } from "../components/CustomConfirmChangeStatusItAsset";
 import { StaffOutSection } from "../components/StaffOutSection";
 import { TicketOutSection } from "../components/TicketOutSection";
-import { isAxiosError } from "axios";
-import type { BackendError } from "@/interfaces/backendError.interfaces";
+import { AssetStatusSelect } from "../components/AssetStatusSelect"; // <-- NUEVO COMPONENTE
 
 // ==========================================
 // ESQUEMA DE VALIDACIÓN ZOD
 // ==========================================
 const movementOutSchema = z.object({
+  movementMode: z.enum(["sin_ticket", "con_ticket"]),
   itAssetsStatusId: z.string().min(1, "Debes seleccionar un estado"),
   staffId: z.string().optional(),
   tikedId: z.string().optional(),
-  observations: z.string().optional(),
-  description: z.string().optional(),
-  voucher: z.string().optional(),
+  observations: z.string().trim().optional(), 
+  description: z.string().trim().optional(), 
+  voucher: z.string().trim().optional(),
+}).superRefine((values, ctx) => {
+  if (values.movementMode === "sin_ticket") {
+    if (!values.staffId) {
+      ctx.addIssue({ code: "custom", message: "Debes seleccionar un empleado para esta salida", path: ["staffId"] });
+    }
+    const desc = values.description || ""; 
+    if (desc.length < 10) { 
+      ctx.addIssue({ code: "custom", message: "La descripción es obligatoria y debe tener al menos 10 caracteres", path: ["description"] });
+    }
+  }
+  if (values.movementMode === "con_ticket" && !values.tikedId) {
+    ctx.addIssue({ code: "custom", message: "Debes vincular un ticket para esta salida", path: ["tikedId"] });
+  }
 });
 
 type MovementOutFormValues = z.infer<typeof movementOutSchema>;
-
 type MovementMode = "sin_ticket" | "con_ticket";
 
 const ItAssetsMovementOut = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Estados locales
   const [movementMode, setMovementMode] = useState<MovementMode>("sin_ticket");
-  const [isEditingStatus, setIsEditingStatus] = useState(false);
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
-  // Hooks de datos generales
   const { itAsset, isLoadingAsset } = useItAssets();
-  const { itAssetsStatus, isLoading: isLoadingStatus } = useItAssetsStatus();
   const { createOutMovementAsync, isCreatingOut } = useItAssetsMovements();
 
-  // Instancia de React-Hook-Form
   const form = useForm<MovementOutFormValues>({
     resolver: zodResolver(movementOutSchema),
     defaultValues: {
+      movementMode: "sin_ticket",
       itAssetsStatusId: "",
       staffId: "",
       tikedId: "",
@@ -71,19 +77,18 @@ const ItAssetsMovementOut = () => {
     },
   });
 
-  // Limpiar campos específicos cuando cambia el modo de salida para no mandar datos mezclados
+  // Limpiar campos visualmente y borrar errores cuando cambia el modo
   useEffect(() => {
+    form.setValue("movementMode", movementMode);
     if (movementMode === "sin_ticket") {
       form.setValue("tikedId", ""); 
+      form.clearErrors("tikedId"); 
     } else {
       form.setValue("staffId", ""); 
       form.setValue("description", "");
+      form.clearErrors(["staffId", "description"]); 
     }
   }, [movementMode, form]);
-
-  // Observador de estado físico actual en el select
-  const currentStatusId = form.watch("itAssetsStatusId");
-  const selectedStatusDetail = itAssetsStatus.find(status => status.id === currentStatusId);
 
   // Cargar estado inicial del equipo
   useEffect(() => {
@@ -92,46 +97,32 @@ const ItAssetsMovementOut = () => {
     }
   }, [itAsset, form]);
 
-  // Enviar formulario
   const onSubmit = async (data: MovementOutFormValues) => {
     if (!id) return;
 
+    const finalPayload = {
+      itAssetId: id,
+      itAssetsStatusId: data.itAssetsStatusId,
+      observations: data.observations || undefined,
+      voucher: data.voucher || undefined,
+      staffId: movementMode === "sin_ticket" && data.staffId ? data.staffId : undefined,
+      description: movementMode === "sin_ticket" && data.description ? data.description : undefined,
+      ticketId: movementMode === "con_ticket" && data.tikedId ? data.tikedId : undefined,
+    };
+
     try {
       await sileo.promise(
-        createOutMovementAsync({
-          itAssetId: id,
-          itAssetsStatusId: data.itAssetsStatusId,
-          staffId: data.staffId ? data.staffId : undefined,
-          ticketId: data.tikedId ? data.tikedId : undefined,
-          observations: data.observations,
-          description: data.description,
-          voucher: data.voucher,
-        }),
+        createOutMovementAsync(finalPayload),
         {
           loading: { title: "Registrando salida..." },
-          success: {
-            title: "Salida registrada",
-            description: "El activo se ha despachado exitosamente.",
-            duration: 4000,
-          },
+          success: { title: "Salida registrada", description: "El activo se ha despachado exitosamente.", duration: 4000 },
           error: (err) => {
             let backendMessage = "Error en el servidor";
-
-            if (
-              isAxiosError<BackendError>(err) &&
-              err.response?.data?.message
-            ) {
+            if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
               const rawMessage = err.response.data.message;
-              backendMessage = Array.isArray(rawMessage)
-                ? rawMessage[0]
-                : rawMessage;
+              backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
             }
-
-            return {
-              title: "Error al registrar salida",
-              description: backendMessage,
-              duration: 5000,
-            };
+            return { title: "Error al registrar salida", description: backendMessage, duration: 5000 };
           },
         });
       navigate("/it-assets");
@@ -161,9 +152,8 @@ const ItAssetsMovementOut = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-10">
       
-      {/* HEADER DE LA PÁGINA */}
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" onClick={() => navigate('it-assets')}>
+        <Button variant="outline" size="icon" onClick={() => navigate('/it-assets')}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
@@ -174,12 +164,10 @@ const ItAssetsMovementOut = () => {
 
       <div className="flex flex-col md:grid md:grid-cols-12 gap-8 items-start">
         
-        {/* PREVIEW */}
         <div className="w-full md:col-span-5 lg:col-span-4">
-          <CustomItAssetPreview itAsset={itAsset} />
+          <CustomItAssetPreview itAsset={itAsset} mode="out"/>
         </div>
 
-        {/* FORMULARIO PRINCIPAL */}
         <div className="w-full md:col-span-7 lg:col-span-8 space-y-6">
           <Card>
             <CardHeader>
@@ -190,16 +178,14 @@ const ItAssetsMovementOut = () => {
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   
-                  {/* === SELECTOR DE MODO (TABS) === */}
+                  {/* SELECTOR DE MODO (TABS) */}
                   <div className="flex p-1 bg-muted rounded-lg border border-border/50">
                     <button
                       type="button"
                       onClick={() => setMovementMode("sin_ticket")}
                       className={cn(
                         "flex-1 py-2 text-sm font-semibold rounded-md transition-all",
-                        movementMode === "sin_ticket" 
-                          ? "bg-background shadow-sm text-foreground" 
-                          : "text-muted-foreground hover:text-foreground"
+                        movementMode === "sin_ticket" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
                       )}
                     >
                       Salida a Personal
@@ -209,86 +195,27 @@ const ItAssetsMovementOut = () => {
                       onClick={() => setMovementMode("con_ticket")}
                       className={cn(
                         "flex-1 py-2 text-sm font-semibold rounded-md transition-all",
-                        movementMode === "con_ticket" 
-                          ? "bg-background shadow-sm text-foreground" 
-                          : "text-muted-foreground hover:text-foreground"
+                        movementMode === "con_ticket" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
                       )}
                     >
                       Salida por Ticket
                     </button>
                   </div>
 
-                  {/* ESTADO DEL ACTIVO (Común en ambos modos) */}
-                  <FormField
-                    control={form.control}
-                    name="itAssetsStatusId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Estado físico al momento de salir <span className="text-red-500">*</span></FormLabel>
-                        {!isEditingStatus ? (
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-muted/40 p-3 rounded-md border border-border/50">
-                            <div className="flex-1">
-                              <span className="block font-medium text-sm text-foreground">
-                                {itAsset.itAssetStatus?.name || "Estado Desconocido"}
-                              </span>
-                              {itAsset.itAssetStatus?.description && (
-                                <span className="block text-xs text-muted-foreground mt-0.5 line-clamp-2" title={itAsset.itAssetStatus.description}>
-                                  {itAsset.itAssetStatus.description}
-                                </span>
-                              )}
-                            </div>
-                            <Button 
-                              type="button" 
-                              variant="outline" 
-                              size="sm" 
-                              className="h-8 text-xs shrink-0 self-start sm:self-auto"
-                              onClick={() => setShowConfirmDialog(true)}
-                              disabled={isCreatingOut}
-                            >
-                              <RefreshCw className="h-3 w-3 mr-2" /> Cambiar Estado
-                            </Button>
-                          </div>
-                        ) : (
-                          <div className="space-y-2">
-                            <Select onValueChange={field.onChange} value={field.value} disabled={isLoadingStatus || isCreatingOut}>
-                              <FormControl>
-                                <SelectTrigger className="border-primary/50 focus:ring-primary/20">
-                                  <SelectValue placeholder="Selecciona el estado físico del equipo" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {itAssetsStatus.map((status) => (
-                                  <SelectItem key={status.id} value={status.id}>
-                                    {status.name}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            
-                            {selectedStatusDetail?.description && (
-                              <div className="flex gap-2 items-start bg-blue-50/50 dark:bg-blue-950/20 p-2.5 rounded-md border border-blue-100 dark:border-blue-900/50">
-                                <Info className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
-                                <p className="text-xs text-muted-foreground leading-relaxed">
-                                  <strong className="text-foreground/80 block mb-0.5">Descripción del estado:</strong>
-                                  {selectedStatusDetail.description}
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                  {/* NUEVO COMPONENTE EXTRAÍDO */}
+                  <AssetStatusSelect 
+                    itAsset={itAsset} 
+                    isDisabled={isCreatingOut} 
                   />
 
-                  {/* === SECCIONES DINÁMICAS (Se inyectan aquí) === */}
+                  {/* SECCIONES DINÁMICAS */}
                   {movementMode === "sin_ticket" ? (
                     <StaffOutSection isDisabled={isCreatingOut} />
                   ) : (
                     <TicketOutSection isDisabled={isCreatingOut} />
                   )}
 
-                  {/* VOUCHER (Común en ambos modos) */}
+                  {/* CAMPOS COMUNES */}
                   <FormField
                     control={form.control}
                     name="voucher"
@@ -303,7 +230,6 @@ const ItAssetsMovementOut = () => {
                     )}
                   />
 
-                  {/* OBSERVACIONES (Común en ambos modos) */}
                   <FormField
                     control={form.control}
                     name="observations"
@@ -337,17 +263,6 @@ const ItAssetsMovementOut = () => {
           </Card>
         </div>
       </div>
-
-      <CustomConfirmChangeStatusItAsset 
-        open={showConfirmDialog} 
-        onOpenChange={setShowConfirmDialog}
-        currentStatusName={itAsset.itAssetStatus?.name}
-        onConfirm={() => {
-          setIsEditingStatus(true);
-          setShowConfirmDialog(false);
-        }}
-      />
-
     </div>
   );
 };

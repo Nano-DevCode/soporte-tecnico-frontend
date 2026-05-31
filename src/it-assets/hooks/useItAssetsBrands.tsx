@@ -1,23 +1,23 @@
 import { useMemo } from 'react';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getItAssetsTypesAction } from '../actions/get-itAssets-types';
-import { createItAssetsTypeAction } from '../actions/create-itAssets-type';
+import { getItAssetsBrandsAction } from '../actions/get-itAssets-brand';
+import { createItAssetsBrandAction } from '../actions/create-itAssets-brand';
 
-export const useItAssetsTypes = (searchTerm: string = "") => {
+export const useItAssetsBrands = (searchTerm: string = "") => {
   const queryClient = useQueryClient();
 
   // 1. Configuración del Infinite Query para lectura y paginación
   const query = useInfiniteQuery({
-    queryKey: ['itAssetsTypes', searchTerm],
+    queryKey: ['itAssetsBrands', searchTerm],
     queryFn: ({ pageParam = 0 }) => 
-      getItAssetsTypesAction({ 
+      getItAssetsBrandsAction({ 
         limit: 10, 
         offset: pageParam, 
         query: searchTerm 
       }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      // Calculamos el siguiente offset
+      // Calculamos el siguiente offset basado en la estructura de tu meta
       if (lastPage.meta.page >= lastPage.meta.lastPage) return undefined;
       return lastPage.meta.page * 10;
     },
@@ -26,23 +26,22 @@ export const useItAssetsTypes = (searchTerm: string = "") => {
 
   // 2. Configuración de la Mutación para creación
   const createMutation = useMutation({
-    mutationFn: createItAssetsTypeAction,
+    mutationFn: createItAssetsBrandAction,
     onSuccess: () => {
-      // Invalida la caché para forzar una recarga y mostrar el nuevo tipo creado
-      queryClient.invalidateQueries({ queryKey: ['itAssetsTypes'] });
+      // Invalida la caché para forzar una recarga y mostrar la nueva marca creada
+      queryClient.invalidateQueries({ queryKey: ['itAssetsBrands'] });
     },
   });
 
   // 3. Aplanamos las páginas para obtener un solo arreglo continuo
-  const memorizedItAssetsTypes = useMemo(() => {
-    // IMPORTANTE: Verifica en tu interfaz `ItAssetsTypesResponse` cómo se llama el arreglo que devuelve.
-    // Aquí asumo que se llama "types" (page.types). Si se llama "data", "items", etc., cámbialo aquí.
-    return query.data?.pages.flatMap((page) => page.itAssetsTypes) ?? [];
+  const memorizedItAssetsBrands = useMemo(() => {
+    // IMPORTANTE: Asegúrate de que "brands" coincida con la propiedad de tu interface ItAssetsBrandsResponse
+    return query.data?.pages.flatMap((page) => page.brands) ?? [];
   }, [query.data]); 
 
   return {
     // Datos de lectura
-    itAssetsTypes: memorizedItAssetsTypes, 
+    itAssetsBrands: memorizedItAssetsBrands, 
     meta: query.data?.pages.at(-1)?.meta,
     fetchNextPage: query.fetchNextPage,
     hasNextPage: query.hasNextPage,
@@ -52,7 +51,7 @@ export const useItAssetsTypes = (searchTerm: string = "") => {
     error: query.error,
     
     // Datos de escritura
-    createType: createMutation.mutateAsync,
+    createBrand: createMutation.mutateAsync,
     isCreating: createMutation.isPending,
     createError: createMutation.error,
   };
