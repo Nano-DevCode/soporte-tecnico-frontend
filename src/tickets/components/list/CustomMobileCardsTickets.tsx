@@ -10,6 +10,8 @@ import { TicketPriorityBadge } from "../TicketPriorityBadge";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { SkeletonMobileCardTickets } from "../Skeletons/SkeletonMobileCardTickets";
+import { Separator } from "@/components/ui/separator";
+import { TicketTagsBadge } from "../TicketTagsBadge";
 
 interface Props {
     tickets: Ticket[];
@@ -66,12 +68,15 @@ export const CustomMobileCardsTickets = ({ tickets, handleCardClick, isLoading }
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-2 mt-1 pl-10 flex-wrap">
+                    <Separator />
+
+                    <div className="flex items-center gap-2 pl-10 flex-wrap">
                         <TicketStatusBadge statusCode={ticket.status_code} />
                         <TicketPriorityBadge priority={ticket.priority} />
                         <Badge variant="outline" className="text-muted-foreground">
                             {ticket.school_period?.name || t('tickets.data_default.school_period')}
                         </Badge>
+                        <TicketTagsBadge tags={ticket.tags} />
                     </div>
                 </Card>
             ))}

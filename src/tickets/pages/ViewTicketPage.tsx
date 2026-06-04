@@ -1,16 +1,15 @@
 import { CustomTitlePageWithBack } from '@/components/custom/CustomTitlePageWithBack'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { useGetTicketById } from '../hooks/useGetTicketById';
 import { sileo } from 'sileo';
-import { CustomFullScreenLoading } from '@/components/custom/CustomFullScreenLoading';
 import { TicketStepper } from '../components/details/TicketStepper';
 import { DetailsTicket } from '../components/details/DetailsTicket';
 import { DetailHeaderTicket } from '../components/details/DetailHeaderTicket';
 import { TicketTimeLine } from '../components/details/TicketTimeLine';
 import { useStartTicket } from '../hooks/useStartTicket';
-import { getAvailableActions, TicketEvent } from '../utils/ticket-state-machine';
+import { TicketEvent, TicketStatus } from '../utils/ticket-state-machine';
 import { useCloseTicket } from '../hooks/useCloseTicket';
 import { useArchiveTicket } from '../hooks/useArchiveTicket';
 import { getAxiosErrorMessage } from '@/lib/helpers/getAxiosErrorMessage';
@@ -18,11 +17,20 @@ import { TicketActions } from '../components/details/TicketActions';
 import { TechnicalReportsAccordion } from '../components/details/TechnicalReportsAccordion';
 import { TicketDocuments } from '../components/details/TicketDocuments';
 import { Can } from '@/common/permission/Can';
+import { useSmartNavigation } from '@/components/hooks/useSmartNavigation';
+import { TicketActorsCard } from '../components/details/TicketActorsCard';
+import { DetailHeaderTicketSkeleton } from '../components/Skeletons/DetailHeaderTicketSkeleton';
+import { TicketActionsSkeleton } from '../components/Skeletons/TicketActionsSkeleton';
+import { TicketStepperSkeleton } from '../components/Skeletons/TicketStepperSkeleton';
+import { TicketTimeLineSkeleton } from '../components/Skeletons/TicketTimeLineSkeleton';
+import { DetailsTicketSkeleton } from '../components/Skeletons/DetailsTicketSkeleton';
+import { TicketDocumentsSkeleton } from '../components/Skeletons/TicketDocumentsSkeleton';
+import { TechnicalReportsAccordionSkeleton } from '../components/Skeletons/TechnicalReportsAccordionSkeleton';
 
 export const ViewTicketPage = () => {
     const { id } = useParams();
     const { t } = useTranslation();
-    const navigate = useNavigate();
+    const { navigateFallback } = useSmartNavigation('/tickets');
 
     const { isLoading, isError, data: ticket } = useGetTicketById(id);
     const { mutate: startTicket, isPending: isStarting } = useStartTicket();
@@ -30,31 +38,33 @@ export const ViewTicketPage = () => {
     const { mutate: archiveTicket, isPending: isArchiving } = useArchiveTicket();
 
     useEffect(() => {
-        if (!isLoading && (isError || !ticket)) {
+        if (isLoading) return;
+
+        if (isError || !ticket) {
             sileo.error({
-                title: 'p',
-                description: 'p',
+                title: t('tickets.not_found.title'),
+                description: t('tickets.not_found.message'),
                 duration: 6000,
             });
-
-            navigate('/tickets', { replace: true });
+            navigateFallback();
         }
-    }, [isError, isLoading, ticket, id, navigate, t]);
+    }, [isError, isLoading, ticket, t, navigateFallback]);
 
     const handleDirectAction = (event: TicketEvent) => {
         if (!ticket) return;
+
         if (event === TicketEvent.ATENDER) {
             startTicket({ ticketId: ticket.id }, {
                 onSuccess: () => {
                     sileo.success({
-                        title: t('tickets.actions.attend.success_title', '¡Atención iniciada!'),
-                        description: t('tickets.actions.attend.success_desc', 'El tiempo de resolución ha comenzado.'),
+                        title: t('tickets.actions.attend.success.title'),
+                        description: t('tickets.actions.attend.success.description'),
                     });
                 },
                 onError: (error) => {
                     sileo.error({
-                        title: t('common.errors.title', 'Error'),
-                        description: getAxiosErrorMessage(error) || 'No se pudo iniciar la atención.',
+                        title: t('common.errors.title'),
+                        description: getAxiosErrorMessage(error) || t('tickets.actions.attend.error.description'),
                     });
                 }
             });
@@ -63,14 +73,14 @@ export const ViewTicketPage = () => {
             closeTicket({ ticketId: ticket.id }, {
                 onSuccess: () => {
                     sileo.success({
-                        title: t('tickets.actions.close.success_title', '¡Ticket cerrado!'),
-                        description: t('tickets.actions.close.success_desc', 'El ticket se ha cerrado definitivamente y ya no admite modificaciones.'),
+                        title: t('tickets.actions.close.success.title'),
+                        description: t('tickets.actions.close.success.description'),
                     });
                 },
                 onError: (error) => {
                     sileo.error({
-                        title: t('common.errors.title', 'Error'),
-                        description: getAxiosErrorMessage(error) || 'No se pudo cerrar el ticket.',
+                        title: t('common.errors.title'),
+                        description: getAxiosErrorMessage(error) || t('tickets.actions.close.error.description'),
                     });
                 }
             });
@@ -79,17 +89,19 @@ export const ViewTicketPage = () => {
             archiveTicket({ ticketId: ticket.id }, {
                 onSuccess: () => {
                     sileo.success({
-                        title: t('tickets.actions.archive.success_title', '¡Ticket archivado!'),
-                        description: t('tickets.actions.archive.success_desc', 'El ticket ha sido movido al archivo histórico exitosamente.'),
+                        title: t('tickets.actions.archive.success.title'),
+                        description: t('tickets.actions.archive.success.description'),
                     });
                 },
                 onError: (error) => {
                     sileo.error({
-                        title: t('common.errors.title', 'Error'),
-                        description: getAxiosErrorMessage(error) || 'No se pudo archivar el ticket.',
+                        title: t('common.errors.title'),
+                        description: getAxiosErrorMessage(error) || t('tickets.actions.archive.error.description'),
                     });
                 }
             });
+        } else {
+            console.warn(t('tickets.actions.unhandled_event', { event }));
         }
     };
 
@@ -99,26 +111,53 @@ export const ViewTicketPage = () => {
                 isArchiving ? TicketEvent.ARCHIVAR :
                     null;
 
-    if (isLoading) {
-        return <CustomFullScreenLoading />;
+    if (isLoading || !ticket) {
+        return (
+            <div className="space-y-4">
+                <CustomTitlePageWithBack
+                    backLink="/tickets"
+                    title={t('tickets.view_page.title')}
+                    description={t('tickets.view_page.description')}
+                />
+
+                <DetailHeaderTicketSkeleton />
+
+                <TicketActionsSkeleton />
+
+                <div className="hidden lg:block">
+                    <TicketStepperSkeleton />
+                </div>
+
+                <div className="grid gap-4 lg:grid-cols-3">
+                    <div className="lg:col-span-1 order-2 lg:order-1 space-y-4">
+                        {/* <TicketActorsCardSkeleton /> */}
+                        <TicketTimeLineSkeleton />
+                    </div>
+
+                    <div className="lg:col-span-2 order-1 lg:order-2 space-y-4">
+                        <DetailsTicketSkeleton />
+                        <TechnicalReportsAccordionSkeleton />
+                        <TicketDocumentsSkeleton />
+                    </div>
+                </div>
+            </div>
+        );
     }
 
-    if (!ticket) {
-        return null;
-    }
-    const canWatchTechnicalReports =
-        getAvailableActions(ticket.currentStatusCode).includes(TicketEvent.WATCH_TECHNICAL_REPORT);
+    const canWatchTechnicalReports = ticket.ticket_histories.some((th) =>
+        th.status.code === TicketStatus.NO_SOLUCIONADA ||
+        th.status.code === TicketStatus.SOLUCIONADA
+    );
+
     return (
-        <div className="space-y-5">
+        <div className="space-y-4">
             <CustomTitlePageWithBack
                 backLink="/tickets"
                 title={t('tickets.view_page.title')}
                 description={t('tickets.view_page.description')}
             />
 
-            <DetailHeaderTicket
-                ticket={ticket}
-            />
+            <DetailHeaderTicket ticket={ticket} />
 
             <TicketActions
                 currentState={ticket.currentStatusCode}
@@ -126,12 +165,14 @@ export const ViewTicketPage = () => {
                 onDirectAction={handleDirectAction}
                 pendingEvent={currentPendingEvent}
             />
+
             <div className="hidden lg:block">
                 <TicketStepper currentState={ticket.currentStatusCode} />
             </div>
 
             <div className="grid gap-4 lg:grid-cols-3">
-                <div className="lg:col-span-1 order-2 lg:order-1">
+                <div className="lg:col-span-1 order-2 lg:order-1 space-y-4">
+                    <TicketActorsCard ticket={ticket} />
                     <TicketTimeLine ticket_histories={ticket.ticket_histories} />
                 </div>
 
@@ -139,17 +180,10 @@ export const ViewTicketPage = () => {
                     <DetailsTicket ticket={ticket} />
 
                     <Can permission='WATCH_TECHNICAL_REPORT'>
-                        {
-                            canWatchTechnicalReports && <TechnicalReportsAccordion ticketId={ticket.id} />
-                        }
+                        {canWatchTechnicalReports && <TechnicalReportsAccordion ticketId={ticket.id} />}
                     </Can>
 
-
-                    <TicketDocuments
-                        ticketId={ticket.id}
-                        currentState={ticket.currentStatusCode}
-                        documents={ticket.documents}
-                    />
+                    <TicketDocuments documents={ticket.documents} />
                 </div>
             </div>
         </div>

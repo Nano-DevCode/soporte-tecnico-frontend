@@ -348,7 +348,9 @@
       "save_changes": "Guardar cambios",
       "view": "Detalles",
       "refresh": "Recargar",
-      "retry": "Reintentar"
+      "retry": "Reintentar",
+      "clean": "Limpiar",
+      "continue": "Si, Continuar"
     },
     "date": {
       "no_date": "Sin fecha"
@@ -392,6 +394,9 @@
     },
     "inputs": {
       "optional": "(Opcional)"
+    },
+    "errors": {
+      "title": "!Ha ocurrido un error!"
     }
   },
 
@@ -533,17 +538,25 @@
       "issue_type": "Tipo de problema",
       "description": "Descripción detallada",
       "coordinator": "Coordinador",
-      "asigned_to": "Asignado a: ",
-      "canalized_to": "Canalizado a: "
+      "asigned_to": "Asignado a",
+      "canalized_to": "Canalizado a "
     },
     "data_default": {
       "department": "Sin departamento",
       "school_period": "N/A",
-      "issue_type": "General"
+      "issue_type": "General",
+      "tags": "Por clasificar"
     },
     "filters": {
       "status": "Estado",
-      "priority": "Prioridad"
+      "priority": "Prioridad",
+      "date": {
+        "label": "Fecha",
+        "from": "Desde",
+        "to": "Hasta",
+        "wathever": "Cualquiera",
+        "no_date": "Ninguna"
+      }
     },
     "status": {
       "RECIBIDA": {
@@ -618,6 +631,77 @@
       }
     },
 
+    "actions": {
+      "unhandled_event": "El evento {{event}} no está manejado en ViewTicketPage.",
+      "create": {
+        "label": "Crear"
+      },
+      "edit": {
+        "label": "Editar"
+      },
+      "reject": {
+        "label": "Rechazar"
+      },
+      "route": {
+        "label": "Canalizar"
+      },
+      "assign": {
+        "label": "Asignar Técnicos"
+      },
+      "attend": {
+        "label": "Comenzar a Atender",
+        "confirm_title": "¿Iniciar atención del ticket?",
+        "confirm_message": "Se registrará tu hora de inicio y se notificará al solicitante.",
+        "success": {
+          "title": "¡Atención iniciada!",
+          "description": "El tiempo de resolución ha comenzado."
+        },
+        "error": {
+          "description": "No se pudo iniciar la atención. Por favor, inténtalo de nuevo."
+        }
+      },
+      "finish": {
+        "label": "Registrar Respuesta"
+      },
+      "close": {
+        "label": "Cerrar",
+        "confirm_title": "¿Cerrar solicitud?",
+        "confirm_message": "Confirme la recepción de la orden de trabajo para dar por concluida la solicitud.",
+        "success": {
+          "title": "¡Ticket cerrado!",
+          "description": "El ticket se ha cerrado definitivamente y ya no admite modificaciones."
+        },
+        "error": {
+          "description": "No se pudo cerrar el ticket. Por favor, verifica el estado e inténtalo de nuevo."
+        }
+      },
+      "archive": {
+        "label": "Archivar",
+        "confirm_title": "¿Archivar esta solicitud?",
+        "confirm_message": "Confirme la recepción de los formatos de la solicitud.",
+        "success": {
+          "title": "¡Ticket archivado!",
+          "description": "El ticket ha sido movido al archivo histórico exitosamente."
+        },
+        "error": {
+          "description": "No se pudo archivar el ticket. Por favor, inténtalo de nuevo."
+        }
+      },
+      "intervene": {
+        "label": "Registrar Bitácora"
+      }
+    },
+
+    "documents": {
+      "request_pdf": "Formato de Solicitud de Mantenimiento",
+      "work_order_pdf": "Orden de Trabajo (Reporte Final)",
+      "errors": {
+        "title": "!Ha ocurrido un error!",
+        "loading_request": "Ocurrió un error al intentar abrir la solicitud de soporte técnico. Por favor, intenta de nuevo.",
+        "loading_response": "Ocurrió un error al intentar abrir la orden de trabajo. Por favor, intenta de nuevo."
+      }
+    },
+    
     "not_found": {
       "title": "Ticket no encontrado",
       "message": "El ticket al que intentas acceder no existe o fue eliminado."
@@ -636,6 +720,18 @@
       "timeline": {
         "title": "Historial de cambio",
         "description": "Visualiza los cambios de la solicitud"
+      },
+      "involved_staff": {
+        "title": "Personal involucrado",
+        "description": "Personal involucrado en la solicitud"
+      },
+      "technical_reports": {
+        "title": "Bitácoras",
+        "description": "Historial de bitácoras generadas para este ticket."
+      },
+      "documents": {
+        "title": "Documentos",
+        "description": "Archivos y formatos generados de esta solicitud."
       }
     },
 
@@ -686,7 +782,8 @@
           "status": "Estatus",
           "priority": "Prioridad",
           "school_period": "Periodo",
-          "actions": "Acciones"
+          "actions": "Acciones",
+          "tags": "Etiquetas"
         }
       },
       "empty": {
@@ -738,16 +835,30 @@
         "message": "Ocurrió un error al intentar finalizar la solicitud, por favor intentelo nuevamente."
       }
     },
+
     "intervene_page": {
       "title": "Registrar bitácora de intervención",
       "description": "Documenta el avance en la atención de esta solicitud.",
       "success": {
         "title": "Bitácora registrada",
-        "message": "El ticket ha sido actualizado correctamente."
+        "message": "La bitácora ha sido registrada exitosamente."
       },
       "error": {
         "title": "Error al guardar",
-        "message": "Ocurrió un error al enviar la solicitud de soporte técnico."
+        "message": "Ocurrió un error al guardar la bitácora de la solicitud."
+      }
+    },
+
+    "route_page": {
+      "title": "Canalizar Solicitud",
+      "description": "Canaliza la solicitud a un coordinador para su atención.",
+      "success": {
+        "title": "Solicitud canalizada",
+        "message": "La solicitud ha sido canalizada exitosamente"
+      },
+      "error": {
+        "title": "Error al guardar",
+        "message": "Ocurrió un error al canalizar la solicitud de soporte técnico."
       }
     },
 
@@ -812,14 +923,16 @@
 
           "tags": {
             "label": "Etiquetas de clasificación",
-            "placeholder": "Añadir etiqueta...",
-            "description": "Escribe y presiona Enter para crear nuevas clasificaciones.",
+            "placeholder": "Seleccionar etiquetas...",
+            "description": "Escribe y presiona Crear para anadir nuevas etiquetas.",
             "create": {
               "label": "Crear etiqueta"
             },
             "not_found": {
               "label": "No se encontraron etiquetas." 
-            }
+            },
+            "searching": "Buscando coincidencias...",
+            "loading_more": "Cargando más..."
           }
         },
         "buttons": {
@@ -891,15 +1004,19 @@
           },
           "coordinator": {
             "label": "Coordinador",
-            "placeholder": "Selecciona a un coordinador...",
+            "placeholder": "Selecciona un coordinador...",
             "not_found": "No se encontró ningún coordinador."
+          },
+          "priority": {
+            "label": "Prioridad",
+            "placeholder": "Selecciona la prioridad de atención..."
           }
         },
         "buttons": {
           "submit": "Confirmar Canalización"
         },
         "errors": {
-          "coordination_required": "Por favor, selecciona un área de coordinación.",
+          "coordination_required": "Debes seleccionar a un coordinador.",
           "priority_required": "Debes asignar una prioridad al ticket.",
           "priority_invalid": "La prioridad debe ser un número entero válido.",
           "priority_min": "La prioridad mínima permitida es 1.",
@@ -1001,7 +1118,13 @@
 
   "technical_reports": {
     "data": {
+      "diagnosis": "Diagnóstico Técnico",
+      "work_done": "Trabajo Realizado",
+      "materials_used": "Materiales Utilizados",
+      "materials_none_used": "Ninguno",
+      "date": "Fecha",
       "is_resolved": {
+        "label": "Estado del problema",
         "true": "Solucionado",
         "false": "No solucionado"
       }
@@ -1023,6 +1146,10 @@
         "title": "No se encontraron Bitácoras",
         "description": "Intenta ajustar los filtros de busqueda"
       }
+    },
+    "error": {
+      "title": "Error al cargar",
+      "description": "No se pudieron obtener las Bitácoras. Revisa tu conexión."
     }
   }
 

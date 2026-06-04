@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { Loader2, ClipboardSignature, Save, X, Plus } from "lucide-react";
+import { Loader2, ClipboardSignature, Save, X, BrushCleaning } from "lucide-react";
 
 import {
     Form,
@@ -13,29 +13,25 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
 import { Textarea } from "@/components/ui/textarea";
 import { InterveneTicketSchema, type InterveneTicketFormInput, type InterveneTicketFormOutput } from "@/tickets/schemas/intervene-ticket.schema";
-import { Combobox, ComboboxChip, ComboboxChips, ComboboxChipsInput, ComboboxContent, ComboboxEmpty, ComboboxItem, ComboboxList, ComboboxValue, useComboboxAnchor } from "@/components/ui/combobox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Field, FieldContent, FieldDescription, FieldLabel, FieldTitle } from "@/components/ui/field";
 import { CustomOptionalInput } from "@/components/custom/CustomOptionalInput";
-import type { Tag } from "@/common/tags/interfaces/tag.interface";
-
+import { InfiniteScrollCombobox } from "../InfiniteScrollCombobox";
 
 interface Props {
     isPending: boolean;
-    tags: Tag[]
     onSubmit: (data: InterveneTicketFormOutput) => void;
     onCancel: () => void;
 }
 
-export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, tags }: Props) => {
+export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
     const { t } = useTranslation();
-
     const schema = useMemo(() => InterveneTicketSchema(t), [t]);
 
     const form = useForm<InterveneTicketFormInput, unknown, InterveneTicketFormOutput>({
@@ -49,24 +45,6 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, tags }: Pro
         },
     });
 
-    const [inputValue, setInputValue] = useState("");
-
-    const tagNames = useMemo(() => tags ? tags.map(t => t.name.toUpperCase()) : [], [tags]);
-
-    const dynamicItems = useMemo(() => {
-        const currentSelectedTags = form.getValues("tags") || [];
-        const allKnownTags = Array.from(new Set([...tagNames, ...currentSelectedTags]));
-        const normalizedInput = inputValue.trim().toUpperCase();
-        if (normalizedInput && !allKnownTags.includes(normalizedInput)) {
-            return [...allKnownTags, normalizedInput];
-        }
-        return allKnownTags;
-    }, [form, inputValue, tagNames])
-
-    const anchor = useComboboxAnchor()
-
-
-
     const handleCancel = () => {
         if (form.formState.isDirty) {
             const confirmDiscard = window.confirm(t('common.warnings.discard_changes'));
@@ -75,19 +53,7 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, tags }: Pro
         onCancel();
     };
 
-    const handleAddTag = (newTag: string) => {
-        const currentTags = form.getValues("tags") || [];
-
-        if (currentTags.includes(newTag)) return;
-
-        // setTagItem([...tagItems, newTag]);
-
-        form.setValue("tags", [...currentTags, newTag], {
-            shouldValidate: true,
-            shouldDirty: true,
-        });
-
-    };
+    const isBusy = isPending || form.formState.isSubmitting;
 
     return (
         <Card>
@@ -115,7 +81,7 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, tags }: Pro
                                                 autoFocus
                                                 placeholder={t('tickets.form.intervene.fields.diagnosis.placeholder')}
                                                 className="resize-none min-h-24"
-                                                disabled={isPending}
+                                                disabled={isBusy}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -134,7 +100,7 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, tags }: Pro
                                             <Textarea
                                                 placeholder={t('tickets.form.intervene.fields.work_performed.placeholder')}
                                                 className="resize-none min-h-24"
-                                                disabled={isPending}
+                                                disabled={isBusy}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -152,8 +118,8 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, tags }: Pro
                                         <FormControl>
                                             <Textarea
                                                 placeholder={t('tickets.form.intervene.fields.required_materials.placeholder')}
-                                                className="resize-none min-h-16"
-                                                disabled={isPending}
+                                                className="resize-none min-h-24"
+                                                disabled={isBusy}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -165,66 +131,37 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, tags }: Pro
                             <FormField
                                 control={form.control}
                                 name="tags"
-                                render={({ field }) => {
+                                render={({ field, fieldState }) => {
+
+                                    let errorMessage = fieldState.error?.message;
+                                    if (!errorMessage && Array.isArray(fieldState.error)) {
+                                        const firstNestedError = fieldState.error.find((err) => err != null);
+                                        if (firstNestedError) {
+                                            errorMessage = firstNestedError.message;
+                                        }
+                                    }
 
                                     return (
                                         <FormItem>
                                             <FormLabel>{t('tickets.form.intervene.fields.tags.label')}<CustomOptionalInput /></FormLabel>
                                             <FormControl>
-                                                <Combobox
-                                                    items={dynamicItems}
-                                                    multiple
-                                                    autoHighlight
-                                                    value={field.value || []}
-                                                    onValueChange={field.onChange}
-                                                    onInputValueChange={setInputValue}
-                                                    disabled={isPending}
-                                                >
-                                                    <ComboboxChips ref={anchor}>
-                                                        <ComboboxValue>
-                                                            {(field.value || []).map((item) => (
-                                                                <ComboboxChip key={item}>{item}</ComboboxChip>
-                                                            ))}
-                                                        </ComboboxValue>
-                                                        <ComboboxChipsInput
-                                                            placeholder={t('tickets.form.intervene.fields.tags.placeholder')}
-                                                        />
-                                                    </ComboboxChips>
-                                                    <ComboboxContent anchor={anchor}>
-                                                        <ComboboxEmpty>
-                                                            <span>{t('tickets.form.intervene.fields.tags.not_found.label')}</span>
-                                                        </ComboboxEmpty>
-                                                        <ComboboxList>
-                                                            {(item) => {
-                                                                const isNewTag = !tagNames.includes(item) && !field.value?.includes(item);
-
-                                                                return (
-                                                                    <ComboboxItem
-                                                                        key={item}
-                                                                        value={item}
-                                                                        className={isNewTag ? "text-primary bg-primary/5 hover:bg-primary/10 transition-colors" : ""}
-                                                                    >
-                                                                        {isNewTag ? (
-                                                                            <div className="flex items-center gap-2" onClick={() => handleAddTag(item)}>
-                                                                                <Plus className="h-4 w-4" />
-                                                                                <span>
-                                                                                    {t('tickets.form.intervene.fields.tags.create.label')} <strong className="font-semibold">"{item}"</strong>
-                                                                                </span>
-                                                                            </div>
-                                                                        ) : (
-                                                                            item
-                                                                        )}
-                                                                    </ComboboxItem>
-                                                                );
-                                                            }}
-                                                        </ComboboxList>
-                                                    </ComboboxContent>
-                                                </Combobox>
+                                                <InfiniteScrollCombobox
+                                                    onChange={field.onChange}
+                                                    value={field.value}
+                                                    disabled={isBusy}
+                                                />
                                             </FormControl>
                                             <FormDescription>
                                                 {t('tickets.form.intervene.fields.tags.description')}
                                             </FormDescription>
-                                            <FormMessage />
+                                            {errorMessage &&
+                                                <p
+                                                    data-slot="form-message"
+                                                    className={"text-sm text-destructive"}
+                                                >
+                                                    {errorMessage}
+                                                </p>
+                                            }
                                         </FormItem>
                                     )
                                 }}
@@ -235,14 +172,18 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, tags }: Pro
                                 name="is_resolved"
                                 render={({ field, fieldState }) => (
                                     <FormItem>
-                                        <FormLabel>{t('tickets.form.intervene.fields.is_resolved.label')}</FormLabel>
+                                        <div className={
+                                            "flex items-center gap-2 text-sm leading-none font-medium select-none"} >
+                                            {t('tickets.form.intervene.fields.is_resolved.label')}
+                                        </div>
                                         <FormControl>
                                             <RadioGroup
+                                                name={field.name}
+                                                value={typeof field.value === "boolean" ? String(field.value) : ""}
                                                 onValueChange={(value) => field.onChange(value === "true")}
-                                                value={field.value === true ? "true" : (field.value === false ? "false" : undefined)}
-                                                disabled={isPending}
-                                                className="grid grid-cols-1 md:grid-cols-2 gap-4"
                                                 aria-invalid={fieldState.invalid}
+                                                disabled={isBusy}
+                                                className="grid grid-cols-1 md:grid-cols-2 gap-4"
                                             >
                                                 <FieldLabel htmlFor="resolved-true">
                                                     <Field orientation="horizontal" data-invalid={fieldState.invalid}>
@@ -283,11 +224,22 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, tags }: Pro
                 </Form>
             </CardContent>
             <Separator />
-            <CardFooter className="flex flex-col-reverse sm:flex-row justify-end gap-3">
+            <CardFooter className="flex flex-wrap-reverse sm:flex-row justify-end gap-3">
                 <Button
                     variant="outline"
                     type="button"
-                    disabled={isPending}
+                    disabled={isBusy || !form.formState.isDirty}
+                    onClick={() => form.reset()}
+                    className="w-full sm:w-auto"
+                >
+                    <BrushCleaning className="mr-2 h-4 w-4" />
+                    {t('common.buttons.clean')}
+                </Button>
+
+                <Button
+                    variant="outline"
+                    type="button"
+                    disabled={isBusy}
                     onClick={handleCancel}
                     className="w-full sm:w-auto"
                 >
@@ -298,10 +250,10 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, tags }: Pro
                 <Button
                     type="submit"
                     form="form-intervene-ticket"
-                    disabled={isPending || !form.formState.isDirty}
+                    disabled={isBusy || !form.formState.isDirty}
                     className="w-full sm:w-auto"
                 >
-                    {isPending ? (
+                    {isBusy ? (
                         <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
                     ) : (
                         <Save className="mr-1.5 h-4 w-4" />

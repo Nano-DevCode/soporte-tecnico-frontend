@@ -64,14 +64,14 @@ export const TicketPriorityBadge = ({ priority, className, showIcon = true }: Pr
                     {showIcon && <Icon />}
                     {isValidPriority
                         ? t(`tickets.priority.${currentPriority}.name` as PriorityNameTranslationKey)
-                        : t('tickets.priority.UNKNOWN.name', 'Desconocida')}
+                        : t('tickets.priority.UNKNOWN.name')}
                 </Badge>
             </TooltipTrigger>
             <TooltipContent side="left" className="max-w-xs text-center">
                 <p className="text-sm">
                     {isValidPriority
                         ? t(`tickets.priority.${currentPriority}.description` as PriorityDescTranslationKey)
-                        : t('tickets.priority.UNKNOWN.description', 'Prioridad no asignada')}
+                        : t('tickets.priority.UNKNOWN.description')}
                 </p>
             </TooltipContent>
         </Tooltip>

@@ -11,6 +11,7 @@ import {
     AlertCircle,
     Flag,
     Archive,
+    History,
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { toFormatLocalDateString } from "@/lib/helpers/to-format-local-date-string";
@@ -20,6 +21,8 @@ import type { TicketHistory } from "../../interfaces/ticket-details.response";
 import { Separator } from "@/components/ui/separator";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
 import { useTranslation } from "react-i18next";
+
+type StatusNameTranslationKey = `tickets.status.${TicketStatusCode}.name`;
 
 const TIMELINE_CONFIG: Record<TicketStatusCode, { icon: React.ElementType, bg: string, text: string }> = {
     RECIBIDA: { icon: FileText, bg: 'bg-blue-100', text: 'text-blue-600' },
@@ -54,12 +57,14 @@ interface Props {
 
 export const TicketTimeLine = ({ ticket_histories }: Props) => {
     const { t, i18n } = useTranslation()
+
     if (!ticket_histories || ticket_histories.length === 0) return null;
 
     return (
         <Card>
             <CardHeader className="gap-0">
                 <CustomHeaderCard
+                    icon={History}
                     title={t('tickets.view_page.timeline.title')}
                     description={t('tickets.view_page.timeline.description')}
                 />
@@ -68,6 +73,7 @@ export const TicketTimeLine = ({ ticket_histories }: Props) => {
             <CardContent>
                 {ticket_histories.map((historial, idx) => {
                     const isLastItem = idx === ticket_histories.length - 1;
+                    const statusCode = historial.status.code;
 
                     return (
                         <div key={historial.id} className="relative flex gap-4">
@@ -76,11 +82,11 @@ export const TicketTimeLine = ({ ticket_histories }: Props) => {
                                 <div className="absolute left-4.5 sm:left-5 top-9 bottom-0 w-px bg-muted-foreground -ml-px" />
                             )}
 
-                            <TimelineIcon code={historial.status.code} />
+                            <TimelineIcon code={statusCode} />
 
                             <div className={cn("flex flex-col min-w-0 gap-1", !isLastItem && "pb-8")}>
                                 <h3 className="text-sm font-semibold text-foreground uppercase leading-tight truncate">
-                                    {historial.status.name}
+                                    {t(`tickets.status.${statusCode}.name` as StatusNameTranslationKey)}
                                 </h3>
 
                                 <div className="flex items-center text-xs sm:text-sm text-muted-foreground">

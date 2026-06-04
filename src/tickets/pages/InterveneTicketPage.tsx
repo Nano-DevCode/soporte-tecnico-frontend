@@ -1,37 +1,22 @@
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { sileo } from "sileo";
+
 import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
-import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 import { useInterveneTicket } from "../hooks/useInterveneTicket";
+import { useSmartNavigation } from "@/components/hooks/useSmartNavigation";
+
 import type { InterveneTicketFormOutput } from "../schemas/intervene-ticket.schema";
 import { InterveneTicketForm } from "../components/forms/InterveneTicketForm";
-import { useGetTags } from "@/common/tags/hooks/useGetTags";
-import { useEffect } from "react";
+import { CustomFormPageLayout } from "@/components/custom/CustomFormPageLayout";
 
 export const InterveneTicketPage = () => {
     const { id } = useParams();
     const { t } = useTranslation();
-    const navigate = useNavigate();
-    const location = useLocation();
+    const { navigateSmartBack } = useSmartNavigation('/tickets');
 
-    const previousPage = location.state?.from;
 
-    const { mutate, isPending } = useInterveneTicket();
-    const { data: tags, isLoading, isError } = useGetTags();
-
-    useEffect(() => {
-        if (isLoading) return
-
-        if (isError || !tags) {
-            sileo.error({
-                title: t('common.fetch_error.title'),
-                description: t('common.fetch_error.description'),
-                duration: 6000,
-            });
-            navigate(previousPage || `/tickets`, { replace: true });
-        }
-    }, [isError, isLoading, tags, navigate, t, previousPage]);
+    const { mutate, isPending, isSuccess } = useInterveneTicket();
 
 
     const handleSubmit = (values: InterveneTicketFormOutput) => {
@@ -44,7 +29,7 @@ export const InterveneTicketPage = () => {
                     description: t('tickets.intervene_page.success.message'),
                     duration: 5000,
                 });
-                navigate(previousPage || '/tickets', { replace: true })
+                navigateSmartBack(`/tickets/${id}`);
             },
             onError: (error) => {
                 console.error("Error en la mutación:", error);
@@ -58,38 +43,20 @@ export const InterveneTicketPage = () => {
     };
 
     const handleCancel = () => {
-        navigate(previousPage || `/tickets`);
+        navigateSmartBack(`/tickets/${id}`);
     };
 
-    if (isLoading || !tags) {
-        return (
-            <div className="mx-auto max-w-4xl space-y-5">
-                <CustomTitlePageWithBack
-                    backLink={previousPage || "/tickets"}
-                    title={t('tickets.intervene_page.title')}
-                    description={t('tickets.intervene_page.description')}
-                />
-                {/* <FinishTicketFormSkeleton /> */}
-            </div>
-        );
-    }
-
     return (
-        <div className="mx-auto max-w-4xl space-y-5">
-            <CustomTitlePageWithBack
-                backLink={previousPage || "/tickets"}
-                title={t('tickets.intervene_page.title')}
-                description={t('tickets.intervene_page.description')}
+        <CustomFormPageLayout
+            backLink={`/tickets/${id}`}
+            title={t('tickets.intervene_page.title')}
+            description={t('tickets.intervene_page.description')}
+        >
+            <InterveneTicketForm
+                isPending={isPending || isSuccess}
+                onSubmit={handleSubmit}
+                onCancel={handleCancel}
             />
-
-            <div>
-                <InterveneTicketForm
-                    tags={tags}
-                    isPending={isPending}
-                    onSubmit={handleSubmit}
-                    onCancel={handleCancel}
-                />
-            </div>
-        </div>
+        </CustomFormPageLayout>
     )
 }

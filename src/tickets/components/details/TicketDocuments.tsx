@@ -3,71 +3,91 @@ import { Button } from "@/components/ui/button";
 import { FileText, Loader2, FileDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
-import type { TicketStatusCode } from "../../interfaces/ticket-status-code.interface";
-// Asumiendo que guardaste el hook que creamos en esta ruta:
 import { Separator } from "@/components/ui/separator";
 import { useGetTicketPdf } from "@/tickets/hooks/useGetTicketPdf";
 import { TYPE_DOCUMENT_NAME, type Document } from "@/tickets/interfaces/ticket-details.response";
 import { useGetTicketResponsePdf } from "@/tickets/hooks/useGetTicketResponsePdf";
+import { useCan } from "@/common/permission/useCan";
+import { sileo } from "sileo";
+import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
 
 interface Props {
-    ticketId: string;
-    currentState: TicketStatusCode;
     documents: Document[];
 }
 
-// TODO: agrgear el watch response a la maquina de estados.
-export const TicketDocuments = ({ currentState, documents }: Props) => {
+export const TicketDocuments = ({ documents }: Props) => {
     const { t } = useTranslation();
+    const { can } = useCan();
     const { mutate: openRequestPdf, isPending: isPendingRequest } = useGetTicketPdf();
     const { mutate: openResponsePdf, isPending: isPendingResponse } = useGetTicketResponsePdf();
 
-    const handleOpenDocument = (documentType: TYPE_DOCUMENT_NAME) => {
-        const filename = documents.find((doc) =>
-            doc.type_document.name === documentType)?.name ?? undefined
+    const requestDocument = documents?.find((doc) => doc.type_document.name === TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM);
+    const responseDocument = documents?.find((doc) => doc.type_document.name === TYPE_DOCUMENT_NAME.WORK_ORDER_FORM);
 
-        if (filename && documentType === TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM) {
-            openRequestPdf(filename);
+    const showRequest = requestDocument && can('WATCH_TICKET');
+    const showResponse = responseDocument && can('WATCH_RESPONSE_REPORT');
+
+    const handleOpenDocument = (filename: string, documentType: TYPE_DOCUMENT_NAME) => {
+        if (documentType === TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM) {
+            openRequestPdf(filename, {
+                onError: (error) => {
+                    sileo.error({
+                        title: t('tickets.documents.errors.title'),
+                        description: getAxiosErrorMessage(error) || t('tickets.documents.errors.loading_request'),
+                    });
+                }
+            });
         }
-        else if (filename && documentType === TYPE_DOCUMENT_NAME.WORK_ORDER_FORM) {
-            openResponsePdf(filename);
+        else if (documentType === TYPE_DOCUMENT_NAME.WORK_ORDER_FORM) {
+            openResponsePdf(filename, {
+                onError: (error) => {
+                    sileo.error({
+                        title: t('tickets.documents.errors.title'),
+                        description: getAxiosErrorMessage(error) || t('tickets.documents.errors.loading_response'),
+                    });
+                }
+            });
         }
     };
+
+    if (!showRequest && !showResponse) return null;
 
     return (
         <Card>
             <CardHeader className="gap-0">
                 <CustomHeaderCard
-                    title={t('tickets.documents.title', 'Documentos')}
-                    description={t('tickets.documents.description', 'Archivos y formatos generados de esta solicitud.')}
+                    title={t('tickets.view_page.documents.title')}
+                    description={t('tickets.view_page.documents.description')}
                     icon={FileDown}
                 />
             </CardHeader>
             <Separator />
             <CardContent className="space-y-3">
-                <Button
-                    variant="outline"
-                    className="w-full justify-start"
-                    onClick={() => handleOpenDocument(TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM)}
-                    disabled={isPendingRequest}
-                >
-                    {isPendingRequest
-                        ? <Loader2 className="animate-spin text-muted-foreground" />
-                        : <FileText className="text-amber-700" />}
-                    {t('tickets.documents.request_pdf', 'Formato de Solicitud de Mantenimiento')}
-                </Button>
-
-                {(currentState === 'FINALIZADA' || currentState === 'CERRADA' || currentState === 'ARCHIVADA') && (
+                {showRequest && (
                     <Button
                         variant="outline"
                         className="w-full justify-start"
-                        onClick={() => handleOpenDocument(TYPE_DOCUMENT_NAME.WORK_ORDER_FORM)}
+                        onClick={() => handleOpenDocument(requestDocument!.name, TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM)}
+                        disabled={isPendingRequest}
+                    >
+                        {isPendingRequest
+                            ? <Loader2 className="animate-spin text-muted-foreground" />
+                            : <FileText className="text-amber-700" />}
+                        {t('tickets.documents.request_pdf')}
+                    </Button>
+                )}
+
+                {showResponse && (
+                    <Button
+                        variant="outline"
+                        className="w-full justify-start"
+                        onClick={() => handleOpenDocument(responseDocument!.name, TYPE_DOCUMENT_NAME.WORK_ORDER_FORM)}
                         disabled={isPendingResponse}
                     >
                         {isPendingResponse
                             ? <Loader2 className="animate-spin text-muted-foreground" />
                             : <FileText className="text-amber-700" />}
-                        {t('tickets.documents.work_order_pdf', 'Orden de Trabajo (Reporte Final)')}
+                        {t('tickets.documents.work_order_pdf')}
                     </Button>
                 )}
             </CardContent>

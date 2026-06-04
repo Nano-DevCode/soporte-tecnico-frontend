@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { Loader2, Flag, Save, X } from "lucide-react"; // Flag es un buen ícono para "Finalizar"
+import { Loader2, Flag, Save, X, BrushCleaning } from "lucide-react"; // Flag es un buen ícono para "Finalizar"
 
 import {
     Form,
@@ -108,12 +108,12 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel, maintenanceTyp
                                 )}
                             />
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                            <div className="flex flex-col md:flex-row flex-wrap gap-6 ">
                                 <FormField
                                     control={form.control}
                                     name="maintenance_type_id"
                                     render={({ field }) => (
-                                        <FormItem>
+                                        <FormItem className="flex-1">
                                             <FormLabel>{t('tickets.form.finish.fields.maintenance_type.label')}</FormLabel>
                                             <Select
                                                 disabled={isBusy}
@@ -143,7 +143,7 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel, maintenanceTyp
                                     control={form.control}
                                     name="service_type_id"
                                     render={({ field }) => (
-                                        <FormItem>
+                                        <FormItem className="flex-1">
                                             <FormLabel>{t('tickets.form.finish.fields.service_type.label')}</FormLabel>
                                             <Select
                                                 disabled={isBusy}
@@ -175,7 +175,18 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel, maintenanceTyp
                 </Form>
             </CardContent>
             <Separator />
-            <CardFooter className="flex flex-col-reverse sm:flex-row justify-end gap-3">
+            <CardFooter className="flex flex-wrap-reverse sm:flex-row justify-end gap-3">
+                <Button
+                    variant="outline"
+                    type="button"
+                    disabled={isBusy || !form.formState.isDirty}
+                    onClick={() => form.reset()}
+                    className="w-full sm:w-auto"
+                >
+                    <BrushCleaning className="mr-2 h-4 w-4" />
+                    {t('common.buttons.clean')}
+                </Button>
+
                 <Button
                     variant="outline"
                     type="button"

@@ -13,12 +13,13 @@ import { AlertCircle, RefreshCcw, TicketIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { CustomEmptyListState } from '@/components/custom/CustomEmptyListState';
+import { TICKET_COLUMN_IDS } from '../interfaces/ticket-column-ids.types';
 
 export const CustomListTickets = () => {
-    const { data, isLoading: skeletonLoading, isError, refetch } = useAllTickets();
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
+    const { data, isLoading: skeletonLoading, isError, refetch, isFetching } = useAllTickets();
 
     const sortBy = searchParams.get('sortBy') || 'created_at';
     const sortOrder = useMemo(() => {
@@ -66,6 +67,9 @@ export const CustomListTickets = () => {
         columns,
         sorting: tableSortingState,
         onSortingChange: handleSortingChange,
+        initialColumnVisibility: {
+            [TICKET_COLUMN_IDS.TAGS]: false,
+        }
     });
 
     return (
@@ -89,38 +93,36 @@ export const CustomListTickets = () => {
                         variant="secondary"
                         onClick={() => refetch()}
                     >
-                        <RefreshCcw className="h-4 w-4" />
+                        <RefreshCcw className={isFetching ? 'animate-spin' : ''} />
                         {t('common.buttons.retry')}
                     </Button>
                 </Empty>
             ) :
-                (
-                    <>
-                        <div className='hidden md:block'>
-                            <DataTable
-                                table={table}
-                                columnsLength={columns.length}
-                                onRowClick={(row) => handleCardClick(row.original.id)}
-                                isLoading={skeletonLoading}
-                                emptyState={
-                                    <CustomEmptyListState
-                                        icon={TicketIcon}
-                                        title={t("tickets.list_page.empty.title")}
-                                        description={t("tickets.list_page.empty.description")}
-                                    />}
-                            />
-                        </div>
-                        <div className='md:hidden'>
-                            <CustomMobileCardsTickets
-                                tickets={ticketsList}
-                                handleCardClick={handleCardClick}
-                                isLoading={skeletonLoading}
-                            />
-                        </div>
+                (<>
+                    <div className='hidden md:block'>
+                        <DataTable
+                            table={table}
+                            columnsLength={columns.length}
+                            onRowClick={(row) => handleCardClick(row.original.id)}
+                            isLoading={skeletonLoading}
+                            emptyState={
+                                <CustomEmptyListState
+                                    icon={TicketIcon}
+                                    title={t("tickets.list_page.empty.title")}
+                                    description={t("tickets.list_page.empty.description")}
+                                />}
+                        />
+                    </div>
+                    <div className='md:hidden'>
+                        <CustomMobileCardsTickets
+                            tickets={ticketsList}
+                            handleCardClick={handleCardClick}
+                            isLoading={skeletonLoading}
+                        />
+                    </div>
 
-                        <CustomPagination totalPages={data?.meta.lastPage ?? 0} />
-                    </>
-                )
+                    <CustomPagination totalPages={data?.meta.lastPage ?? 0} />
+                </>)
             }
         </>
     )

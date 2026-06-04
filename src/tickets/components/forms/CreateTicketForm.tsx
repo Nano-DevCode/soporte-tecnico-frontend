@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { Loader2, Save, User, X } from "lucide-react";
+import { BrushCleaning, Loader2, Save, User, X } from "lucide-react";
 
 import {
     Form,
@@ -208,7 +208,18 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                 </Form>
             </CardContent>
             <Separator />
-            <CardFooter className="flex flex-col-reverse sm:flex-row justify-end gap-3">
+            <CardFooter className="flex flex-wrap-reverse sm:flex-row justify-end gap-3">
+                <Button
+                    variant="outline"
+                    type="button"
+                    disabled={isBusy || !form.formState.isDirty}
+                    onClick={() => form.reset()}
+                    className="w-full sm:w-auto"
+                >
+                    <BrushCleaning className="mr-2 h-4 w-4" />
+                    {t('common.buttons.clean')}
+                </Button>
+
                 <Button
                     variant="outline"
                     type="button"

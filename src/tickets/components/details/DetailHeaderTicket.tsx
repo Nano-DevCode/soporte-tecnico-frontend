@@ -1,68 +1,42 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { TicketStatusBadge } from "../TicketStatusBadge"
+import { Card, CardContent } from "@/components/ui/card";
+import { TicketStatusBadge } from "../TicketStatusBadge";
 import type { TicketDetailsResponse } from "@/tickets/interfaces/ticket-details.response";
-import { useTranslation } from "react-i18next";
 import { TicketPriorityBadge } from "../TicketPriorityBadge";
-import { getFullName } from "@/lib/helpers/toFullName";
 import { TicketTagsBadge } from "../TicketTagsBadge";
+import { Hash } from "lucide-react";
 
 export interface Props {
     ticket: TicketDetailsResponse;
 }
+
 export const DetailHeaderTicket = ({ ticket }: Props) => {
-    const { t } = useTranslation();
+
     return (
         <Card>
-            <CardContent>
-                <div className="flex flex-row flex-wrap gap-2">
-                    <div className="text-muted-foreground font-medium  text-sm wrap-break-word">
-
-                        <h2 className="text-xl font-bold tracking-tight text-foreground ">
+            <CardContent className="space-y-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <Hash className="h-5 w-5 text-muted-foreground" strokeWidth={2.5} />
+                        <h2 className="text-xl md:text-2xl font-bold tracking-tight text-nowrap">
                             {ticket.folio}
                         </h2>
-                        <p >
-                            {t("tickets.data.department")}
-                            : <span className="text-foreground">
-                                {ticket.jefe_depto.department.name}
-                            </span>
-                        </p>
-
-                        {(ticket.coordinator) && (
-                            <p>
-                                {t('tickets.data.canalized_to')}
-                                <span className="text-foreground">
-                                    {getFullName(
-                                        ticket.coordinator.name,
-                                        ticket.coordinator.paternalSurname,
-                                        ticket.coordinator.maternalSurname)
-                                    }
-                                </span>
-                            </p>
-                        )}
-                        {ticket.attends.length > 0 && (
-                            <p>
-                                {t('tickets.data.asigned_to')}
-                                <span className="text-foreground">
-                                    {ticket.attends.map((a) =>
-                                        getFullName(
-                                            a.technician.name,
-                                            a.technician.paternalSurname,
-                                            a.technician.maternalSurname)
-                                    ).join(', ')}
-                                </span>
-                            </p>
-                        )}
+                        <span className="font-semibold text-muted-foreground">
+                            - {ticket.jefe_depto.department.name}
+                        </span>
                     </div>
-                    <div className="flex flex-col gap-4 flex-1">
-                        <div className="flex justify-end gap-2">
-                            <TicketStatusBadge statusCode={ticket.currentStatusCode} />
-                            <TicketPriorityBadge priority={ticket.priority} />
-                        </div>
-
-                        <TicketTagsBadge tags={ticket.tags} />
+                    <div className="flex flex-wrap items-center gap-2">
+                        <TicketStatusBadge statusCode={ticket.currentStatusCode} />
+                        <TicketPriorityBadge priority={ticket.priority} />
                     </div>
                 </div>
+
+                {ticket.tags && ticket.tags.length > 0 && (
+                    <div className="flex flex-wrap justify-end gap-2">
+                        <TicketTagsBadge tags={ticket.tags} />
+                    </div>
+                )}
+
             </CardContent>
         </Card>
-    )
-}
+    );
+};

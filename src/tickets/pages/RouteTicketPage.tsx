@@ -1,58 +1,72 @@
-import { useNavigate, useParams } from "react-router";
-import { DetailsTicket } from "../components/details/DetailsTicket"
-import { useGetTicketById } from "../hooks/useGetTicketById"
 import { useTranslation } from "react-i18next";
-import { CustomFullScreenLoading } from "@/components/custom/CustomFullScreenLoading";
+import { useParams } from "react-router";
 import { sileo } from "sileo";
 import { useEffect } from "react";
-import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
-import type { RouteTicketFormOutput } from "../schemas/route-ticket.schema";
-import { RouteTicketForm } from "../components/forms/RouteTicketForm";
-import { useRouteTicket } from "../hooks/useRouteTicket";
+
 import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
+import { useGetTicketById } from "../hooks/useGetTicketById"
+import { useRouteTicket } from "../hooks/useRouteTicket";
+import { useSmartNavigation } from "@/components/hooks/useSmartNavigation";
+
+import type { RouteTicketFormOutput } from "../schemas/route-ticket.schema";
+import { DetailsTicket } from "../components/details/DetailsTicket"
+import { RouteTicketForm } from "../components/forms/RouteTicketForm";
+import { CustomFormPageLayout } from "@/components/custom/CustomFormPageLayout";
+import { useGetCoordinators } from "@/common/coordinators/hooks/useGetCoordinators";
+import { RouteTicketFormSkeleton } from "../components/Skeletons/RouteTicketFormSkeleton";
+import { DetailsTicketSkeleton } from "../components/Skeletons/DetailsTicketSkeleton";
 
 export const RouteTicketPage = () => {
     const { id } = useParams();
     const { t } = useTranslation();
-    const navigate = useNavigate();
+    const { navigateFallback, navigateSmartBack } = useSmartNavigation('/tickets');
 
-    const { isLoading, isError, data: ticket } = useGetTicketById(id);
-    const { mutate, isPending } = useRouteTicket();
+    const { isLoading: isLoadingTicket, isError: isErrorTicket, data: ticket } = useGetTicketById(id);
+    const { isLoading: isLoadingCoordinators, isError: isErrorCoordinator, data: coordinators } = useGetCoordinators();
+    const { mutate, isPending, isSuccess } = useRouteTicket();
+
+    const isLoading = isLoadingCoordinators || isLoadingTicket;
 
     useEffect(() => {
-        if (!isLoading && (isError || !ticket)) {
+        if (isLoading) return;
+
+        if (isErrorTicket || !ticket) {
             sileo.error({
-                title: 'p',
-                description: 'p',
+                title: t('tickets.not_found.title'),
+                description: t('tickets.not_found.message'),
                 duration: 6000,
             });
-
-            navigate('/tickets', { replace: true });
+            navigateFallback();
+            return;
         }
-    }, [isError, isLoading, ticket, id, navigate, t]);
+
+        if (isErrorCoordinator || !coordinators) {
+            sileo.error({
+                title: t('common.fetch_error.title'),
+                description: t('common.fetch_error.description'),
+                duration: 6000,
+            });
+            navigateFallback();
+        }
+    }, [isLoading, ticket, t, navigateFallback, isErrorTicket, isErrorCoordinator, coordinators]);
 
     const handleSubmit = (values: RouteTicketFormOutput) => {
-        if (!id) {
-            return
-        }
+        if (!id) return
 
         mutate({ ticketId: id, routeTicketPayload: values }, {
             onSuccess: () => {
                 sileo.success({
-                    title: t('tickets.create_page.success.title'),
-                    description: t('tickets.create_page.success.message'),
+                    title: t('tickets.route_page.success.title'),
+                    description: t('tickets.route_page.success.message'),
                     duration: 5000,
                 });
-                navigate(`/tickets`);
+                navigateSmartBack(`/tickets/${id}`);
             },
             onError: (error) => {
                 console.error("Error en la mutación:", error);
-
-                const errorMessage = getAxiosErrorMessage(error);
-
                 sileo.error({
-                    title: t('tickets.create_page.error.title'),
-                    description: errorMessage,
+                    title: t('tickets.route_page.error.title'),
+                    description: getAxiosErrorMessage(error),
                     duration: 7000,
                 });
             },
@@ -60,24 +74,36 @@ export const RouteTicketPage = () => {
     };
 
     const handleCancel = () => {
-        navigate('/tickets');
+        navigateSmartBack(`/tickets/${id}`);
     };
 
-    if (isLoading) {
-        return <CustomFullScreenLoading />;
-    }
+    if (isLoading || !ticket || !coordinators) {
+        return (
+            <CustomFormPageLayout
+                backLink={`/tickets/${id}`}
+                title={t('tickets.route_page.title')}
+                description={t('tickets.route_page.description')}
+            >
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                    <div className="lg:col-span-7 order-2 lg:order-1">
+                        <DetailsTicketSkeleton />
+                    </div>
 
-    if (!ticket) {
-        return null;
+                    <div className="lg:col-span-5 order-1 lg:order-2 lg:sticky lg:top-15">
+                        <RouteTicketFormSkeleton />
+                    </div>
+
+                </div>
+            </CustomFormPageLayout>
+        )
     }
 
     return (
-        <div className="mx-auto max-w-4xl space-y-5">
-            <CustomTitlePageWithBack
-                backLink={`/tickets/${ticket.id}`}
-                title="Canalizar solicitud"
-                description={"Selecciona la coordinación a la que se canalizara la solicitud"}
-            />
+        <CustomFormPageLayout
+            backLink={`/tickets/${id}`}
+            title={t('tickets.route_page.title')}
+            description={t('tickets.route_page.description')}
+        >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
                 <div className="lg:col-span-7 order-2 lg:order-1">
                     <DetailsTicket ticket={ticket} />
@@ -86,14 +112,14 @@ export const RouteTicketPage = () => {
                 <div className="lg:col-span-5 order-1 lg:order-2 lg:sticky lg:top-15">
                     <RouteTicketForm
                         priorityDefault={ticket.priority}
-                        isPending={isPending}
+                        isPending={isPending || isSuccess}
                         onSubmit={handleSubmit}
                         onCancel={handleCancel}
-                    />
+                        coordinators={coordinators} />
                 </div>
 
             </div>
-        </div>
+        </CustomFormPageLayout>
     )
 }
 

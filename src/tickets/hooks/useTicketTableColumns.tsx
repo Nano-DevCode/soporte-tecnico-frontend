@@ -94,6 +94,23 @@ export const getTicketColumns = (t: TFunction, i18n: i18n): ColumnDef<Ticket>[] 
       ),
     },
     {
+      accessorKey: "tags",
+      id: TICKET_COLUMN_IDS.TAGS,
+      header: ({ column }) => SortableHeader(column, t("tickets.list_page.table.headers.tags")),
+      cell: ({ row }) => {
+        const tagsNames = row.original.tags.map((t) => t.name);
+        return (
+          <span className="text-xs font-semibold text-muted-foreground uppercase" >
+            {
+              (tagsNames.length <= 0)
+                ? t("tickets.data_default.tags")
+                : tagsNames.join(', ')
+            }
+          </span >
+        )
+      },
+    },
+    {
       id: TICKET_COLUMN_IDS.ACTIONS,
       enableSorting: false,
       header: () => <div className="text-center">{t("tickets.list_page.table.headers.actions")}</div>,

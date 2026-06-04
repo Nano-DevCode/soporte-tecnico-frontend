@@ -7,6 +7,7 @@ export const TICKET_COLUMN_IDS = {
   PRIORITY: "priority",
   ACTIONS: "actions",
   SCHOOL_PERIOD: "school_period",
+  TAGS: "tags",
 } as const;
 
 export type TicketColumnId = typeof TICKET_COLUMN_IDS[keyof typeof TICKET_COLUMN_IDS];

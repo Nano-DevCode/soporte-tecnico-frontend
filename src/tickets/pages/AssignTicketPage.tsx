@@ -1,25 +1,26 @@
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useParams } from "react-router";
-import { useGetTicketById } from "../hooks/useGetTicketById";
-import { useAssignTicket } from "../hooks/useAssignTicket";
+import { useParams } from "react-router";
 import { useEffect } from "react";
 import { sileo } from "sileo";
-import type { AssignTicketFormOutput } from "../schemas/assign-ticket.schema";
+
 import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
-import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
+import { useGetTicketById } from "../hooks/useGetTicketById";
+import { useAssignTicket } from "../hooks/useAssignTicket";
+import { useGetTechnicians } from "@/common/technicians/hooks/useGetTechnicians";
+import { useSmartNavigation } from "@/components/hooks/useSmartNavigation";
+
+import type { AssignTicketFormOutput } from "../schemas/assign-ticket.schema";
 import { AssignTicketForm } from "../components/forms/AssignTicketForm";
 import { DetailsTicket } from "../components/details/DetailsTicket";
 import { DetailsTicketSkeleton } from "../components/Skeletons/DetailsTicketSkeleton";
 import { AssignTicketFormSkeleton } from "../components/Skeletons/AssignTicketFormSkeleton";
-import { useGetTechnicians } from "@/common/technicians/hooks/useGetTechnicians";
+import { CustomFormPageLayout } from "@/components/custom/CustomFormPageLayout";
 
 export const AssignTicketPage = () => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
-    const location = useLocation();
     const { id } = useParams();
 
-    const previousPage = location.state?.from;
+    const { navigateFallback, navigateSmartBack } = useSmartNavigation('/tickets');
 
     const {
         isLoading: loadingTicket,
@@ -46,7 +47,7 @@ export const AssignTicketPage = () => {
                 description: t('tickets.not_found.message'),
                 duration: 6000,
             });
-            navigate(previousPage || `/tickets`, { replace: true });
+            navigateFallback();
             return;
         }
 
@@ -56,14 +57,13 @@ export const AssignTicketPage = () => {
                 description: t('tickets.assign_page.fetch_error.description'),
                 duration: 6000,
             });
-            navigate(previousPage || `/tickets`, { replace: true });
+            navigateFallback();
         }
-    }, [isLoading, ticket, id, navigate, t, isTicketError, isTechsError, previousPage, technicians]);
+    }, [t, isLoading, ticket, isTicketError, isTechsError, technicians, navigateFallback]);
 
     const handleSubmit = (values: AssignTicketFormOutput) => {
-        if (!id) {
-            return
-        }
+        if (!id) return
+
         mutate({ ticketId: id, assignTicketPayload: values }, {
             onSuccess: () => {
                 sileo.success({
@@ -71,16 +71,13 @@ export const AssignTicketPage = () => {
                     description: t('tickets.assign_page.success.message'),
                     duration: 5000,
                 });
-                navigate(previousPage || `/tickets`, { replace: true });
+                navigateSmartBack(`/tickets/${id}`);
             },
             onError: (error) => {
                 console.error("Error en la mutación:", error);
-
-                const errorMessage = getAxiosErrorMessage(error);
-
                 sileo.error({
                     title: t('tickets.assign_page.error.title'),
-                    description: errorMessage,
+                    description: getAxiosErrorMessage(error),
                     duration: 7000,
                 });
             },
@@ -88,17 +85,16 @@ export const AssignTicketPage = () => {
     };
 
     const handleCancel = () => {
-        navigate(previousPage || `/tickets`);
+        navigateSmartBack(`/tickets/${id}`);
     };
 
     if (isLoading || !ticket || !technicians) {
         return (
-            <div className="mx-auto space-y-5">
-                <CustomTitlePageWithBack
-                    backLink={previousPage || `/tickets/${id}`}
-                    title={t('tickets.assign_page.title')}
-                    description={t('tickets.assign_page.description')}
-                />
+            <CustomFormPageLayout
+                backLink={`/tickets/${id}`}
+                title={t('tickets.assign_page.title')}
+                description={t('tickets.assign_page.description')}
+            >
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
                     <div className="lg:col-span-7 order-2 lg:order-1">
                         <DetailsTicketSkeleton />
@@ -109,18 +105,16 @@ export const AssignTicketPage = () => {
                     </div>
 
                 </div>
-
-            </div>
+            </CustomFormPageLayout>
         )
     }
 
     return (
-        <div className="mx-auto space-y-5">
-            <CustomTitlePageWithBack
-                backLink={previousPage || `/tickets/${id}`}
-                title={t('tickets.assign_page.title')}
-                description={t('tickets.assign_page.description')}
-            />
+        <CustomFormPageLayout
+            backLink={`/tickets/${id}`}
+            title={t('tickets.assign_page.title')}
+            description={t('tickets.assign_page.description')}
+        >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
                 <div className="lg:col-span-7 order-2 lg:order-1">
                     <DetailsTicket ticket={ticket} />
@@ -137,7 +131,6 @@ export const AssignTicketPage = () => {
                 </div>
 
             </div>
-
-        </div>
+        </CustomFormPageLayout>
     )
 }

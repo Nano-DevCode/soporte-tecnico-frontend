@@ -1,8 +1,15 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
-import type { Tag } from "../interfaces/tag.interface";
+import type { GetTagsResponse } from "../interfaces/tag.interface";
 
+interface FetchTagsParams {
+    search?: string;
+    page?: number;
+    limit?: number;
+}
 
-export const getTagsAction = async (): Promise<Tag[]> => {
-    const { data } = await soporteTecnicoApi.get<Tag[]>('/tags');
+export const getTagsAction = async (params: FetchTagsParams): Promise<GetTagsResponse> => {
+    const { data } = await soporteTecnicoApi.get<GetTagsResponse>('/tags',
+        { params }
+    );
     return data;
 }

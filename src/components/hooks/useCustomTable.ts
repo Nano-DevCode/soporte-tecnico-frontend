@@ -14,6 +14,7 @@ interface UseCustomTableProps<TData, TValue> {
     data: TData[];
     columns: ColumnDef<TData, TValue>[];
     sorting?: SortingState;
+    initialColumnVisibility?: VisibilityState;
     onSortingChange?: (sorting: SortingState) => void;
 }
 
@@ -22,9 +23,11 @@ export function useCustomTable<TData, TValue>({
     columns,
     sorting = [],
     onSortingChange,
+    initialColumnVisibility = {}
+
 }: UseCustomTableProps<TData, TValue>) {
 
-    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(initialColumnVisibility);
 
     const table = useReactTable({
         data,
@@ -41,6 +44,7 @@ export function useCustomTable<TData, TValue>({
         },
         getSortedRowModel: getSortedRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
+
         state: {
             sorting,
             columnVisibility,

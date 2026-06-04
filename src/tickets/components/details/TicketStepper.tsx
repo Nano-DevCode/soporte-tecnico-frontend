@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import type { TicketStatusCode } from '../../interfaces/ticket-status-code.interface';
+import { useTranslation } from 'react-i18next';
 
 
 const LINEAR_STEPS: TicketStatusCode[] = [
@@ -28,43 +29,37 @@ const LINEAR_STEPS: TicketStatusCode[] = [
     'ARCHIVADA'
 ];
 
+type StatusNameTranslationKey = `tickets.status.${TicketStatusCode}.name`;
+type StatusDescTranslationKey = `tickets.status.${TicketStatusCode}.description`;
+
 interface StateConfig {
-    label: string;
-    description?: string;
     icon: React.ElementType;
     isException?: boolean;
     alertVariant?: 'default' | 'destructive' | 'warning';
     fallbackIndex?: number;
 }
-// TODO: hacer la traduccion de los label and description
 const STATE_DICTIONARY: Record<TicketStatusCode, StateConfig> = {
-    RECIBIDA: { label: 'Recibida', icon: ClipboardList },
-    CANALIZADA: { label: 'Canalizada', icon: Send },
-    ASIGNADA: { label: 'Asignada', icon: UserPlus },
-    ATENDIENDO: { label: 'Atendiendo', icon: Wrench },
-    SOLUCIONADA: { label: 'Solucionada', icon: CheckCircle2 },
-    FINALIZADA: { label: 'Finalizada', icon: Flag },
-    CERRADA: { label: 'Cerrada', icon: Lock },
+    RECIBIDA: { icon: ClipboardList },
+    CANALIZADA: { icon: Send },
+    ASIGNADA: { icon: UserPlus },
+    ATENDIENDO: { icon: Wrench },
+    SOLUCIONADA: { icon: CheckCircle2 },
+    FINALIZADA: { icon: Flag },
+    CERRADA: { icon: Lock },
 
     RECHAZADA: {
-        label: 'Rechazada',
-        description: 'La solicitud no procedió y fue rechazada.',
         icon: XCircle,
         isException: true,
         alertVariant: 'destructive',
         fallbackIndex: 0
     },
     NO_SOLUCIONADA: {
-        label: 'No Solucionada',
-        description: 'El problema no pudo ser resuelto por el área técnica.',
         icon: AlertCircle,
         isException: true,
         alertVariant: 'destructive',
         fallbackIndex: 3
     },
     ARCHIVADA: {
-        label: 'Archivada',
-        description: 'Este ticket es antiguo y se encuentra en el archivo histórico.',
         icon: Archive,
         isException: false,
         alertVariant: 'default',
@@ -78,6 +73,7 @@ interface TicketStepperProps {
 }
 
 export function TicketStepper({ currentState, className }: TicketStepperProps) {
+    const { t } = useTranslation();
     const config = STATE_DICTIONARY[currentState] || STATE_DICTIONARY['RECIBIDA'];
     const isExceptional = config.isException;
 
@@ -98,9 +94,11 @@ export function TicketStepper({ currentState, className }: TicketStepperProps) {
                         className={cn("mb-8", config.alertVariant === 'default' && "bg-muted")}
                     >
                         <config.icon className="h-4 w-4" />
-                        <AlertTitle>{config.label}</AlertTitle>
+                        <AlertTitle>
+                            {t(`tickets.status.${currentState}.name` as StatusNameTranslationKey)}
+                        </AlertTitle>
                         <AlertDescription>
-                            {config.description}
+                            {t(`tickets.status.${currentState}.description` as StatusDescTranslationKey)}
                         </AlertDescription>
                     </Alert>
                 )}
@@ -111,7 +109,6 @@ export function TicketStepper({ currentState, className }: TicketStepperProps) {
                     <div
                         className={cn(
                             "absolute top-5 left-0 h-1 rounded-full transition-all duration-500 ease-in-out",
-                            // isExceptional ? "bg-muted-foreground/30" : 
                             "bg-primary"
                         )}
                         style={{ width: `${progressPercentage}%` }}
@@ -133,13 +130,9 @@ export function TicketStepper({ currentState, className }: TicketStepperProps) {
                                     <div
                                         className={cn(
                                             'h-10 w-10 rounded-full flex items-center justify-center transition-all duration-300 relative z-10 shrink-0 border-2',
-                                            // Estado Completado
                                             isCompleted && 'bg-primary border-primary text-primary-foreground',
-                                            // Estado Actual (Activo)
                                             isCurrent && 'bg-background border-primary text-primary ring-4 ring-primary/20',
-                                            // Estado Futuro
                                             isFuture && 'bg-background border-muted text-muted-foreground',
-                                            // Estado donde ocurrió un error/excepción
                                             isErrorStep && 'bg-destructive border-destructive text-destructive-foreground ring-4 ring-destructive/20'
                                         )}
                                     >
@@ -161,7 +154,7 @@ export function TicketStepper({ currentState, className }: TicketStepperProps) {
                                             isErrorStep && 'text-destructive'
                                         )}
                                     >
-                                        {stepConfig.label}
+                                        {t(`tickets.status.${stepName}.name` as StatusNameTranslationKey)}
                                     </span>
                                 </div>
                             );

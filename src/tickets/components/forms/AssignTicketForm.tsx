@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { Loader2, Send, UserPlus, X } from "lucide-react";
+import { BrushCleaning, Loader2, Send, UserPlus, X } from "lucide-react";
 
 import {
     Form,
@@ -167,11 +167,22 @@ export const AssignTicketForm = ({ onSubmit, isPending, onCancel, ticket, techni
             <Separator />
             <CardFooter className="flex flex-wrap-reverse sm:flex-row justify-end gap-3">
                 <Button
+                    variant="outline"
+                    type="button"
+                    disabled={isBusy || !form.formState.isDirty}
+                    onClick={() => form.reset()}
+                    className="w-full sm:w-auto"
+                >
+                    <BrushCleaning className="mr-2 h-4 w-4" />
+                    {t('common.buttons.clean')}
+                </Button>
+
+                <Button
                     variant="ghost"
                     type="button"
                     disabled={isBusy}
                     onClick={handleCancel}
-                    className="flex-auto"
+                    className="w-full sm:w-auto"
                 >
                     <X className="mr-2 h-4 w-4" />
                     {t('common.buttons.cancel')}
@@ -181,7 +192,7 @@ export const AssignTicketForm = ({ onSubmit, isPending, onCancel, ticket, techni
                     type="submit"
                     form="form-assign-ticket"
                     disabled={isBusy || (!form.formState.isDirty && ticket.currentStatusCode !== TicketStatus.NO_SOLUCIONADA)}
-                    className="flex-auto"
+                    className="w-full sm:w-auto"
                 >
                     {isBusy ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />

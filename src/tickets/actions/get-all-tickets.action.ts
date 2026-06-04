@@ -14,11 +14,15 @@ interface Options {
     department?: string | undefined;
     school_period?: string | undefined;
     issue_type?: string | undefined;
+    tags?: string | undefined;
+    start_date?: string | undefined;
+    end_date?: string | undefined;
 }
 
 export const getAllTicketsAction = async (options: Options): Promise<TicketsResponse> => {
     const { limit = 10, page = 1, query, sortBy, sortOrder,
-        status, priority, department, issue_type, school_period } = options;
+        status, priority, department, issue_type, school_period,
+        start_date, end_date, tags } = options;
     const parsedLimit = Number(limit);
     const parsedPage = Number(page);
 
@@ -34,7 +38,10 @@ export const getAllTicketsAction = async (options: Options): Promise<TicketsResp
                 priority,
                 department,
                 school_period,
-                issue_type
+                issue_type,
+                tags,
+                start_date,
+                end_date
             },
         }
     );

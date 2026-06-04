@@ -1,26 +1,26 @@
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useParams } from "react-router";
-import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
-import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
+import { useParams } from "react-router";
+import { useEffect } from "react";
 import { sileo } from "sileo";
-import type { TicketFormOutput } from "../schemas/ticket.schema";
-import { CreateTicketForm } from "../components/forms/CreateTicketForm";
+
+import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
+import { getAvailableActions, TicketEvent } from "../utils/ticket-state-machine";
 import { useEditTicket } from "../hooks/useEditTicket";
 import { useGetTicketById } from "../hooks/useGetTicketById";
-import { useEffect } from "react";
-import { RejectionReportDetails } from "../components/details/RejectionReportDetails";
-import { getAvailableActions, TicketEvent } from "../utils/ticket-state-machine";
 import { useAllIssueTypes } from "@/IssueTypes/hooks/useAllIssueTypes";
+import { useSmartNavigation } from "@/components/hooks/useSmartNavigation";
+
+import type { TicketFormOutput } from "../schemas/ticket.schema";
+import { CreateTicketForm } from "../components/forms/CreateTicketForm";
+import { RejectionReportDetails } from "../components/details/RejectionReportDetails";
 import { TicketFormSkeleton } from "../components/Skeletons/TicketFormSkeleton";
+import { CustomFormPageLayout } from "@/components/custom/CustomFormPageLayout";
 
 
 export const EditTicketPage = () => {
     const { id } = useParams();
     const { t } = useTranslation();
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    const previousPage = location.state?.from;
+    const { navigateFallback, navigateSmartBack } = useSmartNavigation('/tickets');
 
     const { data: issueTypes, isLoading: isLoadingIssues, isError: isErrorIssue } = useAllIssueTypes();
     const { data: ticket, isLoading: isLoadingTicket, isError: isErrorTicket } = useGetTicketById(id);
@@ -37,7 +37,7 @@ export const EditTicketPage = () => {
                 description: t('tickets.not_found.message'),
                 duration: 6000,
             });
-            navigate(previousPage || `/tickets`, { replace: true });
+            navigateFallback();
             return;
         }
 
@@ -47,9 +47,9 @@ export const EditTicketPage = () => {
                 description: t('common.fetch_error.description'),
                 duration: 6000,
             });
-            navigate(previousPage || `/tickets`, { replace: true });
+            navigateFallback();
         }
-    }, [isLoading, isErrorTicket, ticket, isErrorIssue, issueTypes, navigate, previousPage, t]);
+    }, [isLoading, isErrorTicket, ticket, isErrorIssue, issueTypes, t, navigateFallback]);
 
     const handleSubmit = (values: TicketFormOutput) => {
         if (!id) return;
@@ -61,7 +61,7 @@ export const EditTicketPage = () => {
                     description: t('tickets.edit_page.success.message'),
                     duration: 5000,
                 });
-                navigate(previousPage || `/tickets`, { replace: true });
+                navigateSmartBack(`/tickets/${id}`);
             },
             onError: (error) => {
                 console.error("Error en la mutación:", error);
@@ -75,19 +75,18 @@ export const EditTicketPage = () => {
     };
 
     const handleCancel = () => {
-        navigate(previousPage || `/tickets`);
+        navigateSmartBack(`/tickets/${id}`);
     };
 
     if (isLoading || !ticket || !issueTypes) {
         return (
-            <div className="mx-auto max-w-4xl space-y-5">
-                <CustomTitlePageWithBack
-                    backLink={previousPage || `/tickets`}
-                    title={t('tickets.edit_page.title')}
-                    description={t('tickets.edit_page.description')}
-                />
+            <CustomFormPageLayout
+                backLink={`/tickets/${id}`}
+                title={t('tickets.edit_page.title')}
+                description={t('tickets.edit_page.description')}
+            >
                 <TicketFormSkeleton />
-            </div>
+            </CustomFormPageLayout>
         );
     }
 
@@ -95,12 +94,11 @@ export const EditTicketPage = () => {
         getAvailableActions(ticket.currentStatusCode).includes(TicketEvent.WATCH_REJECTION_REPORT);
 
     return (
-        <div className="mx-auto max-w-4xl space-y-5">
-            <CustomTitlePageWithBack
-                backLink={previousPage || `/tickets`}
-                title={t('tickets.edit_page.title')}
-                description={t('tickets.edit_page.description')}
-            />
+        <CustomFormPageLayout
+            backLink={`/tickets/${id}`}
+            title={t('tickets.edit_page.title')}
+            description={t('tickets.edit_page.description')}
+        >
             {canWatchRejectionReport && (
                 <RejectionReportDetails ticketId={ticket.id} />
             )}
@@ -112,6 +110,6 @@ export const EditTicketPage = () => {
                 onCancel={handleCancel}
                 issueTypes={issueTypes}
             />
-        </div>
+        </CustomFormPageLayout>
     );
 }

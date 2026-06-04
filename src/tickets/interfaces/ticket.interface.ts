@@ -1,3 +1,5 @@
+import type { Tag } from "@/common/tags/interfaces/tag.interface";
+
 export interface Ticket {
     id:            string;
     folio:         string;
@@ -5,6 +7,7 @@ export interface Ticket {
     status_code:   string;
     priority:      number;
     description:   string;
+    tags:          Tag[];
     jefe_depto:    JefeDepto;
     issue_type:    IssueType;
     school_period: SchoolPeriod;

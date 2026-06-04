@@ -15,6 +15,8 @@ import { useAllIssueTypes } from "@/IssueTypes/hooks/useAllIssueTypes";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useTicketFilters } from "../hooks/useTicketFilters";
 import { CustomFilterSelect } from "@/components/custom/CustomFilterSelect";
+import { InfiniteScrollCombobox } from "./InfiniteScrollCombobox";
+import { CustomFilterDate } from "@/components/custom/CustomFilterDate";
 
 interface Props {
   table: Table<Ticket>;
@@ -24,7 +26,7 @@ interface Props {
 
 export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) => {
   const { t } = useTranslation();
-  const { filters, updateFilter, resetFilters, hasActiveFilters } = useTicketFilters();
+  const { filters, updateFilter, updateMultipleFilters, resetFilters, hasActiveFilters } = useTicketFilters();
 
   const { data: statuses, isLoading: loadingStatuses } = useGetStatus();
   const { data: schoolPeriods, isLoading: loadingPeriods } = useSchoolPeriods();
@@ -108,31 +110,56 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
               {t("common.filters.less_filters")}
             </span>
           </AccordionTrigger>
-          <AccordionContent className="flex flex-wrap items-center gap-2 py-0 pt-2">
+          <AccordionContent >
+            <div className="flex flex-col md:flex-row flex-wrap items-center gap-2 py-0 pt-2">
 
-            <CustomFilterSelect
-              label={t("tickets.list_page.table.headers.department")}
-              defaultValue={filters.department}
-              isLoading={loadingDepartments}
-              onChange={(v) => updateFilter("department", v)}
-              options={departments?.map(d => ({ value: d.id, label: d.name }))}
-            />
+              <CustomFilterSelect
+                label={t("tickets.list_page.table.headers.department")}
+                defaultValue={filters.department}
+                isLoading={loadingDepartments}
+                onChange={(v) => updateFilter("department", v)}
+                options={departments?.map(d => ({ value: d.id, label: d.name }))}
+              />
 
-            <CustomFilterSelect
-              label={t("tickets.list_page.table.headers.school_period")}
-              defaultValue={filters.school_period}
-              isLoading={loadingPeriods}
-              onChange={(v) => updateFilter("school_period", v)}
-              options={schoolPeriods?.data.map(p => ({ value: p.id, label: p.name }))}
-            />
+              <CustomFilterSelect
+                label={t("tickets.list_page.table.headers.school_period")}
+                defaultValue={filters.school_period}
+                isLoading={loadingPeriods}
+                onChange={(v) => updateFilter("school_period", v)}
+                options={schoolPeriods?.data.map(p => ({ value: p.id, label: p.name }))}
+              />
 
-            <CustomFilterSelect
-              label={t("tickets.list_page.table.headers.issue_type")}
-              defaultValue={filters.issue_type}
-              isLoading={loadingIssues}
-              onChange={(v) => updateFilter("issue_type", v)}
-              options={issueTypes?.map(i => ({ value: i.id.toString(), label: i.name }))}
-            />
+              <CustomFilterSelect
+                label={t("tickets.list_page.table.headers.issue_type")}
+                defaultValue={filters.issue_type}
+                isLoading={loadingIssues}
+                onChange={(v) => updateFilter("issue_type", v)}
+                options={issueTypes?.map(i => ({ value: i.id.toString(), label: i.name }))}
+              />
+              <div className="flex-1 flex flex-row gap-2 w-full">
+                <CustomFilterDate
+                  label={t('tickets.filters.date.from')}
+                  value={filters.start_date}
+                  onChange={(val) => updateMultipleFilters({ start_date: val })}
+                  maxDate={filters.end_date ? new Date(`${filters.end_date}T00:00:00`) : undefined}
+                />
+
+                <CustomFilterDate
+                  label={t('tickets.filters.date.to')}
+                  value={filters.end_date}
+                  onChange={(val) => updateMultipleFilters({ end_date: val })}
+                  minDate={filters.start_date ? new Date(`${filters.start_date}T00:00:00`) : undefined}
+                />
+              </div>
+              <div className="w-full shrink-0">
+                <InfiniteScrollCombobox
+                  value={filters.tags}
+                  onChange={(newTagsArray) => updateFilter("tags", newTagsArray)}
+                  creatable={false}
+                />
+              </div>
+
+            </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

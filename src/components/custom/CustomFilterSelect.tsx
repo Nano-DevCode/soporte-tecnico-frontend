@@ -20,7 +20,7 @@ export const CustomFilterSelect = ({ label, defaultValue, options = [], isLoadin
 
     return (
         <Select value={defaultValue} disabled={isLoading} onValueChange={onChange}>
-            <SelectTrigger className="flex-1 max-w-full">
+            <SelectTrigger className="flex-1 w-full">
                 <div className="line-clamp-1">
                     <span className="text-muted-foreground mr-2">{label}:</span>
                     <SelectValue />

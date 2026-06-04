@@ -21,43 +21,43 @@ export const TicketFormSkeleton = () => {
             <CardContent>
                 <div className="grid grid-cols-1 gap-x-5 gap-y-6 md:grid-cols-2 items-start">
 
-                    <div className="space-y-1">
-                        <Skeleton className="h-4 w-32" />
-                        <Skeleton className="h-10 w-full rounded-md" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-3.5 w-32" />
+                        <Skeleton className="h-9 w-full rounded-md" />
                     </div>
 
-                    <div className="space-y-1">
-                        <Skeleton className="h-4 w-36" />
-                        <Skeleton className="h-10 w-full rounded-md" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-3.5 w-36" />
+                        <Skeleton className="h-9 w-full rounded-md" />
                     </div>
 
-                    <div className="space-y-1">
-                        <Skeleton className="h-4 w-40" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-3.5 w-40" />
                         <Skeleton className="h-15 w-full rounded-md" />
                     </div>
 
-                    <div className="space-y-1">
-                        <Skeleton className="h-4 w-36" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-3.5 w-36" />
                         <Skeleton className="h-15 w-full rounded-md" />
                     </div>
 
-                    <div className="space-y-1">
-                        <Skeleton className="h-4 w-32" />
-                        <Skeleton className="h-10 w-full rounded-md" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-3.5 w-32" />
+                        <Skeleton className="h-9 w-full rounded-md" />
                     </div>
 
-                    <div className="space-y-1 md:col-span-2">
-                        <Skeleton className="h-4 w-44" />
+                    <div className="space-y-2 md:col-span-2">
+                        <Skeleton className="h-3.5 w-44" />
                         <Skeleton className="h-30 w-full rounded-md" />
                     </div>
 
                 </div>
             </CardContent>
             <Separator />
-            <CardFooter className="flex flex-col-reverse sm:flex-row justify-end gap-3">
-                <Skeleton className="h-10 w-full sm:w-28 rounded-md" />
-
-                <Skeleton className="h-10 w-full sm:w-32 rounded-md" />
+            <CardFooter className="flex flex-wrap-reverse sm:flex-row justify-end gap-3">
+                <Skeleton className="h-9 w-full sm:w-25" />
+                <Skeleton className="h-9 w-full sm:w-28" />
+                <Skeleton className="h-9 w-full sm:w-32" />
             </CardFooter>
         </Card>
     );

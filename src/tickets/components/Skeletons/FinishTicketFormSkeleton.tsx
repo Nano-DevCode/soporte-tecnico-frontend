@@ -41,7 +41,8 @@ export const FinishTicketFormSkeleton = () => {
                 </div>
             </CardContent>
             <Separator />
-            <CardFooter className="flex flex-col-reverse sm:flex-row justify-end gap-3">
+            <CardFooter className="flex flex-wrap-reverse sm:flex-row justify-end gap-3">
+                <Skeleton className="h-9 w-full sm:w-25" />
                 <Skeleton className="h-9 w-full sm:w-27.5" />
                 <Skeleton className="h-9 w-full sm:w-35" />
             </CardFooter>

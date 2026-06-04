@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { Loader2, Send, X } from "lucide-react";
+import { BrushCleaning, Loader2, Send, X } from "lucide-react";
 
 import {
     Form,
@@ -12,59 +12,38 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
 import { RouteTicketSchema, type RouteTicketFormInput, type RouteTicketFormOutput } from "@/tickets/schemas/route-ticket.schema";
-import { sileo } from "sileo";
-import { useNavigate } from "react-router";
-import { CustomFullScreenLoading } from "@/components/custom/CustomFullScreenLoading";
-import { useGetCoordinators } from "@/common/coordinators/hooks/useGetCoordinators";
 import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "@/components/ui/combobox";
 import { getFullName } from "@/lib/helpers/toFullName";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { Coordinator } from "@/common/coordinators/interfaces/get-coordinators.response";
+import { CustomOptionalInput } from "@/components/custom/CustomOptionalInput";
 
 interface Props {
     isPending: boolean;
-    priorityDefault?: number;
+    priorityDefault: number;
+    coordinators: Coordinator[]
     onSubmit: (data: RouteTicketFormOutput) => void;
     onCancel: () => void;
 }
 
-export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault }: Props) => {
+export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault, coordinators }: Props) => {
     const { t } = useTranslation();
     const schema = useMemo(() => RouteTicketSchema(t), [t]);
-    const { isLoading, isError, data: coordinators } = useGetCoordinators();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!isLoading && (isError || !coordinators)) {
-            sileo.error({
-                title: 'p',
-                description: 'p',
-                duration: 6000,
-            });
-
-            navigate('/tickets', { replace: true });
-        }
-    }, [isError, isLoading, coordinators, navigate, t]);
 
     const form = useForm<RouteTicketFormInput, unknown, RouteTicketFormOutput>({
         resolver: zodResolver(schema),
         defaultValues: {
             coordinatorId: "",
-            priority: priorityDefault || undefined,
-        },
+            priority: String(priorityDefault),
+        }
     });
 
-    if (isLoading) {
-        return <CustomFullScreenLoading />;
-    }
-
-    if (!coordinators) {
-        return null;
-    }
+    const isBusy = isPending || form.formState.isSubmitting;
 
     return (
         <Card>
@@ -96,9 +75,9 @@ export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault
                                             }
                                             value={coordinators.find((c) => c.id === field.value) || null}
                                             onValueChange={(selectedCoordinator) => {
-                                                field.onChange(selectedCoordinator ? selectedCoordinator.id : undefined);
+                                                field.onChange(selectedCoordinator ? selectedCoordinator.id : "");
                                             }}
-                                            disabled={isPending}
+                                            disabled={isBusy}
                                             autoHighlight
                                         >
                                             <ComboboxInput autoFocus
@@ -122,12 +101,10 @@ export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault
                                                                 </span>
                                                             </div>
 
-                                                            {/* Detalles extra (Email y Rol) debajo del nombre */}
                                                             <div className="flex gap-2 text-xs text-muted-foreground mt-1">
                                                                 <span className="font-semibold bg-secondary px-1.5 rounded">
                                                                     {coordinator.user.role.name}
                                                                 </span>
-                                                                {/* <span className="truncate">{coordinator.user.email}</span> */}
                                                             </div>
                                                         </ComboboxItem>
                                                     )}
@@ -146,20 +123,18 @@ export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>
-                                        {t('tickets.form.route.fields.priority.label', 'Prioridad')}
-                                        <span className="text-muted-foreground font-normal ml-1">
-                                            ({t('common.labels.optional', 'Opcional')})
-                                        </span>
+                                        {t('tickets.form.route.fields.priority.label')}
+                                        <CustomOptionalInput />
                                     </FormLabel>
                                     <Select
                                         name={field.name}
-                                        disabled={isPending}
+                                        disabled={isBusy}
                                         onValueChange={field.onChange}
-                                        defaultValue={field.value ? String(field.value) : undefined}
+                                        value={field.value as string}
                                     >
                                         <FormControl>
                                             <SelectTrigger className="w-full">
-                                                <SelectValue placeholder={t('tickets.form.route.fields.priority.placeholder', 'Selecciona una prioridad')} />
+                                                <SelectValue placeholder={t('tickets.form.route.fields.priority.placeholder')} />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
@@ -178,12 +153,24 @@ export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault
             </CardContent>
             <Separator />
             <CardFooter className="flex flex-wrap-reverse sm:flex-row justify-end gap-3">
+
                 <Button
-                    variant="ghost"
+                    variant="outline"
                     type="button"
-                    disabled={isPending}
+                    disabled={isBusy || !form.formState.isDirty}
+                    onClick={() => form.reset()}
+                    className="w-full sm:w-auto"
+                >
+                    <BrushCleaning className="mr-2 h-4 w-4" />
+                    {t('common.buttons.clean')}
+                </Button>
+
+                <Button
+                    variant="destructive"
+                    type="button"
+                    disabled={isBusy}
                     onClick={onCancel}
-                    className="flex-auto"
+                    className="w-full sm:w-auto"
                 >
                     <X className="mr-2 h-4 w-4" />
                     {t('common.buttons.cancel')}
@@ -192,10 +179,10 @@ export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault
                 <Button
                     type="submit"
                     form="form-route-ticket"
-                    disabled={isPending || !form.formState.isDirty}
-                    className="flex-auto"
+                    disabled={isBusy || !form.formState.isDirty}
+                    className="w-full sm:w-auto"
                 >
-                    {isPending ? (
+                    {isBusy ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
                         <Send className="mr-2 h-4 w-4" />
