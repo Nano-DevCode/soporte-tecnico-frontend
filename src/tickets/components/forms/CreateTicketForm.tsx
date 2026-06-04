@@ -77,7 +77,7 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
             <Separator />
             <CardContent>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} id="form-ticket">
+                    <form onSubmit={form.handleSubmit(onSubmit)} noValidate id="form-ticket">
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 items-start">
                             <FormField
                                 control={form.control}
