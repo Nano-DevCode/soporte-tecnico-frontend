@@ -7,7 +7,7 @@ export const logError = (error: unknown, context: string): void => {
 
   // Solo mostramos logs si es desarrollo O si lo pedimos explícitamente en el .env
   if (isDev || forceLogs) {
-    console.group(`🔴 Error en: ${context}`);
+    console.group(`Error en: ${context}`);
     console.error(error);
     console.groupEnd();
   }

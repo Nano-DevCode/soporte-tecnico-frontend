@@ -5,7 +5,6 @@ import { useCallback, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { t } from "i18next";
 import { CustomDialogConfirm } from "@/components/custom/CustomDialogCorfirm";
-import { CustomSkeletonTableCard } from "@/components/custom/CustomSkeletonTableCard";
 import { CustomPagination } from "@/components/custom/CustomPagination";
 import { CustomItAssetDesktopCatalog } from "../components/CustomItAssetDesktopCatalog";
 import { Link } from "react-router";
@@ -15,6 +14,8 @@ import { isAxiosError } from "axios";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { logError } from "@/utils/logger";
 import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
+import { CustomItAssetDesktopCatalogSkeleton } from "@/components/custom/CustomItAssetDesktopCatalogSkeleton";
+import { CustomItAssetFilters } from "../components/CustomItAssetFilters";
 
 export function ItAssetsPage() {
   const { isLoading, itAssets, changeStatusAsync, isChangingStatus, meta } = useItAssets();
@@ -131,10 +132,10 @@ export function ItAssetsPage() {
         cancelText= {t("itAssets.mainPage.dialog.buttonCancel")}
       />
 
-      {/* <CustomItAssetFilters /> */}
+      <CustomItAssetFilters />
 
       {isLoading ? (
-          <CustomSkeletonTableCard/>
+          <CustomItAssetDesktopCatalogSkeleton/>
         ) : (
           <>
             <CustomItAssetDesktopCatalog

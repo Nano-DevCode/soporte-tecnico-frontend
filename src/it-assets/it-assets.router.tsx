@@ -4,6 +4,9 @@ import { ItAssetsPage } from "./pages/ItAssetsPage";
 import ItAssetsMovementOut from "./pages/ItAssetsMovementOut";
 import ItAssetsMovementIn from "./pages/ItAssetsMovementIn";
 import ItAssetsCreatePage from "./pages/ItAssetsCreatePage";
+import ItAssetsUpdatePage from "./pages/ItAssetsUpdatePage";
+import { ItAssetsMovementsPage } from "./pages/ItAssetsMovementsPage";
+import { ItAssetsMovementViewPage } from "./pages/ItAssetsMovementViewPage";
 
 export const itAssetRoutes = [
     {
@@ -23,6 +26,14 @@ export const itAssetRoutes = [
             </SuspenseWrapper>
     },
     {
+        path: 'edit/:id',
+        element: 
+            <SuspenseWrapper>
+                <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}/>
+                <ItAssetsUpdatePage />
+            </SuspenseWrapper>
+    },
+    {
         path: 'out/:id',
         element: 
             <SuspenseWrapper>
@@ -36,6 +47,22 @@ export const itAssetRoutes = [
             <SuspenseWrapper>
                 <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}/>
                 <ItAssetsMovementIn />
+            </SuspenseWrapper>
+    },
+    {
+        path: 'movements',
+        element: 
+            <SuspenseWrapper>
+                <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}/>
+                <ItAssetsMovementsPage />
+            </SuspenseWrapper>
+    },
+    {
+        path: 'movements/:id',
+        element: 
+            <SuspenseWrapper>
+                <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}/>
+                <ItAssetsMovementViewPage />
             </SuspenseWrapper>
     }
 ]

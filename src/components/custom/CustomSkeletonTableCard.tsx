@@ -3,47 +3,81 @@ import { Skeleton } from '../ui/skeleton'
 export const CustomSkeletonTableCard = () => {
   return (
     <>
-        <div className="space-y-6">
-          {/* Skeleton para (Tabla) */}
-          <div className="hidden md:block rounded-xl border border-border bg-card overflow-hidden">
-            <div className="p-4 border-b bg-muted/30">
-              <Skeleton className="h-6 w-full max-w-[800px]" />
+        <div className="space-y-6 animate-in fade-in duration-500">
+          
+          {/* SKELETON PARA DESKTOP (TABLA) */}
+          <div className="hidden md:block rounded-xl border border-border bg-card overflow-hidden shadow-sm">
+            
+            {/* Cabecera (Simulando los 5 TableHeads) */}
+            <div className="flex items-center p-4 border-b bg-muted/30 gap-4">
+              <div className="w-[150px]"><Skeleton className="h-4 w-20" /></div>
+              <div className="w-[120px] flex justify-center"><Skeleton className="h-4 w-12" /></div>
+              <div className="w-[80px] flex justify-center"><Skeleton className="h-4 w-10" /></div>
+              <div className="flex-1"><Skeleton className="h-4 w-32" /></div>
+              <div className="w-[100px] flex justify-center"><Skeleton className="h-4 w-16" /></div>
             </div>
+
+            {/* Filas */}
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="flex items-center gap-4 p-4 border-b last:border-0">
-                <Skeleton className="h-4 w-16" />
-                <div className="flex items-center gap-3 flex-1">
-                  <Skeleton className="h-10 w-10 rounded-full" />
-                  <div className="space-y-2">
-                    <Skeleton className="h-4 w-48" />
-                    <Skeleton className="h-3 w-32" />
-                  </div>
+              <div key={i} className="flex items-center p-4 border-b last:border-0 gap-4">
+                
+                {/* 1. Fecha */}
+                <div className="w-[150px]">
+                  <Skeleton className="h-4 w-28" />
                 </div>
-                <Skeleton className="h-4 w-24" /> 
-                <Skeleton className="h-4 w-20" /> 
-                <Skeleton className="h-6 w-16 rounded-full" />
-                <Skeleton className="h-8 w-8 rounded-md" />
+                
+                {/* 2. Tipo (Simulando el Badge) */}
+                <div className="w-[120px] flex justify-center">
+                  <Skeleton className="h-6 w-20 rounded-full" />
+                </div>
+                
+                {/* 3. Foto (Simulando el AssetThumbnail cuadrado) */}
+                <div className="w-[80px] flex justify-center">
+                  <Skeleton className="h-10 w-10 rounded-md" />
+                </div>
+                
+                {/* 4. Activo / Serie (Simulando los dos textos apilados) */}
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-[60%] max-w-[200px]" />
+                  <Skeleton className="h-3 w-[40%] max-w-[120px]" />
+                </div>
+                
+                {/* 5. Detalles (Simulando el Botón del ojo) */}
+                <div className="w-[100px] flex justify-center">
+                  <Skeleton className="h-8 w-8 rounded-md" />
+                </div>
+                
               </div>
             ))}
           </div>
 
-          {/* Skeleton para (Cards) */}
-          <div className="md:hidden space-y-3">
+          {/* SKELETON PARA MOBILE (CARDS) */}
+          <div className="md:hidden space-y-4">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="rounded-xl border border-border bg-card p-4 flex gap-4">
-                <Skeleton className="h-10 w-10 rounded-full shrink-0" />
+              <div key={i} className="rounded-xl border border-border bg-card p-4 flex gap-4 shadow-sm">
+                {/* Imagen del móvil */}
+                <Skeleton className="h-14 w-14 rounded-md shrink-0" />
+                
                 <div className="flex-1 space-y-3">
-                  <div className="flex justify-between items-center">
-                    <Skeleton className="h-3 w-12" />
-                    <Skeleton className="h-3 w-16" />
+                  {/* Fila superior: Serie y Tipo */}
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="space-y-1.5 flex-1">
+                      <Skeleton className="h-4 w-32" />
+                      <Skeleton className="h-3 w-20" />
+                    </div>
+                    <Skeleton className="h-5 w-16 rounded-full shrink-0" />
                   </div>
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-3 w-3/4" />
-                  <Skeleton className="h-6 w-20 rounded-full" />
+                  
+                  {/* Fila inferior: Fecha */}
+                  <div className="pt-2 border-t border-border/50 flex justify-between items-center">
+                    <Skeleton className="h-3 w-24" />
+                    <Skeleton className="h-7 w-7 rounded-md shrink-0" />
+                  </div>
                 </div>
               </div>
             ))}
           </div>
+
         </div>    
     </>
   )

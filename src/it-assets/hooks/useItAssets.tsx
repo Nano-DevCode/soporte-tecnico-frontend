@@ -3,12 +3,13 @@ import { useParams, useSearchParams } from "react-router";
 import { getItAssetsAction } from "../actions/get-itAssets";
 import { getItAssetAction } from "../actions/get-itAsset";
 import { createItAssetAction } from "../actions/create-itAsset";
+import { updateItAssetAction } from "../actions/update-itAsset";
+import { changeStatusItAssetAction } from "../actions/changeStatus-itAssets";
 
 export const useItAssets = () => {
   const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
   
-  // Desestructuración más limpia
   const { id } = useParams();
 
   const limit = Number(searchParams.get('limit')) || 10;
@@ -40,22 +41,29 @@ export const useItAssets = () => {
     },
   });
 
-  const changeStatusMutation = useMutation({
-    mutationFn: async () => {
-    },
-    onSuccess: () => {
-      // Invalidamos el catálogo general
+  // ==========================================
+  // CORRECCIÓN AQUÍ
+  // ==========================================
+  const updateAssetMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: FormData }) => 
+      updateItAssetAction({ id }, data), 
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['it-assets'] });
-      // Si estamos viendo un detalle, lo invalidamos también para que se refresque
+      queryClient.invalidateQueries({ queryKey: ['it-asset', variables.id] });
+    },
+  });
+
+  const changeStatusMutation = useMutation({
+    mutationFn: changeStatusItAssetAction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['it-assets'] });
       if (id) {
         queryClient.invalidateQueries({ queryKey: ['it-asset', id] });
       }
     },
   });
   
-
   return {
-    // Retornos de la lista (Catálogo)
     itAssets: assetsQuery.data?.itAssets ?? [],
     meta: assetsQuery.data?.meta,
     isLoading: assetsQuery.isLoading,
@@ -63,17 +71,18 @@ export const useItAssets = () => {
     error: assetsQuery.error,
     refetch: assetsQuery.refetch,
     
-    // CORRECCIÓN 3: Exponemos los retornos del activo individual
     itAsset: assetQuery.data,
     isLoadingAsset: assetQuery.isLoading,
     isFetchingAsset: assetQuery.isFetching,
     errorAsset: assetQuery.error,
 
-    // Mutaciones
     changeStatusAsync: changeStatusMutation.mutateAsync,
     isChangingStatus: changeStatusMutation.isPending,
 
     createAssetMutation: createAssetMutation,
     isCreatingAsset: createAssetMutation.isPending,
+
+    updateAssetMutation: updateAssetMutation,
+    isUpdatingAsset: updateAssetMutation.isPending,
   };
 }

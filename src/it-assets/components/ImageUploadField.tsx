@@ -1,20 +1,31 @@
 import { useState, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { UploadCloud, X} from "lucide-react";
+import { UploadCloud, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export const ImageUploadField = ({ disabled }: { disabled?: boolean }) => {
+interface ImageUploadProps {
+  disabled?: boolean;
+  currentImageUrl?: string | null;
+}
+
+export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps) => {
   const { control } = useFormContext();
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  
+  // Iniciamos la vista previa con la imagen actual si existe
+  const [previewUrl, setPreviewUrl] = useState<string | null>(currentImageUrl || null);
+  const [prevImageUrl, setPrevImageUrl] = useState<string | null>(currentImageUrl || null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  if (currentImageUrl !== prevImageUrl) {
+    setPrevImageUrl(currentImageUrl || null);
+    setPreviewUrl(currentImageUrl || null);
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, onChange: (val: File | null) => void) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Guardamos el archivo en el formulario de React Hook Form
       onChange(file);
-      // Creamos una URL local para mostrar la vista previa
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
@@ -31,10 +42,13 @@ export const ImageUploadField = ({ disabled }: { disabled?: boolean }) => {
       name="imageFile"
       render={({ field }) => (
         <FormItem className="w-full md:col-span-2">
-          <FormLabel>Fotografía del Activo <span className="text-red-500">*</span></FormLabel>
+          <FormLabel>
+            Fotografía del Activo 
+            {/* Solo mostramos el asterisco si NO hay una imagen previa (modo creación) */}
+            {!previewUrl && <span className="text-red-500"> *</span>}
+          </FormLabel>
           <FormControl>
             <div className="flex flex-col items-center justify-center w-full">
-              {/* INPUT INVISIBLE */}
               <input
                 type="file"
                 accept="image/jpeg, image/png, image/webp"
@@ -45,7 +59,6 @@ export const ImageUploadField = ({ disabled }: { disabled?: boolean }) => {
               />
 
               {!previewUrl ? (
-                // ZONA DE SUBIDA
                 <div 
                   onClick={() => !disabled && inputRef.current?.click()}
                   className={`w-full flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
@@ -56,12 +69,9 @@ export const ImageUploadField = ({ disabled }: { disabled?: boolean }) => {
                   <p className="text-sm font-medium text-foreground mb-1">
                     Haz clic para subir una imagen
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    PNG, JPG o WEBP (Máx. 5MB)
-                  </p>
+                  <p className="text-xs text-muted-foreground">PNG, JPG o WEBP (Máx. 5MB)</p>
                 </div>
               ) : (
-                // VISTA PREVIA DE LA IMAGEN
                 <div className="relative w-full sm:w-1/2 rounded-lg overflow-hidden border border-border bg-muted/30 group">
                   <img 
                     src={previewUrl} 
@@ -77,7 +87,7 @@ export const ImageUploadField = ({ disabled }: { disabled?: boolean }) => {
                       onClick={() => handleRemove(field.onChange)}
                       className="gap-2"
                     >
-                      <X className="h-4 w-4" /> Eliminar foto
+                      <X className="h-4 w-4" /> Cambiar foto
                     </Button>
                   </div>
                 </div>

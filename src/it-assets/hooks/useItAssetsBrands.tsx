@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getItAssetsBrandsAction } from '../actions/get-itAssets-brand';
+import { getItAssetsBrandsAction } from '../actions/get-itAssets-brands';
 import { createItAssetsBrandAction } from '../actions/create-itAssets-brand';
 
 export const useItAssetsBrands = (searchTerm: string = "") => {

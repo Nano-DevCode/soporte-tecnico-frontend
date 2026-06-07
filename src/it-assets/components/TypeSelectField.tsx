@@ -3,9 +3,9 @@ import { useFormContext } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { useItAssetsTypes } from "../hooks/useItAssetsTypes";
 import { InfiniteScrollSelect } from "@/Equipments/components/infinite-scroll-select";
-import { sileo } from "sileo"; // <-- Importamos sileo para las notificaciones
+import { sileo } from "sileo";
 
-export const TypeSelectField = ({ disabled }: { disabled?: boolean }) => {
+export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
   const { control } = useFormContext();
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -15,16 +15,7 @@ export const TypeSelectField = ({ disabled }: { disabled?: boolean }) => {
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  // Extraemos createType e isCreating del hook
-  const { 
-    itAssetsTypes, 
-    fetchNextPage, 
-    hasNextPage, 
-    isFetchingNextPage, 
-    isLoading,
-    createType,
-    isCreating
-  } = useItAssetsTypes(debouncedSearch);
+  const { itAssetsTypes, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, createType, isCreating } = useItAssetsTypes(debouncedSearch);
 
   const options = useMemo(() => {
     return itAssetsTypes.map(type => ({ id: type.id, name: type.name }));
@@ -34,44 +25,43 @@ export const TypeSelectField = ({ disabled }: { disabled?: boolean }) => {
     <FormField
       control={control}
       name="typeId"
-      render={({ field }) => (
-        <FormItem className="w-full">
-          <FormLabel>Tipo de Activo <span className="text-red-500">*</span></FormLabel>
-          <FormControl>
-            <InfiniteScrollSelect
-              options={options}
-              value={options.find(opt => opt.id === field.value) || null}
-              onChange={(val) => field.onChange(val?.id || "")}
-              onSearch={setSearchInput}
-              fetchNextPage={fetchNextPage}
-              hasNextPage={!!hasNextPage}
-              isFetchingNextPage={isFetchingNextPage}
-              isLoading={isLoading}
-              placeholder="Buscar o crear tipo..."
-              disabled={disabled || isCreating} // Deshabilitamos si se está creando
-              allowCreate={true} // <-- Habilitamos la creación
-              onCreate={async (newItemName) => {
-                try {
-                  const newType = await sileo.promise(
-                    createType({ name: newItemName }),
-                    {
+      render={({ field }) => {
+        // Magia para el Update: Si el ID está seleccionado pero no lo encontró en la primera página, usamos initialData
+        const selectedOption = options.find(opt => opt.id === field.value) || (field.value === initialData?.id ? initialData : null);
+
+        return (
+          <FormItem className="w-full">
+            <FormLabel>Tipo de Activo <span className="text-red-500">*</span></FormLabel>
+            <FormControl>
+              <InfiniteScrollSelect
+                options={options}
+                value={selectedOption || null}
+                onChange={(val) => field.onChange(val?.id || "")}
+                onSearch={setSearchInput}
+                fetchNextPage={fetchNextPage}
+                hasNextPage={!!hasNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+                isLoading={isLoading}
+                placeholder="Buscar o crear tipo..."
+                disabled={disabled || isCreating}
+                allowCreate={true}
+                onCreate={async (newItemName) => {
+                  try {
+                    const newType = await sileo.promise(createType({ name: newItemName }), {
                       loading: { title: `Creando tipo "${newItemName}"...` },
                       success: { title: "Tipo creado exitosamente" },
-                      error: { title: "Error al crear el tipo" }
-                    }
-                  );
-                  // Auto-seleccionamos el nuevo tipo en el formulario
-                  field.onChange(newType.id);
-                  setSearchInput(""); // Limpiamos la búsqueda
-                } catch (error) {
-                  console.error(error);
-                }
-              }}
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
+                      error: { title: "Error al crear" }
+                    });
+                    field.onChange(newType.id);
+                    setSearchInput("");
+                  } catch (error) { console.error(error); }
+                }}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )
+      }}
     />
   );
 };

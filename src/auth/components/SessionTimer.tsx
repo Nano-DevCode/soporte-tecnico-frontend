@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
 import { useAuthStore } from '../store/auth.store';
 
-// 2 horas en milisegundos
-const HOURS_MS = 2 * 60 * 60 * 1000;
+const HOURS_MS = 2 * 60 * 60 * 1000; // 2 horas
 
 export const SessionTimer = () => {
-  const { authStatus, lastCheck, logout, checkAuthStatus } = useAuthStore();
+  // Ahora usamos sessionStart para el límite de tiempo
+  const { authStatus, sessionStart, logout, checkAuthStatus } = useAuthStore();
 
   useEffect(() => {
-    if (authStatus !== 'authenticated' || !lastCheck) return;
+    if (authStatus !== 'authenticated' || !sessionStart) return;
 
     const interval = setInterval(() => {
-      const timeElapsed = Date.now() - lastCheck;
+      const timeElapsed = Date.now() - sessionStart;
       
       if (timeElapsed >= HOURS_MS) {
         logout();
@@ -19,17 +19,18 @@ export const SessionTimer = () => {
     }, 60000);
 
     return () => clearInterval(interval);
-  }, [authStatus, lastCheck, logout]);
+  }, [authStatus, sessionStart, logout]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && authStatus === 'authenticated' && lastCheck) {
+      if (document.visibilityState === 'visible' && authStatus === 'authenticated' && sessionStart) {
         
-        const timeElapsed = Date.now() - lastCheck;
+        const timeElapsed = Date.now() - sessionStart;
 
         if (timeElapsed >= HOURS_MS) {
           logout();
         } else {
+          // Si aún le queda tiempo, verificamos con el backend para refrescar el 'lastCheck'
           checkAuthStatus();
         }
       }
@@ -40,7 +41,7 @@ export const SessionTimer = () => {
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [authStatus, lastCheck, logout, checkAuthStatus]);
+  }, [authStatus, sessionStart, logout, checkAuthStatus]);
 
   return null;
 };

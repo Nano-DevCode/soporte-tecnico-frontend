@@ -5,7 +5,7 @@ import { useUserRoles } from "@/auth/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Hammer, Archive, ClipboardList } from "lucide-react";
+import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Hammer, Archive, ClipboardList, MonitorCog } from "lucide-react";
 
 // Types para la configuración
 type NavSubItem = {
@@ -46,6 +46,15 @@ export const CustomSidebarNavContent = memo(() => {
       subItems: [
         { title: t("custom_nav_content_users"), path: "/users", show: true },
         { title: t("custom_nav_content_depatment"), path: "/departments", show: true },
+      ]
+    },
+    {
+      title: "Activos TI",
+      icon: MonitorCog,
+      show: isSuperAdmin || isCoordinator || isBossCC,
+      subItems: [
+        { title: "Inventario", path: "/it-assets", show: true },
+        { title: "Bicatora", path: "/it-assets/movements", show: true },
       ]
     },
     {

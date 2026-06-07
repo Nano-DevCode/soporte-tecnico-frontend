@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -17,29 +18,29 @@ import useItAssetsStatus from "../hooks/useItAssetsStatus";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { ItAssetsForm } from "../components/ItAssetsFormPage";
 
-
-const createAssetSchema = z.object({
+const updateAssetSchema = z.object({
   serialNumber: z.string().min(1, "El número de serie es obligatorio").trim(),
   idInventary: z.string().trim().optional(),
   typeId: z.string().min(1, "Debes seleccionar un tipo"),
   brandId: z.string().min(1, "Debes seleccionar una marca"),
   modelId: z.string().min(1, "Debes seleccionar un modelo"),
-  statusId: z.string().min(1, "Debes seleccionar un estado inicial"),
+  statusId: z.string().min(1, "Debes seleccionar un estado"),
   invoiceId: z.string().optional(),
   description: z.string().trim().optional(),
-  observations: z.string().trim().optional(),
-  imageFile: z.any().refine((file) => file instanceof File, "La fotografía del activo es obligatoria"),
+  imageFile: z.any().optional(), // Opcional en modo edición
 });
 
-type CreateAssetFormValues = z.infer<typeof createAssetSchema>;
+type UpdateAssetFormValues = z.infer<typeof updateAssetSchema>;
 
-const ItAssetsCreatePage = () => {
+const ItAssetsUpdatePage = () => {
   const navigate = useNavigate();
-  const { createAssetMutation, isCreatingAsset } = useItAssets();
+  const { id } = useParams();
+
+  const { updateAssetMutation, itAsset, isLoadingAsset } = useItAssets();
   const { itAssetsStatus, isLoading: isLoadingStatus } = useItAssetsStatus();
 
-  const form = useForm<CreateAssetFormValues>({
-    resolver: zodResolver(createAssetSchema),
+  const form = useForm<UpdateAssetFormValues>({
+    resolver: zodResolver(updateAssetSchema),
     defaultValues: {
       serialNumber: "",
       idInventary: "",
@@ -49,36 +50,56 @@ const ItAssetsCreatePage = () => {
       statusId: "",
       invoiceId: "",
       description: "",
-      observations: "",
       imageFile: undefined,
     },
   });
 
-  const onSubmit = async (data: CreateAssetFormValues) => {
+  // Hidratamos el formulario usando los nombres de propiedades de tu interfaz ItAsset
+  useEffect(() => {
+    if (itAsset) {
+      form.reset({
+        serialNumber: itAsset.serialNumber,
+        idInventary: itAsset.idInventary || "",
+        typeId: itAsset.itAssetsType?.id || "",
+        brandId: itAsset.model?.brand?.id || "", 
+        modelId: itAsset.model?.id || "",
+        statusId: itAsset.itAssetStatus?.id || "",
+        invoiceId: itAsset.invoice?.id || "",
+        description: itAsset.description || "",
+        imageFile: undefined, 
+      });
+    }
+  }, [itAsset, form]);
+
+  const isUpdating = updateAssetMutation.isPending;
+
+  const onSubmit = async (data: UpdateAssetFormValues) => {
     const formData = new FormData();
     formData.append("serialNumber", data.serialNumber);
     formData.append("modelId", data.modelId);
     formData.append("statusId", data.statusId);
     formData.append("typeId", data.typeId);
     
-    if (data.imageFile) formData.append("file", data.imageFile); 
+    if (data.imageFile instanceof File) {
+      formData.append("file", data.imageFile); 
+    }
+
     if (data.idInventary) formData.append("idInventary", data.idInventary);
     if (data.invoiceId) formData.append("invoiceId", data.invoiceId);
     if (data.description) formData.append("description", data.description);
-    if (data.observations) formData.append("observations", data.observations);
 
     try {
       await sileo.promise(
-        createAssetMutation.mutateAsync(formData),
+        updateAssetMutation.mutateAsync({ id: id!, data: formData }),
         {
-          loading: { title: "Registrando activo..." },
+          loading: { title: "Actualizando activo..." },
           success: { 
-            title: "Activo registrado", 
-            description: "El equipo ha sido añadido al inventario exitosamente.", 
+            title: "Activo actualizado", 
+            description: "Los cambios se guardaron exitosamente.", 
             duration: 4000 
           },
           error: (err) => {
-            let backendMessage = "Error al registrar el activo";
+            let backendMessage = "Error al actualizar";
             if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
               const rawMessage = err.response.data.message;
               backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
@@ -93,17 +114,26 @@ const ItAssetsCreatePage = () => {
     }
   };
 
+  if (isLoadingAsset) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="text-muted-foreground">Cargando datos del activo...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-10">
       
-      {/* HEADER: Puedes añadir labels o elementos aquí en el futuro */}
+      {/* HEADER */}
       <div className="flex items-center gap-4">
         <Button variant="outline" size="icon" type="button" onClick={() => navigate(-1)}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Nuevo Activo TI</h1>
-          <p className="text-muted-foreground text-sm">Registra un nuevo equipo en el inventario.</p>
+          <h1 className="text-2xl font-bold tracking-tight">Editar Activo TI</h1>
+          <p className="text-muted-foreground text-sm">Modifica la información del equipo seleccionado.</p>
         </div>
       </div>
 
@@ -111,7 +141,7 @@ const ItAssetsCreatePage = () => {
         <CardHeader>
           <CardTitle>Información del Equipo</CardTitle>
           <CardDescription>
-            Llena los datos técnicos y administrativos del activo. Los campos con asterisco (*) son obligatorios.
+            Actualiza los datos técnicos y administrativos del activo.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -119,22 +149,22 @@ const ItAssetsCreatePage = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               
               <ItAssetsForm 
-                isSaving={isCreatingAsset}
+                isSaving={isUpdating}
                 itAssetsStatus={itAssetsStatus}
                 isLoadingStatus={isLoadingStatus}
-                showObservations={true} // Se muestran observaciones al crear
-                itAssetInitialData={null}
+                showObservations={false} // Se ocultan observaciones al editar
+                itAssetInitialData={itAsset} // Pasa los datos iniciales tipados para sincronizar selectores
               />
 
               <div className="flex justify-end gap-4 pt-4 border-t">
-                <Button type="button" variant="outline" onClick={() => navigate(-1)} disabled={isCreatingAsset}>
+                <Button type="button" variant="outline" onClick={() => navigate(-1)} disabled={isUpdating}>
                   Cancelar
                 </Button>
-                <Button type="submit" disabled={isCreatingAsset}>
-                  {isCreatingAsset ? (
-                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Registrando...</>
+                <Button type="submit" disabled={isUpdating}>
+                  {isUpdating ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Guardando...</>
                   ) : (
-                    <><Save className="mr-2 h-4 w-4" /> Registrar Activo</>
+                    <><Save className="mr-2 h-4 w-4" /> Guardar Cambios</>
                   )}
                 </Button>
               </div>
@@ -147,4 +177,4 @@ const ItAssetsCreatePage = () => {
   );
 };
 
-export default ItAssetsCreatePage;
+export default ItAssetsUpdatePage;

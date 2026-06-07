@@ -3,12 +3,12 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Monitor, Barcode, LogIn, LogOut } from "lucide-react"; 
 import { t } from "i18next";
-import CustomNotFoundTable from "@/components/custom/CustomNotFoundTable";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router"; // Importación necesaria para redireccionar
 import { Button } from "@/components/ui/button";
 import { CustomItAssetActionsMenu } from "./CustomToolActionsMenu";
 import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
+import CustomNotFoundCatalog from "@/components/custom/CustomNotFoundCatalog";
 
 interface Props {
   itAssets: ItAsset[];
@@ -19,13 +19,11 @@ export const CustomItAssetDesktopCatalog = memo(({ itAssets, handleDownClick }: 
   
   if (itAssets.length === 0) {
     return (
-      <Card className="w-full shadow-sm">
-        <CustomNotFoundTable 
-          title={t("itAssets.notFound.title", "No se encontraron activos")}
-          description={t("itAssets.notFound.description", "No hay activos de TI que coincidan con tu búsqueda.")}
-          icon={Monitor} 
-        />
-      </Card>
+      <CustomNotFoundCatalog
+        title={t("itAssets.notFound.title", "No se encontraron activos")}
+        description={t("itAssets.notFound.description", "No hay activos de TI que coincidan con tu búsqueda. Intenta con otros filtros.")}
+        icon={Monitor} 
+      />
     );
   }
 
@@ -127,17 +125,24 @@ export const CustomItAssetDesktopCatalog = memo(({ itAssets, handleDownClick }: 
               
               <div className="flex-1">
                 {asset.inUse ? (
-                  // Botón si está Ocupado -> Redirige a hacer una ENTRADA
-                  <Link to={`/it-assets/in/${asset.id}`} className="block w-full">
-                    <Button variant="secondary" size="sm" className="w-full gap-2 text-amber-600 hover:text-amber-700 hover:bg-amber-100/80 dark:hover:bg-amber-900/50">
+                  <Link 
+                    to={`/it-assets/in/${asset.id}`} 
+                    className={cn("block w-full", !asset.status && "pointer-events-none")}
+                    onClick={(e) => !asset.status && e.preventDefault()}
+                  >
+                    <Button variant="secondary" size="sm" className="w-full gap-2 text-amber-600 hover:text-amber-700 hover:bg-amber-100/80 dark:hover:bg-amber-900/50" disabled={!asset.status}>
                       <LogIn className="h-4 w-4" />
                       Entrada
                     </Button>
                   </Link>
                 ) : (
                   // Botón si está Disponible -> Redirige a hacer una SALIDA
-                  <Link to={`/it-assets/out/${asset.id}`} className="block w-full">
-                    <Button variant="default" size="sm" className="w-full gap-2">
+                  <Link 
+                    to={`/it-assets/out/${asset.id}`} 
+                    className={cn("block w-full", !asset.status && "pointer-events-none")}
+                    onClick={(e) => !asset.status && e.preventDefault()}
+                  >
+                    <Button variant="default" size="sm" className="w-full gap-2" disabled={!asset.status}>
                       <LogOut className="h-4 w-4" />
                       Salida
                     </Button>
