@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
-import type { ListTechnicalReports } from "../interfaces/list-technical-reports.interface";
+import type { TechnicalReport } from "../interfaces/list-technical-reports.interface";
 
 interface Options {
     limit?: number | string;
@@ -7,12 +7,12 @@ interface Options {
     query?: string;
 }
 
-export const getAllTechnicalReports = async (options: Options): Promise<ListTechnicalReports> => {
+export const getAllTechnicalReports = async (options: Options): Promise<TechnicalReport> => {
     const { limit = 10, page = 1, query } = options;
     const parsedLimit = Number(limit);
     const parsedPage = Number(page);
 
-    const { data } = await soporteTecnicoApi.get<ListTechnicalReports>('/technical-reports',
+    const { data } = await soporteTecnicoApi.get<TechnicalReport>('/technical-reports',
         {
             params: {
                 limit: isNaN(parsedLimit) || parsedLimit < 1 ? 10 : parsedLimit,

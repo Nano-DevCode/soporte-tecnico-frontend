@@ -110,7 +110,7 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
               {t("common.filters.less_filters")}
             </span>
           </AccordionTrigger>
-          <AccordionContent >
+          <AccordionContent className="pb-0" >
             <div className="flex flex-col md:flex-row flex-wrap items-center gap-2 py-0 pt-2">
 
               <CustomFilterSelect
