@@ -2,8 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { useItAssetsInvoices } from "../hooks/useItAssetsInvoices";
-import { InfiniteScrollSelect } from "@/Equipments/components/infinite-scroll-select";
 import { sileo } from "sileo";
+import { InfiniteScrollSelect } from "@/components/custom/InfiniteScrollSelect";
 
 export const InvoiceSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
   const { control } = useFormContext();

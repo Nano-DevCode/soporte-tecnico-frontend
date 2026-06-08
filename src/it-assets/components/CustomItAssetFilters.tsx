@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { FilterX, Search } from "lucide-react";
 import { useSearchParams } from "react-router";
 import { t } from "i18next";
-import { InfiniteScrollSelect } from "../../components/custom/infinite-scroll-select";
+import { InfiniteScrollSelect } from "../../components/custom/InfiniteScrollSelect";
 
 // IMPORTANTE: Asegúrate de que las rutas a tus hooks coincidan con tu estructura
 import { useItAssetsTypes } from "../hooks/useItAssetsTypes";

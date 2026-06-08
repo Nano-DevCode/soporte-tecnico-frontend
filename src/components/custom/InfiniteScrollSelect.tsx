@@ -87,7 +87,8 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
       value={value}
       onValueChange={(val) => {
         if (val?.id === "CREATE_NEW_ITEM") {
-          onCreate?.(val.name);
+          // Se limpia cualquier espacio extra al final antes de crear el ítem
+          onCreate?.(val.name.trim());
         } else {
           onChange(val);
           setInputValue(val?.name ?? "");
@@ -100,10 +101,11 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
           placeholder={placeholder}
           showClear
           value={inputValue}
-          className="w-full"
+          className="w-full uppercase" 
           onChange={(e) => {
-            setInputValue(e.target.value);
-            onSearch(e.target.value);
+            const formattedValue = e.target.value.toUpperCase().trimStart();
+            setInputValue(formattedValue);
+            onSearch(formattedValue.trim());
           }}
         />
       </div>

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { FilterX, Search } from "lucide-react";
 import { useSearchParams } from "react-router";
 import { t } from "i18next";
-import { InfiniteScrollSelect } from "../../components/custom/infinite-scroll-select";
+import { InfiniteScrollSelect } from "../../components/custom/InfiniteScrollSelect";
 import { useToolTypes } from "../hooks/useToolTypes";
 import { useToolBrands } from "../hooks/useToolBrands";
 

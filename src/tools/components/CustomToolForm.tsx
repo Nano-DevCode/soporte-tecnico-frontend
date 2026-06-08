@@ -23,7 +23,7 @@ import { Label } from "@/components/ui/label";
 import { useToolBrands } from "../hooks/useToolBrands";
 import { useToolModels } from "../hooks/useToolModels";
 import { useToolTypes } from "../hooks/useToolTypes";
-import { InfiniteScrollSelect } from "../../components/custom/infinite-scroll-select";
+import { InfiniteScrollSelect } from "../../components/custom/InfiniteScrollSelect";
 import type { Tool } from "../interfaces/toolsResponse"; 
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 
