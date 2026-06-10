@@ -14,6 +14,7 @@ import { equipmentRoutes } from "./Equipments/equipments.routes";
 import { toolRoutes } from "./tools/tools.router";
 import { itAssetRoutes } from "./it-assets/it-assets.router";
 import { TechnicalReportsRoutes } from "./technical-reports/technical-reports.router";
+import { FoliosRoutes } from "./folios/folio.router";
 
 // TODO: proteger rutas dependiendo del status del ticket
 // const PanelLayout = lazy(() => import("./layout/PanelLayout"))
@@ -71,6 +72,10 @@ export const appRouter = createBrowserRouter([
             {
                 path: 'it-assets',
                 children: itAssetRoutes,
+            },
+            {
+                path: 'folios',
+                children: FoliosRoutes,
             }
         ],
     },

@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
-import type { Ticket } from "@/tickets/interfaces/ticket.interface";
 import type { Column } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 
-export const SortableHeader = (column: Column<Ticket, unknown>, title: string) => {
+export const SortableHeader = <TData, TValue>(column: Column<TData, TValue>, title: string) => {
   const isSorted = column.getIsSorted();
 
   return (

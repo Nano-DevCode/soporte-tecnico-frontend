@@ -5,10 +5,11 @@ import { useUserRoles } from "@/auth/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Hammer, Archive, ClipboardList, MonitorCog } from "lucide-react";
+import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Hammer, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply } from "lucide-react";
 
 // Types para la configuración
 type NavSubItem = {
+  icon?: React.ElementType;
   title: string;
   path: string;
   show: boolean;
@@ -97,6 +98,31 @@ export const CustomSidebarNavContent = memo(() => {
       show: isSuperAdmin || isBossCC || isSecretaryCC,
     },
     {
+      title: t("common.nav_content.settings.folios.item"),
+      icon: FileDigit,
+      show: isSuperAdmin || isBossCC || isBoss,
+      subItems: [
+        {
+          title: t("common.nav_content.settings.folios.subitems.list_departments"),
+          icon: Building2,
+          path: "/folios/tickets",
+          show: isSuperAdmin || isBossCC
+        },
+        {
+          title: t("common.nav_content.settings.folios.subitems.my_department"),
+          icon: Building,
+          path: "/folios/tickets/my-department",
+          show: isSuperAdmin || isBoss
+        },
+        {
+          title: t("common.nav_content.settings.folios.subitems.responses"),
+          icon: MessageSquareReply,
+          path: "/folios/responses",
+          show: isSuperAdmin || isBoss
+        },
+      ]
+    },
+    {
       title: t("settings"),
       icon: Cog,
       show: true,
@@ -134,7 +160,7 @@ export const CustomSidebarNavContent = memo(() => {
         {navItems.filter(item => item.show).map((item, index) => {
 
           if (item.subItems) {
-            const isActiveGroup = item.subItems.some(sub => pathname.startsWith(sub.path));
+            const isActiveGroup = item.subItems.some(sub => pathname === sub.path);
 
             return (
               <Collapsible key={index} className="group/collapsible" defaultOpen={isActiveGroup}>
@@ -149,8 +175,11 @@ export const CustomSidebarNavContent = memo(() => {
                 <CollapsibleContent>
                   <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
                     {item.subItems.filter(sub => sub.show).map((sub, subIdx) => (
-                      <Link key={subIdx} to={sub.path} className={getSubItemClass(pathname.startsWith(sub.path))}>
-                        <List className="h-4 w-4" /> {sub.title}
+                      <Link key={subIdx} to={sub.path} className={getSubItemClass(pathname === sub.path)}>
+                        {
+                          sub.icon ? <sub.icon className="h-4 w-4" /> : <List className="h-4 w-4" />
+                        }
+                        {sub.title}
                       </Link>
                     ))}
                   </div>

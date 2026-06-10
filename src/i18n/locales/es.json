@@ -397,6 +397,18 @@
     },
     "errors": {
       "title": "!Ha ocurrido un error!"
+    },
+    "nav_content": {
+      "settings":{
+        "folios": {
+          "item": "Folios",
+          "subitems": {
+            "list_departments": "Solicitudes de Departamentos",
+            "responses": "Respuestas",
+            "my_department": "Mi departamento"
+          }
+        }
+      } 
     }
   },
 
@@ -1151,8 +1163,219 @@
       "title": "Error al cargar",
       "description": "No se pudieron obtener las Bitácoras. Revisa tu conexión."
     }
-  }
+  },
 
+
+
+  "folios": {
+    "data": {
+      "department_name": "Departamento",
+      "acronym": "Siglas",
+      "period_name": "Periodo",
+      "current_value": "Número actual",
+      "next_value": "Número siguiente",
+      "next_folio_preview": "Folio siguiente"
+    },
+
+    "tickets":{
+      "data_description": {
+        "current_value": "Número de folio de la ultima solicitud generada por este departamento",
+        "next_value": "Número de folio que tendra la siguiente solicitud generada por este departamento",
+        "next_folio_preview": "Folio que tendra la siguiente solicitud generada por este departamento"
+      },
+      "not_found": {
+        "title": "Detalles del folio de solicitudes para el departamento no encontrados",
+        "message": "No se pudieron encontrar los detalles para el folio de solicitudes del departamento especificado"
+      },
+      "view_page": {
+        "title": "Detalles del folio de solicitud del departamento",
+        "description": "Visualiza la información actual del folio de solicitud del departamento",
+        "details": {
+          "sections": {
+            "department_details": "Información del departamento",
+            "folio_details": "Detalles actuales del folio",
+            "period_details": "Información del periodo"
+          }
+        }
+      },
+      "view_my_department_page": {
+        "title": "Detalles del folio de solicitud de su departamento",
+        "description": "Visualiza la información actual del folio de solicitud de su departamento",
+        "details": {
+          "sections": {
+            "department_details": "Información del departamento",
+            "folio_details": "Detalles actuales del folio",
+            "period_details": "Información del periodo"
+          }
+        }
+      },
+      "edit_page": {
+        "title": "Editar Folio de solicitud del departamento",
+        "description": "Modifica el folio de la solicitud para el departamento seleccionado.",
+        "success": {
+          "title": "Folio de solicitud actualizado",
+          "message": "Los cambios se han guardado correctamente."
+        },
+        "details": {
+          "sections": {
+            "config": "Configura el nuevo valor para el folio"
+          }
+        },
+        "error": {
+          "title": "Error al editar el folio de la solicitud",
+          "message": "Hubo un problema al intentar actualizar el folio de solicitud del departamento."
+        }
+      },
+      "edit_my_department_page": {
+        "title": "Editar el folio de solicitud de su departamento",
+        "description": "Modifique el folio de la solicitud de su departamento.",
+        "success": {
+          "title": "Folio de solicitud actualizado",
+          "message": "Los cambios se han guardado correctamente."
+        },
+        "details": {
+          "sections": {
+            "config": "Configura el nuevo valor para el folio"
+          }
+        },
+        "error": {
+          "title": "Error al editar el folio de la solicitud",
+          "message": "Hubo un problema al intentar actualizar el folio de solicitud del departamento."
+        }
+      },
+
+      "forms": {
+        "folio": {
+          "header": {
+            "title": "Datos del folio de solicitud",
+            "description": "Información del valor del folio de solicitud"
+          },
+          "fields": {
+            "folio": {
+              "label": "Número del folio para la siguiente solicitud",
+              "placeholder": "Ingresa el número de folio",
+              "description": "El número ingresado sera el número que tome la siguiente solicitud creada por el departamento."
+            },
+            "next_folio_preview": {
+              "label": "Previsualización del Folio para la siguiente solicitud",
+              "placeholder": "Ingresa un número de folio",
+              "description": "La siguiente solicitud creada por el departamento tendra el siguiente folio despues de guardar el cambio."
+            }
+          },
+          "buttons": {
+            "submit": "Guardar"
+          },
+          "errors": {
+            "requested_folio_required": "El número de folio es requerido.",
+            "requested_folio_invalid": "El número de folio debe ser un número entero válido.",
+            "requested_folio_positive": "El número de folio debe ser mayor a cero.",
+            "requested_min_folio": "El número de folio debe ser mayor al número de folio siguiente: {{currentValueFolio}}."
+          }
+        }
+      }
+    },
+
+    "responses":{
+      "data_description": {
+        "current_value": "Número de folio de la ultima respuesta generada.",
+        "next_value": "Número de folio que tendra la siguiente respuesta generada.",
+        "next_folio_preview": "Folio que tendra la siguiente respuesta generada."
+      },
+      "not_found": {
+        "title": "Detalles del folio de respuestas no encontrados",
+        "message": "No se pudieron encontrar los detalles para el folio de respuestas."
+      },
+      "view_page": {
+        "title": "Detalles del folio de respuestas del departamento",
+        "description": "Visualiza el estado actual del folio de respuestas del departamento",
+        "details": {
+          "sections": {
+            "department_details": "Información del departamento",
+            "folio_details": "Detalles actuales del Folio",
+            "period_details": "Información del perido"
+          }
+        }
+      },
+
+      "edit_page": {
+        "title": "Editar el folio de respuesta",
+        "description": "Modifique el folio de la respuesta.",
+        "success": {
+          "title": "Folio de respuesta actualizado",
+          "message": "Los cambios se han guardado correctamente."
+        },
+        "details": {
+          "sections": {
+            "config": "Configura el nuevo valor para el folio"
+          }
+        },
+        "error": {
+          "title": "Error al editar el folio de respuesta",
+          "message": "Hubo un problema al intentar actualizar el folio de respuesta del departamento."
+        }
+      },
+
+      "forms": {
+        "folio": {
+          "header": {
+            "title": "Datos del folio de respuesta",
+            "description": "Información del valor del folio de respuesta"
+          },
+          "fields": {
+            "folio": {
+              "label": "Número del folio para la siguiente respuesta",
+              "placeholder": "Ingresa el número de folio",
+              "description": "El número ingresado sera el número que tome la siguiente respuesta que se cree despues de guardar el cambio."
+            },
+            "next_folio_preview": {
+              "label": "Previsualización del Folio para la siguiente solicitud",
+              "placeholder": "Ingresa un número de folio",
+              "description": "La siguiente respuesta que se cree tendra el siguiente folio despues de guardar el cambio."
+            }
+          },
+          "buttons": {
+            "submit": "Guardar"
+          },
+          "errors": {
+            "requested_folio_required": "El número de folio es requerido.",
+            "requested_folio_invalid": "El número de folio debe ser un número entero válido.",
+            "requested_folio_positive": "El número de folio debe ser mayor a cero.",
+            "requested_min_folio": "El número de folio debe ser mayor al número de folio siguiente: {{currentValueFolio}}."
+          }
+        }
+      }
+    },
+
+    "actions": {
+      "config_folio": "Configurar Folio"
+    },
+    "list_page": {
+      "title": "Folios de solicitudes",
+      "description": "Visualiza y configura los folios de las solicitudes para cada departamento.",
+      "actions": {
+        "change": "Cambiar Folio"
+      },
+      "table": {
+        "headers": {
+          "department_name": "Departamento",
+          "acronym": "Siglas",
+          "period_name": "Periodo",
+          "current_value": "Valor actual",
+          "next_value": "Valor siguiente",
+          "next_folio_preview": "Folio siguiente",
+          "actions": "Acciones"
+        }
+      },
+      "empty": {
+        "title": "No se encontraron registros",
+        "description": "Intenta ajustar los filtros de busqueda"
+      },
+      "error": {
+        "title": "No se pudieron cargar los folios",
+        "description": "Hubo un problema de conexión con el servidor. Por favor, intenta de nuevo."
+      }
+    }
+  }
 ,
   "equipment_form_new": "Nuevo Registro de Equipo",
   "equipment_form_description": "Complete la información técnica y administrativa del activo",
