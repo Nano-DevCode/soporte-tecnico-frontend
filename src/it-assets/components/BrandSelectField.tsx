@@ -4,6 +4,8 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { useItAssetsBrands } from "../hooks/useItAssetsBrands";
 import { sileo } from "sileo";
 import { InfiniteScrollSelect } from "@/components/custom/InfiniteScrollSelect";
+import { isAxiosError } from "axios";
+import type { BackendError } from "@/interfaces/backendError.interfaces";
 
 export const BrandSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
   const { control } = useFormContext();
@@ -48,8 +50,19 @@ export const BrandSelectField = ({ disabled, initialData }: { disabled?: boolean
                   try {
                     const newBrand = await sileo.promise(createBrand({ name: newItemName }), {
                       loading: { title: `Creando marca "${newItemName}"...` },
-                      success: { title: "Marca creada" },
-                      error: { title: "Error al crear" }
+                      success: { title: "Marca creada"  },
+                      error: (err) => {
+                        let backendMessage = "Error al crear la marca";
+                        if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
+                          const rawMessage = err.response.data.message;
+                          backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
+                        }
+                        return {
+                          title: "Error",
+                          description: backendMessage,
+                          duration: 5000,
+                        };
+                      }
                     });
                     field.onChange(newBrand.id);
                     setSearchInput("");

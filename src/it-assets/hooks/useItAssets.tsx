@@ -13,13 +13,21 @@ export const useItAssets = () => {
   const { id } = useParams();
 
   const limit = Number(searchParams.get('limit')) || 10;
+  const brandId = searchParams.get('brandId') || undefined;
+  const modelId = searchParams.get('modelId') || undefined;
+  const typeId = searchParams.get('typeId') || undefined;
+  const status = searchParams.get('status') === 'true'
+    ? true
+    : searchParams.get('status') === 'false'
+      ? false
+      : undefined;
   const page = Number(searchParams.get('page')) || 1;
   const offset = (page - 1) * limit;
   const query = searchParams.get("query")?.trim() || undefined;
 
   const assetsQuery = useQuery({
-    queryKey: ['it-assets', { limit, offset, query }],
-    queryFn: () => getItAssetsAction({ limit, offset, query }),
+    queryKey: ['it-assets', { limit, offset, query, brandId, modelId, status, typeId}],
+    queryFn: () => getItAssetsAction({ limit, offset, query, brandId, modelId, status, typeId}),
     staleTime: 1000 * 60 * 5,
     select: (response) => ({
       itAssets: response.itAssets,
@@ -41,9 +49,6 @@ export const useItAssets = () => {
     },
   });
 
-  // ==========================================
-  // CORRECCIÓN AQUÍ
-  // ==========================================
   const updateAssetMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: FormData }) => 
       updateItAssetAction({ id }, data), 

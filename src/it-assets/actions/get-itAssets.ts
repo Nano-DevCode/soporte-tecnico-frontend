@@ -5,6 +5,10 @@ interface Options {
   limit?: number | string;
   offset?: number | string;
   query?: string;
+  brandId?: string;
+  typeId?: string;
+  modelId?: string;
+  status?: boolean;
 }
 
 export const getItAssetsAction = async (
@@ -15,6 +19,10 @@ export const getItAssetsAction = async (
     limit = 10,
     offset = 0,
     query = undefined,
+    brandId = undefined,
+    typeId = undefined,
+    modelId = undefined,
+    status = undefined,
   } = options;
 
   const { data } = await soporteTecnicoApi.get<ItAssetsResponse>(
@@ -32,6 +40,10 @@ export const getItAssetsAction = async (
         query: query
           ? query.trim().replaceAll("+", " ")
           : undefined,
+        brandId: brandId ? brandId : undefined,
+        typeId: typeId ? typeId : undefined,
+        modelId: modelId ? modelId : undefined,
+        status: status ? status : undefined,
       },
     }
   );

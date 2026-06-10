@@ -2,13 +2,13 @@ import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
 import type { Invoice } from "../interfaces/itAssetsInvoicesResponse.interface";
 
 interface Options {
-  name: string;
+  idInternal: string;
 }
 
 export const createItAssetsInvoiceAction = async(options: Options):Promise<Invoice> => {
-  const { name } = options;
+  const { idInternal } = options;
   const { data } = await soporteTecnicoApi.post<Invoice>('/it-assets-invoices', {
-    name: name
+    idInternal: idInternal
   });  
   return data;
 }

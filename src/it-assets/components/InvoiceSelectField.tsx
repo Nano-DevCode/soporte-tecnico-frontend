@@ -4,6 +4,8 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { useItAssetsInvoices } from "../hooks/useItAssetsInvoices";
 import { sileo } from "sileo";
 import { InfiniteScrollSelect } from "@/components/custom/InfiniteScrollSelect";
+import { isAxiosError } from "axios";
+import type { BackendError } from "@/interfaces/backendError.interfaces";
 
 export const InvoiceSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
   const { control } = useFormContext();
@@ -49,10 +51,21 @@ export const InvoiceSelectField = ({ disabled, initialData }: { disabled?: boole
                 allowCreate={true}
                 onCreate={async (newItemName) => {
                   try {
-                    const newInvoice = await sileo.promise(createInvoice({ name: newItemName }), {
+                    const newInvoice = await sileo.promise(createInvoice({ idInternal: newItemName }), {
                       loading: { title: `Creando factura...` },
                       success: { title: "Factura creada" },
-                      error: { title: "Error al crear" }
+                      error: (err) => {
+                        let backendMessage = "Error al crear la Factura";
+                        if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
+                          const rawMessage = err.response.data.message;
+                          backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
+                        }
+                        return {
+                          title: "Error",
+                          description: backendMessage,
+                          duration: 5000,
+                        };
+                      }
                     });
                     field.onChange(newInvoice.id);
                     setSearchInput("");
