@@ -2,25 +2,25 @@ import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
 import type { ItAssetsMovementResponse } from "../interfaces/itAssetsMovementResponse";
 
 interface Options {
-  offset?: number | string;
-  limit?: number | string;
+  offset?: number;
+  limit?: number;
   query?: string;
+  type?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
-export const getItAssetsMovementsAction = async(options: Options):Promise<ItAssetsMovementResponse> => {
-  const { limit = 10, offset = 0, query = undefined } = options;
+export const getItAssetsMovementsAction = async (options: Options): Promise<ItAssetsMovementResponse> => {
   const { data } = await soporteTecnicoApi.get<ItAssetsMovementResponse>('/it-assets-movements', {
-    params: {
-      limit: limit ? limit : undefined,
-      offset: offset ? offset : undefined,
-      query: query ? query : undefined,
-    }
+    params: options 
   });  
 
   const baseUrl = import.meta.env.VITE_API_URL;
 
   const mappedMovements = data.itAssetsMovements.map(movement => {
-    movement.itAsset.imageUrl = `${baseUrl}${movement.itAsset.imageUrl}`;
+    if (movement.itAsset?.imageUrl && !movement.itAsset.imageUrl.startsWith('http')) {
+      movement.itAsset.imageUrl = `${baseUrl}${movement.itAsset.imageUrl}`;
+    }
     
     return movement;
   });

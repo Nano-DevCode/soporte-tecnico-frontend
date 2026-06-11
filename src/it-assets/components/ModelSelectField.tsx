@@ -4,6 +4,8 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { useItAssetsModels } from "../hooks/useItAssetsModels";
 import { sileo } from "sileo";
 import { InfiniteScrollSelect } from "@/components/custom/InfiniteScrollSelect";
+import type { BackendError } from "@/interfaces/backendError.interfaces";
+import { isAxiosError } from "axios";
 
 export const ModelSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
   const { control, watch, setValue } = useFormContext();
@@ -64,7 +66,18 @@ export const ModelSelectField = ({ disabled, initialData }: { disabled?: boolean
                     const newModel = await sileo.promise(createModel({ name: newItemName, brandId: selectedBrandId }), {
                       loading: { title: `Creando modelo "${newItemName}"...` },
                       success: { title: "Modelo creado" },
-                      error: { title: "Error al crear" }
+                      error: (err) => {
+                        let backendMessage = "Error al crear la marca";
+                        if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
+                          const rawMessage = err.response.data.message;
+                          backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
+                        }
+                        return {
+                          title: "Error",
+                          description: backendMessage,
+                          duration: 5000,
+                        };
+                      }
                     });
                     field.onChange(newModel.id);
                     setSearchInput("");

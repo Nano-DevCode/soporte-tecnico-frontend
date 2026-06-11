@@ -55,7 +55,7 @@ export const InvoiceSelectField = ({ disabled, initialData }: { disabled?: boole
                       loading: { title: `Creando factura...` },
                       success: { title: "Factura creada" },
                       error: (err) => {
-                        let backendMessage = "Error al crear la Factura";
+                        let backendMessage = "Error al crear la marca";
                         if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
                           const rawMessage = err.response.data.message;
                           backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;

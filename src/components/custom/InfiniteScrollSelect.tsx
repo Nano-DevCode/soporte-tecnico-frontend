@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { Plus, Check, Loader2 } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import {
   Combobox,
   ComboboxContent,
@@ -75,10 +75,9 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
         className="flex items-center justify-between py-2 cursor-pointer"
       >
         <span className="truncate">{option.name}</span>
-        {value?.id === option.id && <Check className="h-4 w-4 text-primary" />}
       </ComboboxItem>
     ));
-  }, [options, value?.id]);
+  }, [options]);
 
   return (
     <Combobox

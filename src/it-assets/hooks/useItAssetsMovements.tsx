@@ -9,14 +9,20 @@ export const useItAssetsMovements = (id?: string) => {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
 
+  // Paginación
   const limit = Number(searchParams.get('limit')) || 10;
   const page = Number(searchParams.get('page')) || 1;
   const offset = (page - 1) * limit;
+  
+  // Filtros de búsqueda
   const query = searchParams.get("query")?.trim() || undefined;
+  const type = searchParams.get("type") || undefined;
+  const startDate = searchParams.get("startDate") || undefined;
+  const endDate = searchParams.get("endDate") || undefined;
 
   const queryMovements = useQuery({
-    queryKey: ['it-assets-movements', { limit, offset, query }],
-    queryFn: () => getItAssetsMovementsAction({ limit, offset, query }),
+    queryKey: ['it-assets-movements', { limit, offset, query, type, startDate, endDate }],
+    queryFn: () => getItAssetsMovementsAction({ limit, offset, query, type, startDate, endDate }),
     staleTime: 1000 * 60 * 5,
     select: (response) => ({
       itAssetsMovements: response.itAssetsMovements,

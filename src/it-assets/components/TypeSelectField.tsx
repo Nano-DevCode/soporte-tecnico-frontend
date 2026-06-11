@@ -4,6 +4,8 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { useItAssetsTypes } from "../hooks/useItAssetsTypes";
 import { sileo } from "sileo";
 import { InfiniteScrollSelect } from "@/components/custom/InfiniteScrollSelect";
+import { isAxiosError } from "axios";
+import type { BackendError } from "@/interfaces/backendError.interfaces";
 
 export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
   const { control } = useFormContext();
@@ -26,7 +28,6 @@ export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean,
       control={control}
       name="typeId"
       render={({ field }) => {
-        // Magia para el Update: Si el ID está seleccionado pero no lo encontró en la primera página, usamos initialData
         const selectedOption = options.find(opt => opt.id === field.value) || (field.value === initialData?.id ? initialData : null);
 
         return (
@@ -50,7 +51,18 @@ export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean,
                     const newType = await sileo.promise(createType({ name: newItemName }), {
                       loading: { title: `Creando tipo "${newItemName}"...` },
                       success: { title: "Tipo creado exitosamente" },
-                      error: { title: "Error al crear" }
+                      error: (err) => {
+                        let backendMessage = "Error al crear la marca";
+                        if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
+                          const rawMessage = err.response.data.message;
+                          backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
+                        }
+                        return {
+                          title: "Error",
+                          description: backendMessage,
+                          duration: 5000,
+                        };
+                      }
                     });
                     field.onChange(newType.id);
                     setSearchInput("");

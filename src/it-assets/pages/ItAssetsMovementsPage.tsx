@@ -7,9 +7,12 @@ import { CustomSkeletonTableCard } from "@/components/custom/CustomSkeletonTable
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { CustomItAssetsMovementDesktopTable } from "../components/CustomItAssetsMovementDesktopTable";
 import { CustomItAssetsMovementMobileCard } from "../components/CustomItAssetsMovementMobileCard";
+import { CustomItAssetsMovementsFilters } from "../components/CustomItAssetsMovementsFilters";
 
 export const ItAssetsMovementsPage = () => {
   const { itAssetsMovements, meta, isLoadingMovements } = useItAssetsMovements();
+  console.log(itAssetsMovements, meta);
+  
 
   return (
     <div className="space-y-6">
@@ -22,8 +25,7 @@ export const ItAssetsMovementsPage = () => {
         />
       </div>
       
-      {/* Filtros (Descoméntalo cuando lo crees) */}
-      {/* <CustomItAssetsMovementsFilters /> */}
+      <CustomItAssetsMovementsFilters />
 
       {isLoadingMovements ? (
         <CustomSkeletonTableCard />

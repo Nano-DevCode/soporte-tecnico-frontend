@@ -25,6 +25,7 @@ export const getItAssetsAction = async (
     status = undefined,
   } = options;
 
+  console.log(status);
   const { data } = await soporteTecnicoApi.get<ItAssetsResponse>(
     "/it-assets",
     {
@@ -40,10 +41,10 @@ export const getItAssetsAction = async (
         query: query
           ? query.trim().replaceAll("+", " ")
           : undefined,
-        brandId: brandId ? brandId : undefined,
-        typeId: typeId ? typeId : undefined,
-        modelId: modelId ? modelId : undefined,
-        status: status ? status : undefined,
+        brandId: brandId ?? undefined,
+        typeId: typeId ?? undefined,
+        modelId: modelId ?? undefined,
+        status: status ?? undefined,
       },
     }
   );
