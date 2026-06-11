@@ -1,6 +1,9 @@
+import { lazy } from "react";
 import { Navigate } from "react-router";
-import { ProfilePage } from "./pages/ProfilePage";
-import { ConfigurationPage } from "./pages/ConfigurationPage";
+import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
+
+const ProfilePage = lazy(() => import("./pages/ProfilePage").then(module => ({ default: module.ProfilePage })));
+const ConfigurationPage = lazy(() => import("./pages/ConfigurationPage").then(module => ({ default: module.ConfigurationPage })));
 
 export const accountRoutes = [
     {
@@ -9,10 +12,16 @@ export const accountRoutes = [
     },
     {
         path: 'profile',
-        element: <ProfilePage />
+        element: 
+            <SuspenseWrapper>
+                <ProfilePage />
+            </SuspenseWrapper>
     },
     {
         path: 'configuration',
-        element: <ConfigurationPage />
+        element: 
+            <SuspenseWrapper>
+                <ConfigurationPage />
+            </SuspenseWrapper>
     },
 ];

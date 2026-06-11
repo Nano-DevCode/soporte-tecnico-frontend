@@ -1,24 +1,38 @@
+import { lazy } from "react";
+import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 
-import { CreateEquipmentPage } from "./pages/EquipmentCreate";
-import { EquipmentDetailsPage } from "./pages/EquipmentDetailsPage";
-import { EquipmentPage } from "./pages/EquipmentPage";
-import { UpdateEquipmentPage } from "./pages/EquipmentUpdate";
+const EquipmentPage = lazy(() => import("./pages/EquipmentPage").then(module => ({ default: module.EquipmentPage })));
+const CreateEquipmentPage = lazy(() => import("./pages/EquipmentCreate").then(module => ({ default: module.CreateEquipmentPage })));
+const EquipmentDetailsPage = lazy(() => import("./pages/EquipmentDetailsPage").then(module => ({ default: module.EquipmentDetailsPage })));
+const UpdateEquipmentPage = lazy(() => import("./pages/EquipmentUpdate").then(module => ({ default: module.UpdateEquipmentPage })));
 
 export const equipmentRoutes = [
     {
         index: true,
-        element: <EquipmentPage />
+        element: 
+            <SuspenseWrapper>
+                <EquipmentPage />
+            </SuspenseWrapper>
     },
     {
         path: 'create',
-        element: <CreateEquipmentPage/>
+        element: 
+            <SuspenseWrapper>
+                <CreateEquipmentPage />
+            </SuspenseWrapper>
     },
     {
         path: 'details/:id',
-        element: <EquipmentDetailsPage />
+        element: 
+            <SuspenseWrapper>
+                <EquipmentDetailsPage />
+            </SuspenseWrapper>
     },
     {
         path: 'edit/:id',
-        element: <UpdateEquipmentPage />
+        element: 
+            <SuspenseWrapper>
+                <UpdateEquipmentPage />
+            </SuspenseWrapper>
     }
 ];

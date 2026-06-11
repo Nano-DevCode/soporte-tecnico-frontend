@@ -133,7 +133,6 @@ export const CustomItAssetsMovementsFilters = memo(() => {
               onSelect={(date) => updateFilters("startDate", date ? format(date, "yyyy-MM-dd") : "")}
               // 👇 Nueva validación: Bloquea las fechas posteriores a endDateObj
               disabled={endDateObj ? { after: endDateObj } : undefined}
-              initialFocus
             />
           </PopoverContent>
         </Popover>
@@ -163,7 +162,6 @@ export const CustomItAssetsMovementsFilters = memo(() => {
               onSelect={(date) => updateFilters("endDate", date ? format(date, "yyyy-MM-dd") : "")}
               // 👇 Nueva validación: Bloquea las fechas anteriores a startDateObj
               disabled={startDateObj ? { before: startDateObj } : undefined}
-              initialFocus
             />
           </PopoverContent>
         </Popover>

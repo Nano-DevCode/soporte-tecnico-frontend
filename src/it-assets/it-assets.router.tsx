@@ -1,12 +1,14 @@
+import { lazy } from "react";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { RoleRoute } from "@/auth/routes/ProtectedRoutes";
-import { ItAssetsPage } from "./pages/ItAssetsPage";
-import ItAssetsMovementOut from "./pages/ItAssetsMovementOut";
-import ItAssetsMovementIn from "./pages/ItAssetsMovementIn";
-import ItAssetsCreatePage from "./pages/ItAssetsCreatePage";
-import ItAssetsUpdatePage from "./pages/ItAssetsUpdatePage";
-import { ItAssetsMovementsPage } from "./pages/ItAssetsMovementsPage";
-import { ItAssetsMovementViewPage } from "./pages/ItAssetsMovementViewPage";
+
+const ItAssetsMovementOut = lazy(() => import("./pages/ItAssetsMovementOut"));
+const ItAssetsMovementIn = lazy(() => import("./pages/ItAssetsMovementIn"));
+const ItAssetsCreatePage = lazy(() => import("./pages/ItAssetsCreatePage"));
+const ItAssetsUpdatePage = lazy(() => import("./pages/ItAssetsUpdatePage"));
+const ItAssetsPage = lazy(() => import("./pages/ItAssetsPage").then(module => ({ default: module.ItAssetsPage })));
+const ItAssetsMovementsPage = lazy(() => import("./pages/ItAssetsMovementsPage").then(module => ({ default: module.ItAssetsMovementsPage })));
+const ItAssetsMovementViewPage = lazy(() => import("./pages/ItAssetsMovementViewPage").then(module => ({ default: module.ItAssetsMovementViewPage })));
 
 export const itAssetRoutes = [
     {
@@ -65,4 +67,4 @@ export const itAssetRoutes = [
                 <ItAssetsMovementViewPage />
             </SuspenseWrapper>
     }
-]
+];

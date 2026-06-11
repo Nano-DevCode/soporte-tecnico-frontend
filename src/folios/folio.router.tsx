@@ -1,19 +1,20 @@
+import { lazy } from "react";
 import { CanRoute } from "@/common/permission/CanRoute";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
-import { ListTicketFolioDepartmentsPage } from "./pages/ListTicketFolioDepartmentsPage";
-import { ViewTicketFolioDepartmentPage } from "./pages/ViewTicketFolioDepartmentPage";
-import { EditTicketFolioDepartmentPage } from "./pages/EditTicketFolioDepartmentPage";
-import { ViewMyTicketFolioDepartmentPage } from "./pages/ViewMyTicketFolioDepartmentPage";
-import { EditMyTicketFolioDepartmentPage } from "./pages/EditMyTicketFolioDepartmentPage";
-import { ViewResponseFolioPage } from "./pages/ViewResponseFolioPage";
-import { EditResponseFolioPage } from "./pages/EditResponseFolioPage";
+
+const ListTicketFolioDepartmentsPage = lazy(() => import("./pages/ListTicketFolioDepartmentsPage").then(module => ({ default: module.ListTicketFolioDepartmentsPage })));
+const ViewTicketFolioDepartmentPage = lazy(() => import("./pages/ViewTicketFolioDepartmentPage").then(module => ({ default: module.ViewTicketFolioDepartmentPage })));
+const EditTicketFolioDepartmentPage = lazy(() => import("./pages/EditTicketFolioDepartmentPage").then(module => ({ default: module.EditTicketFolioDepartmentPage })));
+const ViewMyTicketFolioDepartmentPage = lazy(() => import("./pages/ViewMyTicketFolioDepartmentPage").then(module => ({ default: module.ViewMyTicketFolioDepartmentPage })));
+const EditMyTicketFolioDepartmentPage = lazy(() => import("./pages/EditMyTicketFolioDepartmentPage").then(module => ({ default: module.EditMyTicketFolioDepartmentPage })));
+const ViewResponseFolioPage = lazy(() => import("./pages/ViewResponseFolioPage").then(module => ({ default: module.ViewResponseFolioPage })));
+const EditResponseFolioPage = lazy(() => import("./pages/EditResponseFolioPage").then(module => ({ default: module.EditResponseFolioPage })));
 
 export const FoliosRoutes = [
     {
         index: true,
         path: 'tickets',
         element:
-
             <SuspenseWrapper>
                 <CanRoute permission="WATCH_TICKET_FOLIO_DEPARTMENTS_LIST">
                     <ListTicketFolioDepartmentsPage />

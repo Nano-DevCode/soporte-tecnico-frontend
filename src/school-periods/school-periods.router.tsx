@@ -1,25 +1,39 @@
-import { CreateSchoolPeriodPage } from "./pages/CreateSchoolPeriodPage";
-import { EditSchoolPeriodPage } from "./pages/EditSchoolPeriodPage";
-import { SchoolPeriodsPage } from "./pages/SchoolPeriodsPage";
-import { SchoolPeriodViewPage } from "./pages/SchoolPeriodViewPage";
+import { lazy } from "react";
+import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 
+const SchoolPeriodsPage = lazy(() => import("./pages/SchoolPeriodsPage").then(module => ({ default: module.SchoolPeriodsPage })));
+const CreateSchoolPeriodPage = lazy(() => import("./pages/CreateSchoolPeriodPage").then(module => ({ default: module.CreateSchoolPeriodPage })));
+const SchoolPeriodViewPage = lazy(() => import("./pages/SchoolPeriodViewPage").then(module => ({ default: module.SchoolPeriodViewPage })));
+const EditSchoolPeriodPage = lazy(() => import("./pages/EditSchoolPeriodPage").then(module => ({ default: module.EditSchoolPeriodPage })));
 
 export const SchoolPeriodsRoutes = [
     {
         index: true,
-        element: <SchoolPeriodsPage />
+        element: 
+            <SuspenseWrapper>
+                <SchoolPeriodsPage />
+            </SuspenseWrapper>
     },
     {
         path: 'new',
-        element: <CreateSchoolPeriodPage />
+        element: 
+            <SuspenseWrapper>
+                <CreateSchoolPeriodPage />
+            </SuspenseWrapper>
     },
     {
         path: ':id',
-        element: <SchoolPeriodViewPage />
+        element: 
+            <SuspenseWrapper>
+                <SchoolPeriodViewPage />
+            </SuspenseWrapper>
     },
     {
         // Ruta para editar
         path: ':id/edit',
-        element: <EditSchoolPeriodPage />
+        element: 
+            <SuspenseWrapper>
+                <EditSchoolPeriodPage />
+            </SuspenseWrapper>
     },
 ];

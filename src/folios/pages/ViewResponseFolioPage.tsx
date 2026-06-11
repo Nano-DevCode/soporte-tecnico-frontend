@@ -56,7 +56,7 @@ export const ViewResponseFolioPage = () => {
                     <CardFooter>
                         <Button
                             className="ml-auto"
-                            variant={"primary"}
+                            variant={"default"}
                             onClick={() => navigate('/folios/responses/edit')}
                         >
                             <PencilLine />

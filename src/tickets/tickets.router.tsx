@@ -1,26 +1,26 @@
+import { lazy } from "react";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
-import { ListTicketPage } from "./pages/admin/ListTicketsPage";
-import { AssignTicketPage } from "./pages/AssignTicketPage";
-import { CreateTicketPage } from "./pages/CreateTicketPage";
-import { EditTicketPage } from "./pages/EditTicketPage";
-import { FinishTicketPage } from "./pages/FinishTicketPage";
-import { InterveneTicketPage } from "./pages/InterveneTicketPage";
-import { RejectTicketPage } from "./pages/RejectTicketPage";
-import { RouteTicketPage } from "./pages/RouteTicketPage";
-import { ViewTicketPage } from "./pages/ViewTicketPage";
 import { CanRoute } from "@/common/permission/CanRoute";
 
+const ListTicketPage = lazy(() => import("./pages/admin/ListTicketsPage").then(module => ({ default: module.ListTicketPage })));
+const AssignTicketPage = lazy(() => import("./pages/AssignTicketPage").then(module => ({ default: module.AssignTicketPage })));
+const CreateTicketPage = lazy(() => import("./pages/CreateTicketPage").then(module => ({ default: module.CreateTicketPage })));
+const EditTicketPage = lazy(() => import("./pages/EditTicketPage").then(module => ({ default: module.EditTicketPage })));
+const FinishTicketPage = lazy(() => import("./pages/FinishTicketPage").then(module => ({ default: module.FinishTicketPage })));
+const InterveneTicketPage = lazy(() => import("./pages/InterveneTicketPage").then(module => ({ default: module.InterveneTicketPage })));
+const RejectTicketPage = lazy(() => import("./pages/RejectTicketPage").then(module => ({ default: module.RejectTicketPage })));
+const RouteTicketPage = lazy(() => import("./pages/RouteTicketPage").then(module => ({ default: module.RouteTicketPage })));
+const ViewTicketPage = lazy(() => import("./pages/ViewTicketPage").then(module => ({ default: module.ViewTicketPage })));
 
 export const TicketsRoutes = [
     {
         index: true,
         element:
-
             <SuspenseWrapper>
                 <CanRoute permission="WATCH_TICKET_LIST">
                     <ListTicketPage />
                 </CanRoute>
-            </SuspenseWrapper >
+            </SuspenseWrapper>
     },
     {
         path: 'new',
@@ -29,7 +29,7 @@ export const TicketsRoutes = [
                 <CanRoute permission="CREATE_TICKET">
                     <CreateTicketPage />
                 </CanRoute>
-            </SuspenseWrapper >
+            </SuspenseWrapper>
     },
     {
         path: ':id',
@@ -38,7 +38,7 @@ export const TicketsRoutes = [
                 <CanRoute permission="WATCH_TICKET">
                     <ViewTicketPage />
                 </CanRoute>
-            </SuspenseWrapper >
+            </SuspenseWrapper>
     },
     {
         path: ':id/edit',
@@ -47,7 +47,7 @@ export const TicketsRoutes = [
                 <CanRoute permission="EDIT_TICKET">
                     <EditTicketPage />
                 </CanRoute>
-            </SuspenseWrapper >
+            </SuspenseWrapper>
     },
     {
         path: ':id/route',
@@ -56,7 +56,7 @@ export const TicketsRoutes = [
                 <CanRoute permission="ROUTE_TICKET">
                     <RouteTicketPage />
                 </CanRoute>
-            </SuspenseWrapper >
+            </SuspenseWrapper>
     },
     {
         path: ':id/assign',
@@ -65,7 +65,7 @@ export const TicketsRoutes = [
                 <CanRoute permission="ASSIGN_TICKET">
                     <AssignTicketPage />
                 </CanRoute>
-            </SuspenseWrapper >
+            </SuspenseWrapper>
     },
     {
         path: ':id/intervene',
@@ -74,7 +74,7 @@ export const TicketsRoutes = [
                 <CanRoute permission="INTERVENE_TICKET">
                     <InterveneTicketPage />
                 </CanRoute>
-            </SuspenseWrapper >
+            </SuspenseWrapper>
     },
     {
         path: ':id/finish',
@@ -83,7 +83,7 @@ export const TicketsRoutes = [
                 <CanRoute permission="FINISH_TICKET">
                     <FinishTicketPage />
                 </CanRoute>
-            </SuspenseWrapper >
+            </SuspenseWrapper>
     },
     {
         path: ':id/reject',
@@ -92,6 +92,6 @@ export const TicketsRoutes = [
                 <CanRoute permission="REJECT_TICKET">
                     <RejectTicketPage />
                 </CanRoute>
-            </SuspenseWrapper >
+            </SuspenseWrapper>
     },
 ];

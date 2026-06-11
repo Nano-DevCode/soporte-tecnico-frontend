@@ -1,6 +1,3 @@
-"use client"
-"use no memo"
-
 import {
     flexRender,
     type Row,
