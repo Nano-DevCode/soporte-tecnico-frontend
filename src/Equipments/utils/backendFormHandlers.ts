@@ -99,14 +99,22 @@ export const handleBackendFormErrorsEq = <T extends FieldValues>(
         return;
     }
     else if (typeof message === "string") {
-        if (message.toLowerCase().includes("inventario") || message.toLowerCase().includes("num_inventario")) {
+        const msgLower = message.toLowerCase();
+
+        // Agregamos "inventory" para que soporte el mensaje en inglés
+        if (
+            msgLower.includes("inventario") ||
+            msgLower.includes("num_inventario") ||
+            msgLower.includes("inventory")
+        ) {
             setError("num_inventario" as Path<T>, {
                 type: "backend",
                 message: message,
             });
+            return; // Detiene la ejecución para que no salte al onGlobalError global
         }
 
-    else if (onGlobalError) {
+        if (onGlobalError) {
             onGlobalError(message);
         }
     }

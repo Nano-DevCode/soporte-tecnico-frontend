@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo } from "react";
-import { InfiniteScrollSelect } from "../components/infinite-scroll-select";
+import { InfiniteScrollSelect } from "../components/infinite-scroll-selectEqip";
 
 interface ExtendedCatalogProperties {
     id: string;

@@ -247,7 +247,7 @@ export const EquipmentDetailsPage = () => {
                     <dt className="font-medium text-muted-foreground">{t("eq_details_print_color_label")}</dt>
                     <dd className="font-semibold flex items-center gap-1.5">
                       <FileImage className="h-4 w-4 text-muted-foreground " />
-                      <span className={equipment?.printer?.color ? "text-blue-700 font-bold" : "text-gray-800"}>
+                      <span className={equipment?.printer?.color ? "text-green-500 font-bold" : "text-red-500"}>
                         {equipment?.printer?.color ? t("eq_details_print_color_yes") : t("eq_details_print_color_no")}
                       </span>
                     </dd>

@@ -411,8 +411,6 @@
       } 
     }
   },
-
-
   "center_managers": {
     "list_page": {
       "title": "Gestión de los Jefes del Centro de Cómputo",
@@ -537,8 +535,6 @@
       }
     }
   },
-
-
   "tickets": {
     "data": {
       "affected_name": "Responsable directo del equipo",
@@ -642,7 +638,6 @@
         "description": "Nivel de prioridad no definido en el sistema."
       }
     },
-
     "actions": {
       "unhandled_event": "El evento {{event}} no está manejado en ViewTicketPage.",
       "create": {
@@ -703,7 +698,6 @@
         "label": "Registrar Bitácora"
       }
     },
-
     "documents": {
       "request_pdf": "Formato de Solicitud de Mantenimiento",
       "work_order_pdf": "Orden de Trabajo (Reporte Final)",
@@ -713,12 +707,10 @@
         "loading_response": "Ocurrió un error al intentar abrir la orden de trabajo. Por favor, intenta de nuevo."
       }
     },
-    
     "not_found": {
       "title": "Ticket no encontrado",
       "message": "El ticket al que intentas acceder no existe o fue eliminado."
     },
-
     "view_page": {
       "title": "Progreso de la solicitud",
       "description": "Visualiza el avance de la solicitud",
@@ -746,7 +738,6 @@
         "description": "Archivos y formatos generados de esta solicitud."
       }
     },
-
     "reject_page": {
       "title": "Rechazar Solicitud",
       "description": "La solicitud será devuelto para su modificación",
@@ -759,7 +750,6 @@
         "message": "Hubo un problema al intentar rechazar la solicitud."
       }
     },
-
     "edit_page": {
       "title": "Editar Solicitud",
       "description": "Modifica la información de la solicitud.",
@@ -772,7 +762,6 @@
         "message": "Hubo un problema al intentar actualizar el ticket."
       }
     },
-
     "list_page": {
       "title": "Lista de Solicitudes",
       "description": "Visualiza y gestiona todas las solicitudes de soporte técnico registradas en el sistema",
@@ -847,7 +836,6 @@
         "message": "Ocurrió un error al intentar finalizar la solicitud, por favor intentelo nuevamente."
       }
     },
-
     "intervene_page": {
       "title": "Registrar bitácora de intervención",
       "description": "Documenta el avance en la atención de esta solicitud.",
@@ -860,7 +848,6 @@
         "message": "Ocurrió un error al guardar la bitácora de la solicitud."
       }
     },
-
     "route_page": {
       "title": "Canalizar Solicitud",
       "description": "Canaliza la solicitud a un coordinador para su atención.",
@@ -873,7 +860,6 @@
         "message": "Ocurrió un error al canalizar la solicitud de soporte técnico."
       }
     },
-
     "form": {
       "header": {
         "title": "Datos de la solicitud",
@@ -899,7 +885,6 @@
           "justification_max": "La justificación es demasiado larga (máximo 1000 caracteres)."
         }
       },
-      
       "intervene": {
         "header": {
           "title": "Registro de Bitácora",
@@ -932,7 +917,6 @@
               }
             }
           },
-
           "tags": {
             "label": "Etiquetas de clasificación",
             "placeholder": "Seleccionar etiquetas...",
@@ -941,7 +925,7 @@
               "label": "Crear etiqueta"
             },
             "not_found": {
-              "label": "No se encontraron etiquetas." 
+              "label": "No se encontraron etiquetas."
             },
             "searching": "Buscando coincidencias...",
             "loading_more": "Cargando más..."
@@ -1105,7 +1089,6 @@
       }
     }
   },
-
   "rejection_reports": {
     "header": {
       "title": "Registrar Reporte de Rechazo",
@@ -1127,7 +1110,6 @@
       "description": "No se pudo obtener el reporte de rechazo. Revisa tu conexión."
     }
   },
-
   "technical_reports": {
     "data": {
       "diagnosis": "Diagnóstico Técnico",
@@ -1147,12 +1129,9 @@
     "list_page": {
       "title": "Bitácoras",
       "description": "Visualiza y gestiona todas las bitácoras registradas en el sistema",
-      "actions": {
-      },
+      "actions": {},
       "table": {
-        "headers": {
-          
-        }
+        "headers": {}
       },
       "empty": {
         "title": "No se encontraron Bitácoras",
@@ -1389,24 +1368,19 @@
   "equipment_form_new_model_placeholder": "Nombre del nuevo modelo",
   "equipment_form_responsible_section": "Responsable Asignado",
   "equipment_form_new_responsible_title": "Nuevo Responsable",
-  
-  "description":"Descripción",
+  "description": "Descripción",
   "custom_userEq_form_n_control": "N° Empleado",
   "custom_userEq_form_names": "Nombre(s)",
   "custom_userEq_form_first_last_name": "Primer Apellido",
   "custom_userEq_form_second_last_name": "Segundo Apellido",
   "custom_userEq_form_department": "Área o Departamento",
   "custom_userEq_form_email": "Correo Electrónico",
-
   "equipment_specific_data": "DATOS ESPECÍFICOS DEL EQUIPO",
   "select_equipment_type": "Selecciona un tipo de equipo para continuar",
   "only_numbers_allowed": "Solo se permiten números enteros (GB)",
   "computer_type": "TIPO DE EQUIPO",
   "processor": "PROCESADOR",
   "new_entry_title": "NUEVO REGISTRO",
-
-
-  
   "computer_data_title": "DATOS ESPECÍFICOS DEL EQUIPO",
   "select_type": "TIPO DE EQUIPO",
   "processor_brand": "MARCA DE PROCESADOR",
@@ -1426,7 +1400,7 @@
   "printing_type": "Tipo de impresión",
   "new_function": "Nueva Funcionalidad",
   "new_printing_type": "Nuevo Tipo de Impresión",
-  "type_equipment_computer":"Nuevo Equipo de Computo",
+  "type_equipment_computer": "Nuevo Equipo de Computo",
   "min_3_chars": "Mínimo 3 caracteres",
   "max_200_chars": "Maximo 200 caracteres",
   "max_description_chars": "Maximo 250 caracteres",
@@ -1435,8 +1409,7 @@
   "field_required": "Este campo es obligatorio",
   "placeholder_numbers": "Ej. 500",
   "toner_placeholder": "Ej. HP-85A",
-
-  "tools" : {
+  "tools": {
     "create": {
       "sileo": {
         "loading": {
@@ -1457,7 +1430,7 @@
     "edit": {
       "sileo": {
         "loading": {
-          "title":  "Actualizando..."
+          "title": "Actualizando..."
         },
         "success": {
           "title": "¡Actualizado!",
@@ -1501,7 +1474,7 @@
           "title": "Error al al actualizar"
         }
       },
-      "dialog" : {
+      "dialog": {
         "model": "Modelo:",
         "brand": "Marca:",
         "id": "Id:",
@@ -1514,7 +1487,7 @@
         "buttonCancel": "Cancelar"
       },
       "titleCard": {
-        "title":"Herramientas",
+        "title": "Herramientas",
         "description": "Gestión de herramientas"
       },
       "buttonCreate": {
@@ -1535,13 +1508,11 @@
       "active": "Activo",
       "inactive": "Inactivo"
     },
-    "form": {
-
-    },
+    "form": {},
     "backList": {
       "backLabel": "Lista de Herramientas"
     },
-    "notFound" : {
+    "notFound": {
       "title": "No se encontro la herramienta",
       "description": "Verifica tus filtros"
     },
@@ -1552,7 +1523,6 @@
       "down": "Dar de Baja"
     }
   },
-
   "generic_error_backend_message": "Revisa los datos e intenta de nuevo.",
   "generic_status": {
     "active": "Activo",
@@ -1560,7 +1530,6 @@
   },
   "generic_not_found_list": "No se encontro ninguna concidencia",
   "generic_not_found_list_description": "Ajuste los filtros de búsqueda",
-
   "api_brands_fetch_error": "Error al obtener las marcas paginadas:",
   "api_computer_types_fetch_error": "Error al obtener tipos de equipos de computadoras paginados:",
   "api_computer_types_by_id_error": "Error al obtener tipo de equipo de computadora con ID",
@@ -1619,8 +1588,6 @@
   "api_storage_type_create_error": "Error al registrar el tipo de almacenamiento.",
   "api_equipment_activate_error": "Error al activar el equipo:",
   "api_equipment_deactivate_error": "Error al desactivar el equipo:",
-
-
   "ui_processor_modal_title": "REGISTRAR NUEVO PROCESADOR",
   "ui_processor_brand_label": "Marca del procesador",
   "ui_processor_brand_placeholder": "Ej. Intel, AMD",
@@ -1631,7 +1598,6 @@
   "ui_processor_error_title": "Error al crear procesador",
   "ui_processor_saving": "Guardando...",
   "ui_processor_save": "Guardar Procesador",
-
   "ui_responsible_modal_title": "REGISTRAR NUEVO RESPONSABLE",
   "ui_responsible_num_label": "Nº Empleado",
   "ui_responsible_num_placeholder": "Ej. EMP-202601",
@@ -1648,16 +1614,13 @@
   "ui_responsible_error_title": "Error al crear responsable",
   "ui_responsible_saving": "Guardando...",
   "ui_responsible_save": "Guardar Responsable",
-
   "ui_btn_cancel": "Cancelar",
-
   "valid_processor_brand_min": "La marca es requerida mínimo 2 caracteres",
   "valid_processor_brand_max": "Máximo 50 caracteres",
   "valid_processor_model_min": "El modelo es requerido mínimo 2 caracteres",
   "valid_processor_model_max": "Máximo 90 caracteres",
   "valid_processor_desc_min": "La descripción es requerida mínimo 2 caracteres",
   "valid_processor_desc_max": "Máximo 150 caracteres",
-
   "valid_responsible_num_min": "El número de empleado es requerido, mínimo 2 caracteres",
   "valid_responsible_num_max": "Máximo 100 caracteres",
   "valid_responsible_num_regex": "Solo se permiten letras, números y guiones",
@@ -1672,7 +1635,6 @@
   "valid_responsible_area_max": "Máximo 150 caracteres",
   "valid_responsible_mail_min": "El correo es requerido",
   "valid_responsible_mail_email": "Escribe una dirección de correo válida",
-
   "ui_computer_specs_title": "Especificaciones de Computadora",
   "ui_computer_type_label": "Tipo de Equipo",
   "ui_computer_type_placeholder": "Laptop, Desktop...",
@@ -1686,31 +1648,26 @@
   "ui_computer_capacity_label": "Capacidad de Almacenamiento en Disco (GB)",
   "ui_computer_available_label": "Espacio Disponible en Disco (GB)",
   "ui_btn_add": "Agregar",
-  
   "ui_computer_type_loading": "Creando tipo de computadora...",
   "ui_computer_type_success_title": "¡Tipo creado!",
   "ui_computer_type_success_desc": "El tipo \"{{name}}\" se guardó correctamente.",
   "ui_computer_type_error_title": "Error al crear",
   "ui_computer_type_error_desc": "No se pudo crear el tipo.",
-
   "ui_os_loading": "Creando sistema operativo...",
   "ui_os_success_title": "¡S.O. creado!",
   "ui_os_success_desc": "El S.O. \"{{name}}\" se guardó correctamente.",
   "ui_os_error_title": "Error al crear",
   "ui_os_error_desc": "No se pudo crear el sistema operativo.",
-
   "ui_storage_loading": "Creando tipo de almacenamiento...",
   "ui_storage_success_title": "¡Almacenamiento creado!",
   "ui_storage_success_desc": "El almacenamiento \"{{name}}\" se guardó correctamente.",
   "ui_storage_error_title": "Error al crear",
   "ui_storage_error_desc": "No se pudo crear el tipo de almacenamiento.",
-
   "ui_processor_loading": "Registrando procesador...",
   "ui_processor_success_title": "¡Procesador registrado!",
   "ui_processor_success_desc": "{{brand}} {{model}} se añadió correctamente.",
   "ui_processor_save_error_title": "Error en el guardado",
   "ui_processor_save_error_desc": "No se pudo registrar el procesador.",
-
   "valid_computer_type_required": "El tipo de equipo es obligatorio",
   "valid_computer_processor_required": "El procesador es obligatorio",
   "valid_computer_os_required": "El sistema operativo es obligatorio",
@@ -1726,18 +1683,15 @@
   "ui_menu_edit_record": "Editar Registro",
   "ui_menu_activate_equipment": "Activar equipo",
   "ui_menu_deactivate_equipment": "Desactivar equipo",
-
   "ui_status_active": "Activo",
   "ui_status_inactive": "Inactivo",
   "ui_table_no_description": "Aún no se tiene una descripción",
   "ui_table_no_data": "No hay datos disponibles para esta categoría.",
   "ui_table_ports_count": "{{count}} Puertos",
-
   "ui_category_computer": "Computadora",
   "ui_category_printer": "Impresora",
   "ui_category_network": "Red",
   "ui_category_other": "Otro",
-
   "ui_th_inventory_no": "N° Inventario",
   "ui_th_type": "Tipo",
   "ui_th_brand_model": "Marca - Modelo",
@@ -1753,7 +1707,6 @@
   "ui_th_network_type": "Tipo de Red",
   "ui_th_ports": "Puertos",
   "ui_th_actions": "Acciones",
-
   "ui_filter_search_placeholder": "Buscar por número de inventario...",
   "ui_filter_status_placeholder": "Estado",
   "ui_filter_status_all": "Todos los Estados",
@@ -1762,38 +1715,30 @@
   "ui_filter_category_placeholder": "Categoría",
   "ui_filter_category_all": "Todos los Equipos",
   "ui_filter_btn_clear": "Limpiar",
-
-  
   "eq_form_alert_empty_title": "Campo vacío",
   "eq_form_alert_type_empty_desc": "El nombre del tipo de equipo no puede contener solo espacios.",
   "eq_form_alert_brand_empty_desc": "El nombre de la marca no puede contener solo espacios.",
   "eq_form_alert_model_empty_desc": "El nombre del modelo no puede contener solo espacios.",
   "eq_form_alert_model_no_brand": "Debes seleccionar una marca primero.",
-  
   "eq_form_sileo_error_title": "Error al crear",
   "eq_form_sileo_type_loading": "Creando tipo de equipo...",
   "eq_form_sileo_type_success": "¡Tipo creado!",
   "eq_form_sileo_type_success_desc": "El tipo \"{{name}}\" se guardó correctamente.",
   "eq_form_sileo_type_error_desc": "No se pudo crear el tipo.",
-
   "eq_form_sileo_brand_loading": "Creando marca...",
   "eq_form_sileo_brand_success": "¡Marca creada!",
   "eq_form_sileo_brand_success_desc": "La marca \"{{name}}\" se guardó correctamente.",
   "eq_form_sileo_brand_error_desc": "No se pudo crear la marca.",
-
   "eq_form_sileo_model_loading": "Creando modelo...",
   "eq_form_sileo_model_success": "¡Modelo creado!",
   "eq_form_sileo_model_success_desc": "El modelo \"{{name}}\" se guardó correctamente.",
   "eq_form_sileo_model_error_desc": "No se pudo crear el modelo.",
-
   "eq_form_readonly_title": "ACTUALMENTE ESTE EQUIPO ESTA INACTIVO",
   "eq_form_readonly_desc": "La edición ha sido deshabilitada",
-
   "eq_form_mode_update_title": "Editar Equipo",
   "eq_form_mode_update_desc": "Modifique los campos necesarios del equipo seleccionado.",
   "eq_form_mode_create_title": "Registrar Nuevo Equipo",
   "eq_form_mode_create_desc": "Ingrese los datos para registrar un nuevo equipo.",
-
   "eq_form_label_type": "Tipo de equipo",
   "eq_form_label_inventory": "Número de Inventario",
   "eq_form_label_brand": "Marca",
@@ -1802,23 +1747,19 @@
   "eq_form_label_department": "Departamento",
   "eq_form_label_description": "Descripción / Notas Adicionales",
   "eq_form_label_area": "Área",
-
   "eq_form_badge_optional": "Opcional",
   "eq_form_badge_required": "Obligatorio",
-
   "eq_form_placeholder_type": "Selecciona tipo...",
   "eq_form_placeholder_model_no_brand": "Primero elige una marca",
   "eq_form_placeholder_model": "Selecciona modelo...",
   "eq_form_placeholder_responsible": "Nombre del responsable...",
   "eq_form_placeholder_department": "Sistemas, RH, etc ...",
   "eq_form_placeholder_description": "Especificaciones técnicas u observaciones...",
-
   "eq_form_btn_add": "Agregar",
   "eq_form_btn_cancel": "CANCELAR",
   "eq_form_btn_saving": "Guardando...",
   "eq_form_btn_submit_update": "ACTUALMENTE REGISTRO",
   "eq_form_btn_submit_create": "REGISTRAR EQUIPO",
-
   "eq_form_validate_type_required": "El tipo de equipo es obligatorio",
   "eq_form_validate_inventory_required": "Este campo es requerido",
   "eq_form_validate_brand_required": "La marca es obligatoria",
@@ -1829,14 +1770,12 @@
   "eq_form_validate_description_fallback": "La descripción es obligatoria para este tipo de equipo",
   "eq_form_validate_min_chars": "Mínimo {{count}} caracteres",
   "eq_form_validate_max_chars": "Máximo {{count}} caracteres",
-
   "eq_form_sileo_resp_loading": "Creando responsable...",
   "eq_form_sileo_resp_success": "¡Responsable creado!",
   "eq_form_sileo_resp_success_desc": "El registro se vinculó correctamente al equipo.",
   "eq_form_sileo_resp_error_title": "Error al crear responsable",
   "eq_form_sileo_resp_error_desc": "Revisa los datos del responsable e intenta de nuevo.",
-  "eq_form_warning_type_uneditable":"El tipo de equipo no es editable",
-  
+  "eq_form_warning_type_uneditable": "El tipo de equipo no es editable",
   "eq_card_label_type": "Tipo de equipo",
   "eq_card_unassigned": "Sin asignar",
   "eq_card_label_department": "Departamento",
@@ -1860,7 +1799,6 @@
   "eq_card_poe_yes": "Sí",
   "eq_card_poe_no": "No",
   "eq_card_no_equipments": "No hay equipos registrados.",
-
   "eq_network_toast_loading": "Creando tipo de red...",
   "eq_network_toast_success_title": "¡Tipo de red creado!",
   "eq_network_toast_success_desc_1": "El tipo",
@@ -1899,7 +1837,6 @@
   "eq_printer_error_toner_min": "Mínimo 3 caracteres",
   "eq_printer_error_toner_max": "Máximo 150 caracteres",
   "eq_printer_label_color_question": "¿Imprime a Color?",
-  
   "eq_dialog_toast_activate_success_1": "El equipo",
   "eq_dialog_toast_activate_success_2": "ha sido activado.",
   "eq_dialog_toast_activate_error": "No se pudo activar",
@@ -1911,7 +1848,6 @@
   "eq_dialog_deactivate_title": "¿Desactivar este equipo?",
   "eq_dialog_deactivate_desc_1": "¿Estás seguro de que deseas desactivar el equipo con folio",
   "eq_dialog_deactivate_desc_2": "Esta acción no eliminará los datos.",
-
   "eq_select_default_placeholder": "Seleccionar...",
   "eq_select_searching": "Buscando...",
   "eq_select_press_to_create": "Presiona abajo para crear",
@@ -1919,12 +1855,10 @@
   "eq_select_create_prefix": "Crear",
   "eq_select_loading_more": "Cargando más",
   "eq_select_end_of_catalog": "FIN DEL CATÁLOGO",
-
   "eq_hook_create_success": "Equipo registrado con éxito",
   "eq_hook_create_error_default": "Error al crear el equipo",
   "eq_hook_update_success": "Información actualizada",
   "eq_hook_update_error_default": "Error al actualizar el equipo",
-
   "eq_create_page_toast_loading_title": "Registrando equipo...",
   "eq_create_page_toast_loading_desc": "Por favor, espere un momento.",
   "eq_create_page_toast_success_title": "¡Equipo registrado!",
@@ -1932,7 +1866,6 @@
   "eq_create_page_toast_error_default": "Ocurrió un error, verifica el campo con error.",
   "eq_create_page_toast_error_title": "Error al registrar equipo",
   "eq_create_page_back_label": "Listar Equipos",
-
   "eq_details_status_active": "Activo",
   "eq_details_status_inactive": "Inactivo",
   "eq_details_back_label": "Listar Equipos",
@@ -1964,7 +1897,6 @@
   "eq_details_net_poe_label": "¿El equipo es PoE (Power over Ethernet)?",
   "eq_details_generic_yes": "Sí",
   "eq_details_generic_no": "No",
-
   "eq_page_cat_all": "General",
   "eq_page_cat_computer": "Cómputo",
   "eq_page_cat_printer": "Impresión",
@@ -1976,7 +1908,6 @@
   "eq_page_total_singular": "equipo",
   "eq_page_total_plural": "equipos",
   "eq_page_btn_add": "Agregar un Equipo",
-  
   "eq_update_loading_title": "Actualizando equipo...",
   "eq_update_loading_desc": "Por favor, espere un momento mientras se guardan los cambios.",
   "eq_update_success_title": "¡Equipo actualizado!",
@@ -1987,7 +1918,167 @@
   "eq_update_not_found_title": "Equipo no encontrado",
   "eq_update_not_found_desc": "El registro que intentas editar no existe o no se pudo recuperar.",
   "eq_update_back_list_btn": "Listar Equipos",
+  "api_brand_consumable_by_id_error": "Error al recuperar la marca con el ID",
+  "api_brand_consumables_fetch_error": "Error al obtener las marcas",
+  "api_ubication_consumables_fetch_error": "Error al obtener las ubicaciones",
+  "api_ubication_consumable_by_id_error": "Error al recuperar la ubicación con el ID",
+  "api_type_consumables_fetch_error": "Error al obtener las clasificaciones de consumibles",
+  "api_type_consumable_by_id_error": "Error al recuperar la clasificación del consumible con el ID",
+  "api_unit_measurement_consumables_fetch_error": "Error al obtener las unidades de medida",
+  "api_unit_measurement_consumable_by_id_error": "Error al recuperar la unidad de medida del consumible",
+  "api_type_consumable_name_required": "El nombre de la clasificación de consumible es requerido",
+  "api_type_consumable_create_error": "La clasificación de consumible no se puedo crear correctamente",
+  "api_ubication_consumable_name_required": "El nombre de la ubicación es requerido",
+  "api_ubication_consumable_create_error": "El nombre de la ubicación no se puedo crear correctamente",
+  "api_consumables_server_create_error": "Error al crear el consumible",
+  "api_consumables_server_update_error": "Error al editar el consumible",
+  "api_consumables_fetch_error": "Error al recuperar los consumibles",
+  "api_consumables_by_id_console_error": "Error al recuperar consumible por ID",
+  "api_consumables_by_id_ui_error": "Error al recuperar un consumible por ID",
+  "api_batches_fetch_error": "Error al recuperar el historial de lotes de consumibles.",
+  "api_batch_fetch_by_id_error": "No se pudo recuperar la información del lote solicitado.",
 
+  "custom_consumable_actions_menu_view_details": "Ver detalles",
+  "custom_consumable_actions_menu_edit": "Editar",
+  "custom_consumable_actions_menu_delete": "Eliminar",
+  "custom_consumable_desktop_table_code": "Código",
+  "custom_consumable_desktop_table_brand": "Marca",
+  "custom_consumable_desktop_table_description": "descripción",
+  "custom_consumable_desktop_table_type": "Clasificación de consumible",
+  "custom_consumable_desktop_table_measurement": "Unitario / Fraccionario",
+  "custom_consumable_desktop_table_ubication": "Ubicación",
+  "custom_consumable_desktop_table_actions": "Acciones",
+  "custom_consumable_desktop_table_id": "ID:",
+  "custom_consumable_desktop_table_uses": "usos",
+  "custom_consumable_desktop_table_no_brand": "Sin Marca",
+  "custom_consumable_desktop_table_not_found": "No se encontraron consumibles",
+  "custom_consumable_desktop_table_setting_filters": "Intenta ajustar los criterios de búsqueda o filtros aplicados.",
+  "consumable_page_custom_title_card": "Consumibles e Inventario",
+  "consumable_page_custom_description_card": "Administra el catálogo de consumibles, clasificaciones, marcas y stock del almacén de soporte.",
+  "consumable_page_create_consumable": "Crear consumible",
+  "consumable_page_confirm_delete_title": "¿Está seguro de eliminar este consumible?",
+  "consumable_page_confirm_delete_btn": "Sí, eliminar consumible",
+  "consumable_page_name_un_available": "Descripción no disponible",
+  "consumable_page_delete_warning_message": "Esta acción no se puede deshacer de forma directa si el elemento cuenta con relaciones activas en el inventario.",
+  "custom_consumable_filters_placeholder_search": "Buscar por código, descripción, marca o ubicación... (Presiona Enter)",
+
+
+  "ui_consumable_specs_title": "Especificaciones del Consumible",
+  "ui_consumable_description_label": "Descripción",
+  "ui_consumable_description_placeholder": "Ej. Alcohol Isopropílico 1L",
+  
+  "ui_type_consumable_label": "Tipo de Consumible",
+  "ui_type_consumable_placeholder": "Seleccione un tipo",
+  "ui_type_consumable_loading": "Creando tipo de consumible...",
+  "ui_type_consumable_success_title": "Tipo creado",
+  "ui_type_consumable_success_desc": "El tipo \"{{name}}\" se ha agregado correctamente.",
+  "ui_type_consumable_error_title": "Error al crear tipo",
+  "ui_type_consumable_error_desc": "No se pudo guardar el tipo de consumible.",
+
+  "ui_brand_consumable_label": "Marca",
+  "ui_brand_consumable_placeholder": "Seleccione una marca",
+  "ui_brand_consumable_loading": "Creando marca...",
+  "ui_brand_consumable_success_title": "Marca creada",
+  "ui_brand_consumable_success_desc": "La marca \"{{name}}\" se ha agregado correctamente.",
+  "ui_brand_consumable_error_title": "Error al crear marca",
+  "ui_brand_consumable_error_desc": "No se pudo guardar la marca.",
+
+  "ui_ubication_consumable_label": "Ubicación",
+  "ui_ubication_consumable_placeholder": "Seleccione una ubicación",
+  "ui_ubication_consumable_loading": "Creando ubicación...",
+  "ui_ubication_consumable_success_title": "Ubicación creada",
+  "ui_ubication_consumable_success_desc": "La ubicación \"{{name}}\" se ha agregado correctamente.",
+  "ui_ubication_consumable_error_title": "Error al crear ubicación",
+  "ui_ubication_consumable_error_desc": "No se pudo guardar la ubicación.",
+
+  "ui_unit_measurement_label": "Unidad de Medida",
+  "ui_unit_measurement_placeholder": "Seleccione una unidad",
+  "ui_unit_measurement_loading": "Creando unidad de medida...",
+  "ui_unit_measurement_success_title": "Unidad creada",
+  "ui_unit_measurement_success_desc": "La unidad \"{{name}}\" se ha agregado correctamente.",
+  "ui_unit_measurement_error_title": "Error al crear unidad",
+  "ui_unit_measurement_error_desc": "No se pudo guardar la unidad de medida.",
+
+  "ui_consumable_number_uses_label": "Número de Usos",
+
+  "valid_consumable_description_required": "La descripción del consumible es obligatoria.",
+  "valid_type_consumable_required": "El tipo de consumible es obligatorio.",
+  "valid_brand_consumable_required": "La marca del consumible es obligatoria.",
+  "valid_ubication_consumable_required": "La ubicación del consumible es obligatoria.",
+  "valid_unit_measurement_required": "La unidad de medida es obligatoria.",
+
+  "api_movement_types_fetch_error":"Error al recuperar los tipos de movimientos.",
+  "api_movement_type_by_id_error":"Error al recuperar el tipo de movimiento con el ID.",
+  "api_movement_applications_fetch_error":"Error al recuperar los tipos de aplicación de movimientos.",
+  "api_movement_application_by_id_error":"Error al recuperar el tipo de aplicación de movimiento con el ID.",
+  "api_tickets_fetch_error":"Error al recuperar los tickets.",
+  "api_tickets_by_id_error":"Eror al recuperar el ticker con el ID.",
+  "":"",
+  "errors": {
+    "consumables": {
+      "missingNumberUses": "El número de usos es obligatorio para esta unidad de medida.",
+      "invalidNumberUses": "El número de usos debe ser un número entero mayor a 0."
+    }
+  },
+
+  "custom_nav_content_subitem_list_consumables": "Lista de consumibles",
+  "consumable_hook_create_success":"Consumible creado con éxito",
+  "consumable_hook_create_error_default":"Error al crear consumible",
+  "consumable_hook_update_success":"Consumible actualizado con éxito",
+  "consumable_hook_update_error_default":"Error al crear consumible",
+  "ui_consumable_loading":"Creando consumible",
+  "ui_consumable_success_title":"Consumible Creado",
+  
+  "ui_consumable_updating":"Actualizando...",
+  "ui_consumable_updating_desc":"Guardando los cambios del consumible.",
+  "ui_consumable_update_success_title": "¡Actualizado!",
+  "ui_consumable_update_success_desc":"El consumible se modificó correctamente.",
+  "":"",
+
+  "consumables": {
+    "form": {
+      "titleCreate": "Crear Nuevo Consumible",
+      "titleEdit": "Editar Consumible",
+      "lockedMovements": "Bloqueado: Posee lotes activos",
+      "notModifiableMovements": "No modificable por movimientos de inventario"
+    },
+    "fields": {
+      "description": "Descripción del Consumible",
+      "type": "Tipo de Consumible",
+      "unitMeasurement": "Unidad de Medida",
+      "brand": "Marca",
+      "ubication": "Ubicación en Almacén",
+      "numberUses": "Número de Usos Permitidos"
+    },
+    "placeholders": {
+      "description": "Ej: Cartucho de tinta HP 664 Negro...",
+      "selectType": "Selecciona un tipo",
+      "selectBrand": "Selecciona una marca",
+      "selectUbication": "Selecciona una ubicación",
+      "numberUses": "Ej: 50 usos"
+    },
+    "units": {
+      "piece": "Pieza",
+      "fractional": "Fraccionario"
+    },
+    "validations": {
+      "descriptionRequired": "La descripción es obligatoria",
+      "descriptionMin": "Mínimo 3 caracteres",
+      "descriptionMax": "Máximo 500 caracteres",
+      "typeRequired": "El tipo es obligatorio",
+      "brandRequired": "La marca es obligatoria",
+      "ubicationRequired": "La ubicación es obligatoria",
+      "numberUsesRequired": "El número de usos es requerido para elementos fraccionarios",
+      "numberUsesMin": "Debe permitir al menos 1 uso (IsPositive)"
+    }
+  },
+  "commons": {
+    "actions": {
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando..."
+    }
+  },
   "itAssets": {
     "mainPage": {
       "titleCard": {

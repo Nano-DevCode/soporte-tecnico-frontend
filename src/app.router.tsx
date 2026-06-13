@@ -15,6 +15,8 @@ import { toolRoutes } from "./tools/tools.router";
 import { itAssetRoutes } from "./it-assets/it-assets.router";
 import { TechnicalReportsRoutes } from "./technical-reports/technical-reports.router";
 import { FoliosRoutes } from "./folios/folio.router";
+import { consumableRoutes } from "./Consumables/consumables.routes";
+import { movementConsumableRoutes } from "./Consumables/movementConsumables.routes";
 
 // TODO: proteger rutas dependiendo del status del ticket
 // const PanelLayout = lazy(() => import("./layout/PanelLayout"))
@@ -76,7 +78,16 @@ export const appRouter = createBrowserRouter([
             {
                 path: 'folios',
                 children: FoliosRoutes,
-            }
+            },
+            {
+                path: 'consumables',
+                children: consumableRoutes,
+            },
+            {
+                path: 'movementsConsumable',
+                children: movementConsumableRoutes,
+            },
+
         ],
     },
     // Auth Routes

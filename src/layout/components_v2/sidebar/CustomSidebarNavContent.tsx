@@ -5,7 +5,7 @@ import { useUserRoles } from "@/auth/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Hammer, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply } from "lucide-react";
+import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Hammer, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks } from "lucide-react";
 
 // Types para la configuración
 type NavSubItem = {
@@ -65,13 +65,19 @@ export const CustomSidebarNavContent = memo(() => {
       show: isSuperAdmin || isCoordinator || isBossCC,
     },
     {
-      title: t("inventory", "Inventarios"),
-      icon: Archive,
-      show: true,
+      title: t("custom_nav_content_subitem_list_consumables"),
+      icon: Blocks,
+      show: isSuperAdmin || isCoordinator || isBossCC,
       subItems: [
-        { title: t("equipment_list", "Lista de equipos"), path: "/equipments", show: true },
-        // { title: t("materials_list", "Lista de materiales"), path: "/tools", show: true },
+        { title: ("Historial de movimientos"), path: "/movementsConsumable", show: true },
+        { title: ("Consumibles"), path: "/consumables", show: true },
       ]
+    },
+    {
+      title: t("equipment_list", "Inventario de Equipos"),
+      icon: Archive,
+      path:"/equipments",
+      show: true,
     },
     {
       title: t("custom_nav_content_subitem_list_tickets"),

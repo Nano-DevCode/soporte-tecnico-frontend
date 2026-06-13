@@ -43,9 +43,9 @@ export const EquipmentPage = () => {
             description={currentCategory === 'all' ? t("eq_page_desc_all") : `${t("eq_page_desc_prefix")} ${title}`}
             icon={icon}
           />
-          <span className="bg-blue-700 text-white text-[13px] font-bold px-2.5 py-2 rounded-sm  mt-1">
+          {/* <span className="bg-blue-700 text-white text-[13px] font-bold px-2.5 py-2 rounded-sm  mt-1">
             {t("eq_page_total_label")}: {meta.total} {meta.total === 1 ? t("eq_page_total_singular") : t("eq_page_total_plural")}
-          </span>
+          </span> */}
         </div>
 
         <Button asChild className="bg-blue-700 hover:bg-blue-800">
@@ -56,7 +56,9 @@ export const EquipmentPage = () => {
         </Button>
       </div>
       <CustomEquipmentFilters />
-
+      <h4 className=" text-sm text-muted-foreground font-semibold mb-1">
+          {t("eq_page_total_label")}: {meta.total} {meta.total === 1 ? t("eq_page_total_singular") : t("eq_page_total_plural")}
+      </h4>
       {isLoading ? (
         <CustomSkeletonTableCard />
       ) : (
