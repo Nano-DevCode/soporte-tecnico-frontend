@@ -5,6 +5,8 @@ import * as z from "zod";
 import { Save, Loader2, ArrowLeft } from "lucide-react";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
+import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -17,26 +19,29 @@ import useItAssetsStatus from "../hooks/useItAssetsStatus";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { ItAssetsForm } from "../components/ItAssetsFormPage";
 
-
-const createAssetSchema = z.object({
-  serialNumber: z.string().min(1, "El número de serie es obligatorio").trim(),
-  idInventary: z.string().trim().optional(),
-  typeId: z.string().min(1, "Debes seleccionar un tipo"),
-  brandId: z.string().min(1, "Debes seleccionar una marca"),
-  modelId: z.string().min(1, "Debes seleccionar un modelo"),
-  statusId: z.string().min(1, "Debes seleccionar un estado inicial"),
-  invoiceId: z.string().optional(),
-  description: z.string().trim().optional(),
-  observations: z.string().trim().optional(),
-  imageFile: z.any().refine((file) => file instanceof File, "La fotografía del activo es obligatoria"),
-});
-
-type CreateAssetFormValues = z.infer<typeof createAssetSchema>;
-
 const ItAssetsCreatePage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { createAssetMutation, isCreatingAsset } = useItAssets();
   const { itAssetsStatus, isLoading: isLoadingStatus } = useItAssetsStatus();
+
+  // 1. Metemos el esquema dentro del componente, pero lo memorizamos 
+  // para que solo se vuelva a crear si el idioma (t) cambia.
+  const createAssetSchema = useMemo(() => z.object({
+    serialNumber: z.string().min(1, t("itAssets.createPage.validation.serialNumber")).trim(),
+    idInventary: z.string().trim().optional(),
+    typeId: z.string().min(1, t("itAssets.createPage.validation.typeId")),
+    brandId: z.string().min(1, t("itAssets.createPage.validation.brandId")),
+    modelId: z.string().min(1, t("itAssets.createPage.validation.modelId")),
+    statusId: z.string().min(1, t("itAssets.createPage.validation.statusId")),
+    invoiceId: z.string().optional(),
+    description: z.string().trim().optional(),
+    observations: z.string().trim().optional(),
+    imageFile: z.any().refine((file) => file instanceof File, t("itAssets.createPage.validation.imageFile")),
+  }), [t]);
+
+  // 2. El tipo inferido ahora vive dentro del componente
+  type CreateAssetFormValues = z.infer<typeof createAssetSchema>;
 
   const form = useForm<CreateAssetFormValues>({
     resolver: zodResolver(createAssetSchema),
@@ -71,19 +76,19 @@ const ItAssetsCreatePage = () => {
       await sileo.promise(
         createAssetMutation.mutateAsync(formData),
         {
-          loading: { title: "Registrando activo..." },
+          loading: { title: t("itAssets.createPage.sileo.loading.title") },
           success: { 
-            title: "Activo registrado", 
-            description: "El equipo ha sido añadido al inventario exitosamente.", 
+            title: t("itAssets.createPage.sileo.success.title"), 
+            description: t("itAssets.createPage.sileo.success.description"), 
             duration: 4000 
           },
           error: (err) => {
-            let backendMessage = "Error al registrar el activo";
+            let backendMessage = t("itAssets.createPage.sileo.error.defaultMessage");
             if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
               const rawMessage = err.response.data.message;
               backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
             }
-            return { title: "Error", description: backendMessage, duration: 5000 };
+            return { title: t("itAssets.createPage.sileo.error.title"), description: backendMessage, duration: 5000 };
           },
         }
       );
@@ -96,22 +101,21 @@ const ItAssetsCreatePage = () => {
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-10">
       
-      {/* HEADER: Puedes añadir labels o elementos aquí en el futuro */}
       <div className="flex items-center gap-4">
         <Button variant="outline" size="icon" type="button" onClick={() => navigate(-1)}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Nuevo Activo TI</h1>
-          <p className="text-muted-foreground text-sm">Registra un nuevo equipo en el inventario.</p>
+          <h1 className="text-2xl font-bold tracking-tight">{t("itAssets.createPage.header.title")}</h1>
+          <p className="text-muted-foreground text-sm">{t("itAssets.createPage.header.description")}</p>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Información del Equipo</CardTitle>
+          <CardTitle>{t("itAssets.createPage.card.title")}</CardTitle>
           <CardDescription>
-            Llena los datos técnicos y administrativos del activo. Los campos con asterisco (*) son obligatorios.
+            {t("itAssets.createPage.card.description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -122,19 +126,19 @@ const ItAssetsCreatePage = () => {
                 isSaving={isCreatingAsset}
                 itAssetsStatus={itAssetsStatus}
                 isLoadingStatus={isLoadingStatus}
-                showObservations={true} // Se muestran observaciones al crear
+                showObservations={true} 
                 itAssetInitialData={null}
               />
 
               <div className="flex justify-end gap-4 pt-4 border-t">
                 <Button type="button" variant="outline" onClick={() => navigate(-1)} disabled={isCreatingAsset}>
-                  Cancelar
+                  {t("itAssets.createPage.buttons.cancel")}
                 </Button>
                 <Button type="submit" disabled={isCreatingAsset}>
                   {isCreatingAsset ? (
-                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Registrando...</>
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("itAssets.createPage.buttons.submitting")}</>
                   ) : (
-                    <><Save className="mr-2 h-4 w-4" /> Registrar Activo</>
+                    <><Save className="mr-2 h-4 w-4" /> {t("itAssets.createPage.buttons.submit")}</>
                   )}
                 </Button>
               </div>
