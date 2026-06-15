@@ -1,4 +1,5 @@
 import { Info, FileText } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { type ItAssetsMovement } from '../interfaces/itAssetsMovementResponse';
 import DetailItem from '@/components/custom/DetailItem';
 
@@ -7,6 +8,8 @@ interface Props {
 }
 
 const ItAssetMovementInDetails = ({ itAssetMovement } :Props) => {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
   
@@ -23,10 +26,10 @@ const ItAssetMovementInDetails = ({ itAssetMovement } :Props) => {
             
             <div className="flex-1 space-y-1.5">
                 <h4 className="text-xs font-bold text-blue-800 dark:text-blue-300 uppercase tracking-widest">
-                Estado Físico al Recibir
+                {t("itAssets.components.movementInDetails.statusLabel")}
                 </h4>
                 <p className="text-lg font-black text-foreground">
-                {itAssetMovement.itAsset.itAssetStatus.name || "N/A"}
+                {itAssetMovement.itAsset.itAssetStatus.name || t("itAssets.components.movementInDetails.na")}
                 </p>
                 <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
                 {itAssetMovement.itAsset.itAssetStatus.description}
@@ -39,8 +42,8 @@ const ItAssetMovementInDetails = ({ itAssetMovement } :Props) => {
         <div className="px-1">
             <DetailItem 
             icon={FileText} 
-            label="Observaciones al Recibir" 
-            value={itAssetMovement.movementIn?.observations || "El equipo fue recibido sin observaciones adicionales."} 
+            label={t("itAssets.components.movementInDetails.observationsLabel")} 
+            value={itAssetMovement.movementIn?.observations || t("itAssets.components.movementInDetails.noObservations")} 
             isTextarea 
             />
         </div>

@@ -86,7 +86,6 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
       value={value}
       onValueChange={(val) => {
         if (val?.id === "CREATE_NEW_ITEM") {
-          // Se limpia cualquier espacio extra al final antes de crear el ítem
           onCreate?.(val.name.trim());
         } else {
           onChange(val);
@@ -109,7 +108,7 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
         />
       </div>
 
-      <ComboboxContent className="shadow-xl border-zinc-800">
+      <ComboboxContent className="shadow-xl border-border">
         <ComboboxEmpty className="py-6 text-center text-sm">
           {isLoading ? (
             <div className="flex items-center justify-center gap-2">
@@ -125,14 +124,14 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
 
         <ComboboxList
           onScroll={handleScroll}
-          className="max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-800"
+          className="max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/30"
         >
           {renderedOptions}
 
           {showCreateOption && (
             <ComboboxItem
               value={{ id: "CREATE_NEW_ITEM", name: inputValue.trim() }}
-              className="mt-1 border-t border-zinc-800 pt-2 text-primary font-semibold hover:bg-primary/5 flex items-center gap-2 group/create transition-colors"
+              className="mt-1 border-t border-border pt-2 text-primary font-semibold hover:bg-primary/5 flex items-center gap-2 group/create transition-colors"
             >
               <div className="flex items-center justify-center h-6 w-6 rounded-md bg-primary/10 group-hover/create:bg-primary/20 transition-colors">
                 <Plus className="h-4 w-4" />
@@ -142,7 +141,7 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
           )}
 
           {isFetchingNextPage && (
-            <div className="flex items-center justify-center gap-2 py-4 border-t border-zinc-900 bg-zinc-950/50">
+            <div className="flex items-center justify-center gap-2 py-4 border-t border-border bg-muted/50">
               <Loader2 className="h-3 w-3 animate-spin text-primary" />
               <span className="text-[10px] uppercase font-bold text-muted-foreground">
                 Cargando más
@@ -152,8 +151,9 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
         </ComboboxList>
 
         {!hasNextPage && options.length > 0 && !showCreateOption && (
-          <div className="py-2 border-t border-zinc-900 bg-zinc-900/20 text-center">
-            <span className="text-[10px] text-zinc-500 font-medium">
+          // Se cambió border-zinc-900, bg-zinc-900/20 y text-zinc-500 a colores semánticos
+          <div className="py-2 border-t border-border bg-muted/20 text-center">
+            <span className="text-[10px] text-muted-foreground font-medium">
               FIN DEL CATÁLOGO
             </span>
           </div>
@@ -162,3 +162,5 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
     </Combobox>
   );
 });
+
+export default InfiniteScrollSelect;

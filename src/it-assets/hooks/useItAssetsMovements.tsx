@@ -39,17 +39,25 @@ export const useItAssetsMovements = (id?: string) => {
 
   const createMovementOutMutation = useMutation({
     mutationFn: createItAssetsMovementOutAction, 
-    onSuccess: () => {
+    onSuccess: (_ , variables) => {
+      // 1. Refresca la tabla de Activos
       queryClient.invalidateQueries({ queryKey: ['it-assets'] });
+      // 2. Refresca la tabla de Movimientos
       queryClient.invalidateQueries({ queryKey: ['it-assets-movements'] });
+      // 3. Refresca la vista de detalles del Activo específico
+      queryClient.invalidateQueries({ queryKey: ['it-asset', variables.itAssetId] });
     },
   });
 
   const createMovementInMutation = useMutation({
     mutationFn: createItAssetsMovementInAction, 
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      // 1. Refresca la tabla de Activos
       queryClient.invalidateQueries({ queryKey: ['it-assets'] });
+      // 2. Refresca la tabla de Movimientos
       queryClient.invalidateQueries({ queryKey: ['it-assets-movements'] });
+      // 3. Refresca la vista de detalles del Activo específico
+      queryClient.invalidateQueries({ queryKey: ['it-asset', variables.itAssetId] });
     },
   });
 

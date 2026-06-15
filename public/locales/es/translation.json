@@ -1086,6 +1086,25 @@
         "equipment_location_max": "La ubicación no puede exceder los 200 caracteres.",
         "issue_type_required": "Debes seleccionar una categoría o tipo de problema.",
         "issue_type_invalid": "El tipo de problema seleccionado no es válido."
+      },
+      "components": {
+        "ticketDetailsCard": {
+          "loading": "Cargando información completa del ticket...",
+          "headerTitle": "Detalles del Ticket Asociado",
+          "unclassified": "Sin Clasificar",
+          "status": "ESTADO",
+          "fields": {
+            "affected": "Afectado",
+            "location": "Ubicación",
+            "priority": "Prioridad",
+            "level": "Nivel",
+            "schedule": "Horario Disponible",
+            "na": "N/A",
+            "description": "Descripción del Problema (Reporte Original)",
+            "boss": "Jefe del Departamento",
+            "technicians": "Técnicos Asignados"
+          }
+        }
       }
     }
   },
@@ -2013,7 +2032,6 @@
   "api_movement_application_by_id_error":"Error al recuperar el tipo de aplicación de movimiento con el ID.",
   "api_tickets_fetch_error":"Error al recuperar los tickets.",
   "api_tickets_by_id_error":"Eror al recuperar el ticker con el ID.",
-  "":"",
   "errors": {
     "consumables": {
       "missingNumberUses": "El número de usos es obligatorio para esta unidad de medida.",
@@ -2069,7 +2087,7 @@
       "brandRequired": "La marca es obligatoria",
       "ubicationRequired": "La ubicación es obligatoria",
       "numberUsesRequired": "El número de usos es requerido para elementos fraccionarios",
-      "numberUsesMin": "Debe permitir al menos 1 uso (IsPositive)"
+      "numberUsesMin": "Debe permitir al menos 1 uso"
     }
   },
   "commons": {
@@ -2312,6 +2330,296 @@
         "changeStatus": "Cambiar Estado",
         "placeholder": "Selecciona el estado físico del equipo",
         "descriptionLabel": "Descripción del estado:"
+      },
+      "brandSelectField": {
+        "label": "Marca",
+        "placeholder": "Buscar o crear marca...",
+        "sileo": {
+          "loading": {
+            "title": "Creando marca \"{{name}}\"..."
+          },
+          "success": {
+            "title": "Marca creada"
+          },
+          "error": {
+            "title": "Error",
+            "defaultMessage": "Error al crear la marca"
+          }
+        }
+      },
+      "confirmChangeStatus": {
+        "title": "¿Modificar estado del equipo?",
+        "descriptionStart": "El sistema ha precargado el estado actual del equipo (",
+        "unknownStatus": "Desconocido",
+        "descriptionEnd": "). Si cambias este valor, se registrará la salida con el nuevo estado y se actualizará en el inventario. ¿Deseas continuar?",
+        "cancel": "No, mantener estado",
+        "confirm": "Sí, cambiar estado"
+      },
+      "desktopCatalog": {
+        "notFound": {
+          "title": "No se encontraron activos",
+          "description": "No hay activos de TI que coincidan con tu búsqueda. Intenta con otros filtros."
+        },
+        "availability": {
+          "inUse": "En Uso",
+          "available": "Disponible"
+        },
+        "imageAlt": "Imagen del activo",
+        "status": {
+          "active": "Activo",
+          "inactive": "Inactivo"
+        },
+        "serialNumber": {
+          "empty": "Sin número de serie"
+        },
+        "buttons": {
+          "in": "Entrada",
+          "out": "Salida"
+        }
+      },
+      "filters": {
+        "selected": "Seleccionado...",
+        "searchPlaceholder": "Buscar por N° Serie o ID Inventario...",
+        "statusPlaceholder": "Estado",
+        "status": {
+          "all": "Todos los Estados",
+          "active": "Activos",
+          "inactive": "Inactivos"
+        },
+        "typePlaceholder": "Filtrar por Tipo...",
+        "brandPlaceholder": "Filtrar por Marca...",
+        "modelPlaceholder": "Filtrar por Modelo...",
+        "clear": "Limpiar"
+      },
+      "assetPreview": {
+        "titleIn": "Equipo a recibir",
+        "titleOut": "Equipo a despachar",
+        "imageAlt": "Activo",
+        "type": "Tipo",
+        "serial": "Serie",
+        "na": "N/A",
+        "statusLabel": "Estado Físico Actual",
+        "statusUnknown": "Estado no definido",
+        "warnings": {
+          "outInUseTitle": "Atención",
+          "outInUseStart": "Este equipo actualmente está marcado como ",
+          "outInUseBold": "En Uso",
+          "outInUseEnd": ". Por favor, asegúrate de registrar su entrada antes de asignarlo nuevamente.",
+          "inNotInUseTitle": "Aviso",
+          "inNotInUseStart": "Este equipo actualmente ",
+          "inNotInUseBold": "no está marcado como en uso",
+          "inNotInUseEnd": ". Verifica si realmente necesitas registrar una entrada."
+        }
+      },
+      "movementDesktopTable": {
+        "headers": {
+          "date": "Fecha",
+          "type": "Tipo",
+          "photo": "Foto",
+          "asset": "Activo (N° Serie)",
+          "details": "Detalles"
+        },
+        "badges": {
+          "in": "Entrada",
+          "out": "Salida"
+        },
+        "assetInfo": {
+          "id": "ID",
+          "na": "N/A"
+        },
+        "imageAlt": "Miniatura del activo",
+        "emptyState": {
+          "title": "No se encontraron movimientos",
+          "description": "Aún no hay registros de entradas o salidas para los activos."
+        }
+      },
+      "movementMobileCard": {
+        "imageAlt": "Activo",
+        "badges": {
+          "in": "ENTRADA",
+          "out": "SALIDA"
+        },
+        "assetInfo": {
+          "id": "ID",
+          "na": "N/A"
+        },
+        "emptyState": {
+          "title": "No se encontraron movimientos",
+          "description": "Intenta ajustar los filtros de búsqueda."
+        }
+      },
+      "movementFilters": {
+        "searchPlaceholder": "Buscar por ID, N° Serie o Inventario...",
+        "typePlaceholder": "Tipo de Movimiento",
+        "types": {
+          "all": "Todos los Movimientos",
+          "in": "Entradas IN",
+          "out": "Salidas OUT"
+        },
+        "dateStartPlaceholder": "Desde fecha...",
+        "dateEndPlaceholder": "Hasta fecha...",
+        "clear": "Limpiar"
+      },
+      "actionsMenu": {
+        "view": "Ver detalle",
+        "edit": "Editar",
+        "down": "Dar de baja",
+        "up": "Reactivar"
+      },
+      "imageUploadField": {
+        "label": "Fotografía del Activo",
+        "clickToUpload": "Haz clic para subir una imagen",
+        "formats": "PNG, JPG o WEBP (Máx. 5MB)",
+        "previewAlt": "Vista previa",
+        "changePhoto": "Cambiar foto"
+      },
+      "invoiceSelectField": {
+        "unnamed": "Sin nombre",
+        "label": "Factura (Opcional)",
+        "placeholder": "Buscar o crear factura...",
+        "sileo": {
+          "loading": {
+            "title": "Creando factura..."
+          },
+          "success": {
+            "title": "Factura creada"
+          },
+          "error": {
+            "title": "Error",
+            "defaultMessage": "Error al crear la factura"
+          }
+        }
+      },
+      "movementInDetails": {
+        "statusLabel": "Estado Físico al Recibir",
+        "na": "N/A",
+        "observationsLabel": "Observaciones al Recibir",
+        "noObservations": "El equipo fue recibido sin observaciones adicionales."
+      },
+      "movementOutDetails": {
+        "assignedTo": "Asignado a (Personal)",
+        "unassigned": "Sin personal asignado",
+        "controlNum": "N° Control",
+        "rfc": "RFC",
+        "statusLabel": "Estado Físico al Entregar",
+        "na": "N/A",
+        "voucherLabel": "Folio de Vale",
+        "noVoucher": "Sin vale registrado",
+        "ticketLabel": "Ticket de Soporte Vinculado",
+        "noTicket": "No se vinculó a ningún ticket",
+        "descriptionLabel": "Descripción de Salida",
+        "noDescription": "Sin descripción.",
+        "observationsLabel": "Observaciones",
+        "noObservations": "Sin observaciones adicionales."
+      },
+      "assetPreviewCard": {
+        "status": {
+          "active": "ACTIVO",
+          "inactive": "INACTIVO"
+        },
+        "imageAlt": "Activo {{serial}}",
+        "noImage": "Sin Imagen",
+        "title": "Ficha del Activo",
+        "id": "ID",
+        "noId": "Sin ID asignado",
+        "details": {
+          "type": "Tipo",
+          "model": "Modelo",
+          "noBrand": "Sin Marca",
+          "status": "Estado Físico",
+          "invoice": "Factura",
+          "noInvoice": "Sin factura",
+          "na": "N/A"
+        }
+      },
+      "form": {
+        "serialNumber": {
+          "label": "Número de Serie",
+          "placeholder": "Ej. PF3ZQ..."
+        },
+        "idInventory": {
+          "label": "ID Inventario Interno (Opcional)",
+          "placeholder": "Ej. ITO-PC-001"
+        },
+        "status": {
+          "labelEdit": "Estado Físico",
+          "labelCreate": "Estado Físico Inicial",
+          "placeholder": "Selecciona un estado...",
+          "descriptionTitle": "Descripción del estado seleccionado:"
+        },
+        "description": {
+          "label": "Descripción del Activo (Opcional)",
+          "placeholder": "Características especiales, color, ubicación inicial..."
+        },
+        "observations": {
+          "label": "Observaciones Iniciales (Opcional)",
+          "placeholder": "Detalles sobre desperfectos de fábrica, faltantes en entrega..."
+        }
+      },
+      "modelSelectField": {
+        "label": "Modelo",
+        "placeholder": "Buscar o crear modelo...",
+        "placeholderDisabled": "Selecciona una marca primero",
+        "sileo": {
+          "loading": {
+            "title": "Creando modelo \"{{name}}\"..."
+          },
+          "success": {
+            "title": "Modelo creado"
+          },
+          "error": {
+            "title": "Error",
+            "defaultMessage": "Error al crear el modelo"
+          }
+        }
+      },
+      "staffOutSection": {
+        "noName": "Sin nombre",
+        "assignEmployee": "Asignar empleado",
+        "searchPlaceholder": "Buscar por nombre o número de empleado...",
+        "selectedEmployee": "Empleado seleccionado",
+        "staffFallback": "Personal",
+        "controlNumber": "Ctrl",
+        "description": "A quién se le entregará el equipo de TI.",
+        "outDescriptionLabel": "Descripción de la salida",
+        "outDescriptionPlaceholder": "Motivo de la asignación, detalles de entrega..."
+      },
+      "ticketOutSection": {
+        "label": "Vincular a un Ticket",
+        "placeholder": "Selecciona un ticket asignado...",
+        "previewTitle": "Información del Ticket",
+        "folio": "Folio:",
+        "createdAt": "Fecha de creación:",
+        "priority": "Prioridad:",
+        "level": "Nivel",
+        "issueType": "Tipo de problema:",
+        "schoolPeriod": "Periodo Escolar:",
+        "reportedBy": "Reportado por:",
+        "description": "Descripción del problema:"
+      },
+      "typeSelectField": {
+        "label": "Tipo de Activo",
+        "placeholder": "Buscar o crear tipo...",
+        "sileo": {
+          "loading": {
+            "title": "Creando tipo \"{{name}}\"..."
+          },
+          "success": {
+            "title": "Tipo creado exitosamente"
+          },
+          "error": {
+            "title": "Error",
+            "defaultMessage": "Error al crear el tipo"
+          }
+        }
+      }
+    }
+  },
+  "staff": {
+    "componets": {
+      "staffDetailsCard": {
+        "title": "Personal Asignado",
+        "noData": "Datos del personal no disponibles."
       }
     }
   }

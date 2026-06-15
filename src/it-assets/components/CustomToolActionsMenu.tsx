@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, MoreHorizontal, Pencil, PowerOff, CheckCircle } from "lucide-react";
 import { Link } from "react-router";
 import { cn } from "@/lib/utils";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 export const CustomItAssetActionsMenu = ({
   asset, handleDownClick
 }: Props ) => {
-  
+  const { t } = useTranslation();
   const isActive = asset.status;
 
   return (
@@ -34,14 +34,14 @@ export const CustomItAssetActionsMenu = ({
           <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
             <Link to={`/it-assets/${asset.id}`}>
               <Eye className="h-4 w-4 text-muted-foreground" />
-              {t("itAssets.actionsMenu.view", "Ver detalle")}
+              {t("itAssets.components.actionsMenu.view")}
             </Link>
           </DropdownMenuItem>
           
           <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
             <Link to={`/it-assets/edit/${asset.id}`}>
               <Pencil className="h-4 w-4 text-muted-foreground" />
-              {t("itAssets.actionsMenu.edit", "Editar")}
+              {t("itAssets.components.actionsMenu.edit")}
             </Link>
           </DropdownMenuItem>
           
@@ -59,12 +59,12 @@ export const CustomItAssetActionsMenu = ({
             {isActive ? (
               <>
                 <PowerOff className="h-4 w-4" />
-                {t("itAssets.actionsMenu.down", "Dar de baja")}
+                {t("itAssets.components.actionsMenu.down")}
               </>
             ) : (
               <>
                 <CheckCircle className="h-4 w-4" />
-                {t("itAssets.actionsMenu.up", "Reactivar")}
+                {t("itAssets.components.actionsMenu.up")}
               </>
             )}
           </DropdownMenuItem>
@@ -73,4 +73,6 @@ export const CustomItAssetActionsMenu = ({
       </DropdownMenu>
     </>
   )
-}
+};
+
+export default CustomItAssetActionsMenu;

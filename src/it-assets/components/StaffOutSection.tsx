@@ -1,9 +1,10 @@
 import { useEffect, useState, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { UserRound } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Hooks
-import { useStaffRoleSpecific } from "@/tools/hooks/useStaffRoleSpecific";
+import { useStaffRoleSpecific } from "@/users/hooks/useStaffRoleSpecific";
 
 // UI Components
 import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export const StaffOutSection = ({ isDisabled }: Props) => {
+  const { t } = useTranslation();
   const { control, watch } = useFormContext();
 
   // Estados para la búsqueda infinita del Staff
@@ -43,9 +45,9 @@ export const StaffOutSection = ({ isDisabled }: Props) => {
   const staffOptions = useMemo(() => {
     return staffMembers.map((staff: Staff) => ({
       id: staff.id,
-      name: staff.fullName || "Sin nombre", 
+      name: staff.fullName || t("itAssets.components.staffOutSection.noName"), 
     }));
-  }, [staffMembers]);
+  }, [staffMembers, t]);
 
   // Observador para el Preview
   const currentStaffId = watch("staffId");
@@ -64,7 +66,7 @@ export const StaffOutSection = ({ isDisabled }: Props) => {
           <FormItem>
             <FormLabel className="flex items-center gap-2">
               <UserRound className="h-4 w-4 text-muted-foreground" />
-              Asignar empleado <span className="text-red-500">*</span>
+              {t("itAssets.components.staffOutSection.assignEmployee")} <span className="text-red-500">*</span>
             </FormLabel>
             <FormControl>
               <InfiniteScrollSelect
@@ -76,7 +78,7 @@ export const StaffOutSection = ({ isDisabled }: Props) => {
                 hasNextPage={!!hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 isLoading={isLoadingStaff}
-                placeholder="Buscar por nombre o número de empleado..."
+                placeholder={t("itAssets.components.staffOutSection.searchPlaceholder")}
                 disabled={isDisabled}
               />
             </FormControl>
@@ -89,7 +91,7 @@ export const StaffOutSection = ({ isDisabled }: Props) => {
                 </div>
                 <div className="flex flex-col overflow-hidden w-full">
                   <span className="truncate text-base font-bold text-foreground">
-                    {selectedStaff.fullName || "Empleado seleccionado"}
+                    {selectedStaff.fullName || t("itAssets.components.staffOutSection.selectedEmployee")}
                   </span>
                   
                   <div className="mt-1 flex flex-wrap items-center gap-2">
@@ -99,12 +101,12 @@ export const StaffOutSection = ({ isDisabled }: Props) => {
                       </span>
                     ) : (
                       <span className="bg-muted px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider">
-                        Personal
+                        {t("itAssets.components.staffOutSection.staffFallback")}
                       </span>
                     )}
                     {selectedStaff.num_control && (
                       <span className="bg-muted text-muted-foreground px-2 py-0.5 rounded text-[10px] font-mono font-medium">
-                        Ctrl: {selectedStaff.num_control}
+                        {t("itAssets.components.staffOutSection.controlNumber")}: {selectedStaff.num_control}
                       </span>
                     )}
                   </div>
@@ -126,7 +128,7 @@ export const StaffOutSection = ({ isDisabled }: Props) => {
             )}
 
             {!selectedStaff && (
-              <FormDescription>A quién se le entregará el equipo de TI.</FormDescription>
+              <FormDescription>{t("itAssets.components.staffOutSection.description")}</FormDescription>
             )}
             <FormMessage />
           </FormItem>
@@ -140,11 +142,11 @@ export const StaffOutSection = ({ isDisabled }: Props) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              Descripción de la salida <span className="text-red-500">*</span>
+              {t("itAssets.components.staffOutSection.outDescriptionLabel")} <span className="text-red-500">*</span>
             </FormLabel>
             <FormControl>
               <Textarea 
-                placeholder="Motivo de la asignación, detalles de entrega..." 
+                placeholder={t("itAssets.components.staffOutSection.outDescriptionPlaceholder")} 
                 className="resize-none" 
                 {...field} 
                 disabled={isDisabled} 

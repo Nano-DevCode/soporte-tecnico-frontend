@@ -773,8 +773,524 @@
   "eq_update_fetching_info": "Loading equipment information...",
   "eq_update_not_found_title": "Equipment not found",
   "eq_update_not_found_desc": "The record you are trying to edit does not exist or could not be recovered.",
-  "eq_update_back_list_btn": "List Equipment"
+  "eq_update_back_list_btn": "List Equipment",
 
-
-
+  "itAssets": {
+    "mainPage": {
+      "titleCard": {
+        "title": "IT Assets",
+        "description": "Manage the catalog of computer equipment, components, and peripherals."
+      },
+      "buttonCreate": {
+        "label": "New Asset"
+      },
+      "dialog": {
+        "titleDown": "Deactivate asset",
+        "titleUp": "Reactivate asset",
+        "model": "Model:",
+        "brand": "Brand:",
+        "id": "Inventory ID:",
+        "textDescriptionDown": "Are you sure you want to deactivate this asset? It will no longer appear as available for assignments or loans.",
+        "textDescriptionUp": "Are you sure you want to reactivate this asset? It will be available in the main catalog again.",
+        "buttonConfirmDown": "Yes, deactivate",
+        "buttonConfirmUp": "Yes, reactivate",
+        "buttonCancel": "Cancel"
+      },
+      "sileo": {
+        "loading": {
+          "title": "Updating asset status..."
+        },
+        "success": {
+          "title": "Status updated",
+          "description": "The asset status has been successfully updated in the database."
+        },
+        "error": {
+          "title": "Failed to update",
+          "defaultMessage": "An unexpected server error occurred."
+        }
+      }
+    },
+    "createPage": {
+      "header": {
+        "title": "Create IT Asset",
+        "description": "Register a new computer equipment, component, or peripheral in the system."
+      },
+      "card": {
+        "title": "Asset Information",
+        "description": "Fill in the details to register the new asset."
+      },
+      "validation": {
+        "serialNumber": "Serial number is required",
+        "typeId": "Asset type is required",
+        "brandId": "Brand is required",
+        "modelId": "Model is required",
+        "statusId": "Initial status is required",
+        "imageFile": "You must select a valid image file"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "submitting": "Saving...",
+        "submit": "Save Asset"
+      },
+      "sileo": {
+        "loading": {
+          "title": "Saving asset..."
+        },
+        "success": {
+          "title": "Asset created",
+          "description": "The IT asset has been successfully registered in the database."
+        },
+        "error": {
+          "title": "Failed to create",
+          "defaultMessage": "An unexpected error occurred while trying to save the asset."
+        }
+      }
+    },
+    "movementIn": {
+      "validation": {
+        "statusRequired": "You must select a status"
+      },
+      "sileo": {
+        "loading": {
+          "title": "Registering check-in..."
+        },
+        "success": {
+          "title": "Check-in registered",
+          "description": "The asset has been successfully checked into inventory."
+        },
+        "error": {
+          "title": "Error registering check-in",
+          "defaultMessage": "Server error while trying to register the check-in."
+        }
+      },
+      "notFound": {
+        "title": "Asset not found",
+        "button": "Back to catalog"
+      },
+      "header": {
+        "title": "Register Check-in",
+        "description": "Receive this equipment and update its physical condition."
+      },
+      "card": {
+        "title": "Reception Details",
+        "description": "Verify the condition in which the asset is returned and note any important details."
+      },
+      "form": {
+        "statusLabel": "Physical condition upon check-in",
+        "unknownStatus": "Unknown Status",
+        "statusPlaceholder": "Select the physical condition of the equipment",
+        "statusDescriptionLabel": "Status description:",
+        "observationsLabel": "Observations (Optional)",
+        "observationsPlaceholder": "E.g. The equipment came back dusty, dirty screen, bent cable..."
+      },
+      "buttons": {
+        "changeStatus": "Change Status",
+        "cancel": "Cancel",
+        "submitting": "Registering...",
+        "submit": "Register Check-in"
+      }
+    },
+    "movementOut": {
+      "validation": {
+        "statusRequired": "You must select a status",
+        "staffRequired": "You must select an employee for this check-out",
+        "descriptionLength": "Description is required and must be at least 10 characters long",
+        "ticketRequired": "You must link a ticket for this check-out"
+      },
+      "sileo": {
+        "loading": {
+          "title": "Registering check-out..."
+        },
+        "success": {
+          "title": "Check-out registered",
+          "description": "The asset has been successfully dispatched."
+        },
+        "error": {
+          "title": "Error registering check-out",
+          "defaultMessage": "Server error"
+        }
+      },
+      "notFound": {
+        "title": "Asset not found",
+        "button": "Back to catalog"
+      },
+      "header": {
+        "title": "Register Check-out",
+        "description": "Assign this equipment and update its status."
+      },
+      "card": {
+        "title": "Check-out Details",
+        "description": "Fill in the necessary information to register the movement."
+      },
+      "tabs": {
+        "staff": "Staff Check-out",
+        "ticket": "Ticket Check-out"
+      },
+      "form": {
+        "voucherLabel": "Voucher / Receipt (Optional)",
+        "voucherPlaceholder": "E.g. Voucher-00123",
+        "observationsLabel": "Physical observations (Optional)",
+        "observationsPlaceholder": "E.g. Handed over with a scratch..."
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "submitting": "Registering...",
+        "submit": "Register Check-out"
+      }
+    },
+    "movementsPage": {
+      "header": {
+        "title": "Asset Movements",
+        "description": "History of IT asset check-ins and check-outs."
+      }
+    },
+    "movementViewPage": {
+      "notFound": {
+        "title": "Movement not found",
+        "description": "The record you are looking for does not exist or there was an error loading it.",
+        "button": "Go back"
+      },
+      "header": {
+        "title": "Movement Details",
+        "registeredAt": "Registered on"
+      },
+      "badge": {
+        "in": "Check-in",
+        "out": "Check-out"
+      },
+      "card": {
+        "titleIn": "Check-in Record Data",
+        "titleOut": "Check-out Record Data",
+        "description": "Administrative information saved at the exact moment of the movement.",
+        "noDetails": "No specific details found for this movement."
+      }
+    },
+    "updatePage": {
+      "header": {
+        "title": "Edit IT Asset",
+        "description": "Modify the selected equipment's information."
+      },
+      "card": {
+        "title": "Equipment Information",
+        "description": "Update the technical and administrative data of the asset."
+      },
+      "validation": {
+        "serialNumber": "Serial number is required",
+        "typeId": "You must select a type",
+        "brandId": "You must select a brand",
+        "modelId": "You must select a model",
+        "statusId": "You must select a status"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "submitting": "Saving...",
+        "submit": "Save Changes"
+      },
+      "loading": "Loading asset data...",
+      "sileo": {
+        "loading": {
+          "title": "Updating asset..."
+        },
+        "success": {
+          "title": "Asset updated",
+          "description": "Changes were successfully saved."
+        },
+        "error": {
+          "title": "Error",
+          "defaultMessage": "Error updating"
+        }
+      }
+    },
+    "components": {
+      "assetStatusSelect": {
+        "label": "Physical status at time of movement",
+        "unknownStatus": "Unknown Status",
+        "changeStatus": "Change Status",
+        "placeholder": "Select the physical status of the equipment",
+        "descriptionLabel": "Status description:"
+      },
+      "brandSelectField": {
+        "label": "Brand",
+        "placeholder": "Search or create brand...",
+        "sileo": {
+          "loading": {
+            "title": "Creating brand \"{{name}}\"..."
+          },
+          "success": {
+            "title": "Brand created"
+          },
+          "error": {
+            "title": "Error",
+            "defaultMessage": "Error creating brand"
+          }
+        }
+      },
+      "confirmChangeStatus": {
+        "title": "Modify equipment status?",
+        "descriptionStart": "The system has pre-loaded the current status of the equipment (",
+        "unknownStatus": "Unknown",
+        "descriptionEnd": "). If you change this value, the check-out will be registered with the new status and updated in the inventory. Do you wish to continue?",
+        "cancel": "No, keep status",
+        "confirm": "Yes, change status"
+      },
+      "desktopCatalog": {
+        "notFound": {
+          "title": "No assets found",
+          "description": "No IT assets match your search. Try different filters."
+        },
+        "availability": {
+          "inUse": "In Use",
+          "available": "Available"
+        },
+        "imageAlt": "Asset image",
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "serialNumber": {
+          "empty": "No serial number"
+        },
+        "buttons": {
+          "in": "Check-in",
+          "out": "Check-out"
+        }
+      },
+      "filters": {
+        "selected": "Selected...",
+        "searchPlaceholder": "Search by Serial No. or Inventory ID...",
+        "statusPlaceholder": "Status",
+        "status": {
+          "all": "All Statuses",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "typePlaceholder": "Filter by Type...",
+        "brandPlaceholder": "Filter by Brand...",
+        "modelPlaceholder": "Filter by Model...",
+        "clear": "Clear"
+      },
+      "assetPreview": {
+        "titleIn": "Equipment to receive",
+        "titleOut": "Equipment to dispatch",
+        "imageAlt": "Asset",
+        "type": "Type",
+        "serial": "Serial",
+        "na": "N/A",
+        "statusLabel": "Current Physical Status",
+        "statusUnknown": "Undefined status",
+        "warnings": {
+          "outInUseTitle": "Attention",
+          "outInUseStart": "This equipment is currently marked as ",
+          "outInUseBold": "In Use",
+          "outInUseEnd": ". Please ensure you register its check-in before assigning it again.",
+          "inNotInUseTitle": "Notice",
+          "inNotInUseStart": "This equipment is currently ",
+          "inNotInUseBold": "not marked as in use",
+          "inNotInUseEnd": ". Verify if you really need to register a check-in."
+        }
+      },
+      "movementDesktopTable": {
+        "headers": {
+          "date": "Date",
+          "type": "Type",
+          "photo": "Photo",
+          "asset": "Asset (Serial No.)",
+          "details": "Details"
+        },
+        "badges": {
+          "in": "Check-in",
+          "out": "Check-out"
+        },
+        "assetInfo": {
+          "id": "ID",
+          "na": "N/A"
+        },
+        "imageAlt": "Asset thumbnail",
+        "emptyState": {
+          "title": "No movements found",
+          "description": "There are no check-in or check-out records for assets yet."
+        }
+      },
+      "movementMobileCard": {
+        "imageAlt": "Asset",
+        "badges": {
+          "in": "CHECK-IN",
+          "out": "CHECK-OUT"
+        },
+        "assetInfo": {
+          "id": "ID",
+          "na": "N/A"
+        },
+        "emptyState": {
+          "title": "No movements found",
+          "description": "Try adjusting the search filters."
+        }
+      },
+      "movementFilters": {
+        "searchPlaceholder": "Search by ID, Serial No. or Inventory...",
+        "typePlaceholder": "Movement Type",
+        "types": {
+          "all": "All Movements",
+          "in": "IN Check-ins",
+          "out": "OUT Check-outs"
+        },
+        "dateStartPlaceholder": "From date...",
+        "dateEndPlaceholder": "To date...",
+        "clear": "Clear"
+      },
+      "actionsMenu": {
+        "view": "View details",
+        "edit": "Edit",
+        "down": "Deactivate",
+        "up": "Reactivate"
+      },
+      "imageUploadField": {
+        "label": "Asset Photograph",
+        "clickToUpload": "Click to upload an image",
+        "formats": "PNG, JPG or WEBP (Max 5MB)",
+        "previewAlt": "Preview",
+        "changePhoto": "Change photo"
+      },
+      "invoiceSelectField": {
+        "unnamed": "Unnamed",
+        "label": "Invoice (Optional)",
+        "placeholder": "Search or create invoice...",
+        "sileo": {
+          "loading": {
+            "title": "Creating invoice..."
+          },
+          "success": {
+            "title": "Invoice created"
+          },
+          "error": {
+            "title": "Error",
+            "defaultMessage": "Error creating invoice"
+          }
+        }
+      },
+      "movementInDetails": {
+        "statusLabel": "Physical Status Upon Receipt",
+        "na": "N/A",
+        "observationsLabel": "Receiving Observations",
+        "noObservations": "The equipment was received without additional observations."
+      },
+      "movementOutDetails": {
+        "assignedTo": "Assigned to (Staff)",
+        "unassigned": "No staff assigned",
+        "controlNum": "Control No.",
+        "rfc": "RFC (Tax ID)",
+        "statusLabel": "Physical Status Upon Delivery",
+        "na": "N/A",
+        "voucherLabel": "Voucher Folio",
+        "noVoucher": "No voucher registered",
+        "ticketLabel": "Linked Support Ticket",
+        "noTicket": "Not linked to any ticket",
+        "descriptionLabel": "Check-out Description",
+        "noDescription": "No description.",
+        "observationsLabel": "Observations",
+        "noObservations": "No additional observations."
+      },
+      "assetPreviewCard": {
+        "status": {
+          "active": "ACTIVE",
+          "inactive": "INACTIVE"
+        },
+        "imageAlt": "Asset {{serial}}",
+        "noImage": "No Image",
+        "title": "Asset Details",
+        "id": "ID",
+        "noId": "No ID assigned",
+        "details": {
+          "type": "Type",
+          "model": "Model",
+          "noBrand": "No Brand",
+          "status": "Physical Status",
+          "invoice": "Invoice",
+          "noInvoice": "No invoice",
+          "na": "N/A"
+        }
+      },
+      "form": {
+        "serialNumber": {
+          "label": "Serial Number",
+          "placeholder": "E.g. PF3ZQ..."
+        },
+        "idInventory": {
+          "label": "Internal Inventory ID (Optional)",
+          "placeholder": "E.g. ITO-PC-001"
+        },
+        "status": {
+          "labelEdit": "Physical Status",
+          "labelCreate": "Initial Physical Status",
+          "placeholder": "Select a status...",
+          "descriptionTitle": "Description of the selected status:"
+        },
+        "description": {
+          "label": "Asset Description (Optional)",
+          "placeholder": "Special features, color, initial location..."
+        },
+        "observations": {
+          "label": "Initial Observations (Optional)",
+          "placeholder": "Details about factory defects, missing items upon delivery..."
+        }
+      },
+      "modelSelectField": {
+        "label": "Model",
+        "placeholder": "Search or create model...",
+        "placeholderDisabled": "Select a brand first",
+        "sileo": {
+          "loading": {
+            "title": "Creating model \"{{name}}\"..."
+          },
+          "success": {
+            "title": "Model created"
+          },
+          "error": {
+            "title": "Error",
+            "defaultMessage": "Error creating model"
+          }
+        }
+      },
+      "staffOutSection": {
+        "noName": "No name",
+        "assignEmployee": "Assign employee",
+        "searchPlaceholder": "Search by name or employee number...",
+        "selectedEmployee": "Selected employee",
+        "staffFallback": "Staff",
+        "controlNumber": "Ctrl",
+        "description": "To whom the IT equipment will be delivered.",
+        "outDescriptionLabel": "Check-out description",
+        "outDescriptionPlaceholder": "Reason for assignment, delivery details..."
+      },
+      "ticketOutSection": {
+        "label": "Link to a Ticket",
+        "placeholder": "Select an assigned ticket...",
+        "previewTitle": "Ticket Information",
+        "folio": "Folio:",
+        "createdAt": "Creation date:",
+        "priority": "Priority:",
+        "level": "Level",
+        "issueType": "Issue type:",
+        "schoolPeriod": "School Period:",
+        "reportedBy": "Reported by:",
+        "description": "Problem description:"
+      },
+      "typeSelectField": {
+        "label": "Asset Type",
+        "placeholder": "Search or create type...",
+        "sileo": {
+          "loading": {
+            "title": "Creating type \"{{name}}\"..."
+          },
+          "success": {
+            "title": "Type created successfully"
+          },
+          "error": {
+            "title": "Error",
+            "defaultMessage": "Error creating type"
+          }
+        }
+      }
+    }
+  }
 }

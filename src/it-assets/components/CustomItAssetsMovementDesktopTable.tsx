@@ -5,13 +5,14 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 import type { ItAssetsMovement } from "../interfaces/itAssetsMovementResponse";
 
 interface Props {
   movements: ItAssetsMovement[];
 }
 
-const AssetThumbnail = ({ src }: { src?: string | null }) => {
+const AssetThumbnail = ({ src, altText }: { src?: string | null, altText: string }) => {
   const [hasError, setHasError] = useState(false);
 
   if (!src || hasError) {
@@ -26,7 +27,7 @@ const AssetThumbnail = ({ src }: { src?: string | null }) => {
     <div className="h-10 w-10 mx-auto rounded-md overflow-hidden border border-border shadow-sm bg-muted flex items-center justify-center">
       <img 
         src={src} 
-        alt="Thumbnail" 
+        alt={altText} 
         onError={() => setHasError(true)} 
         className="h-full w-full object-cover transition-transform hover:scale-110" 
       />
@@ -35,21 +36,18 @@ const AssetThumbnail = ({ src }: { src?: string | null }) => {
 };
 
 export const CustomItAssetsMovementDesktopTable = memo(({ movements }: Props) => {
+  const { t } = useTranslation();
+
   return (
     <div className="hidden md:block rounded-xl border border-border shadow-sm overflow-hidden bg-card">
-      {/* LA MAGIA ESTÁ AQUÍ: Agregamos table-fixed */}
-      <Table className="table-fixed w-full">
+      <Table className="w-full">
         <TableHeader>
           <TableRow>
-            {/* Le damos anchos fijos a las columnas que NO queremos que se estiren */}
-            <TableHead>Fecha</TableHead>
-            <TableHead className="text-center">Tipo</TableHead>
-            <TableHead className="text-center">Foto</TableHead>
-            
-            {/* AL NO PONERLE ANCHO, ESTA COLUMNA TOMARÁ EL 100% DEL ESPACIO RESTANTE */}
-            <TableHead>Activo (N° Serie)</TableHead>
-            
-            <TableHead className="text-center">Detalles</TableHead>
+            <TableHead>{t("itAssets.components.movementDesktopTable.headers.date")}</TableHead>
+            <TableHead className="text-center">{t("itAssets.components.movementDesktopTable.headers.type")}</TableHead>
+            <TableHead className="text-center">{t("itAssets.components.movementDesktopTable.headers.photo")}</TableHead>
+            <TableHead>{t("itAssets.components.movementDesktopTable.headers.asset")}</TableHead>
+            <TableHead className="text-center">{t("itAssets.components.movementDesktopTable.headers.details")}</TableHead>
           </TableRow>
         </TableHeader>
         
@@ -81,24 +79,30 @@ export const CustomItAssetsMovementDesktopTable = memo(({ movements }: Props) =>
                     )}
                   >
                     {isInput ? <ArrowDownRight className="w-3 h-3" /> : <ArrowUpRight className="w-3 h-3" />}
-                    {isInput ? "Entrada" : "Salida"}
+                    {isInput 
+                      ? t("itAssets.components.movementDesktopTable.badges.in") 
+                      : t("itAssets.components.movementDesktopTable.badges.out")}
                   </Badge>
                 </TableCell>
                 
                 {/* FOTO */}
                 <TableCell className="align-middle py-4 text-center max-w-none">
-                  <AssetThumbnail src={mov.itAsset.imageUrl} />
+                  <AssetThumbnail 
+                    src={mov.itAsset.imageUrl} 
+                    altText={t("itAssets.components.movementDesktopTable.imageAlt")} 
+                  />
                 </TableCell>
 
                 {/* ACTIVO / SERIAL */}
-                <TableCell className="align-middle py-4 truncate max-w-none">
-                  {/* min-w-0 permite que el truncate funcione maravillosamente dentro de flexbox */}
+                <TableCell className="align-middle py-4 max-w-none">
                   <div className="flex flex-col min-w-0">
-                    <span className="text-sm font-bold text-foreground truncate block">
+                    {/* Se quitó truncate y se agregó whitespace-normal break-words */}
+                    <span className="text-sm font-bold text-foreground whitespace-normal break-words block leading-snug">
                       {mov.itAsset.serialNumber}
                     </span>
-                    <span className="text-xs text-muted-foreground font-mono truncate block">
-                      ID: {mov.itAsset.idInventary || "N/A"}
+                    {/* Se cambió el label a "ID INVENTARIO INTERNO" y se agregó whitespace-normal break-words */}
+                    <span className="text-xs text-muted-foreground font-mono whitespace-normal break-words block mt-0.5">
+                      ID INVENTARIO INTERNO: {mov.itAsset.idInventary || t("itAssets.components.movementDesktopTable.assetInfo.na")}
                     </span>
                   </div>
                 </TableCell>
@@ -119,17 +123,17 @@ export const CustomItAssetsMovementDesktopTable = memo(({ movements }: Props) =>
           {/* ESTADO VACÍO */}
           {movements.length === 0 && (
             <TableRow>
-              <TableCell colSpan={5} className="text-center text-muted-foreground max-w-none">
+              <TableCell colSpan={5} className="text-center py-10 text-muted-foreground max-w-none">
                 <div className="flex flex-col items-center gap-3">
                   <div className="h-14 w-14 rounded-full bg-muted flex items-center justify-center border border-border">
                     <ArrowRightLeft className="h-6 w-6 text-muted-foreground opacity-50" />
                   </div>
                   <div className="space-y-1">
                     <p className="text-base font-semibold text-foreground">
-                      No se encontraron movimientos
+                      {t("itAssets.components.movementDesktopTable.emptyState.title")}
                     </p>
                     <p className="text-sm">
-                      Aún no hay registros de entradas o salidas para los activos.
+                      {t("itAssets.components.movementDesktopTable.emptyState.description")}
                     </p>
                   </div>
                 </div>

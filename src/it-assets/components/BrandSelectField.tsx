@@ -5,9 +5,11 @@ import { useItAssetsBrands } from "../hooks/useItAssetsBrands";
 import { sileo } from "sileo";
 import { InfiniteScrollSelect } from "@/components/custom/InfiniteScrollSelect";
 import { isAxiosError } from "axios";
+import { useTranslation } from "react-i18next";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 
 export const BrandSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
+  const { t } = useTranslation();
   const { control } = useFormContext();
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -32,7 +34,7 @@ export const BrandSelectField = ({ disabled, initialData }: { disabled?: boolean
 
         return (
           <FormItem className="w-full">
-            <FormLabel>Marca <span className="text-red-500">*</span></FormLabel>
+            <FormLabel>{t("itAssets.components.brandSelectField.label")} <span className="text-red-500">*</span></FormLabel>
             <FormControl>
               <InfiniteScrollSelect
                 options={options}
@@ -43,22 +45,22 @@ export const BrandSelectField = ({ disabled, initialData }: { disabled?: boolean
                 hasNextPage={!!hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 isLoading={isLoading}
-                placeholder="Buscar o crear marca..."
+                placeholder={t("itAssets.components.brandSelectField.placeholder")}
                 disabled={disabled || isCreating}
                 allowCreate={true}
                 onCreate={async (newItemName) => {
                   try {
                     const newBrand = await sileo.promise(createBrand({ name: newItemName }), {
-                      loading: { title: `Creando marca "${newItemName}"...` },
-                      success: { title: "Marca creada"  },
+                      loading: { title: t("itAssets.components.brandSelectField.sileo.loading.title", { name: newItemName }) },
+                      success: { title: t("itAssets.components.brandSelectField.sileo.success.title") },
                       error: (err) => {
-                        let backendMessage = "Error al crear la marca";
+                        let backendMessage = t("itAssets.components.brandSelectField.sileo.error.defaultMessage");
                         if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
                           const rawMessage = err.response.data.message;
                           backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
                         }
                         return {
-                          title: "Error",
+                          title: t("itAssets.components.brandSelectField.sileo.error.title"),
                           description: backendMessage,
                           duration: 5000,
                         };

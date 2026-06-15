@@ -2,7 +2,7 @@ import { memo, useRef, useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale"; // Importamos el español para las fechas
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { FilterX, Search, Calendar as CalendarIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/popover";
 
 export const CustomItAssetsMovementsFilters = memo(() => {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -86,7 +87,7 @@ export const CustomItAssetsMovementsFilters = memo(() => {
           <Input
             ref={inputRef}
             type="text"
-            placeholder="Buscar por ID, N° Serie o Inventario..."
+            placeholder={t("itAssets.components.movementFilters.searchPlaceholder")}
             className="w-full pl-9 bg-background h-10 transition-colors focus-visible:ring-1"
             value={globalSearch}
             onChange={(e) => setGlobalSearch(e.target.value)}
@@ -95,12 +96,12 @@ export const CustomItAssetsMovementsFilters = memo(() => {
 
         <Select value={typeFilter} onValueChange={(v) => updateFilters("type", v)}>
           <SelectTrigger className="w-full sm:w-[260px] h-10 bg-background transition-colors focus:ring-1">
-            <SelectValue placeholder="Tipo de Movimiento" />
+            <SelectValue placeholder={t("itAssets.components.movementFilters.typePlaceholder")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos los Movimientos</SelectItem>
-            <SelectItem value="IN">Entradas IN</SelectItem>
-            <SelectItem value="OUT">Salidas OUT</SelectItem>
+            <SelectItem value="all">{t("itAssets.components.movementFilters.types.all")}</SelectItem>
+            <SelectItem value="IN">{t("itAssets.components.movementFilters.types.in")}</SelectItem>
+            <SelectItem value="OUT">{t("itAssets.components.movementFilters.types.out")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -122,7 +123,7 @@ export const CustomItAssetsMovementsFilters = memo(() => {
               {startDateObj ? (
                 format(startDateObj, "PPP", { locale: es })
               ) : (
-                <span>Desde fecha...</span>
+                <span>{t("itAssets.components.movementFilters.dateStartPlaceholder")}</span>
               )}
             </Button>
           </PopoverTrigger>
@@ -151,7 +152,7 @@ export const CustomItAssetsMovementsFilters = memo(() => {
               {endDateObj ? (
                 format(endDateObj, "PPP", { locale: es })
               ) : (
-                <span>Hasta fecha...</span>
+                <span>{t("itAssets.components.movementFilters.dateEndPlaceholder")}</span>
               )}
             </Button>
           </PopoverTrigger>
@@ -174,7 +175,7 @@ export const CustomItAssetsMovementsFilters = memo(() => {
             className="w-full sm:w-auto h-10 px-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors shrink-0"
           >
             <FilterX className="h-4 w-4 mr-2" />
-            <span>{t("clear") || "Limpiar"}</span>
+            <span>{t("itAssets.components.movementFilters.clear")}</span>
           </Button>
         )}
       </div>

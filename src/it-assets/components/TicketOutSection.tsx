@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { Ticket, Info, Calendar, AlertCircle, Clock, Mail, Building2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Hooks
 import { useTicketsAssignedes } from "../hooks/useTicketsAssignedes";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const TicketOutSection = ({ isDisabled }: Props) => {
+  const { t } = useTranslation();
   const { control, watch } = useFormContext();
   const { tickets, isLoading: isLoadingTickets } = useTicketsAssignedes();
 
@@ -34,13 +36,13 @@ export const TicketOutSection = ({ isDisabled }: Props) => {
           <FormItem className="w-full">
             <FormLabel className="flex items-center gap-2">
               <Ticket className="h-4 w-4 text-muted-foreground" />
-              Vincular a un Ticket <span className="text-red-500">*</span>
+              {t("itAssets.components.ticketOutSection.label")} <span className="text-red-500">*</span>
             </FormLabel>
             <Select onValueChange={field.onChange} value={field.value} disabled={isLoadingTickets || isDisabled}>
               <FormControl>
                 {/* AQUÍ AGREGAMOS w-full PARA QUE OCUPE TODO A LO ANCHO */}
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecciona un ticket asignado..." />
+                  <SelectValue placeholder={t("itAssets.components.ticketOutSection.placeholder")} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -60,7 +62,7 @@ export const TicketOutSection = ({ isDisabled }: Props) => {
                 <div className="flex items-center justify-between border-b border-primary/10 pb-3 mb-4">
                   <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
                     <Info className="h-4 w-4 text-primary" />
-                    Información del Ticket
+                    {t("itAssets.components.ticketOutSection.previewTitle")}
                   </h4>
                   <span className="bg-primary/10 text-primary px-2.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider">
                     {selectedTicket.status}
@@ -71,7 +73,9 @@ export const TicketOutSection = ({ isDisabled }: Props) => {
                   
                   {/* Folio */}
                   <div>
-                    <span className="block font-semibold text-muted-foreground mb-1">Folio:</span>
+                    <span className="block font-semibold text-muted-foreground mb-1">
+                      {t("itAssets.components.ticketOutSection.folio")}
+                    </span>
                     <span className="inline-flex items-center rounded-md bg-background px-2.5 py-1 text-xs font-mono font-medium text-foreground border border-border shadow-sm">
                       {selectedTicket.folio}
                     </span>
@@ -80,7 +84,7 @@ export const TicketOutSection = ({ isDisabled }: Props) => {
                   {/* Fecha de Creación */}
                   <div>
                     <span className="flex items-center gap-1.5 font-semibold text-muted-foreground mb-1">
-                      <Calendar className="h-3.5 w-3.5" /> Fecha de creación:
+                      <Calendar className="h-3.5 w-3.5" /> {t("itAssets.components.ticketOutSection.createdAt")}
                     </span>
                     <p className="text-foreground font-medium pl-5">
                       {new Date(selectedTicket.created_at).toLocaleDateString("es-MX", {
@@ -96,30 +100,34 @@ export const TicketOutSection = ({ isDisabled }: Props) => {
                   {/* Prioridad */}
                   <div>
                     <span className="flex items-center gap-1.5 font-semibold text-muted-foreground mb-1">
-                      <AlertCircle className="h-3.5 w-3.5" /> Prioridad:
+                      <AlertCircle className="h-3.5 w-3.5" /> {t("itAssets.components.ticketOutSection.priority")}
                     </span>
                     <p className="text-foreground font-medium pl-5">
-                      Nivel {selectedTicket.priority}
+                      {t("itAssets.components.ticketOutSection.level")} {selectedTicket.priority}
                     </p>
                   </div>
 
                   {/* Tipo de problema */}
                   <div>
-                    <span className="block font-semibold text-muted-foreground mb-1">Tipo de problema:</span>
+                    <span className="block font-semibold text-muted-foreground mb-1">
+                      {t("itAssets.components.ticketOutSection.issueType")}
+                    </span>
                     <p className="text-foreground font-medium">{selectedTicket.issue_type?.name}</p>
                   </div>
 
                   {/* Periodo Escolar */}
                   <div className="sm:col-span-2 lg:col-span-2">
                     <span className="flex items-center gap-1.5 font-semibold text-muted-foreground mb-1">
-                      <Clock className="h-3.5 w-3.5" /> Periodo Escolar:
+                      <Clock className="h-3.5 w-3.5" /> {t("itAssets.components.ticketOutSection.schoolPeriod")}
                     </span>
                     <p className="text-foreground font-medium pl-5">{selectedTicket.school_period?.name}</p>
                   </div>
 
                   {/* Reportado por */}
                   <div className="sm:col-span-2 lg:col-span-3 bg-background/50 p-3.5 rounded-md border border-border/50 mt-1">
-                    <span className="block font-semibold text-muted-foreground mb-2">Reportado por:</span>
+                    <span className="block font-semibold text-muted-foreground mb-2">
+                      {t("itAssets.components.ticketOutSection.reportedBy")}
+                    </span>
                     <div className="flex flex-col gap-1.5">
                       <p className="text-base text-foreground font-bold leading-none">
                         {selectedTicket.jefe_depto?.full_name}
@@ -139,7 +147,9 @@ export const TicketOutSection = ({ isDisabled }: Props) => {
 
                   {/* Descripción */}
                   <div className="sm:col-span-2 lg:col-span-3 mt-1">
-                    <span className="block font-semibold text-muted-foreground mb-2">Descripción del problema:</span>
+                    <span className="block font-semibold text-muted-foreground mb-2">
+                      {t("itAssets.components.ticketOutSection.description")}
+                    </span>
                     <p className="text-foreground italic bg-background p-3.5 rounded-md border border-border/50 whitespace-pre-wrap leading-relaxed shadow-inner">
                       "{selectedTicket.description}"
                     </p>

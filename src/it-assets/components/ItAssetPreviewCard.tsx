@@ -2,6 +2,7 @@ import { Monitor, Layers, Tag, Receipt, Info, Box, type LucideIcon } from "lucid
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
 
 interface Props {
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export const ItAssetPreviewCard = ({ asset }: Props) => {
+  const { t } = useTranslation();
+
   return (
     <div className="md:col-span-1 space-y-6 md:sticky md:top-24">
       <Card className="overflow-hidden shadow-md border-border/60 transition-all duration-300 hover:shadow-lg">
@@ -24,20 +27,24 @@ export const ItAssetPreviewCard = ({ asset }: Props) => {
                 asset.status ? "text-emerald-600 dark:text-emerald-400" : "text-destructive"
               )}
             >
-              {asset.status ? "ACTIVO" : "INACTIVO"}
+              {asset.status 
+                ? t("itAssets.components.assetPreviewCard.status.active") 
+                : t("itAssets.components.assetPreviewCard.status.inactive")}
             </Badge>
           </div>
 
           {asset.imageUrl ? (
             <img 
               src={asset.imageUrl} 
-              alt={`Activo ${asset.serialNumber}`} 
+              alt={t("itAssets.components.assetPreviewCard.imageAlt", { serial: asset.serialNumber })} 
               className="w-full h-full object-contain drop-shadow-xl transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
             <div className="flex flex-col items-center gap-3 text-muted-foreground/40">
               <Monitor className="h-16 w-16" />
-              <span className="text-xs font-semibold uppercase tracking-widest">Sin Imagen</span>
+              <span className="text-xs font-semibold uppercase tracking-widest">
+                {t("itAssets.components.assetPreviewCard.noImage")}
+              </span>
             </div>
           )}
         </div>
@@ -50,14 +57,16 @@ export const ItAssetPreviewCard = ({ asset }: Props) => {
             <div className="flex items-center gap-2 mb-1.5">
               <Box className="h-4 w-4 text-primary" />
               <p className="text-xs font-bold text-primary uppercase tracking-wider">
-                Ficha del Activo
+                {t("itAssets.components.assetPreviewCard.title")}
               </p>
             </div>
-            <h3 className="text-xl font-black leading-none text-foreground mb-2">
+            {/* Se agregó break-all, whitespace-normal y se ajustó el leading */}
+            <h3 className="text-xl font-black leading-tight text-foreground mb-2 break-all whitespace-normal">
               {asset.serialNumber}
             </h3>
-            <div className="inline-flex items-center rounded-md bg-muted/60 px-2 py-1 text-xs font-mono text-muted-foreground border border-border/50">
-              ID: {asset.idInventary || "Sin ID asignado"}
+            {/* Se agregó break-all y whitespace-normal para que el ID rompa línea si es muy largo */}
+            <div className="inline-flex items-center rounded-md bg-muted/60 px-2 py-1 text-xs font-mono text-muted-foreground border border-border/50 break-all whitespace-normal text-left">
+              {t("itAssets.components.assetPreviewCard.id")}: {asset.idInventary || t("itAssets.components.assetPreviewCard.noId")}
             </div>
           </div>
 
@@ -66,35 +75,36 @@ export const ItAssetPreviewCard = ({ asset }: Props) => {
             
             <PreviewRow 
               icon={Tag} 
-              label="Tipo" 
-              value={asset.itAssetsType?.name || "N/A"} 
+              label={t("itAssets.components.assetPreviewCard.details.type")} 
+              value={asset.itAssetsType?.name || t("itAssets.components.assetPreviewCard.details.na")} 
             />
             
             <div className="flex items-start justify-between text-sm group">
               <span className="text-muted-foreground flex items-center gap-2">
                 <Layers className="h-4 w-4 text-muted-foreground/70" /> 
-                <span>Modelo</span>
+                <span>{t("itAssets.components.assetPreviewCard.details.model")}</span>
               </span>
               <div className="text-right">
-                <span className="font-semibold text-foreground block">
-                  {asset.model?.name || "N/A"}
+                {/* Agregado break-all al nombre del modelo por precaución */}
+                <span className="font-semibold text-foreground block break-all whitespace-normal text-right">
+                  {asset.model?.name || t("itAssets.components.assetPreviewCard.details.na")}
                 </span>
                 <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">
-                  {asset.model?.brand?.name || "Sin Marca"}
+                  {asset.model?.brand?.name || t("itAssets.components.assetPreviewCard.details.noBrand")}
                 </span>
               </div>
             </div>
 
             <PreviewRow 
               icon={Info} 
-              label="Estado Físico" 
-              value={asset.itAssetStatus?.name || "N/A"} 
+              label={t("itAssets.components.assetPreviewCard.details.status")} 
+              value={asset.itAssetStatus?.name || t("itAssets.components.assetPreviewCard.details.na")} 
             />
 
             <PreviewRow 
               icon={Receipt} 
-              label="Factura" 
-              value={asset.invoice?.idInternal || "Sin factura"} 
+              label={t("itAssets.components.assetPreviewCard.details.invoice")} 
+              value={asset.invoice?.idInternal || t("itAssets.components.assetPreviewCard.details.noInvoice")} 
               isLast
             />
             
@@ -107,14 +117,15 @@ export const ItAssetPreviewCard = ({ asset }: Props) => {
 
 const PreviewRow = ({ icon: Icon, label, value, isLast }: { icon: LucideIcon, label: string, value: string, isLast?: boolean }) => (
   <div className={cn(
-    "flex items-center justify-between text-sm pb-3",
+    "flex items-start justify-between text-sm pb-3", // Cambiado items-center a items-start
     !isLast && "border-b border-border/50"
   )}>
-    <span className="text-muted-foreground flex items-center gap-2">
+    <span className="text-muted-foreground flex items-center gap-2 pt-0.5 shrink-0">
       <Icon className="h-4 w-4 text-muted-foreground/70" /> 
       <span>{label}</span>
     </span>
-    <span className="font-semibold text-foreground text-right">
+    {/* Se agregó text-right, break-all y whitespace-normal a los valores de las filas */}
+    <span className="font-semibold text-foreground text-right break-all whitespace-normal pl-2">
       {value}
     </span>
   </div>

@@ -5,9 +5,11 @@ import { useItAssetsTypes } from "../hooks/useItAssetsTypes";
 import { sileo } from "sileo";
 import { InfiniteScrollSelect } from "@/components/custom/InfiniteScrollSelect";
 import { isAxiosError } from "axios";
+import { useTranslation } from "react-i18next";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 
 export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
+  const { t } = useTranslation();
   const { control } = useFormContext();
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -32,7 +34,7 @@ export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean,
 
         return (
           <FormItem className="w-full">
-            <FormLabel>Tipo de Activo <span className="text-red-500">*</span></FormLabel>
+            <FormLabel>{t("itAssets.components.typeSelectField.label")} <span className="text-red-500">*</span></FormLabel>
             <FormControl>
               <InfiniteScrollSelect
                 options={options}
@@ -43,22 +45,22 @@ export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean,
                 hasNextPage={!!hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 isLoading={isLoading}
-                placeholder="Buscar o crear tipo..."
+                placeholder={t("itAssets.components.typeSelectField.placeholder")}
                 disabled={disabled || isCreating}
                 allowCreate={true}
                 onCreate={async (newItemName) => {
                   try {
                     const newType = await sileo.promise(createType({ name: newItemName }), {
-                      loading: { title: `Creando tipo "${newItemName}"...` },
-                      success: { title: "Tipo creado exitosamente" },
+                      loading: { title: t("itAssets.components.typeSelectField.sileo.loading.title", { name: newItemName }) },
+                      success: { title: t("itAssets.components.typeSelectField.sileo.success.title") },
                       error: (err) => {
-                        let backendMessage = "Error al crear la marca";
+                        let backendMessage = t("itAssets.components.typeSelectField.sileo.error.defaultMessage");
                         if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
                           const rawMessage = err.response.data.message;
                           backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
                         }
                         return {
-                          title: "Error",
+                          title: t("itAssets.components.typeSelectField.sileo.error.title"),
                           description: backendMessage,
                           duration: 5000,
                         };

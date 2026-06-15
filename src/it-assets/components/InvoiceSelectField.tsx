@@ -5,9 +5,11 @@ import { useItAssetsInvoices } from "../hooks/useItAssetsInvoices";
 import { sileo } from "sileo";
 import { InfiniteScrollSelect } from "@/components/custom/InfiniteScrollSelect";
 import { isAxiosError } from "axios";
+import { useTranslation } from "react-i18next";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 
 export const InvoiceSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
+  const { t } = useTranslation();
   const { control } = useFormContext();
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -22,9 +24,9 @@ export const InvoiceSelectField = ({ disabled, initialData }: { disabled?: boole
   const options = useMemo(() => {
     return itAssetsInvoices.map(invoice => ({ 
       id: invoice.id,
-      name: invoice.idInternal || "Sin nombre"
+      name: invoice.idInternal || t("itAssets.components.invoiceSelectField.unnamed")
     }));
-  }, [itAssetsInvoices]);
+  }, [itAssetsInvoices, t]);
 
   return (
     <FormField
@@ -35,7 +37,7 @@ export const InvoiceSelectField = ({ disabled, initialData }: { disabled?: boole
 
         return (
           <FormItem className="w-full">
-            <FormLabel>Factura (Opcional)</FormLabel>
+            <FormLabel>{t("itAssets.components.invoiceSelectField.label")}</FormLabel>
             <FormControl>
               <InfiniteScrollSelect
                 options={options}
@@ -46,22 +48,22 @@ export const InvoiceSelectField = ({ disabled, initialData }: { disabled?: boole
                 hasNextPage={!!hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 isLoading={isLoading}
-                placeholder="Buscar o crear factura..."
+                placeholder={t("itAssets.components.invoiceSelectField.placeholder")}
                 disabled={disabled || isCreating}
                 allowCreate={true}
                 onCreate={async (newItemName) => {
                   try {
                     const newInvoice = await sileo.promise(createInvoice({ idInternal: newItemName }), {
-                      loading: { title: `Creando factura...` },
-                      success: { title: "Factura creada" },
+                      loading: { title: t("itAssets.components.invoiceSelectField.sileo.loading.title") },
+                      success: { title: t("itAssets.components.invoiceSelectField.sileo.success.title") },
                       error: (err) => {
-                        let backendMessage = "Error al crear la marca";
+                        let backendMessage = t("itAssets.components.invoiceSelectField.sileo.error.defaultMessage");
                         if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
                           const rawMessage = err.response.data.message;
                           backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
                         }
                         return {
-                          title: "Error",
+                          title: t("itAssets.components.invoiceSelectField.sileo.error.title"),
                           description: backendMessage,
                           duration: 5000,
                         };

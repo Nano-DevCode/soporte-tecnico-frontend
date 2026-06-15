@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { FilterX, Search } from "lucide-react";
 import { useSearchParams } from "react-router";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { InfiniteScrollSelect } from "../../components/custom/InfiniteScrollSelect";
 
 // IMPORTANTE: Asegúrate de que las rutas a tus hooks coincidan con tu estructura
@@ -13,6 +13,7 @@ import { useItAssetsBrands } from "../hooks/useItAssetsBrands";
 import { useItAssetsModels } from "../hooks/useItAssetsModels";
 
 export const CustomItAssetFilters = memo(() => {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -112,18 +113,18 @@ export const CustomItAssetFilters = memo(() => {
   // Reconstrucción de objetos para el componente Select
   const selectedTypeObj = useMemo(() => {
     if (!typeFilterId) return null;
-    return itAssetsTypes?.find(t => t.id === typeFilterId) || { id: typeFilterId, name: "Seleccionado..." };
-  }, [typeFilterId, itAssetsTypes]);
+    return itAssetsTypes?.find(tObj => tObj.id === typeFilterId) || { id: typeFilterId, name: t("itAssets.components.filters.selected") };
+  }, [typeFilterId, itAssetsTypes, t]);
 
   const selectedBrandObj = useMemo(() => {
     if (!brandFilterId) return null;
-    return itAssetsBrands?.find(b => b.id === brandFilterId) || { id: brandFilterId, name: "Seleccionado..." };
-  }, [brandFilterId, itAssetsBrands]);
+    return itAssetsBrands?.find(b => b.id === brandFilterId) || { id: brandFilterId, name: t("itAssets.components.filters.selected") };
+  }, [brandFilterId, itAssetsBrands, t]);
 
   const selectedModelObj = useMemo(() => {
     if (!modelFilterId) return null;
-    return itAssetsModels?.find(m => m.id === modelFilterId) || { id: modelFilterId, name: "Seleccionado..." };
-  }, [modelFilterId, itAssetsModels]);
+    return itAssetsModels?.find(m => m.id === modelFilterId) || { id: modelFilterId, name: t("itAssets.components.filters.selected") };
+  }, [modelFilterId, itAssetsModels, t]);
 
   // Evaluar si hay filtros activos
   const hasActiveFilters = 
@@ -143,7 +144,7 @@ export const CustomItAssetFilters = memo(() => {
           <Input
             ref={inputRef}
             type="text"
-            placeholder="Buscar por N° Serie o ID Inventario..."
+            placeholder={t("itAssets.components.filters.searchPlaceholder")}
             className="w-full pl-9 bg-background/60 h-10"
             value={globalSearch}
             onChange={(e) => setGlobalSearch(e.target.value)}
@@ -152,12 +153,12 @@ export const CustomItAssetFilters = memo(() => {
 
         <Select value={statusFilter} onValueChange={(v) => updateFilters("status", v)}>
           <SelectTrigger className="w-full sm:w-[200px] h-10 bg-background/60">
-            <SelectValue placeholder="Estado" />
+            <SelectValue placeholder={t("itAssets.components.filters.statusPlaceholder")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("custom_department_filters_all_status") || "Todos los Estados"}</SelectItem>
-            <SelectItem value="true">{t("custom_department_filters_active_status") || "Activos"}</SelectItem>
-            <SelectItem value="false">{t("custom_department_filters_inactive_status") || "Inactivos"}</SelectItem>
+            <SelectItem value="all">{t("itAssets.components.filters.status.all")}</SelectItem>
+            <SelectItem value="true">{t("itAssets.components.filters.status.active")}</SelectItem>
+            <SelectItem value="false">{t("itAssets.components.filters.status.inactive")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -176,7 +177,7 @@ export const CustomItAssetFilters = memo(() => {
             hasNextPage={!!hasNextTypePage}
             isFetchingNextPage={isFetchingNextType}
             isLoading={isLoadingTypes}
-            placeholder="Filtrar por Tipo..."
+            placeholder={t("itAssets.components.filters.typePlaceholder")}
           />
         </div>
 
@@ -191,7 +192,7 @@ export const CustomItAssetFilters = memo(() => {
             hasNextPage={!!hasNextBrandPage}
             isFetchingNextPage={isFetchingNextBrand}
             isLoading={isLoadingBrands}
-            placeholder="Filtrar por Marca..."
+            placeholder={t("itAssets.components.filters.brandPlaceholder")}
           />
         </div>
 
@@ -206,7 +207,7 @@ export const CustomItAssetFilters = memo(() => {
             hasNextPage={!!hasNextModelPage}
             isFetchingNextPage={isFetchingNextModel}
             isLoading={isLoadingModels}
-            placeholder="Filtrar por Modelo..."
+            placeholder={t("itAssets.components.filters.modelPlaceholder")}
           />
         </div>
 
@@ -218,7 +219,7 @@ export const CustomItAssetFilters = memo(() => {
             className="w-full sm:w-auto h-10 px-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all border border-transparent hover:border-destructive/20 shrink-0"
           >
             <FilterX className="h-4 w-4 mr-2" />
-            <span>{t("clear") || "Limpiar"}</span>
+            <span>{t("itAssets.components.filters.clear")}</span>
           </Button>
         )}
       </div>

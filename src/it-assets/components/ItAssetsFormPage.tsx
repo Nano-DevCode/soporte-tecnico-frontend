@@ -1,5 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import { Info } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // UI Components
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -33,6 +34,7 @@ export const ItAssetsForm = ({
   isLoadingStatus,
   itAssetInitialData
 }: ItAssetsFormProps) => {
+  const { t } = useTranslation();
   const form = useFormContext();
 
   // Escuchamos el estado seleccionado para mostrar su descripción
@@ -50,9 +52,9 @@ export const ItAssetsForm = ({
           name="serialNumber"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Número de Serie <span className="text-red-500">*</span></FormLabel>
+              <FormLabel>{t("itAssets.components.form.serialNumber.label")} <span className="text-red-500">*</span></FormLabel>
               <FormControl>
-                <Input placeholder="Ej. PF3ZQ..." {...field} disabled={isSaving} />
+                <Input placeholder={t("itAssets.components.form.serialNumber.placeholder")} {...field} disabled={isSaving} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -65,9 +67,9 @@ export const ItAssetsForm = ({
           name="idInventary"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>ID Inventario Interno (Opcional)</FormLabel>
+              <FormLabel>{t("itAssets.components.form.idInventory.label")}</FormLabel>
               <FormControl>
-                <Input placeholder="Ej. ITO-PC-001" {...field} disabled={isSaving} />
+                <Input placeholder={t("itAssets.components.form.idInventory.placeholder")} {...field} disabled={isSaving} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -103,11 +105,15 @@ export const ItAssetsForm = ({
           name="statusId"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>{!showObservations ? "Estado Físico" : "Estado Físico Inicial"} <span className="text-red-500">*</span></FormLabel>
+              <FormLabel>
+                {!showObservations 
+                  ? t("itAssets.components.form.status.labelEdit") 
+                  : t("itAssets.components.form.status.labelCreate")} <span className="text-red-500">*</span>
+              </FormLabel>
               <Select onValueChange={field.onChange} value={field.value} disabled={isLoadingStatus || isSaving}>
                 <FormControl>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecciona un estado..." />
+                    <SelectValue placeholder={t("itAssets.components.form.status.placeholder")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -130,7 +136,7 @@ export const ItAssetsForm = ({
         <div className="flex gap-2 items-start bg-blue-50/50 dark:bg-blue-950/20 p-3.5 rounded-md border border-blue-100 dark:border-blue-900/50 animate-in fade-in zoom-in-95 duration-200">
           <Info className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
           <p className="text-sm text-muted-foreground leading-relaxed">
-            <strong className="text-foreground/80 block mb-0.5">Descripción del estado seleccionado:</strong>
+            <strong className="text-foreground/80 block mb-0.5">{t("itAssets.components.form.status.descriptionTitle")}</strong>
             {selectedStatusDetail.description}
           </p>
         </div>
@@ -148,10 +154,10 @@ export const ItAssetsForm = ({
         name="description"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Descripción del Activo (Opcional)</FormLabel>
+            <FormLabel>{t("itAssets.components.form.description.label")}</FormLabel>
             <FormControl>
               <Textarea 
-                placeholder="Características especiales, color, ubicación inicial..." 
+                placeholder={t("itAssets.components.form.description.placeholder")} 
                 className="resize-none" 
                 {...field} 
                 disabled={isSaving} 
@@ -169,10 +175,10 @@ export const ItAssetsForm = ({
           name="observations"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Observaciones Iniciales (Opcional)</FormLabel>
+              <FormLabel>{t("itAssets.components.form.observations.label")}</FormLabel>
               <FormControl>
                 <Textarea 
-                  placeholder="Detalles sobre desperfectos de fábrica, faltantes en entrega..." 
+                  placeholder={t("itAssets.components.form.observations.placeholder")} 
                   className="resize-none" 
                   {...field} 
                   disabled={isSaving} 
@@ -186,3 +192,5 @@ export const ItAssetsForm = ({
     </div>
   );
 };
+
+export default ItAssetsForm;

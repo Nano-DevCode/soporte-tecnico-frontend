@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getStaffRoleSpecificAction } from '@/it-assets/actions/get-staffRoleSpecific';
+import { getStaffRoleSpecificAction } from '@/users/actions/get-staffRoleSpecific';
 
 export const useStaffRoleSpecific = (searchTerm: string = "") => {
   const query = useInfiniteQuery({

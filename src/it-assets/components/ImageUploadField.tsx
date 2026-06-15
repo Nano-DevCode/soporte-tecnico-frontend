@@ -3,6 +3,7 @@ import { useFormContext } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { UploadCloud, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface ImageUploadProps {
   disabled?: boolean;
@@ -10,6 +11,7 @@ interface ImageUploadProps {
 }
 
 export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps) => {
+  const { t } = useTranslation();
   const { control } = useFormContext();
   
   // Iniciamos la vista previa con la imagen actual si existe
@@ -43,7 +45,7 @@ export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps
       render={({ field }) => (
         <FormItem className="w-full md:col-span-2">
           <FormLabel>
-            Fotografía del Activo 
+            {t("itAssets.components.imageUploadField.label")}
             {/* Solo mostramos el asterisco si NO hay una imagen previa (modo creación) */}
             {!previewUrl && <span className="text-red-500"> *</span>}
           </FormLabel>
@@ -67,15 +69,17 @@ export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps
                 >
                   <UploadCloud className="h-10 w-10 text-primary mb-3" />
                   <p className="text-sm font-medium text-foreground mb-1">
-                    Haz clic para subir una imagen
+                    {t("itAssets.components.imageUploadField.clickToUpload")}
                   </p>
-                  <p className="text-xs text-muted-foreground">PNG, JPG o WEBP (Máx. 5MB)</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("itAssets.components.imageUploadField.formats")}
+                  </p>
                 </div>
               ) : (
                 <div className="relative w-full sm:w-1/2 rounded-lg overflow-hidden border border-border bg-muted/30 group">
                   <img 
                     src={previewUrl} 
-                    alt="Vista previa" 
+                    alt={t("itAssets.components.imageUploadField.previewAlt")} 
                     className="w-full h-auto object-contain max-h-60"
                   />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -87,7 +91,7 @@ export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps
                       onClick={() => handleRemove(field.onChange)}
                       className="gap-2"
                     >
-                      <X className="h-4 w-4" /> Cambiar foto
+                      <X className="h-4 w-4" /> {t("itAssets.components.imageUploadField.changePhoto")}
                     </Button>
                   </div>
                 </div>

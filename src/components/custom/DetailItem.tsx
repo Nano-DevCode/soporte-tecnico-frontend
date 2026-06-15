@@ -27,18 +27,20 @@ const DetailItem = ({ icon: Icon, label, value, subValue, isTextarea }: DetailIt
       {/* Contenido */}
       <div className={cn(!isTextarea && "pl-1")}>
         {isTextarea ? (
-          // Bloque de nota
-          <div className="bg-muted/10 p-4 rounded-lg border border-border/60 text-sm text-foreground whitespace-pre-wrap min-h-[80px] leading-relaxed shadow-sm transition-colors hover:bg-muted/20">
+          // Bloque de nota (Añadido break-words por seguridad)
+          <div className="bg-muted/10 p-4 rounded-lg border border-border/60 text-sm text-foreground whitespace-pre-wrap break-words min-h-[80px] leading-relaxed shadow-sm transition-colors hover:bg-muted/20">
             {value}
           </div>
         ) : (
           // Estilo de texto normal con sub-valor
           <div className="space-y-0.5">
-            <p className="text-sm font-semibold text-foreground leading-snug">
+            {/* SE AGREGÓ "break-all" AQUÍ */}
+            <p className="text-sm font-semibold text-foreground leading-snug break-all">
               {value}
             </p>
             {subValue && (
-              <p className="text-xs font-medium text-muted-foreground/80 leading-relaxed">
+              <p className="text-xs font-medium text-muted-foreground/80 leading-relaxed break-all">
+                {/* SE AGREGÓ "break-all" AQUÍ */}
                 {subValue}
               </p>
             )}

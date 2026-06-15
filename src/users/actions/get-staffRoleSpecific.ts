@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
-import type { StaffsWithSpecificsRolesResponse } from "../interfaces/staffsWithSpecificsRolesResponse.interface";
+import type { StaffsWithSpecificsRolesResponse } from "../../it-assets/interfaces/staffsWithSpecificsRolesResponse.interface";
 
 interface Options {
   query?: string;

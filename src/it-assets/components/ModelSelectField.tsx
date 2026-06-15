@@ -4,10 +4,12 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { useItAssetsModels } from "../hooks/useItAssetsModels";
 import { sileo } from "sileo";
 import { InfiniteScrollSelect } from "@/components/custom/InfiniteScrollSelect";
+import { useTranslation } from "react-i18next";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { isAxiosError } from "axios";
 
 export const ModelSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
+  const { t } = useTranslation();
   const { control, watch, setValue } = useFormContext();
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -46,7 +48,7 @@ export const ModelSelectField = ({ disabled, initialData }: { disabled?: boolean
 
         return (
           <FormItem className="w-full">
-            <FormLabel>Modelo <span className="text-red-500">*</span></FormLabel>
+            <FormLabel>{t("itAssets.components.modelSelectField.label")} <span className="text-red-500">*</span></FormLabel>
             <FormControl>
               <InfiniteScrollSelect
                 options={options}
@@ -57,23 +59,23 @@ export const ModelSelectField = ({ disabled, initialData }: { disabled?: boolean
                 hasNextPage={!!hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 isLoading={isLoading}
-                placeholder={selectedBrandId ? "Buscar o crear modelo..." : "Selecciona una marca primero"}
+                placeholder={selectedBrandId ? t("itAssets.components.modelSelectField.placeholder") : t("itAssets.components.modelSelectField.placeholderDisabled")}
                 disabled={isFieldDisabled}
                 allowCreate={!!selectedBrandId} 
                 onCreate={async (newItemName) => {
                   if (!selectedBrandId) return;
                   try {
                     const newModel = await sileo.promise(createModel({ name: newItemName, brandId: selectedBrandId }), {
-                      loading: { title: `Creando modelo "${newItemName}"...` },
-                      success: { title: "Modelo creado" },
+                      loading: { title: t("itAssets.components.modelSelectField.sileo.loading.title", { name: newItemName }) },
+                      success: { title: t("itAssets.components.modelSelectField.sileo.success.title") },
                       error: (err) => {
-                        let backendMessage = "Error al crear la marca";
+                        let backendMessage = t("itAssets.components.modelSelectField.sileo.error.defaultMessage");
                         if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
                           const rawMessage = err.response.data.message;
                           backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
                         }
                         return {
-                          title: "Error",
+                          title: t("itAssets.components.modelSelectField.sileo.error.title"),
                           description: backendMessage,
                           duration: 5000,
                         };

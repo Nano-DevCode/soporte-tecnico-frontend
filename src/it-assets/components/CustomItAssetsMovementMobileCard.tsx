@@ -4,6 +4,7 @@ import { Eye, ArrowRightLeft, ArrowDownRight, ArrowUpRight, Monitor } from "luci
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 import type { ItAssetsMovement } from "../interfaces/itAssetsMovementResponse";
 
 interface Props {
@@ -11,6 +12,8 @@ interface Props {
 }
 
 export const CustomItAssetsMovementMobileCard = memo(({ movements }: Props) => {
+  const { t } = useTranslation();
+
   return (
     <div className="md:hidden space-y-3">
       {movements.map((mov) => {
@@ -29,7 +32,7 @@ export const CustomItAssetsMovementMobileCard = memo(({ movements }: Props) => {
               {mov.itAsset.imageUrl ? (
                 <img 
                   src={mov.itAsset.imageUrl} 
-                  alt="Activo" 
+                  alt={t("itAssets.components.movementMobileCard.imageAlt")} 
                   className="h-full w-full object-cover" 
                 />
               ) : (
@@ -50,19 +53,23 @@ export const CustomItAssetsMovementMobileCard = memo(({ movements }: Props) => {
                   )}
                 >
                   {isInput ? <ArrowDownRight className="w-3 h-3" /> : <ArrowUpRight className="w-3 h-3" />}
-                  {isInput ? 'ENTRADA' : 'SALIDA'}
+                  {isInput 
+                    ? t("itAssets.components.movementMobileCard.badges.in") 
+                    : t("itAssets.components.movementMobileCard.badges.out")}
                 </Badge>
-                <span className="text-[10px] text-muted-foreground font-medium">
+                <span className="text-[10px] text-muted-foreground font-medium shrink-0">
                   {formattedDate}
                 </span>
               </div>
 
-              <p className="text-sm font-bold text-foreground leading-snug truncate">
+              {/* Se quitó 'truncate' y se agregó 'whitespace-normal break-words' */}
+              <p className="text-sm font-bold text-foreground leading-snug whitespace-normal break-words">
                 {mov.itAsset.serialNumber}
               </p>
 
-              <p className="text-xs text-muted-foreground font-mono truncate">
-                ID: {mov.itAsset.idInventary || "N/A"}
+              {/* Se cambió a 'ID INVENTARIO INTERNO', se quitó 'truncate' y se agregó 'whitespace-normal break-words' */}
+              <p className="text-xs text-muted-foreground font-mono whitespace-normal break-words">
+                ID INVENTARIO INTERNO: {mov.itAsset.idInventary || t("itAssets.components.movementMobileCard.assetInfo.na")}
               </p>
             </div>
 
@@ -82,10 +89,10 @@ export const CustomItAssetsMovementMobileCard = memo(({ movements }: Props) => {
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card py-16">
           <ArrowRightLeft className="h-10 w-10 text-muted-foreground/40" />
           <p className="mt-3 text-sm font-medium text-muted-foreground">
-            No se encontraron movimientos
+            {t("itAssets.components.movementMobileCard.emptyState.title")}
           </p>
           <p className="mt-1 text-xs text-muted-foreground/70 text-center px-4">
-            Intenta ajustar los filtros de búsqueda.
+            {t("itAssets.components.movementMobileCard.emptyState.description")}
           </p>
         </div>
       )}

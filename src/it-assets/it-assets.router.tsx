@@ -9,6 +9,8 @@ const ItAssetsUpdatePage = lazy(() => import("./pages/ItAssetsUpdatePage"));
 const ItAssetsPage = lazy(() => import("./pages/ItAssetsPage").then(module => ({ default: module.ItAssetsPage })));
 const ItAssetsMovementsPage = lazy(() => import("./pages/ItAssetsMovementsPage").then(module => ({ default: module.ItAssetsMovementsPage })));
 const ItAssetsMovementViewPage = lazy(() => import("./pages/ItAssetsMovementViewPage").then(module => ({ default: module.ItAssetsMovementViewPage })));
+const ItAssetsDetailsPage = lazy(() => import("./pages/ItAssetsDetailsPage").then(module => ({ default: module.default })));
+
 
 export const itAssetRoutes = [
     {
@@ -65,6 +67,14 @@ export const itAssetRoutes = [
             <SuspenseWrapper>
                 <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}/>
                 <ItAssetsMovementViewPage />
+            </SuspenseWrapper>
+    },
+    {
+        path: ':id',
+        element: 
+            <SuspenseWrapper>
+                <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}/>
+                <ItAssetsDetailsPage />
             </SuspenseWrapper>
     }
 ];
