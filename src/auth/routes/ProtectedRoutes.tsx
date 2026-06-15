@@ -45,6 +45,7 @@ export const RedirectPerRole = () => {
     isSecretaryCC,
     isSuperAdmin,
     isTechnician,
+    isVisitor
   } = useUserRoles();
 
   if (isSuperAdmin)  return <Navigate to='/' />;
@@ -54,6 +55,7 @@ export const RedirectPerRole = () => {
   if (isPlaning)     return <Navigate to='/' />;
   if (isSecretaryCC) return <Navigate to='/' />;
   if (isTechnician)  return <Navigate to='/' />;
+  if (isVisitor)  return <Navigate to='/' />;
 
   return <Navigate to='/auth/login' />;
 };
