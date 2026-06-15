@@ -10,8 +10,8 @@ import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessa
 import { Textarea } from "@/components/ui/textarea";
 
 // Custom Components
-import { InfiniteScrollSelect } from "@/Equipments/components/infinite-scroll-selectEqip";
 import type { Staff } from "../interfaces/staffsWithSpecificsRolesResponse.interface";
+import { InfiniteScrollSelect } from "@/components/custom/InfiniteScrollSelect";
 
 interface Props {
   isDisabled: boolean;

@@ -2109,8 +2109,209 @@
           "description": "El activo ha cambiado de estado correctamente en la base de datos."
         },
         "error": {
-          "title": "No se pudo actualizar"
+          "title": "No se pudo actualizar",
+          "defaultMessage": "Ocurrió un error inesperado en el servidor."
         }
+      }
+    },
+    "createPage": {
+      "header": {
+        "title": "Crear Activo de TI",
+        "description": "Registra un nuevo equipo de cómputo, componente o periférico en el sistema."
+      },
+      "card": {
+        "title": "Información del Activo",
+        "description": "Completa los detalles para dar de alta el nuevo activo."
+      },
+      "validation": {
+        "serialNumber": "El número de serie es obligatorio",
+        "typeId": "El tipo de activo es obligatorio",
+        "brandId": "La marca es obligatoria",
+        "modelId": "El modelo es obligatorio",
+        "statusId": "El estado inicial es obligatorio",
+        "imageFile": "Debe seleccionar un archivo de imagen válido"
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "submitting": "Guardando...",
+        "submit": "Guardar Activo"
+      },
+      "sileo": {
+        "loading": {
+          "title": "Guardando el activo..."
+        },
+        "success": {
+          "title": "Activo creado",
+          "description": "El activo de TI se ha registrado correctamente en la base de datos."
+        },
+        "error": {
+          "title": "No se pudo crear",
+          "defaultMessage": "Ocurrió un error inesperado al intentar guardar el activo."
+        }
+      }
+    },
+    "movementIn": {
+      "validation": {
+        "statusRequired": "Debes seleccionar un estado"
+      },
+      "sileo": {
+        "loading": {
+          "title": "Registrando entrada..."
+        },
+        "success": {
+          "title": "Entrada registrada",
+          "description": "El activo se ha ingresado correctamente al inventario."
+        },
+        "error": {
+          "title": "Error al registrar entrada",
+          "defaultMessage": "Error en el servidor al intentar registrar la entrada."
+        }
+      },
+      "notFound": {
+        "title": "Activo no encontrado",
+        "button": "Volver al catálogo"
+      },
+      "header": {
+        "title": "Registrar Entrada",
+        "description": "Recibe este equipo y actualiza su condición física."
+      },
+      "card": {
+        "title": "Detalles de la Recepción",
+        "description": "Verifica en qué condiciones regresa el activo y anota cualquier detalle importante."
+      },
+      "form": {
+        "statusLabel": "Estado físico al momento de entrar",
+        "unknownStatus": "Estado Desconocido",
+        "statusPlaceholder": "Selecciona el estado físico del equipo",
+        "statusDescriptionLabel": "Descripción del estado:",
+        "observationsLabel": "Observaciones (Opcional)",
+        "observationsPlaceholder": "Ej. El equipo regresó con polvo, pantalla sucia, cable doblado..."
+      },
+      "buttons": {
+        "changeStatus": "Cambiar Estado",
+        "cancel": "Cancelar",
+        "submitting": "Registrando...",
+        "submit": "Registrar Entrada"
+      }
+    },
+    "movementOut": {
+      "validation": {
+        "statusRequired": "Debes seleccionar un estado",
+        "staffRequired": "Debes seleccionar un empleado para esta salida",
+        "descriptionLength": "La descripción es obligatoria y debe tener al menos 10 caracteres",
+        "ticketRequired": "Debes vincular un ticket para esta salida"
+      },
+      "sileo": {
+        "loading": {
+          "title": "Registrando salida..."
+        },
+        "success": {
+          "title": "Salida registrada",
+          "description": "El activo se ha despachado exitosamente."
+        },
+        "error": {
+          "title": "Error al registrar salida",
+          "defaultMessage": "Error en el servidor"
+        }
+      },
+      "notFound": {
+        "title": "Activo no encontrado",
+        "button": "Volver al catálogo"
+      },
+      "header": {
+        "title": "Registrar Salida",
+        "description": "Asigna este equipo y actualiza su estado."
+      },
+      "card": {
+        "title": "Detalles de la Salida",
+        "description": "Completa la información necesaria para registrar el movimiento."
+      },
+      "tabs": {
+        "staff": "Salida a Personal",
+        "ticket": "Salida por Ticket"
+      },
+      "form": {
+        "voucherLabel": "Folio / Comprobante (Opcional)",
+        "voucherPlaceholder": "Ej. Vale-00123",
+        "observationsLabel": "Observaciones físicas (Opcional)",
+        "observationsPlaceholder": "Ej. Se entrega con rayón..."
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "submitting": "Registrando...",
+        "submit": "Registrar Salida"
+      }
+    },
+    "movementsPage": {
+      "header": {
+        "title": "Movimientos de Activos",
+        "description": "Historial de entradas y salidas de los activos de TI."
+      }
+    },
+    "movementViewPage": {
+      "notFound": {
+        "title": "Movimiento no encontrado",
+        "description": "El registro que buscas no existe o hubo un error al cargarlo.",
+        "button": "Regresar"
+      },
+      "header": {
+        "title": "Detalle del Movimiento",
+        "registeredAt": "Registrado el"
+      },
+      "badge": {
+        "in": "Entrada",
+        "out": "Salida"
+      },
+      "card": {
+        "titleIn": "Datos del Registro de Entrada",
+        "titleOut": "Datos del Registro de Salida",
+        "description": "Información administrativa guardada al momento exacto del movimiento.",
+        "noDetails": "No se encontraron detalles específicos de este movimiento."
+      }
+    },
+    "updatePage": {
+      "header": {
+        "title": "Editar Activo TI",
+        "description": "Modifica la información del equipo seleccionado."
+      },
+      "card": {
+        "title": "Información del Equipo",
+        "description": "Actualiza los datos técnicos y administrativos del activo."
+      },
+      "validation": {
+        "serialNumber": "El número de serie es obligatorio",
+        "typeId": "Debes seleccionar un tipo",
+        "brandId": "Debes seleccionar una marca",
+        "modelId": "Debes seleccionar un modelo",
+        "statusId": "Debes seleccionar un estado"
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "submitting": "Guardando...",
+        "submit": "Guardar Cambios"
+      },
+      "loading": "Cargando datos del activo...",
+      "sileo": {
+        "loading": {
+          "title": "Actualizando activo..."
+        },
+        "success": {
+          "title": "Activo actualizado",
+          "description": "Los cambios se guardaron exitosamente."
+        },
+        "error": {
+          "title": "Error",
+          "defaultMessage": "Error al actualizar"
+        }
+      }
+    },
+    "components": {
+      "assetStatusSelect": {
+        "label": "Estado físico al momento de mover",
+        "unknownStatus": "Estado Desconocido",
+        "changeStatus": "Cambiar Estado",
+        "placeholder": "Selecciona el estado físico del equipo",
+        "descriptionLabel": "Descripción del estado:"
       }
     }
   }

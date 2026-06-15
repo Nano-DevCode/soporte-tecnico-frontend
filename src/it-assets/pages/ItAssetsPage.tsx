@@ -3,7 +3,7 @@ import { useItAssets } from "../hooks/useItAssets";
 import { AlertTriangle, ArrowUpCircle, Plus, ToolCase } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { CustomDialogConfirm } from "@/components/custom/CustomDialogCorfirm";
 import { CustomPagination } from "@/components/custom/CustomPagination";
 import { CustomItAssetDesktopCatalog } from "../components/CustomItAssetDesktopCatalog";
@@ -18,6 +18,7 @@ import { CustomItAssetDesktopCatalogSkeleton } from "@/components/custom/CustomI
 import { CustomItAssetFilters } from "../components/CustomItAssetFilters";
 
 export function ItAssetsPage() {
+  const { t } = useTranslation();
   const { isLoading, itAssets, changeStatusAsync, isChangingStatus, meta } = useItAssets();
 
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
@@ -45,7 +46,7 @@ export function ItAssetsPage() {
           duration: 4000,
         },
         error: (err) => {
-          let backendMessage = t("generic_error_backend_message");
+          let backendMessage = t("itAssets.mainPage.sileo.error.defaultMessage");
           if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
             const rawMessage = err.response.data.message;
             backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
@@ -96,7 +97,7 @@ export function ItAssetsPage() {
         </p>
       </div>
     );
-  }, [assetSelect]);
+  }, [assetSelect, t]);
   
   return(
     <div className="space-y-6">

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,6 +6,7 @@ import * as z from "zod";
 import { Save, Loader2, ArrowLeft } from "lucide-react";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
+import { useTranslation } from "react-i18next";
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -18,26 +19,28 @@ import useItAssetsStatus from "../hooks/useItAssetsStatus";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { ItAssetsForm } from "../components/ItAssetsFormPage";
 
-const updateAssetSchema = z.object({
-  serialNumber: z.string().min(1, "El número de serie es obligatorio").trim(),
-  idInventary: z.string().trim().optional(),
-  typeId: z.string().min(1, "Debes seleccionar un tipo"),
-  brandId: z.string().min(1, "Debes seleccionar una marca"),
-  modelId: z.string().min(1, "Debes seleccionar un modelo"),
-  statusId: z.string().min(1, "Debes seleccionar un estado"),
-  invoiceId: z.string().optional(),
-  description: z.string().trim().optional(),
-  imageFile: z.any().optional(), // Opcional en modo edición
-});
-
-type UpdateAssetFormValues = z.infer<typeof updateAssetSchema>;
-
 const ItAssetsUpdatePage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { t } = useTranslation();
 
   const { updateAssetMutation, itAsset, isLoadingAsset } = useItAssets();
   const { itAssetsStatus, isLoading: isLoadingStatus } = useItAssetsStatus();
+
+  // Esquema de validación memorizado para que reaccione a cambios de idioma
+  const updateAssetSchema = useMemo(() => z.object({
+    serialNumber: z.string().min(1, t("itAssets.updatePage.validation.serialNumber")).trim(),
+    idInventary: z.string().trim().optional(),
+    typeId: z.string().min(1, t("itAssets.updatePage.validation.typeId")),
+    brandId: z.string().min(1, t("itAssets.updatePage.validation.brandId")),
+    modelId: z.string().min(1, t("itAssets.updatePage.validation.modelId")),
+    statusId: z.string().min(1, t("itAssets.updatePage.validation.statusId")),
+    invoiceId: z.string().optional(),
+    description: z.string().trim().optional(),
+    imageFile: z.any().optional(), // Opcional en modo edición
+  }), [t]);
+
+  type UpdateAssetFormValues = z.infer<typeof updateAssetSchema>;
 
   const form = useForm<UpdateAssetFormValues>({
     resolver: zodResolver(updateAssetSchema),
@@ -92,19 +95,19 @@ const ItAssetsUpdatePage = () => {
       await sileo.promise(
         updateAssetMutation.mutateAsync({ id: id!, data: formData }),
         {
-          loading: { title: "Actualizando activo..." },
+          loading: { title: t("itAssets.updatePage.sileo.loading.title") },
           success: { 
-            title: "Activo actualizado", 
-            description: "Los cambios se guardaron exitosamente.", 
+            title: t("itAssets.updatePage.sileo.success.title"), 
+            description: t("itAssets.updatePage.sileo.success.description"), 
             duration: 4000 
           },
           error: (err) => {
-            let backendMessage = "Error al actualizar";
+            let backendMessage = t("itAssets.updatePage.sileo.error.defaultMessage");
             if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
               const rawMessage = err.response.data.message;
               backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
             }
-            return { title: "Error", description: backendMessage, duration: 5000 };
+            return { title: t("itAssets.updatePage.sileo.error.title"), description: backendMessage, duration: 5000 };
           },
         }
       );
@@ -118,7 +121,7 @@ const ItAssetsUpdatePage = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-muted-foreground">Cargando datos del activo...</p>
+        <p className="text-muted-foreground">{t("itAssets.updatePage.loading")}</p>
       </div>
     );
   }
@@ -132,16 +135,16 @@ const ItAssetsUpdatePage = () => {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Editar Activo TI</h1>
-          <p className="text-muted-foreground text-sm">Modifica la información del equipo seleccionado.</p>
+          <h1 className="text-2xl font-bold tracking-tight">{t("itAssets.updatePage.header.title")}</h1>
+          <p className="text-muted-foreground text-sm">{t("itAssets.updatePage.header.description")}</p>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Información del Equipo</CardTitle>
+          <CardTitle>{t("itAssets.updatePage.card.title")}</CardTitle>
           <CardDescription>
-            Actualiza los datos técnicos y administrativos del activo.
+            {t("itAssets.updatePage.card.description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -158,13 +161,13 @@ const ItAssetsUpdatePage = () => {
 
               <div className="flex justify-end gap-4 pt-4 border-t">
                 <Button type="button" variant="outline" onClick={() => navigate(-1)} disabled={isUpdating}>
-                  Cancelar
+                  {t("itAssets.updatePage.buttons.cancel")}
                 </Button>
                 <Button type="submit" disabled={isUpdating}>
                   {isUpdating ? (
-                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Guardando...</>
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("itAssets.updatePage.buttons.submitting")}</>
                   ) : (
-                    <><Save className="mr-2 h-4 w-4" /> Guardar Cambios</>
+                    <><Save className="mr-2 h-4 w-4" /> {t("itAssets.updatePage.buttons.submit")}</>
                   )}
                 </Button>
               </div>

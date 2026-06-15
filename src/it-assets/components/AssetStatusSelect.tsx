@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { RefreshCw, Info } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import useItAssetsStatus from "../hooks/useItAssetsStatus";
 import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export const AssetStatusSelect = ({ itAsset, isDisabled }: Props) => {
+  const { t } = useTranslation();
   const { control, watch } = useFormContext();
   const { itAssetsStatus, isLoading: isLoadingStatus } = useItAssetsStatus();
   
@@ -32,12 +34,14 @@ export const AssetStatusSelect = ({ itAsset, isDisabled }: Props) => {
         name="itAssetsStatusId"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Estado físico al momento de mover <span className="text-red-500">*</span></FormLabel>
+            <FormLabel>
+              {t("itAssets.components.assetStatusSelect.label")} <span className="text-red-500">*</span>
+            </FormLabel>
             {!isEditingStatus ? (
               <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-muted/40 p-3 rounded-md border border-border/50">
                 <div className="flex-1">
                   <span className="block font-medium text-sm text-foreground">
-                    {itAsset.itAssetStatus?.name || "Estado Desconocido"}
+                    {itAsset.itAssetStatus?.name || t("itAssets.components.assetStatusSelect.unknownStatus")}
                   </span>
                   {itAsset.itAssetStatus?.description && (
                     <span className="block text-xs text-muted-foreground mt-0.5 line-clamp-2" title={itAsset.itAssetStatus.description}>
@@ -53,7 +57,7 @@ export const AssetStatusSelect = ({ itAsset, isDisabled }: Props) => {
                   onClick={() => setShowConfirmDialog(true)}
                   disabled={isDisabled}
                 >
-                  <RefreshCw className="h-3 w-3 mr-2" /> Cambiar Estado
+                  <RefreshCw className="h-3 w-3 mr-2" /> {t("itAssets.components.assetStatusSelect.changeStatus")}
                 </Button>
               </div>
             ) : (
@@ -61,7 +65,7 @@ export const AssetStatusSelect = ({ itAsset, isDisabled }: Props) => {
                 <Select onValueChange={field.onChange} value={field.value} disabled={isLoadingStatus || isDisabled}>
                   <FormControl>
                     <SelectTrigger className="border-primary/50 focus:ring-primary/20">
-                      <SelectValue placeholder="Selecciona el estado físico del equipo" />
+                      <SelectValue placeholder={t("itAssets.components.assetStatusSelect.placeholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -77,7 +81,9 @@ export const AssetStatusSelect = ({ itAsset, isDisabled }: Props) => {
                   <div className="flex gap-2 items-start bg-blue-50/50 dark:bg-blue-950/20 p-2.5 rounded-md border border-blue-100 dark:border-blue-900/50">
                     <Info className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      <strong className="text-foreground/80 block mb-0.5">Descripción del estado:</strong>
+                      <strong className="text-foreground/80 block mb-0.5">
+                        {t("itAssets.components.assetStatusSelect.descriptionLabel")}
+                      </strong>
                       {selectedStatusDetail.description}
                     </p>
                   </div>

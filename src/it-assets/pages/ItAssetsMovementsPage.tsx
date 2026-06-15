@@ -1,4 +1,5 @@
 import { ArrowRightLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { useItAssetsMovements } from "../hooks/useItAssetsMovements";
 
@@ -10,18 +11,18 @@ import { CustomItAssetsMovementMobileCard } from "../components/CustomItAssetsMo
 import { CustomItAssetsMovementsFilters } from "../components/CustomItAssetsMovementsFilters";
 
 export const ItAssetsMovementsPage = () => {
+  const { t } = useTranslation();
   const { itAssetsMovements, meta, isLoadingMovements } = useItAssetsMovements();
   console.log(itAssetsMovements, meta);
   
-
   return (
     <div className="space-y-6">
       {/* Page header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <CustomTitleCard 
           icon={ArrowRightLeft} 
-          title="Movimientos de Activos" 
-          description="Historial de entradas y salidas de los activos de TI."
+          title={t("itAssets.movementsPage.header.title")} 
+          description={t("itAssets.movementsPage.header.description")}
         />
       </div>
       
@@ -41,3 +42,5 @@ export const ItAssetsMovementsPage = () => {
     </div>
   );
 };
+
+export default ItAssetsMovementsPage;

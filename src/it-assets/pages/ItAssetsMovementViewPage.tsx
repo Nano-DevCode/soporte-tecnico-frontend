@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -25,6 +26,7 @@ import ItAssetMovementOutDetails from "../components/ItAssetMovementOutDetails";
 export const ItAssetsMovementViewPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   
   const { itAssetMovement, isLoadingMovement, errorMovement } = useItAssetsMovements(id);
 
@@ -40,9 +42,11 @@ export const ItAssetsMovementViewPage = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
         <Monitor className="h-12 w-12 text-muted-foreground/30" />
-        <h2 className="text-xl font-bold">Movimiento no encontrado</h2>
-        <p className="text-muted-foreground">El registro que buscas no existe o hubo un error al cargarlo.</p>
-        <Button onClick={() => navigate(-1)} variant="outline">Regresar</Button>
+        <h2 className="text-xl font-bold">{t("itAssets.movementViewPage.notFound.title")}</h2>
+        <p className="text-muted-foreground">{t("itAssets.movementViewPage.notFound.description")}</p>
+        <Button onClick={() => navigate(-1)} variant="outline">
+          {t("itAssets.movementViewPage.notFound.button")}
+        </Button>
       </div>
     );
   }
@@ -50,6 +54,7 @@ export const ItAssetsMovementViewPage = () => {
   const isInput = itAssetMovement.type === TypeMovement.IN;
   const asset = itAssetMovement.itAsset;
   
+  // Puedes dejar 'date-fns' con 'es' hardcodeado si la app es solo en español, o condicionarlo luego con el idioma de i18n
   const formattedDate = format(new Date(itAssetMovement.createdAt), "dd 'de' MMMM 'de' yyyy, hh:mm a", { locale: es });
 
   return (
@@ -61,7 +66,7 @@ export const ItAssetsMovementViewPage = () => {
         </Button>
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold tracking-tight">Detalle del Movimiento</h1>
+            <h1 className="text-2xl font-bold tracking-tight">{t("itAssets.movementViewPage.header.title")}</h1>
             <Badge 
               variant="outline"
               className={`font-bold px-3 py-1 uppercase tracking-wider text-xs gap-1.5 shadow-sm
@@ -71,12 +76,12 @@ export const ItAssetsMovementViewPage = () => {
                 }`}
             >
               {isInput ? <ArrowDownRight className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
-              {isInput ? "Entrada" : "Salida"}
+              {isInput ? t("itAssets.movementViewPage.badge.in") : t("itAssets.movementViewPage.badge.out")}
             </Badge>
           </div>
           <p className="text-muted-foreground text-sm flex items-center gap-1.5 mt-1">
             <Calendar className="h-3.5 w-3.5" />
-            Registrado el {formattedDate}
+            {t("itAssets.movementViewPage.header.registeredAt")} {formattedDate}
           </p>
         </div>
       </div>
@@ -91,10 +96,10 @@ export const ItAssetsMovementViewPage = () => {
             <CardHeader className="border-b border-border/50 bg-muted/20">
               <CardTitle className="text-lg flex items-center gap-2">
                 <FileText className="h-5 w-5 text-primary" />
-                Datos del Registro de {isInput ? "Entrada" : "Salida"}
+                {isInput ? t("itAssets.movementViewPage.card.titleIn") : t("itAssets.movementViewPage.card.titleOut")}
               </CardTitle>
               <CardDescription>
-                Información administrativa guardada al momento exacto del movimiento.
+                {t("itAssets.movementViewPage.card.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6">
@@ -112,7 +117,7 @@ export const ItAssetsMovementViewPage = () => {
               {((isInput && !itAssetMovement.movementIn) || (!isInput && !itAssetMovement.movementOut)) && (
                 <div className="flex flex-col items-center justify-center py-10 text-center">
                   <Info className="h-10 w-10 text-muted-foreground/30 mb-3" />
-                  <p className="text-muted-foreground font-medium">No se encontraron detalles específicos de este movimiento.</p>
+                  <p className="text-muted-foreground font-medium">{t("itAssets.movementViewPage.card.noDetails")}</p>
                 </div>
               )}
 
@@ -124,3 +129,5 @@ export const ItAssetsMovementViewPage = () => {
     </div>
   );
 };
+
+export default ItAssetsMovementViewPage;

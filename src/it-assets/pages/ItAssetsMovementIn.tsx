@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,6 +6,7 @@ import * as z from "zod";
 import { LogIn, Loader2, ArrowLeft, Monitor, RefreshCw, Info } from "lucide-react";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
+import { useTranslation } from "react-i18next";
 
 // Hooks
 import { useItAssets } from "../hooks/useItAssets";
@@ -24,19 +25,10 @@ import { Textarea } from "@/components/ui/textarea";
 import CustomItAssetPreview from "../components/CustomItAssetPreview";
 import { CustomConfirmChangeStatusItAsset } from "../components/CustomConfirmChangeStatusItAsset";
 
-// ==========================================
-// ESQUEMA DE VALIDACIÓN ZOD (Entrada)
-// ==========================================
-const movementInSchema = z.object({
-  itAssetsStatusId: z.string().min(1, "Debes seleccionar un estado"),
-  observations: z.string().optional(),
-});
-
-type MovementInFormValues = z.infer<typeof movementInSchema>;
-
 const ItAssetsMovementIn = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Estados locales para la gestión del estado del activo
   const [isEditingStatus, setIsEditingStatus] = useState(false);
@@ -46,6 +38,14 @@ const ItAssetsMovementIn = () => {
   const { itAsset, isLoadingAsset } = useItAssets();
   const { itAssetsStatus, isLoading: isLoadingStatus } = useItAssetsStatus();
   const { createInMovementAsync, isCreatingIn } = useItAssetsMovements();
+
+  // Esquema de validación memorizado para que reaccione a cambios de idioma
+  const movementInSchema = useMemo(() => z.object({
+    itAssetsStatusId: z.string().min(1, t("itAssets.movementIn.validation.statusRequired")),
+    observations: z.string().optional(),
+  }), [t]);
+
+  type MovementInFormValues = z.infer<typeof movementInSchema>;
 
   // Configuración de React Hook Form
   const form = useForm<MovementInFormValues>({
@@ -82,14 +82,14 @@ const ItAssetsMovementIn = () => {
       await sileo.promise(
         createInMovementAsync(payload),
         {
-          loading: { title: "Registrando entrada..." },
+          loading: { title: t("itAssets.movementIn.sileo.loading.title") },
           success: {
-            title: "Entrada registrada",
-            description: "El activo se ha ingresado correctamente al inventario.",
+            title: t("itAssets.movementIn.sileo.success.title"),
+            description: t("itAssets.movementIn.sileo.success.description"),
             duration: 4000,
           },
           error: (err) => {
-            let backendMessage = "Error en el servidor al intentar registrar la entrada.";
+            let backendMessage = t("itAssets.movementIn.sileo.error.defaultMessage");
 
             if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
               const rawMessage = err.response.data.message;
@@ -97,7 +97,7 @@ const ItAssetsMovementIn = () => {
             }
 
             return {
-              title: "Error al registrar entrada",
+              title: t("itAssets.movementIn.sileo.error.title"),
               description: backendMessage,
               duration: 5000,
             };
@@ -123,8 +123,10 @@ const ItAssetsMovementIn = () => {
     return (
       <div className="flex flex-col items-center justify-center p-12 text-center">
         <Monitor className="h-16 w-16 text-muted-foreground/50 mb-4" />
-        <h2 className="text-xl font-bold">Activo no encontrado</h2>
-        <Button className="mt-4" onClick={() => navigate("/it-assets")}>Volver al catálogo</Button>
+        <h2 className="text-xl font-bold">{t("itAssets.movementIn.notFound.title")}</h2>
+        <Button className="mt-4" onClick={() => navigate("/it-assets")}>
+          {t("itAssets.movementIn.notFound.button")}
+        </Button>
       </div>
     );
   }
@@ -138,8 +140,8 @@ const ItAssetsMovementIn = () => {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Registrar Entrada</h1>
-          <p className="text-muted-foreground text-sm">Recibe este equipo y actualiza su condición física.</p>
+          <h1 className="text-2xl font-bold tracking-tight">{t("itAssets.movementIn.header.title")}</h1>
+          <p className="text-muted-foreground text-sm">{t("itAssets.movementIn.header.description")}</p>
         </div>
       </div>
 
@@ -154,9 +156,9 @@ const ItAssetsMovementIn = () => {
         <div className="w-full md:col-span-7 lg:col-span-8 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Detalles de la Recepción</CardTitle>
+              <CardTitle>{t("itAssets.movementIn.card.title")}</CardTitle>
               <CardDescription>
-                Verifica en qué condiciones regresa el activo y anota cualquier detalle importante.
+                {t("itAssets.movementIn.card.description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -169,12 +171,14 @@ const ItAssetsMovementIn = () => {
                     name="itAssetsStatusId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Estado físico al momento de entrar <span className="text-red-500">*</span></FormLabel>
+                        <FormLabel>
+                          {t("itAssets.movementIn.form.statusLabel")} <span className="text-red-500">*</span>
+                        </FormLabel>
                         {!isEditingStatus ? (
                           <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-muted/40 p-3 rounded-md border border-border/50">
                             <div className="flex-1">
                               <span className="block font-medium text-sm text-foreground">
-                                {itAsset.itAssetStatus?.name || "Estado Desconocido"}
+                                {itAsset.itAssetStatus?.name || t("itAssets.movementIn.form.unknownStatus")}
                               </span>
                               {itAsset.itAssetStatus?.description && (
                                 <span className="block text-xs text-muted-foreground mt-0.5 line-clamp-2" title={itAsset.itAssetStatus.description}>
@@ -190,7 +194,7 @@ const ItAssetsMovementIn = () => {
                               onClick={() => setShowConfirmDialog(true)}
                               disabled={isCreatingIn}
                             >
-                              <RefreshCw className="h-3 w-3 mr-2" /> Cambiar Estado
+                              <RefreshCw className="h-3 w-3 mr-2" /> {t("itAssets.movementIn.buttons.changeStatus")}
                             </Button>
                           </div>
                         ) : (
@@ -198,7 +202,7 @@ const ItAssetsMovementIn = () => {
                             <Select onValueChange={field.onChange} value={field.value} disabled={isLoadingStatus || isCreatingIn}>
                               <FormControl>
                                 <SelectTrigger className="border-primary/50 focus:ring-primary/20">
-                                  <SelectValue placeholder="Selecciona el estado físico del equipo" />
+                                  <SelectValue placeholder={t("itAssets.movementIn.form.statusPlaceholder")} />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
@@ -214,7 +218,9 @@ const ItAssetsMovementIn = () => {
                               <div className="flex gap-2 items-start bg-blue-50/50 dark:bg-blue-950/20 p-2.5 rounded-md border border-blue-100 dark:border-blue-900/50">
                                 <Info className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
                                 <p className="text-xs text-muted-foreground leading-relaxed">
-                                  <strong className="text-foreground/80 block mb-0.5">Descripción del estado:</strong>
+                                  <strong className="text-foreground/80 block mb-0.5">
+                                    {t("itAssets.movementIn.form.statusDescriptionLabel")}
+                                  </strong>
                                   {selectedStatusDetail.description}
                                 </p>
                               </div>
@@ -232,10 +238,10 @@ const ItAssetsMovementIn = () => {
                     name="observations"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Observaciones (Opcional)</FormLabel>
+                        <FormLabel>{t("itAssets.movementIn.form.observationsLabel")}</FormLabel>
                         <FormControl>
                           <Textarea 
-                            placeholder="Ej. El equipo regresó con polvo, pantalla sucia, cable doblado..." 
+                            placeholder={t("itAssets.movementIn.form.observationsPlaceholder")} 
                             className="resize-none h-32" 
                             {...field} 
                             disabled={isCreatingIn} 
@@ -249,13 +255,13 @@ const ItAssetsMovementIn = () => {
                   {/* BOTONES */}
                   <div className="flex justify-end gap-4 pt-4 border-t">
                     <Button type="button" variant="outline" onClick={() => navigate(-1)} disabled={isCreatingIn}>
-                      Cancelar
+                      {t("itAssets.movementIn.buttons.cancel")}
                     </Button>
                     <Button type="submit" disabled={isCreatingIn}>
                       {isCreatingIn ? (
-                        <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Registrando...</>
+                        <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("itAssets.movementIn.buttons.submitting")}</>
                       ) : (
-                        <><LogIn className="mr-2 h-4 w-4" /> Registrar Entrada</>
+                        <><LogIn className="mr-2 h-4 w-4" /> {t("itAssets.movementIn.buttons.submit")}</>
                       )}
                     </Button>
                   </div>
