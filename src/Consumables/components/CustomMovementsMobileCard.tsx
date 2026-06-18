@@ -1,0 +1,94 @@
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Calendar, MapPin, Eye } from "lucide-react";
+import { Link } from "react-router"; // Asegúrate de usar 'react-router' o 'react-router-dom' según tu config
+import { Button } from "@/components/ui/button";
+import type { GroupedMovement } from "../interfaces/consumable-movement.interfaces";
+
+interface Props {
+    movements: GroupedMovement[];
+}
+
+export const CustomMovementsMobileCard = ({ movements }: Props) => {
+    if (movements.length === 0) {
+        return (
+            <div className="block md:hidden text-center p-6 border border-dashed rounded-lg bg-card text-muted-foreground text-sm">
+                No se encontraron movimientos registrados en este bloque.
+            </div>
+        );
+    }
+
+    return (
+        <div className="block md:hidden space-y-4">
+            {movements.map((group) => {
+                const isTypeOne = group.movement_type?.id === 1 || group.movement_type?.id === '1';
+
+                const badgeColors = isTypeOne
+                    ? "border-green-600 bg-green-100 text-green-700 dark:bg-green-950/60 dark:text-green-400 uppercase"
+                    : "border-yellow-600 bg-yellow-50 text-yellow-700 dark:bg-yellow-950/60 dark:text-yellow-400 uppercase";
+
+                return (
+                    <Card key={group.code_movement_aplication} className="overflow-hidden border-muted/70 shadow-sm">
+                        <CardContent className="p-4 space-y-3">
+
+                            {/* Encabezado Card */}
+                            <div className="flex justify-between items-start gap-2">
+                                <div className="space-y-0.5">
+                                    <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">Folio Movimiento</span>
+                                    <h3 className="font-bold text-base text-foreground font-mono">{group.code_movement_aplication}</h3>
+                                </div>
+                                <Badge className={`text-xs font-semibold shadow-none ${badgeColors}`}>
+                                    {group.movement_type?.name || "N/A"}
+                                </Badge>
+                            </div>
+
+                            {/* Grid de metadata básica */}
+                            <div className="grid grid-cols-2 gap-2 text-xs py-2 border-t border-b border-dashed">
+                                <div className="space-y-1">
+                                    <p className="text-muted-foreground flex items-center gap-1">
+                                        <Calendar className="h-3 w-3" /> Fecha
+                                    </p>
+                                    <p className="font-medium">{new Date(group.created_at).toLocaleDateString()}</p>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-muted-foreground flex items-center gap-1">
+                                        <MapPin className="h-3 w-3" /> Aplicación
+                                    </p>
+                                    <p className="font-medium truncate">{group.movement_aplication?.name || "N/A"}</p>
+                                </div>
+                            </div>
+
+                            {/* Subtotales Monetarios */}
+                            <div className="flex justify-between items-center bg-muted/40 px-3 py-2 rounded-lg">
+                                <div className="text-xs">
+                                    <span className="text-muted-foreground block">Volumen</span>
+                                    <strong className="text-foreground">{group.total_quantity} unidades</strong>
+                                </div>
+                                <div className="text-right text-xs">
+                                    <span className="text-muted-foreground block">Costo Total</span>
+                                    <strong className="text-blue-600 dark:text-blue-400 text-sm">
+                                        ${group.total_cost.toFixed(2)}
+                                    </strong>
+                                </div>
+                            </div>
+
+                            {/* Botón de Acción Directa a Detalles */}
+                            <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="w-full justify-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground border-zinc-200 dark:border-zinc-800"
+                                asChild
+                            >
+                                <Link to={`/consumable-movements/details/${group.code_movement_aplication}`}>
+                                    <Eye className="h-3.5 w-3.5" />
+                                    Ver detalles completos
+                                </Link>
+                            </Button>
+
+                        </CardContent>
+                    </Card>
+                );
+            })}
+        </div>
+    );
+};

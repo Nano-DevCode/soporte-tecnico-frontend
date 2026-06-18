@@ -5,10 +5,11 @@ import { getEquipmentsAction } from "../actions/get-equipments.action";
 export const useEquipments = () => {
   const [searchParams] = useSearchParams();
 
-  // Lee los filtros de la URL
+  // 1. Leemos el filtro de departamento desde los Query Params de la URL
   const category = searchParams.get("category") || "all";
   const search = searchParams.get("search") || "";
   const status = searchParams.get("status") || "all";
+  const id_departament = searchParams.get("id_departament") || "";
   
   // Lee paginación desde URL y calcula el offset para mandarlo al backend
   const page = Math.max(1, Number(searchParams.get("page") || "1"));
@@ -16,8 +17,9 @@ export const useEquipments = () => {
   const offset = (page - 1) * limit;
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["equipments", { category, search, status, limit, offset }],
-    queryFn: () => getEquipmentsAction({ category, search, status, limit, offset }),
+    // 2. Agregamos id_departament al queryKey para que React Query invalide y recargue la caché al cambiar de departamento
+    queryKey: ["equipments", { category, search, status, id_departament, limit, offset }],
+    queryFn: () => getEquipmentsAction({ category, search, status, id_departament, limit, offset }),
   });
 
   return {

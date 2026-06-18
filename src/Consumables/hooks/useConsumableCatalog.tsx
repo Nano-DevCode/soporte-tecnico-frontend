@@ -61,7 +61,7 @@ export const useMovementTypesConsumables = () =>
 export const useMovementAplicationsConsumables = () =>
     useCatalogFactory({
         queryKey: "movement-aplications",
-        dataKey: "movementAplications", // Mapea exactamente con el JSON de tu backend
+        dataKey: "aplications", // Mapea exactamente con el JSON de tu backend
         fetchFn: getMovementAplicationsAction,
         getByIdFn: getMovementApplicationByIdAction,
     });

@@ -2,12 +2,6 @@
 import { useEffect, useMemo } from "react";
 import { InfiniteScrollSelectconsumables } from "../components/infinite-scroll-selectconsu";
 
-// interface ExtendedCatalogProperties {
-//     id: string;
-//     name: string;
-//     folio?: string;
-// }
-
 interface UISelectOption {
     id: string;
     name: string;

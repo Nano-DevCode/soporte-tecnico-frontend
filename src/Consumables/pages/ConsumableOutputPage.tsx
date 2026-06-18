@@ -2,13 +2,13 @@
 import { useNavigate } from "react-router";
 import { useConsumableBagStore } from "../hooks/useConsumableBagStore";
 import { useConsumables } from "../hooks/useConsumables";
-import { ConsumableOutputForm } from "../components/ConsumableOutputForm";
+import { ConsumableOutputForm } from "../components/CustomConsumableOutputForm";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingBag } from "lucide-react";
+import { CustomBackToList } from "@/components/custom/CustomBackToList";
+import { ShoppingBag, PackageOpen } from "lucide-react";
 
 export const ConsumableOutputPage = () => {
     const navigate = useNavigate();
-    // Traemos 'removeFromBag' (o como se llame en tu store para quitar un ID)
     const { bagIds, clearBag, removeItem } = useConsumableBagStore();
     const { consumables } = useConsumables();
 
@@ -23,42 +23,64 @@ export const ConsumableOutputPage = () => {
     };
 
     const handleRemoveItem = (id: string) => {
-        // Si tu store usa un método específico para remover un ítem por ID:
         removeItem(id);
-
-        // NOTA: Si tu store no tiene un 'removeFromBag', puedes usar la función 
-        // que use tu store para actualizar los ids directos, por ejemplo:
-        // setBagIds(bagIds.filter(bagId => bagId !== id));
     };
 
     return (
-        <div className="p-6 max-w-5xl mx-auto space-y-6">
-            <div className="flex items-center justify-between">
-                <Button variant="outline" size="sm" onClick={() => navigate(-1)}>
-                    <ArrowLeft className="mr-2 h-4 w-4" /> Volver al catálogo
-                </Button>
-                <div className="flex items-center justify-center sm:justify-start gap-2 text-sm text-muted-foreground bg-muted/60 px-3 py-1.5 rounded-full border order-1 sm:order-2 w-full sm:w-auto">
-                    <ShoppingBag className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                    <span>Consumibles seleccionados: {selectedItems.length}</span>
+        <div className="w-full space-y-4">
+            
+            {/* BOTÓN REGRESAR - Sutil y limpio */}
+            <div className="w-full items-center justify-between">
+                <CustomBackToList 
+                    onBack={() => navigate("/consumables")} 
+                    backLabel="Listar Consumibles" 
+                />
+            </div>
+
+            {/* ENCABEZADO DE LA PÁGINA (UX/UI Elegant) */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-border/40">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2.5">
+                        <div className="p-2 rounded-lg bg-muted shadow-sm dark:bg-muted-foreground/25 shrink-0">
+                            <ShoppingBag className="w-5 h-5" />
+                        </div>
+                        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                            Generar Salida de Consumibles
+                        </h1>
+                    </div>
+                    <p className="text-sm text-muted-foreground   pl-1">
+                        Revisa los artículos seleccionados en tu bolsa de despacho y completa el formulario con los detalles del movimiento de inventario.
+                    </p>
                 </div>
             </div>
 
-            <div className="space-y-2">
-                <h1 className="text-3xl font-extrabold tracking-tight">Salida de Material</h1>
-
-            </div>
-
+            {/* CONTENIDO PRINCIPAL / ESTADO VACÍO */}
             {selectedItems.length === 0 ? (
-                <div className="text-center p-12 border border-dashed rounded-xl bg-card">
-                    <p className="text-muted-foreground mb-4">No tienes consumibles seleccionados en tu bolsa para generar una salida.</p>
-                    <Button onClick={() => navigate("/consumables")}>Explorar Catálogo</Button>
+                <div className="flex flex-col items-center justify-center text-center p-16 border border-dashed border-border/80 rounded-2xl bg-card shadow-sm max-w-md mx-auto my-12 space-y-4 animate-in fade-in duration-200">
+                    <div className="p-4 rounded-full bg-muted text-muted-foreground/40">
+                        <PackageOpen className="w-10 h-10" />
+                    </div>
+                    <div className="space-y-1.5">
+                        <h3 className="text-base font-semibold tracking-tight">Tu bolsa está vacía</h3>
+                        <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                            No tienes consumibles seleccionados para generar un movimiento de salida en este momento.
+                        </p>
+                    </div>
+                    <Button 
+                        onClick={() => navigate("/consumables")}
+                        className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm"
+                    >
+                        Explorar Catálogo
+                    </Button>
                 </div>
             ) : (
-                <ConsumableOutputForm
-                    selectedItems={selectedItems}
-                    onSuccess={handleSuccessOutput}
-                    onRemoveItem={handleRemoveItem}
-                />
+                <div className="animate-in duration-300">
+                    <ConsumableOutputForm
+                        selectedItems={selectedItems}
+                        onSuccess={handleSuccessOutput}
+                        onRemoveItem={handleRemoveItem}
+                    />
+                </div>
             )}
         </div>
     );

@@ -6,10 +6,11 @@ export const getEquipmentsAction = async (options: {
   category: string;
   search?: string;
   status?: string;
+  id_departament?: string; // 1. Agregamos el parámetro opcional del departamento
   limit: number;
   offset: number;
 }) => {
-  const { category, limit, offset, search, status } = options;
+  const { category, limit, offset, search, status, id_departament } = options;
 
   try {
     let url = '/equipments';
@@ -34,10 +35,12 @@ export const getEquipmentsAction = async (options: {
         query: search && search.trim() !== '' ? search.trim() : undefined,
         category: category !== 'all' ? category : undefined,
         status: isStatusValid ? status : undefined,
+        id_departament: id_departament || undefined, // 2. Se inyecta a la Query String si tiene un valor válido
         limit,
         offset,
       }
     });
+
     const responseData = response.data?.data || [];
     const responseMeta = response.data?.meta || { total: 0, page: 1, lastPage: 1 };
 

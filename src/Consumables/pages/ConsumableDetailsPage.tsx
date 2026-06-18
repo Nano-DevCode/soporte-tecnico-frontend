@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "react-router";
-import { Loader2, AlertTriangle, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Loader2, AlertTriangle } from "lucide-react";
 import { useConsumableDetails } from "../hooks/useConsumableDetails";
-import { ConsumableDetailsView } from "../components/ConsumableDetailsView";
+import { ConsumableDetailsView } from "../components/CustomConsumableDetailsView";
+import { CustomBackToList } from "@/components/custom/CustomBackToList";
 
 export default function ConsumableDetailsPage() {
     const { id } = useParams<{ id: string }>();
@@ -34,14 +34,17 @@ export default function ConsumableDetailsPage() {
                         {error instanceof Error ? error.message : "El recurso solicitado no existe o no se pudo sincronizar con el servidor."}
                     </p>
                 </div>
-                <Button onClick={() => navigate("/consumables")} variant="outline" className="gap-2 mt-2">
-                    <ArrowLeft className="h-4 w-4" />
-                    Regresar al listado
-                </Button>
+
+                <CustomBackToList onBack={() => navigate("/consumables")} backLabel="Lista de Consumibles" />
             </div>
         );
     }
 
-    // 3. Renderizado exitoso del componente visual de detalle
-    return <ConsumableDetailsView consumable={consumable} />;
+    // 3. Renderizado exitoso del componente visual de detalle con su botón de regreso
+    return (
+        <div className="max-w-4xl  mx-auto space-y-4">
+            <CustomBackToList onBack={() => navigate("/consumables")} backLabel="Lista de Consumibles" />
+            <ConsumableDetailsView consumable={consumable} />
+        </div>
+    );
 }

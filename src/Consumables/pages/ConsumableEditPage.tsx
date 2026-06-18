@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { sileo } from "sileo";
 import { ConsumableFields } from "../components/CustomConsumableForm";
 import { useConsumablesCreateUpdate, useConsumable } from "../hooks/useConsumableCreate";
-import { Button } from "@/components/ui/button";
 import { CustomBackToList } from "@/components/custom/CustomBackToList";
 import { Loader2 } from "lucide-react";
 
@@ -75,9 +74,10 @@ export const ConsumableEditPage = () => {
     }
 
     return (
-        <div className="mx-auto w-full max-w-3xl space-y-4">
+        // Removido max-w-3xl para permitir ancho completo
+        <div className="w-full space-y-4">
             <CustomBackToList onBack={() => navigate("/consumables")} backLabel="Lista de Consumibles" />
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full">
                 <ConsumableFields
                     control={control}
                     register={register}
@@ -87,13 +87,8 @@ export const ConsumableEditPage = () => {
                     watch={watch}
                     mode="update"
                     initialData={consumable ? { imageUrl: consumable.imageUrl } : undefined}
+                    onCancel={() => navigate("/consumables")}
                 />
-                <div className="flex justify-end gap-4">
-                    <Button type="button" variant="outline" disabled={isUpdating} onClick={() => navigate("/consumables")}>Cancelar</Button>
-                    <Button type="submit" disabled={isUpdating} className="bg-emerald-600 hover:bg-emerald-700 text-white min-w-[120px]">
-                        {isUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Actualizar"}
-                    </Button>
-                </div>
             </form>
         </div>
     );

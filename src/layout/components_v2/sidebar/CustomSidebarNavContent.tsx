@@ -69,14 +69,14 @@ export const CustomSidebarNavContent = memo(() => {
       icon: Blocks,
       show: isSuperAdmin || isCoordinator || isBossCC,
       subItems: [
-        { title: ("Historial de movimientos"), path: "/movementsConsumable", show: true },
         { title: ("Consumibles"), path: "/consumables", show: true },
+        { title: ("Historial de movimientos"), path: "/consumable-movements", show: true },
       ]
     },
     {
       title: t("equipment_list", "Inventario de Equipos"),
       icon: Archive,
-      path:"/equipments",
+      path: "/equipments",
       show: true,
     },
     {

@@ -1969,13 +1969,13 @@
   "custom_consumable_desktop_table_not_found": "No se encontraron consumibles",
   "custom_consumable_desktop_table_setting_filters": "Intenta ajustar los criterios de búsqueda o filtros aplicados.",
   "consumable_page_custom_title_card": "Consumibles e Inventario",
-  "consumable_page_custom_description_card": "Administra el catálogo de consumibles, clasificaciones, marcas y stock del almacén de soporte.",
+  "consumable_page_custom_description_card": "Consumibles registrados, se podrán seleccionar para agregar a la lista para realizar movimientos de arribo y salida de consumibles.",
   "consumable_page_create_consumable": "Crear consumible",
   "consumable_page_confirm_delete_title": "¿Está seguro de eliminar este consumible?",
   "consumable_page_confirm_delete_btn": "Sí, eliminar consumible",
   "consumable_page_name_un_available": "Descripción no disponible",
   "consumable_page_delete_warning_message": "Esta acción no se puede deshacer de forma directa si el elemento cuenta con relaciones activas en el inventario.",
-  "custom_consumable_filters_placeholder_search": "Buscar por código, descripción, marca o ubicación... (Presiona Enter)",
+  "custom_consumable_filters_placeholder_search": "Buscar por código, descripción, marca o ubicación...",
 
 
   "ui_consumable_specs_title": "Especificaciones del Consumible",

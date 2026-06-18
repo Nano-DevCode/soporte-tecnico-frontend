@@ -4,13 +4,11 @@ import { sileo } from "sileo";
 import { useConsumablesCreateUpdate } from "../hooks/useConsumableCreate";
 import { ConsumableFields } from "../components/CustomConsumableForm";
 import { CustomBackToList } from "@/components/custom/CustomBackToList";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 
 export const ConsumableCreatePage = () => {
   const navigate = useNavigate();
   const { createConsumableAsync, isCreating } = useConsumablesCreateUpdate();
-  
+
   const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm<FieldValues>({
     defaultValues: {
       consumable: {
@@ -27,7 +25,7 @@ export const ConsumableCreatePage = () => {
 
   const onSubmit = async (data: FieldValues) => {
     const c = data.consumable;
-    
+
     const typeId = c.id_type_consumable?.id ?? c.id_type_consumable;
     const brandId = c.id_brand_consumable?.id ?? c.id_brand_consumable;
     const ubicationId = c.id_ubication_consumable?.id ?? c.id_ubication_consumable;
@@ -57,16 +55,20 @@ export const ConsumableCreatePage = () => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-4">
+    // Removido max-w-3xl para permitir ancho completo
+    <div className="w-full space-y-4">
       <CustomBackToList onBack={() => navigate("/consumables")} backLabel="Lista de Consumibles" />
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <ConsumableFields control={control} register={register} setValue={setValue} disabled={isCreating} errors={errors} watch={watch} mode="create" />
-        <div className="flex justify-end gap-4">
-          <Button type="button" variant="outline" disabled={isCreating} onClick={() => navigate("/consumables")}>Cancelar</Button>
-          <Button type="submit" disabled={isCreating} className="bg-emerald-600 hover:bg-emerald-700 text-white min-w-[120px]">
-            {isCreating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Guardar"}
-          </Button>
-        </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        <ConsumableFields 
+          control={control} 
+          register={register} 
+          setValue={setValue} 
+          disabled={isCreating} 
+          errors={errors} 
+          watch={watch} 
+          mode="create" 
+          onCancel={() => navigate("/consumables")}
+        />
       </form>
     </div>
   );

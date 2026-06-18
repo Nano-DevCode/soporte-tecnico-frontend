@@ -84,7 +84,7 @@ export const appRouter = createBrowserRouter([
                 children: consumableRoutes,
             },
             {
-                path: 'movementsConsumable',
+                path: 'consumable-movements',
                 children: movementConsumableRoutes,
             },
 

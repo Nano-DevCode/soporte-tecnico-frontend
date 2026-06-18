@@ -38,7 +38,7 @@ export const getTicketsAction = async (options: Options = {}): Promise<TicketsRe
         });
         const mappedData = data.data.map((ticket: Tickets) => ({
             ...ticket,
-            name: `Ticket: ${ticket.folio || ''}`.trim()
+            name: `${ticket.folio || ''}`.trim()
         }));
 
         return {

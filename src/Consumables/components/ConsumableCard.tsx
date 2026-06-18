@@ -25,23 +25,27 @@ export function ConsumableCard({ item, isInBag, onToggleBag, handleDownClick }: 
                 : "border-border/60 hover:border-blue-500/30"
         )}>
             {/* --- CONTENEDOR DE LA IMAGEN (Estilo E-commerce) --- */}
-            <div className="relative w-full h-44 bg-muted/40 border-b border-border/40 flex items-center justify-center overflow-hidden p-4">
+            <div className="group relative w-full h-44 bg-muted/40 border-b border-border/40 flex items-center justify-center overflow-hidden p-4">
 
-                <span className="absolute bottom-2 left-2 text-[12px] font-bold px-2 py-0.5 rounded-md bg-zinc-200 text-zinc-900 border-zinc-900 dark:bg-white dark:text-zinc-900 dark:border-zinc-900/50 ">
+                {/* Código del ítem: Se mantiene siempre arriba (z-10) y reacciona al hover general */}
+                <span className="absolute bottom-2 left-2 text-[12px] font-bold px-2 py-0.5 rounded-md bg-zinc-200 text-zinc-900 dark:bg-white dark:text-zinc-900 border border-zinc-300 dark:border-zinc-100 shadow-sm z-10 transition-all duration-300 group-hover:bg-zinc-900 group-hover:text-white dark:group-hover:bg-zinc-200 dark:group-hover:text-zinc-900 group-hover:translate-x-0.5">
                     {item.item_code}
                 </span>
+
                 {finalImageUrl ? (
                     <img
                         src={finalImageUrl}
                         alt={item.description}
-                        className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                        /* CORREGIDO: max-w-full para evitar desbordes y z-0 para que no tape al span */
+                        className="max-w-full max-h-full object-contain z-0 transition-transform duration-300 group-hover:scale-120"
                         loading="lazy"
                         onError={(e) => {
                             (e.target as HTMLImageElement).src = "https://placehold.co/400x300?text=Sin+Imagen";
                         }}
                     />
                 ) : (
-                    <div className="flex flex-col items-center justify-center gap-1.5 text-muted-foreground/50">
+                    /* El fallback también reacciona sutilmente al hover grupal */
+                    <div className="flex flex-col items-center justify-center gap-1.5 text-muted-foreground/50 transition-transform duration-300 group-hover:scale-105">
                         <ImageIcon className="h-10 w-10 stroke-1" />
                         <span className="text-[10px] tracking-wider uppercase font-medium">Sin imagen</span>
                     </div>
@@ -49,7 +53,7 @@ export function ConsumableCard({ item, isInBag, onToggleBag, handleDownClick }: 
             </div>
 
             {/* Contenido de la Tarjeta */}
-            <CardContent className="p-4 flex-1 flex flex-col gap-3 justify-between">
+            <CardContent className="p-2 flex-1 flex flex-col gap-3 justify-between">
 
                 <div className="space-y-2.5">
                     {/* Fila de Stock y Unidad de Medida */}
@@ -76,32 +80,30 @@ export function ConsumableCard({ item, isInBag, onToggleBag, handleDownClick }: 
                     </div>
 
                     {/* Descripción del Consumible */}
-                    <div className="pt-1">
-                        <p className="text-[14px] font-semibold text-justify group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+                    <div className="text-sm font-medium pt-1 line-clamp-2 text-justify group-hover:text-blue-700  dark:group-hover:text-blue-400 transition-colors">
                             {item.description}
-                        </p>
                     </div>
                 </div>
 
                 {/* Detalles Técnicos Intermedios */}
-                <div className="space-y-1.5 pt-2 border-t border-border/40 text-[12px]">
+                <div className="space-y-1.5 pt-2 border-t border-border/40 text-xs">
                     <div className="flex items-center gap-2 text-muted-foreground">
                         <Tag className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
-                        <span className="truncate">Marca: <strong className="text-foreground/80 font-medium">{item.id_brand_consumable?.name || "Genérica"}</strong></span>
+                        <span className="line-clamp-2">Marca: <strong className="text-foreground/80 font-medium">{item.id_brand_consumable?.name || "Genérica"}</strong></span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
                         <MapPin className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
-                        <span className="truncate">Ubicación: <strong className="text-foreground/80 font-medium">{item.id_ubication_consumable?.name || "No asignada"}</strong></span>
+                        <span className="line-clamp-2">Ubicación: <strong className="text-foreground/80 font-medium">{item.id_ubication_consumable?.name || "No asignada"}</strong></span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
                         <Layers className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
-                        <span className="truncate">Categoría: <strong className="text-foreground/80 font-medium">{item.id_type_consumable?.name || "General"}</strong></span>
+                        <span className="line-clamp-2">Categoría: <strong className="text-foreground/80 font-medium">{item.id_type_consumable?.name || "General"}</strong></span>
                     </div>
 
                     {/* Muestra los usos si aplica estructuralmente */}
                     {item.number_uses > 0 && (
-                        <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium pt-0.5">
-                            • Rendimiento estimado: {item.number_uses} usos
+                        <div className=" text-blue-800 dark:text-blue-400 font-xs pt-0.5">
+                            Rendimiento estimado: <strong >{item.number_uses} </strong>{item.number_uses > 1 ? "usos" : "uso"}.
                         </div>
                     )}
                 </div>
@@ -125,7 +127,7 @@ export function ConsumableCard({ item, isInBag, onToggleBag, handleDownClick }: 
                         {isInBag ? (
                             <>
                                 <Check className="mr-1.5 h-4 w-4 stroke-[3]" />
-                                Agregado a la lista
+                                Agregado
                             </>
                         ) : (
                             <>
