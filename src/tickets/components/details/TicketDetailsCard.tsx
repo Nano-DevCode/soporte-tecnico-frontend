@@ -29,7 +29,7 @@ export const TicketDetailsCard = ({ ticketId, fallbackFolio }: TicketDetailsCard
         {isLoadingTicket ? (
             <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/10 p-4 rounded-lg border border-border/50">
                 <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                {t("itAssets.components.ticketDetailsCard.loading")}
+                {t("tickets.components.ticketDetailsCard.loading")}
             </div>
         ) : fullTicket ? (
             <div className="flex flex-col gap-6 bg-muted/10 p-5 rounded-xl border border-border/50">
@@ -38,14 +38,14 @@ export const TicketDetailsCard = ({ ticketId, fallbackFolio }: TicketDetailsCard
                 <div className="border-b border-border/40 pb-3 flex justify-between items-center">
                     <div>
                         <span className="text-xs font-bold text-primary uppercase tracking-widest block">
-                            {t("itAssets.components.ticketDetailsCard.headerTitle")}
+                            {t("tickets.components.ticketDetailsCard.headerTitle")}
                         </span>
                         <span className="text-sm font-semibold text-foreground">
-                            {fullTicket.issue_type?.name || t("itAssets.components.ticketDetailsCard.unclassified")}
+                            {fullTicket.issue_type?.name || t("tickets.components.ticketDetailsCard.unclassified")}
                         </span>
                     </div>
                     <span className="bg-primary/10 text-primary px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest border border-primary/20">
-                        {t("itAssets.components.ticketDetailsCard.status")}: {fullTicket.currentStatusCode}
+                        {t("tickets.components.ticketDetailsCard.status")}: {fullTicket.currentStatusCode}
                     </span>
                 </div>
 
@@ -53,30 +53,30 @@ export const TicketDetailsCard = ({ ticketId, fallbackFolio }: TicketDetailsCard
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <DetailItem 
                         icon={User} 
-                        label={t("itAssets.components.ticketDetailsCard.fields.affected")} 
+                        label={t("tickets.components.ticketDetailsCard.fields.affected")} 
                         value={fullTicket.affected_name} 
                     />
                     <DetailItem 
                         icon={MapPin} 
-                        label={t("itAssets.components.ticketDetailsCard.fields.location")} 
+                        label={t("tickets.components.ticketDetailsCard.fields.location")} 
                         value={fullTicket.equipment_location} 
                     />
                     <DetailItem 
                         icon={Activity} 
-                        label={t("itAssets.components.ticketDetailsCard.fields.priority")} 
-                        value={`${t("itAssets.components.ticketDetailsCard.fields.level")} ${fullTicket.priority}`} 
+                        label={t("tickets.components.ticketDetailsCard.fields.priority")} 
+                        value={`${t("tickets.components.ticketDetailsCard.fields.level")} ${fullTicket.priority}`} 
                     />
                     <DetailItem 
                         icon={Clock} 
-                        label={t("itAssets.components.ticketDetailsCard.fields.schedule")} 
-                        value={fullTicket.available_hours || t("itAssets.components.ticketDetailsCard.fields.na")} 
+                        label={t("tickets.components.ticketDetailsCard.fields.schedule")} 
+                        value={fullTicket.available_hours || t("tickets.components.ticketDetailsCard.fields.na")} 
                     />
                     
                     {/* Descripción Original del Ticket */}
                     <div className="sm:col-span-2 mt-2">
                         <DetailItem 
                             icon={FileText} 
-                            label={t("itAssets.components.ticketDetailsCard.fields.description")} 
+                            label={t("tickets.components.ticketDetailsCard.fields.description")} 
                             value={fullTicket.description} 
                             isTextarea 
                         />
@@ -88,7 +88,7 @@ export const TicketDetailsCard = ({ ticketId, fallbackFolio }: TicketDetailsCard
                     {fullTicket.jefe_depto && (
                         <DetailItem 
                             icon={Building} 
-                            label={t("itAssets.components.ticketDetailsCard.fields.boss")} 
+                            label={t("tickets.components.ticketDetailsCard.fields.boss")} 
                             value={`${fullTicket.jefe_depto.name} ${fullTicket.jefe_depto.paternalSurname}`}
                             subValue={fullTicket.jefe_depto.department?.name} 
                         />
@@ -99,7 +99,7 @@ export const TicketDetailsCard = ({ ticketId, fallbackFolio }: TicketDetailsCard
                             <div className="flex items-center gap-2">
                                 <Wrench className="h-3.5 w-3.5 text-muted-foreground/70" />
                                 <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-                                    {t("itAssets.components.ticketDetailsCard.fields.technicians")}
+                                    {t("tickets.components.ticketDetailsCard.fields.technicians")}
                                 </span>
                             </div>
                             <div className="flex flex-col gap-1 pl-1 text-sm font-semibold">

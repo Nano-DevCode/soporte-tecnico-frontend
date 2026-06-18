@@ -1086,24 +1086,24 @@
         "equipment_location_max": "La ubicación no puede exceder los 200 caracteres.",
         "issue_type_required": "Debes seleccionar una categoría o tipo de problema.",
         "issue_type_invalid": "El tipo de problema seleccionado no es válido."
-      },
-      "components": {
-        "ticketDetailsCard": {
-          "loading": "Cargando información completa del ticket...",
-          "headerTitle": "Detalles del Ticket Asociado",
-          "unclassified": "Sin Clasificar",
-          "status": "ESTADO",
-          "fields": {
-            "affected": "Afectado",
-            "location": "Ubicación",
-            "priority": "Prioridad",
-            "level": "Nivel",
-            "schedule": "Horario Disponible",
-            "na": "N/A",
-            "description": "Descripción del Problema (Reporte Original)",
-            "boss": "Jefe del Departamento",
-            "technicians": "Técnicos Asignados"
-          }
+      }
+    },
+    "components": {
+      "ticketDetailsCard": {
+        "loading": "Cargando información completa del ticket...",
+        "headerTitle": "Detalles del Ticket Asociado",
+        "unclassified": "Sin Clasificar",
+        "status": "ESTADO",
+        "fields": {
+          "affected": "Afectado",
+          "location": "Ubicación",
+          "priority": "Prioridad",
+          "level": "Nivel",
+          "schedule": "Horario Disponible",
+          "na": "N/A",
+          "description": "Descripción del Problema (Reporte Original)",
+          "boss": "Jefe del Departamento",
+          "technicians": "Técnicos Asignados"
         }
       }
     }
@@ -1162,9 +1162,6 @@
       "description": "No se pudieron obtener las Bitácoras. Revisa tu conexión."
     }
   },
-
-
-
   "folios": {
     "data": {
       "department_name": "Departamento",
@@ -1373,8 +1370,7 @@
         "description": "Hubo un problema de conexión con el servidor. Por favor, intenta de nuevo."
       }
     }
-  }
-,
+  },
   "equipment_form_new": "Nuevo Registro de Equipo",
   "equipment_form_description": "Complete la información técnica y administrativa del activo",
   "equipment_form_type": "Tipo de Equipo",
@@ -2616,7 +2612,7 @@
     }
   },
   "staff": {
-    "componets": {
+    "components": {
       "staffDetailsCard": {
         "title": "Personal Asignado",
         "noData": "Datos del personal no disponibles."

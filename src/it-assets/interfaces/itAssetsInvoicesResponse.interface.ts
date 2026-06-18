@@ -1,5 +1,5 @@
 export interface ItAssetsInvoicesResponse {
-    invoices: Invoice[];
+    itAssetsInvoices: Invoice[];
     meta:     Meta;
 }
 

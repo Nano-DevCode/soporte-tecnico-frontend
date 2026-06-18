@@ -1,5 +1,5 @@
 export interface ItAssetsBrandsResponse {
-    brands: Brand[];
+    itAssetsBrands: Brand[];
     meta:   Meta;
 }
 

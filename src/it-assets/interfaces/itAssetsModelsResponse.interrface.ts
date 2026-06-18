@@ -1,7 +1,7 @@
 import type { Brand } from "./itAssetsBrandsResponse.interfaces";
 
 export interface ItAssetsModelsResponse {
-    models: Model[];
+    itAssetsModels: Model[];
     meta:   Meta;
 }
 

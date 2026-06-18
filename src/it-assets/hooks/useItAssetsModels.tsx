@@ -39,7 +39,7 @@ export const useItAssetsModels = (searchTerm: string = "", modelId?: string) => 
   const memorizedItAssetsModels = useMemo(() => {
     // IMPORTANTE: Revisa en tu interfaz ItAssetsModelsResponse si la propiedad se llama "models". 
     // Si se llama "data" o de otra forma, cámbialo aquí.
-    return query.data?.pages.flatMap((page) => page.models) ?? [];
+    return query.data?.pages.flatMap((page) => page.itAssetsModels) ?? [];
   }, [query.data]); 
 
   return {

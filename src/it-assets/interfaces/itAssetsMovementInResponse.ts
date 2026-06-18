@@ -5,7 +5,6 @@ export interface ItAssetsMovementIn {
     id:         string;
     createdAt:  Date;
     updatedAt:  Date;
-    type:       string;
     itAsset:    ItAsset;
     movementIn: MovementIn;
 }

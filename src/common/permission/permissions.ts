@@ -156,5 +156,5 @@ export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> 
         PERMISSIONS.WATCH_REJECTION_REPORT,
         PERMISSIONS.WATCH_RESPONSE_REPORT
     ],
-
+    [AppRoles.Visitante]: []
 };

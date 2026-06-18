@@ -36,7 +36,7 @@ export const useItAssetsBrands = (searchTerm: string = "") => {
   // 3. Aplanamos las páginas para obtener un solo arreglo continuo
   const memorizedItAssetsBrands = useMemo(() => {
     // IMPORTANTE: Asegúrate de que "brands" coincida con la propiedad de tu interface ItAssetsBrandsResponse
-    return query.data?.pages.flatMap((page) => page.brands) ?? [];
+    return query.data?.pages.flatMap((page) => page.itAssetsBrands) ?? [];
   }, [query.data]); 
 
   return {

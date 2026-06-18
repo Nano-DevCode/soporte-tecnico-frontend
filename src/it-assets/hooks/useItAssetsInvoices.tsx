@@ -32,7 +32,7 @@ export const useItAssetsInvoices = (searchTerm: string = "") => {
   const memorizedItAssetsInvoices = useMemo(() => {
     // IMPORTANTE: Aquí asumo que tu interfaz ItAssetsInvoicesResponse tiene un arreglo llamado "invoices".
     // Si se llama distinto (ej. "data", "items" o "facturas"), solo cambia "page.invoices" por ese nombre.
-    return query.data?.pages.flatMap((page) => page.invoices) ?? [];
+    return query.data?.pages.flatMap((page) => page.itAssetsInvoices) ?? [];
   }, [query.data]); 
 
   return {

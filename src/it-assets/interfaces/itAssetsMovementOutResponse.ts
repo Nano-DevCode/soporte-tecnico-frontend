@@ -7,7 +7,6 @@ export interface ItAssetsMovementOut {
     id:          string;
     createdAt:   Date;
     updatedAt:   Date;
-    type:        string;
     itAsset:     ItAsset;
     movementOut: MovementOut;
 }
