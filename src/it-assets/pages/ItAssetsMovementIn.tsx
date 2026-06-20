@@ -1,27 +1,21 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { LogIn, Loader2, ArrowLeft, Monitor, RefreshCw, Info } from "lucide-react";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import { useTranslation } from "react-i18next";
-
-// Hooks
 import { useItAssets } from "../hooks/useItAssets";
 import useItAssetsStatus from "../hooks/useItAssetsStatus";
 import { useItAssetsMovements } from "../hooks/useItAssetsMovements";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
-
-// UI Components
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-
-// Custom Components
 import CustomItAssetPreview from "../components/CustomItAssetPreview";
 import { CustomConfirmChangeStatusItAsset } from "../components/CustomConfirmChangeStatusItAsset";
 
@@ -30,11 +24,10 @@ const ItAssetsMovementIn = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // Estados locales para la gestión del estado del activo
+  // Estados para la gestión del estado del activo
   const [isEditingStatus, setIsEditingStatus] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
-  // Hooks de datos
   const { itAsset, isLoadingAsset } = useItAssets();
   const { itAssetsStatus, isLoading: isLoadingStatus } = useItAssetsStatus();
   const { createInMovementAsync, isCreatingIn } = useItAssetsMovements();
@@ -57,7 +50,10 @@ const ItAssetsMovementIn = () => {
   });
 
   // Observador para mostrar la descripción del estado seleccionado
-  const currentStatusId = form.watch("itAssetsStatusId");
+  const currentStatusId = useWatch({
+    control: form.control,
+    name: "itAssetsStatusId",
+  });
   const selectedStatusDetail = itAssetsStatus.find(status => status.id === currentStatusId);
 
   // Pre-cargar el estado actual del equipo al abrir el formulario
@@ -113,7 +109,7 @@ const ItAssetsMovementIn = () => {
   // Estados de carga y error (UI)
   if (isLoadingAsset) {
     return (
-      <div className="flex h-[400px] items-center justify-center">
+      <div className="flex h-100 items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );

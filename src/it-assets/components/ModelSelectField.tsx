@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { useItAssetsModels } from "../hooks/useItAssetsModels";
@@ -11,25 +11,33 @@ import { isAxiosError } from "axios";
 export const ModelSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
   const { t } = useTranslation();
   const { control, watch, setValue } = useFormContext();
-  const [searchInput, setSearchInput] = useState("");
+
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSearch = (text: string) => {
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    searchTimerRef.current = setTimeout(() => {
+      setDebouncedSearch(text);
+    }, 500);
+  };
 
   const selectedBrandId = watch("brandId");
-  const [prevBrand, setPrevBrand] = useState(selectedBrandId);
-
-  // Evitamos que al cargar los datos en modo edición se borre el modelo automáticamente
-  if (selectedBrandId !== prevBrand) {
-    setPrevBrand(selectedBrandId);
-    // Si el cambio de marca es manual (no la carga inicial), reseteamos el modelo
-    if (prevBrand) {
+  
+  const prevBrandRef = useRef(selectedBrandId);
+  useEffect(() => {
+    if (prevBrandRef.current && selectedBrandId !== prevBrandRef.current) {
       setValue("modelId", "");
     }
-  }
+    prevBrandRef.current = selectedBrandId;
+  }, [selectedBrandId, setValue]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(searchInput), 500);
-    return () => clearTimeout(timer);
-  }, [searchInput]);
+    const timer = searchTimerRef;
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+    };
+  }, []);
 
   const { itAssetsModels, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, createModel, isCreating } = useItAssetsModels(debouncedSearch);
 
@@ -54,7 +62,7 @@ export const ModelSelectField = ({ disabled, initialData }: { disabled?: boolean
                 options={options}
                 value={selectedOption || null}
                 onChange={(val) => field.onChange(val?.id || "")}
-                onSearch={setSearchInput}
+                onSearch={handleSearch}
                 fetchNextPage={fetchNextPage}
                 hasNextPage={!!hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
@@ -82,7 +90,9 @@ export const ModelSelectField = ({ disabled, initialData }: { disabled?: boolean
                       }
                     });
                     field.onChange(newModel.id);
-                    setSearchInput("");
+                    
+                    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+                    setDebouncedSearch("");
                   } catch (error) { console.error(error); }
                 }}
               />

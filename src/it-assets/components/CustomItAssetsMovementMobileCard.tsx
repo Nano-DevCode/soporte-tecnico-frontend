@@ -63,12 +63,12 @@ export const CustomItAssetsMovementMobileCard = memo(({ movements }: Props) => {
               </div>
 
               {/* Se quitó 'truncate' y se agregó 'whitespace-normal break-words' */}
-              <p className="text-sm font-bold text-foreground leading-snug whitespace-normal break-words">
+              <p className="text-sm font-bold text-foreground leading-snug whitespace-normal wrap-break-word">
                 {mov.itAsset.serialNumber}
               </p>
 
               {/* Se cambió a 'ID INVENTARIO INTERNO', se quitó 'truncate' y se agregó 'whitespace-normal break-words' */}
-              <p className="text-xs text-muted-foreground font-mono whitespace-normal break-words">
+              <p className="text-xs text-muted-foreground font-mono whitespace-normal wrap-break-word">
                 ID INVENTARIO INTERNO: {mov.itAsset.idInventary || t("itAssets.components.movementMobileCard.assetInfo.na")}
               </p>
             </div>

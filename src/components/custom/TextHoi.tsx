@@ -11,6 +11,9 @@ const accentMap: Record<string, string> = {
     u: '[uúùüû]',
 };
 
+// 1. ¡Movimos la función pura AFUERA del componente!
+const escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 export const TextHighlighter = ({ text, search }: TextHighlighterProps) => {
     if (!text || !search || search.trim() === '') {
         return <>{text}</>;
@@ -25,9 +28,6 @@ export const TextHighlighter = ({ text, search }: TextHighlighterProps) => {
     if (searchWords.length === 0) {
         return <>{text}</>;
     }
-
-
-    const escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
     const regexParts = searchWords.map((word) => {
         return escapeRegExp(word)
@@ -44,17 +44,20 @@ export const TextHighlighter = ({ text, search }: TextHighlighterProps) => {
     return (
         <>
             {parts.map((part, index) => {
+                // 2. Creamos una key estable combinando el texto y la posición
+                const uniqueKey = `${part}-${index}`; 
+
                 if (matchRegex.test(part)) {
                     return (
                         <mark
-                            key={index}
+                            key={uniqueKey}
                             className="bg-yellow-200 text-yellow-900 rounded-[2px] px-0.5 font-medium dark:bg-yellow-500/30 dark:text-yellow-200"
                         >
                             {part}
                         </mark>
                     );
                 }
-                return <span key={index}>{part}</span>;
+                return <span key={uniqueKey}>{part}</span>;
             })}
         </>
     );

@@ -7,13 +7,9 @@ import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
-
-// UI Components
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-
-// Hooks y Servicios
 import { useItAssets } from "../hooks/useItAssets";
 import useItAssetsStatus from "../hooks/useItAssetsStatus";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
@@ -25,8 +21,8 @@ const ItAssetsCreatePage = () => {
   const { createAssetMutation, isCreatingAsset } = useItAssets();
   const { itAssetsStatus, isLoading: isLoadingStatus } = useItAssetsStatus();
 
-  // 1. Metemos el esquema dentro del componente, pero lo memorizamos 
-  // para que solo se vuelva a crear si el idioma (t) cambia.
+  // Metemos el esquema dentro del componente, pero lo memorizamos 
+  // para que solo se vuelva a crear si el idioma cambia.
   const createAssetSchema = useMemo(() => z.object({
     serialNumber: z.string().min(1, t("itAssets.createPage.validation.serialNumber")).trim(),
     idInventary: z.string().trim().optional(),
@@ -40,7 +36,6 @@ const ItAssetsCreatePage = () => {
     imageFile: z.any().refine((file) => file instanceof File, t("itAssets.createPage.validation.imageFile")),
   }), [t]);
 
-  // 2. El tipo inferido ahora vive dentro del componente
   type CreateAssetFormValues = z.infer<typeof createAssetSchema>;
 
   const form = useForm<CreateAssetFormValues>({

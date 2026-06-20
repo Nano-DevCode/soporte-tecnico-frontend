@@ -19,22 +19,22 @@ export const CustomDepartmentDesktopTable = memo(({ departments, handleDownClick
         {/* Cabecera limpia, sin bg-muted/50 ni íconos extra */}
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px] items-center justify-center text-center">
+            <TableHead className="w-20 items-center justify-center text-center">
               {t("custom_department_desktop_table_folio")}
             </TableHead>
-            <TableHead className="w-[120px] text-left">
+            <TableHead className="w-30 text-left">
               {t("custom_department_desktop_table_acronym")}
             </TableHead>
-            <TableHead className="w-[300px] text-left">
+            <TableHead className="w-75 text-left">
               {t("custom_department_desktop_table_name")}
             </TableHead>
-            <TableHead className="w-[120px] text-center">
+            <TableHead className="w-30 text-center">
               {t("custom_department_desktop_table_priority")}
             </TableHead>
-            <TableHead className="w-[100px] text-center">
+            <TableHead className="w-25 text-center">
               {t("custom_department_desktop_table_status")}
             </TableHead>
-            <TableHead className="w-[80px] text-center">
+            <TableHead className="w-20 text-center">
               {t("custom_department_desktop_table_actions")}
             </TableHead>
           </TableRow>
@@ -59,10 +59,10 @@ export const CustomDepartmentDesktopTable = memo(({ departments, handleDownClick
               {/* NOMBRE */}
               <TableCell className="align-middle py-4">
                 <div className="flex flex-col gap-0.5 min-w-0">
-                  <span className="text-sm font-bold text-foreground truncate max-w-[280px]">
+                  <span className="text-sm font-bold text-foreground truncate max-w-70">
                     {dept.name}
                   </span>
-                  <span className="text-xs text-muted-foreground truncate max-w-[280px]">
+                  <span className="text-xs text-muted-foreground truncate max-w-70">
                     {t("custom_department_desktop_table_id")} {dept.id}
                   </span>
                 </div>
@@ -103,7 +103,7 @@ export const CustomDepartmentDesktopTable = memo(({ departments, handleDownClick
             <TableRow>
               <TableCell 
                 colSpan={6} 
-                className="h-[300px] text-center text-muted-foreground"
+                className="h-75 text-center text-muted-foreground"
               >
                 <div className="flex flex-col items-center gap-3">
                   <div className="h-14 w-14 rounded-full bg-muted flex items-center justify-center border border-border">

@@ -9,18 +9,21 @@ export const useItAssetsMovements = (id?: string) => {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
 
-  // Paginación
   const limit = Number(searchParams.get('limit')) || 10;
   const page = Number(searchParams.get('page')) || 1;
   const offset = (page - 1) * limit;
   
-  // Filtros de búsqueda
   const query = searchParams.get("query")?.trim() || undefined;
   const type = searchParams.get("type") || undefined;
   const startDate = searchParams.get("startDate") || undefined;
   const endDate = searchParams.get("endDate") || undefined;
 
-  const queryMovements = useQuery({
+  const {
+    data: movementsData,
+    isLoading: isLoadingMovements,
+    isFetching: isFetchingMovements,
+    error: errorMovements
+  } = useQuery({
     queryKey: ['it-assets-movements', { limit, offset, query, type, startDate, endDate }],
     queryFn: () => getItAssetsMovementsAction({ limit, offset, query, type, startDate, endDate }),
     staleTime: 1000 * 60 * 5,
@@ -30,7 +33,12 @@ export const useItAssetsMovements = (id?: string) => {
     }),
   });
 
-  const queryMovement = useQuery({
+  const {
+    data: movementData,
+    isLoading: isLoadingMovement,
+    isFetching: isFetchingMovement,
+    error: errorMovement
+  } = useQuery({
     queryKey: ['it-assets-movement', id],
     queryFn: () => getItAssetsMovementAction(id!),
     staleTime: 1000 * 60 * 5,
@@ -40,11 +48,8 @@ export const useItAssetsMovements = (id?: string) => {
   const createMovementOutMutation = useMutation({
     mutationFn: createItAssetsMovementOutAction, 
     onSuccess: (_ , variables) => {
-      // 1. Refresca la tabla de Activos
       queryClient.invalidateQueries({ queryKey: ['it-assets'] });
-      // 2. Refresca la tabla de Movimientos
       queryClient.invalidateQueries({ queryKey: ['it-assets-movements'] });
-      // 3. Refresca la vista de detalles del Activo específico
       queryClient.invalidateQueries({ queryKey: ['it-asset', variables.itAssetId] });
     },
   });
@@ -52,41 +57,34 @@ export const useItAssetsMovements = (id?: string) => {
   const createMovementInMutation = useMutation({
     mutationFn: createItAssetsMovementInAction, 
     onSuccess: (_, variables) => {
-      // 1. Refresca la tabla de Activos
       queryClient.invalidateQueries({ queryKey: ['it-assets'] });
-      // 2. Refresca la tabla de Movimientos
       queryClient.invalidateQueries({ queryKey: ['it-assets-movements'] });
-      // 3. Refresca la vista de detalles del Activo específico
       queryClient.invalidateQueries({ queryKey: ['it-asset', variables.itAssetId] });
     },
   });
 
   return {
-    // Datos de la Lista
-    itAssetsMovements: queryMovements.data?.itAssetsMovements ?? [],
-    meta: queryMovements.data?.meta,
-    isLoadingMovements: queryMovements.isLoading,
-    isFetchingMovements: queryMovements.isFetching,
-    errorMovements: queryMovements.error,
+    itAssetsMovements: movementsData?.itAssetsMovements ?? [],
+    meta: movementsData?.meta,
+    isLoadingMovements,
+    isFetchingMovements,
+    errorMovements,
 
-    // Datos para Detalles
-    itAssetMovement: queryMovement.data,
-    isLoadingMovement: queryMovement.isLoading,
-    isFetchingMovement: queryMovement.isFetching,
-    errorMovement: queryMovement.error,
+    itAssetMovement: movementData,
+    isLoadingMovement,
+    isFetchingMovement,
+    errorMovement,
 
-    // Crear Salida
     isCreatingOut: createMovementOutMutation.isPending,
     isSuccessOut: createMovementOutMutation.isSuccess,
     errorOut: createMovementOutMutation.error,
     createOutMovementAsync: createMovementOutMutation.mutateAsync,
-    createOutMovement: createMovementOutMutation.mutate,  
+    createOutMovement: createMovementOutMutation.mutate,   
     
-    // Crear Entrada
     isCreatingIn: createMovementInMutation.isPending,
     isSuccessIn: createMovementInMutation.isSuccess,
     errorIn: createMovementInMutation.error,
     createInMovementAsync: createMovementInMutation.mutateAsync,
-    createInMovement: createMovementInMutation.mutate,  
+    createInMovement: createMovementInMutation.mutate,   
   };
 };

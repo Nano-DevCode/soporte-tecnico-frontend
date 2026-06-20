@@ -16,7 +16,7 @@ export const ItAssetPreviewCard = ({ asset }: Props) => {
     <div className="md:col-span-1 space-y-6 md:sticky md:top-24">
       <Card className="overflow-hidden shadow-md border-border/60 transition-all duration-300 hover:shadow-lg">
         
-        <div className="relative aspect-[4/3] w-full bg-gradient-to-br from-muted/50 via-muted to-muted/80 flex items-center justify-center p-6 border-b border-border/50 group">
+        <div className="relative aspect-4/3 w-full bg-linear-to-br from-muted/50 via-muted to-muted/80 flex items-center justify-center p-6 border-b border-border/50 group">
           
           {/* Badge de estado flotante sobre la imagen */}
           <div className="absolute top-3 right-3 z-10">
@@ -49,7 +49,6 @@ export const ItAssetPreviewCard = ({ asset }: Props) => {
           )}
         </div>
         
-        {/* === ÁREA DE INFORMACIÓN === */}
         <CardContent className="p-6 space-y-6">
           
           {/* Cabecera del Activo */}
@@ -60,11 +59,9 @@ export const ItAssetPreviewCard = ({ asset }: Props) => {
                 {t("itAssets.components.assetPreviewCard.title")}
               </p>
             </div>
-            {/* Se agregó break-all, whitespace-normal y se ajustó el leading */}
             <h3 className="text-xl font-black leading-tight text-foreground mb-2 break-all whitespace-normal">
               {asset.serialNumber}
             </h3>
-            {/* Se agregó break-all y whitespace-normal para que el ID rompa línea si es muy largo */}
             <div className="inline-flex items-center rounded-md bg-muted/60 px-2 py-1 text-xs font-mono text-muted-foreground border border-border/50 break-all whitespace-normal text-left">
               {t("itAssets.components.assetPreviewCard.id")}: {asset.idInventary || t("itAssets.components.assetPreviewCard.noId")}
             </div>

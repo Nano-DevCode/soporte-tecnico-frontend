@@ -99,7 +99,7 @@ export const CustomPagination = memo(({ totalPages }: Props) => {
           // defaultValue='10' <-- Quitamos esto, el value ya hace el trabajo en Radix
           onValueChange={handleLimitChange}
         >
-          <SelectTrigger className="h-8 w-[70px]">
+          <SelectTrigger className="h-8 w-17.5">
             <SelectValue placeholder={queryLimit} />
           </SelectTrigger>
           <SelectContent side="top">
@@ -125,10 +125,11 @@ export const CustomPagination = memo(({ totalPages }: Props) => {
           <span className="sr-only">{t("custom_pagination_previous")}</span>
         </Button>
 
-        {renderPageNumbers().map((pageNum, index) => {
+        {renderPageNumbers().map((pageNum) => {
           if (pageNum === 'ellipsis-start' || pageNum === 'ellipsis-end') {
             return (
-              <span key={`el-${index}`} className="flex h-8 w-8 items-center justify-center shrink-0">
+              // Usamos pageNum directamente (es un string único en este contexto)
+              <span key={pageNum as string} className="flex h-8 w-8 items-center justify-center shrink-0">
                 <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
               </span>
             );
@@ -136,7 +137,7 @@ export const CustomPagination = memo(({ totalPages }: Props) => {
 
           return (
             <Button
-              key={index}
+              key={pageNum as number} // <-- ¡Usamos el número de página como KEY!
               variant={currentPage === pageNum ? 'default' : 'outline'}
               size="icon"
               className="h-8 w-8 shrink-0"

@@ -14,27 +14,22 @@ export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps
   const { t } = useTranslation();
   const { control } = useFormContext();
   
-  // Iniciamos la vista previa con la imagen actual si existe
-  const [previewUrl, setPreviewUrl] = useState<string | null>(currentImageUrl || null);
-  const [prevImageUrl, setPrevImageUrl] = useState<string | null>(currentImageUrl || null);
+  const [localOverride, setLocalOverride] = useState<{ url: string | null } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  if (currentImageUrl !== prevImageUrl) {
-    setPrevImageUrl(currentImageUrl || null);
-    setPreviewUrl(currentImageUrl || null);
-  }
+  const displayUrl = localOverride ? localOverride.url : currentImageUrl;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, onChange: (val: File | null) => void) => {
     const file = e.target.files?.[0];
     if (file) {
       onChange(file);
-      setPreviewUrl(URL.createObjectURL(file));
+      setLocalOverride({ url: URL.createObjectURL(file) });
     }
   };
 
   const handleRemove = (onChange: (val: File | null) => void) => {
     onChange(null);
-    setPreviewUrl(null);
+    setLocalOverride({ url: null });
     if (inputRef.current) inputRef.current.value = "";
   };
 
@@ -46,8 +41,7 @@ export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps
         <FormItem className="w-full md:col-span-2">
           <FormLabel>
             {t("itAssets.components.imageUploadField.label")}
-            {/* Solo mostramos el asterisco si NO hay una imagen previa (modo creación) */}
-            {!previewUrl && <span className="text-red-500"> *</span>}
+            {!displayUrl && <span className="text-red-500"> *</span>}
           </FormLabel>
           <FormControl>
             <div className="flex flex-col items-center justify-center w-full">
@@ -57,12 +51,16 @@ export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps
                 className="hidden"
                 ref={inputRef}
                 disabled={disabled}
+                aria-label={t("itAssets.components.imageUploadField.label")}
                 onChange={(e) => handleFileChange(e, field.onChange)}
               />
 
-              {!previewUrl ? (
-                <div 
-                  onClick={() => !disabled && inputRef.current?.click()}
+              {!displayUrl ? (
+                <button 
+                  type="button"
+                  disabled={disabled}
+                  aria-label={t("itAssets.components.imageUploadField.clickToUpload")}
+                  onClick={() => inputRef.current?.click()}
                   className={`w-full flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
                     disabled ? "bg-muted cursor-not-allowed opacity-60" : "border-primary/30 bg-primary/5 hover:bg-primary/10"
                   }`}
@@ -74,11 +72,11 @@ export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps
                   <p className="text-xs text-muted-foreground">
                     {t("itAssets.components.imageUploadField.formats")}
                   </p>
-                </div>
+                </button>
               ) : (
                 <div className="relative w-full sm:w-1/2 rounded-lg overflow-hidden border border-border bg-muted/30 group">
                   <img 
-                    src={previewUrl} 
+                    src={displayUrl} 
                     alt={t("itAssets.components.imageUploadField.previewAlt")} 
                     className="w-full h-auto object-contain max-h-60"
                   />
@@ -90,6 +88,7 @@ export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps
                       disabled={disabled}
                       onClick={() => handleRemove(field.onChange)}
                       className="gap-2"
+                      aria-label={t("itAssets.components.imageUploadField.changePhoto")}
                     >
                       <X className="h-4 w-4" /> {t("itAssets.components.imageUploadField.changePhoto")}
                     </Button>

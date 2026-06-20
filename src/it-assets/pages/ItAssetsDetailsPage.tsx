@@ -17,28 +17,22 @@ import {
   Clock, 
   AlignLeft
 } from "lucide-react";
-
-// UI Components
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-// Hooks
 import { useItAssets } from "../hooks/useItAssets";
 import DetailItem from "@/components/custom/DetailItem";
+
+const formatDate = (dateString?: string | Date) => {
+  if (!dateString) return "N/A";
+  return new Date(dateString).toLocaleDateString();
+};
 
 const ItAssetsDetailsPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // El hook ya saca el ID de la URL internamente
   const { itAsset, isLoadingAsset } = useItAssets();
-
-  // Función auxiliar para formatear fechas
-  const formatDate = (dateString?: string | Date) => {
-    if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString();
-  };
 
   if (isLoadingAsset) {
     return (
@@ -63,8 +57,7 @@ const ItAssetsDetailsPage = () => {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-10">
-      
-      {/* HEADER */}
+
       <div className="flex items-center gap-4">
         <Button variant="outline" size="icon" type="button" onClick={() => navigate(-1)}>
           <ArrowLeft className="h-4 w-4" />
@@ -81,7 +74,7 @@ const ItAssetsDetailsPage = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        {/* COLUMNA PRINCIPAL (Detalles) */}
+        {/* Detalles */}
         <div className="md:col-span-2 space-y-6">
           <Card>
             <CardHeader>
@@ -92,7 +85,6 @@ const ItAssetsDetailsPage = () => {
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
-              {/* Uso del nuevo DetailItem */}
               <DetailItem icon={Barcode} label={t("itAssets.fields.serialNumber", "Número de Serie")} value={itAsset.serialNumber || "N/A"} />
               <DetailItem icon={Hash} label={t("itAssets.fields.idInventary", "ID Inventario")} value={itAsset.idInventary || "N/A"} />
               <DetailItem icon={Monitor} label={t("itAssets.fields.type", "Tipo")} value={itAsset.itAssetsType?.name || "N/A"} />
@@ -100,7 +92,6 @@ const ItAssetsDetailsPage = () => {
               <DetailItem icon={Tag} label={t("itAssets.fields.model", "Modelo")} value={itAsset.model?.name || "N/A"} />
               <DetailItem icon={Activity} label={t("itAssets.fields.status", "Estado Físico")} value={itAsset.itAssetStatus?.name || "N/A"} />
               
-              {/* Bloques personalizados para los booleanos */}
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2.5">
                   <div className="flex items-center justify-center bg-muted/60 p-1.5 rounded-md border border-border/40 shadow-sm">
@@ -145,7 +136,7 @@ const ItAssetsDetailsPage = () => {
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
               <DetailItem icon={FileText} label={t("itAssets.fields.invoice", "Factura")} value={itAsset.invoice?.idInternal || "N/A"} />
-              <div className="hidden sm:block"></div> {/* Espaciador invisible para mantener el grid alineado */}
+              <div className="hidden sm:block"></div> 
               
               <DetailItem icon={Calendar} label={t("itAssets.fields.createdAt", "Fecha de Creación")} value={formatDate(itAsset.createdAt)} />
               <DetailItem icon={Clock} label={t("itAssets.fields.updatedAt", "Última Actualización")} value={formatDate(itAsset.updatedAt)} />
@@ -161,7 +152,7 @@ const ItAssetsDetailsPage = () => {
           </Card>
         </div>
 
-        {/* COLUMNA SECUNDARIA (Imagen) */}
+        {/* Imagen */}
         <div className="md:col-span-1">
           <Card className="h-full sticky top-6">
             <CardHeader>

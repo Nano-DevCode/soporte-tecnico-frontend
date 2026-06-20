@@ -4,7 +4,6 @@ import { getDepartmentsActions } from "../actions/get-departments.action";
 import { setStatusDepartmentAction } from "../actions/set-status-departament.action";
 
 export const useDepartments = () => {
-
   const [searchParams] = useSearchParams();
 
   const limit = Number(searchParams.get('limit')) || 10;
@@ -15,7 +14,13 @@ export const useDepartments = () => {
 
   const queryClient = useQueryClient();
 
-  const departmentsQuery = useQuery({
+  const {
+    data: queryData,
+    isLoading,
+    isFetching,
+    error,
+    refetch
+  } = useQuery({
     queryKey: ['departments', { limit, offset, status, query }],
     queryFn: () => getDepartmentsActions({ limit, offset, status, query }),
     staleTime: 1000 * 60 * 5,
@@ -36,15 +41,15 @@ export const useDepartments = () => {
   });
 
   return {
-    // Datos procesados
-    departments: departmentsQuery.data?.departments ?? [],
-    meta: departmentsQuery.data?.meta,
+    // Datos procesados leyendo de nuestra variable desestructurada
+    departments: queryData?.departments ?? [],
+    meta: queryData?.meta,
 
     // Estados de carga
-    isLoading: departmentsQuery.isLoading,
-    isFetching: departmentsQuery.isFetching,
-    error: departmentsQuery.error,
-    refetch: departmentsQuery.refetch,
+    isLoading,
+    isFetching,
+    error,
+    refetch,
 
     // Acciones de mutación
     changeStatus: statusMutation.mutateAsync,

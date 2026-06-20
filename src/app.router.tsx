@@ -7,12 +7,12 @@ import { userRoutes } from "./users/users.router";
 import { accountRoutes } from "./account/account.router";
 import { SchoolPeriodsRoutes } from "./school-periods/school-periods.router";
 import { CenterManagersRoutes } from "./computing-center-managers/center-manager.router";
-import { departmentRoutes } from "./Departments/departments.routes";
+import { DepartmentRoutes } from "./Departments/departments.routes";
 import { TicketsRoutes } from "./tickets/tickets.router";
 import { authRoutes } from "./auth/auth.router";
 import { equipmentRoutes } from "./Equipments/equipments.routes";
 import { toolRoutes } from "./tools/tools.router";
-import { itAssetRoutes } from "./it-assets/it-assets.router";
+import { ItAssetsRoutes } from "./it-assets/it-assets.router";
 import { TechnicalReportsRoutes } from "./technical-reports/technical-reports.router";
 import { FoliosRoutes } from "./folios/folio.router";
 import { consumableRoutes } from "./Consumables/consumables.routes";
@@ -57,7 +57,7 @@ export const appRouter = createBrowserRouter([
             },
             {
                 path: 'departments',
-                children: departmentRoutes,
+                element: <DepartmentRoutes/>,
             },
             {
                 path: 'equipments',
@@ -73,7 +73,7 @@ export const appRouter = createBrowserRouter([
             },
             {
                 path: 'it-assets',
-                children: itAssetRoutes,
+                element: <ItAssetsRoutes/>
             },
             {
                 path: 'folios',

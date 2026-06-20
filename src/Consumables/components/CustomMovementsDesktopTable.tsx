@@ -1,4 +1,3 @@
-import React from "react";
 import { ArrowDownRight, ArrowUpRight, Eye } from "lucide-react";
 import { Link } from "react-router";
 import type { GroupedMovement } from "../interfaces/consumable-movement.interfaces";

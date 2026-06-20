@@ -10,7 +10,7 @@ import { CustomItAssetsMovementDesktopTable } from "../components/CustomItAssets
 import { CustomItAssetsMovementMobileCard } from "../components/CustomItAssetsMovementMobileCard";
 import { CustomItAssetsMovementsFilters } from "../components/CustomItAssetsMovementsFilters";
 
-export const ItAssetsMovementsPage = () => {
+const ItAssetsMovementsPage = () => {
   const { t } = useTranslation();
   const { itAssetsMovements, meta, isLoadingMovements } = useItAssetsMovements();
   console.log(itAssetsMovements, meta);

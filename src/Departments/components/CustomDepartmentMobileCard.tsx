@@ -11,7 +11,6 @@ interface Props {
   handleDownClick: (department: Department) => void;
 }
 
-// Envuelto en memo() para evitar que sea el "Render Fantasma"
 export const CustomDepartmentMobileCard = memo(({ departments, handleDownClick }: Props) => {
   return (
     <div className="md:hidden space-y-3">
@@ -41,7 +40,7 @@ export const CustomDepartmentMobileCard = memo(({ departments, handleDownClick }
             </div>
 
             {/* Nombre del Departamento */}
-            <p className="text-sm font-bold text-foreground leading-snug whitespace-normal break-words">
+            <p className="text-sm font-bold text-foreground leading-snug whitespace-normal wrap-break-word">
               {department.name}
             </p>
 
@@ -59,7 +58,7 @@ export const CustomDepartmentMobileCard = memo(({ departments, handleDownClick }
             {department.priority && (
               <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
                 <Tag className="h-3.5 w-3.5 shrink-0 mt-0.5" />
-                <span className="whitespace-normal break-words leading-relaxed">
+                <span className="whitespace-normal wrap-break-word leading-relaxed">
                   Prioridad: {department.priority}
                 </span>
               </div>

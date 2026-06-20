@@ -27,7 +27,7 @@ const CustomItAssetPreview = ({ itAsset, mode = 'out' }: Props) => {
             {/* 1. ID: Agregamos whitespace-normal, break-all y un max-w */}
             <Badge 
               variant="outline" 
-              className="bg-background shadow-sm font-mono text-[10px] whitespace-normal break-all max-w-[130px] text-right"
+              className="bg-background shadow-sm font-mono text-[10px] whitespace-normal break-all max-w-32.5 text-right"
             >
               #{itAsset.idInventary ?? itAsset.id}
             </Badge>

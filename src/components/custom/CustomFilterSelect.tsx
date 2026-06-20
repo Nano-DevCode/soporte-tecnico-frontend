@@ -1,4 +1,3 @@
-// components/CustomFilterSelect.tsx
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
 
@@ -15,7 +14,15 @@ interface Props {
     onChange: (value: string) => void;
 }
 
-export const CustomFilterSelect = ({ label, defaultValue, options = [], isLoading, onChange }: Props) => {
+const EMPTY_OPTIONS: Option[] = [];
+
+export const CustomFilterSelect = ({ 
+    label, 
+    defaultValue, 
+    options = EMPTY_OPTIONS,
+    isLoading, 
+    onChange 
+}: Props) => {
     const { t } = useTranslation();
 
     return (

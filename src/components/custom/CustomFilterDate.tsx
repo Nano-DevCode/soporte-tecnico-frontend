@@ -6,6 +6,8 @@ import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { enUS, es } from "date-fns/locale";
 import { toFormatLocalDateString } from "@/lib/helpers/to-format-local-date-string";
+// 1. Asegúrate de importar useState y useEffect
+import { useState, useEffect } from "react"; 
 
 interface Props {
   label: string;
@@ -15,10 +17,23 @@ interface Props {
   onChange: (date: string | null) => void;
 }
 
+// 2. Extraemos la fecha constante FUERA del componente
+const MIN_DEFAULT_DATE = new Date("1900-01-01");
+
 export const CustomFilterDate = ({ label, value, onChange, maxDate, minDate }: Props) => {
   const { i18n } = useTranslation();
   const { t } = useTranslation();
   const currentLocale = i18n.language === 'en' ? enUS : es;
+
+  const [today, setToday] = useState<Date | null>(null);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setToday(new Date());
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const parsedDate = value ? new Date(`${value}T00:00:00`) : undefined;
   const isValidDate = parsedDate && !isNaN(parsedDate.getTime());
@@ -46,7 +61,11 @@ export const CustomFilterDate = ({ label, value, onChange, maxDate, minDate }: P
           locale={currentLocale}
           defaultMonth={dateValue}
           disabled={(date) => {
-            let isOut = date > new Date() || date < new Date("1900-01-01");
+            // 4. Si 'today' aún no se carga (estamos en el servidor), no bloqueamos nada para evitar errores
+            if (!today) return false; 
+
+            // 5. Usamos nuestras variables estables
+            let isOut = date > today || date < MIN_DEFAULT_DATE;
             if (minDate) isOut = isOut || date < minDate;
             if (maxDate) isOut = isOut || date > maxDate;
             return isOut;

@@ -6,7 +6,15 @@ import { createItAssetsInvoiceAction } from '../actions/create-itAssets-invoice'
 export const useItAssetsInvoices = (searchTerm: string = "") => {
   const queryClient = useQueryClient();
 
-  const query = useInfiniteQuery({
+  const {
+    data: queryData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    error
+  } = useInfiniteQuery({
     queryKey: ['itAssetsInvoices', searchTerm],
     queryFn: ({ pageParam = 0 }) => 
       getItAssetsInvoicesAction({ 
@@ -30,20 +38,18 @@ export const useItAssetsInvoices = (searchTerm: string = "") => {
   });
 
   const memorizedItAssetsInvoices = useMemo(() => {
-    // IMPORTANTE: Aquí asumo que tu interfaz ItAssetsInvoicesResponse tiene un arreglo llamado "invoices".
-    // Si se llama distinto (ej. "data", "items" o "facturas"), solo cambia "page.invoices" por ese nombre.
-    return query.data?.pages.flatMap((page) => page.itAssetsInvoices) ?? [];
-  }, [query.data]); 
+    return queryData?.pages.flatMap((page) => page.itAssetsInvoices) ?? [];
+  }, [queryData]); 
 
   return {
     itAssetsInvoices: memorizedItAssetsInvoices, 
-    meta: query.data?.pages.at(-1)?.meta,
-    fetchNextPage: query.fetchNextPage,
-    hasNextPage: query.hasNextPage,
-    isFetchingNextPage: query.isFetchingNextPage,
-    isLoading: query.isLoading,
-    isError: query.isError,
-    error: query.error,
+    meta: queryData?.pages.at(-1)?.meta,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    error,
     
     createInvoice: createMutation.mutateAsync,
     isCreating: createMutation.isPending,

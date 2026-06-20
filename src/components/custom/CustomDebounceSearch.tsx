@@ -1,5 +1,4 @@
-// components/custom/CustomDebouncedSearch.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Loader2, Search } from "lucide-react";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { useTranslation } from "react-i18next";
@@ -27,22 +26,21 @@ export const CustomDebouncedSearch = ({
 
     const [localValue, setLocalValue] = useState(defaultValue);
     const { t } = useTranslation();
-    const [prevDefaultValue, setPrevDefaultValue] = useState(defaultValue);
 
-    if (defaultValue !== prevDefaultValue) {
-        setPrevDefaultValue(defaultValue);
-        setLocalValue(defaultValue);
-    }
+    const onSearchRef = useRef(onSearch);
+    useEffect(() => {
+        onSearchRef.current = onSearch;
+    }, [onSearch]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             if (localValue !== defaultValue) {
-                onSearch(localValue);
+                onSearchRef.current(localValue);
             }
         }, delay);
 
         return () => clearTimeout(timer);
-    }, [localValue, defaultValue, delay, onSearch]);
+    }, [localValue, defaultValue, delay]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { useItAssetsTypes } from "../hooks/useItAssetsTypes";
@@ -11,13 +11,26 @@ import type { BackendError } from "@/interfaces/backendError.interfaces";
 export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
   const { t } = useTranslation();
   const { control } = useFormContext();
-  const [searchInput, setSearchInput] = useState("");
+  
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSearch = (text: string) => {
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    searchTimerRef.current = setTimeout(() => {
+      setDebouncedSearch(text);
+    }, 500);
+  };
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(searchInput), 500);
-    return () => clearTimeout(timer);
-  }, [searchInput]);
+    const stableTimer = searchTimerRef; 
+    
+    return () => {
+      if (stableTimer.current) {
+        clearTimeout(stableTimer.current);
+      }
+    };
+  }, []);
 
   const { itAssetsTypes, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, createType, isCreating } = useItAssetsTypes(debouncedSearch);
 
@@ -40,7 +53,7 @@ export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean,
                 options={options}
                 value={selectedOption || null}
                 onChange={(val) => field.onChange(val?.id || "")}
-                onSearch={setSearchInput}
+                onSearch={handleSearch}
                 fetchNextPage={fetchNextPage}
                 hasNextPage={!!hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
@@ -67,7 +80,9 @@ export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean,
                       }
                     });
                     field.onChange(newType.id);
-                    setSearchInput("");
+                    
+                    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+                    setDebouncedSearch("");
                   } catch (error) { console.error(error); }
                 }}
               />

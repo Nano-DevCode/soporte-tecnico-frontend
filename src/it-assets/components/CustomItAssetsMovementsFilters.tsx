@@ -1,7 +1,7 @@
-import { memo, useRef, useState, useEffect } from "react";
+import { memo, useRef, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router";
 import { format, parseISO } from "date-fns";
-import { es } from "date-fns/locale"; // Importamos el español para las fechas
+import { es } from "date-fns/locale"; 
 import { useTranslation } from "react-i18next";
 import { FilterX, Search, Calendar as CalendarIcon } from "lucide-react";
 
@@ -27,27 +27,14 @@ export const CustomItAssetsMovementsFilters = memo(() => {
   const [searchParams, setSearchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // 1. Lectura de parámetros de la URL
   const queryFilter = searchParams.get("query") || "";
   const typeFilter = searchParams.get("type") || "all";
   const startDateFilter = searchParams.get("startDate") || "";
   const endDateFilter = searchParams.get("endDate") || "";
 
-  // Estado local para la búsqueda global (con debounce)
   const [globalSearch, setGlobalSearch] = useState(queryFilter);
 
-  // Efecto de Debounce
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (globalSearch !== queryFilter) {
-        updateFilters("query", globalSearch);
-      }
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [globalSearch, queryFilter]);
-
-  // Función genérica para actualizar la URL
-  const updateFilters = (key: string, value: string | undefined | null) => {
+  const updateFilters = useCallback((key: string, value: string | undefined | null) => {
     const newParams = new URLSearchParams(searchParams);
 
     if (!value || value === "all") {
@@ -58,9 +45,22 @@ export const CustomItAssetsMovementsFilters = memo(() => {
 
     newParams.set("page", "1");
     setSearchParams(newParams);
-  };
+  }, [searchParams, setSearchParams]);
 
-  // Limpieza total
+  const updateFiltersRef = useRef(updateFilters);
+  useEffect(() => {
+    updateFiltersRef.current = updateFilters;
+  }, [updateFilters]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (globalSearch !== queryFilter) {
+        updateFiltersRef.current("query", globalSearch);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [globalSearch, queryFilter]); // <-- updateFilters fuera de las dependencias
+
   const resetFilters = () => {
     setSearchParams({});
     setGlobalSearch("");
@@ -73,14 +73,11 @@ export const CustomItAssetsMovementsFilters = memo(() => {
     startDateFilter !== "" ||
     endDateFilter !== "";
 
-  // Convertimos los strings de la URL a objetos Date para el calendario
   const startDateObj = startDateFilter ? parseISO(startDateFilter) : undefined;
   const endDateObj = endDateFilter ? parseISO(endDateFilter) : undefined;
 
   return (
     <div className="flex flex-col gap-4 p-5 rounded-xl border border-border/60 bg-card shadow-sm animate-in fade-in duration-300">
-      
-      {/* --- FILA 1: Búsqueda Global y Tipo de Movimiento --- */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative w-full sm:flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -95,7 +92,7 @@ export const CustomItAssetsMovementsFilters = memo(() => {
         </div>
 
         <Select value={typeFilter} onValueChange={(v) => updateFilters("type", v)}>
-          <SelectTrigger className="w-full sm:w-[260px] h-10 bg-background transition-colors focus:ring-1">
+          <SelectTrigger className="w-full sm:w-65 h-10 bg-background transition-colors focus:ring-1">
             <SelectValue placeholder={t("itAssets.components.movementFilters.typePlaceholder")} />
           </SelectTrigger>
           <SelectContent>
@@ -106,10 +103,7 @@ export const CustomItAssetsMovementsFilters = memo(() => {
         </Select>
       </div>
 
-      {/* --- FILA 2: Fechas con Popover y Calendar de shadcn --- */}
       <div className="flex flex-col sm:flex-row gap-3 items-center">
-        
-        {/* Fecha Inicio */}
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -132,13 +126,11 @@ export const CustomItAssetsMovementsFilters = memo(() => {
               mode="single"
               selected={startDateObj}
               onSelect={(date) => updateFilters("startDate", date ? format(date, "yyyy-MM-dd") : "")}
-              // 👇 Nueva validación: Bloquea las fechas posteriores a endDateObj
               disabled={endDateObj ? { after: endDateObj } : undefined}
             />
           </PopoverContent>
         </Popover>
 
-        {/* Fecha Fin */}
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -161,13 +153,11 @@ export const CustomItAssetsMovementsFilters = memo(() => {
               mode="single"
               selected={endDateObj}
               onSelect={(date) => updateFilters("endDate", date ? format(date, "yyyy-MM-dd") : "")}
-              // 👇 Nueva validación: Bloquea las fechas anteriores a startDateObj
               disabled={startDateObj ? { before: startDateObj } : undefined}
             />
           </PopoverContent>
         </Popover>
 
-        {/* Botón Limpiar Filtros */}
         {hasActiveFilters && (
           <Button
             variant="ghost"
@@ -179,7 +169,6 @@ export const CustomItAssetsMovementsFilters = memo(() => {
           </Button>
         )}
       </div>
-      
     </div>
   );
 });

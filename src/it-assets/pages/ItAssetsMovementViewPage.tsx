@@ -23,7 +23,7 @@ import { TypeMovement } from "../interfaces/itAssetsMovementResponse";
 import ItAssetMovementInDetails from "../components/ItAssetMovementInDetails";
 import ItAssetMovementOutDetails from "../components/ItAssetMovementOutDetails";
 
-export const ItAssetsMovementViewPage = () => {
+const ItAssetsMovementViewPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();

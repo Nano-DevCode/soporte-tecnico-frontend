@@ -17,7 +17,7 @@ import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
 import { CustomItAssetDesktopCatalogSkeleton } from "@/components/custom/CustomItAssetDesktopCatalogSkeleton";
 import { CustomItAssetFilters } from "../components/CustomItAssetFilters";
 
-export function ItAssetsPage() {
+const ItAssetsPage = () => {
   const { t } = useTranslation();
   const { isLoading, itAssets, changeStatusAsync, isChangingStatus, meta } = useItAssets();
 
@@ -151,3 +151,5 @@ export function ItAssetsPage() {
     </div>
   )
 }
+
+export default ItAssetsPage;

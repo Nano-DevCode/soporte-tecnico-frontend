@@ -57,7 +57,7 @@ export const CustomDepartmentFilters = memo(() => {
         
         {/* Filtro Estado (Status) */}
         <Select value={statusFilter} onValueChange={(v) => updateFilters("status", v)}>
-          <SelectTrigger className="w-full sm:w-[150px] h-10 bg-background/60">
+          <SelectTrigger className="w-full sm:w-37.5 h-10 bg-background/60">
             <SelectValue placeholder="Estado" />
           </SelectTrigger>
           <SelectContent>

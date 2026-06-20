@@ -1,4 +1,4 @@
-import { memo, useRef, useState, useEffect, useMemo } from "react";
+import { memo, useRef, useState, useEffect, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -7,7 +7,6 @@ import { useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { InfiniteScrollSelect } from "../../components/custom/InfiniteScrollSelect";
 
-// IMPORTANTE: Asegúrate de que las rutas a tus hooks coincidan con tu estructura
 import { useItAssetsTypes } from "../hooks/useItAssetsTypes";
 import { useItAssetsBrands } from "../hooks/useItAssetsBrands";
 import { useItAssetsModels } from "../hooks/useItAssetsModels";
@@ -17,14 +16,12 @@ export const CustomItAssetFilters = memo(() => {
   const [searchParams, setSearchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // 1. Lectura de parámetros de la URL (Alineados con FilterItAssetBrandDto)
   const statusFilter = searchParams.get("status") || "all";
   const typeFilterId = searchParams.get("typeId");
   const brandFilterId = searchParams.get("brandId");
   const modelFilterId = searchParams.get("modelId");
   const queryFilter = searchParams.get("query") || "";
 
-  // Estados locales para las búsquedas (InfiniteScroll)
   const [searchType, setSearchType] = useState("");
   const [debouncedType, setDebouncedType] = useState("");
 
@@ -36,7 +33,6 @@ export const CustomItAssetFilters = memo(() => {
 
   const [globalSearch, setGlobalSearch] = useState(queryFilter);
 
-  // Efectos de Debounce para evitar saturar la API
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedType(searchType), 500);
     return () => clearTimeout(timer);
@@ -52,17 +48,7 @@ export const CustomItAssetFilters = memo(() => {
     return () => clearTimeout(timer);
   }, [searchModel]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (globalSearch !== queryFilter) {
-        updateFilters("query", globalSearch);
-      }
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [globalSearch, queryFilter]);
-
-  // Función genérica para actualizar la URL
-  const updateFilters = (key: string, value: string | undefined | null) => {
+  const updateFilters = useCallback((key: string, value: string | undefined | null) => {
     const newParams = new URLSearchParams(searchParams);
 
     if (!value || value === "all") {
@@ -73,9 +59,22 @@ export const CustomItAssetFilters = memo(() => {
 
     newParams.set("page", "1");
     setSearchParams(newParams);
-  };
+  }, [searchParams, setSearchParams]);
 
-  // Limpieza total
+  const updateFiltersRef = useRef(updateFilters);
+  useEffect(() => {
+    updateFiltersRef.current = updateFilters;
+  }, [updateFilters]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (globalSearch !== queryFilter) {
+        updateFiltersRef.current("query", globalSearch);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [globalSearch, queryFilter]); 
+
   const resetFilters = () => {
     setSearchParams({}); 
     setSearchType(""); 
@@ -85,7 +84,6 @@ export const CustomItAssetFilters = memo(() => {
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  // Fetch de catálogos (Asegúrate de pasar los parámetros correctos a tus hooks)
   const {
     itAssetsTypes,
     fetchNextPage: fetchNextTypePage,
@@ -110,7 +108,6 @@ export const CustomItAssetFilters = memo(() => {
     isLoading: isLoadingModels,
   } = useItAssetsModels(debouncedModel);
 
-  // Reconstrucción de objetos para el componente Select
   const selectedTypeObj = useMemo(() => {
     if (!typeFilterId) return null;
     return itAssetsTypes?.find(tObj => tObj.id === typeFilterId) || { id: typeFilterId, name: t("itAssets.components.filters.selected") };
@@ -126,7 +123,6 @@ export const CustomItAssetFilters = memo(() => {
     return itAssetsModels?.find(m => m.id === modelFilterId) || { id: modelFilterId, name: t("itAssets.components.filters.selected") };
   }, [modelFilterId, itAssetsModels, t]);
 
-  // Evaluar si hay filtros activos
   const hasActiveFilters = 
     statusFilter !== "all" || 
     typeFilterId || 
@@ -136,8 +132,6 @@ export const CustomItAssetFilters = memo(() => {
 
   return (
     <div className="flex flex-col gap-3 p-4 rounded-xl border border-border bg-card/50 shadow-sm animate-in fade-in duration-300">
-      
-      {/* --- FILA 1: Búsqueda Global y Estado del Sistema --- */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative w-full sm:flex-1">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -152,7 +146,7 @@ export const CustomItAssetFilters = memo(() => {
         </div>
 
         <Select value={statusFilter} onValueChange={(v) => updateFilters("status", v)}>
-          <SelectTrigger className="w-full sm:w-[200px] h-10 bg-background/60">
+          <SelectTrigger className="w-full sm:w-50 h-10 bg-background/60">
             <SelectValue placeholder={t("itAssets.components.filters.statusPlaceholder")} />
           </SelectTrigger>
           <SelectContent>
@@ -163,10 +157,7 @@ export const CustomItAssetFilters = memo(() => {
         </Select>
       </div>
 
-      {/* --- FILA 2: Tipo, Marca, Modelo y Botón Limpiar --- */}
       <div className="flex flex-col sm:flex-row gap-3">
-        
-        {/* Filtro: TIPO */}
         <div className="w-full sm:flex-1">
           <InfiniteScrollSelect
             options={itAssetsTypes}
@@ -181,7 +172,6 @@ export const CustomItAssetFilters = memo(() => {
           />
         </div>
 
-        {/* Filtro: MARCA */}
         <div className="w-full sm:flex-1">
           <InfiniteScrollSelect
             options={itAssetsBrands}
@@ -196,7 +186,6 @@ export const CustomItAssetFilters = memo(() => {
           />
         </div>
 
-        {/* Filtro: MODELO */}
         <div className="w-full sm:flex-1">
           <InfiniteScrollSelect
             options={itAssetsModels}
@@ -211,7 +200,6 @@ export const CustomItAssetFilters = memo(() => {
           />
         </div>
 
-        {/* Botón Limpiar Filtros */}
         {hasActiveFilters && (
           <Button
             variant="ghost"
@@ -223,7 +211,6 @@ export const CustomItAssetFilters = memo(() => {
           </Button>
         )}
       </div>
-      
     </div>
   );
 });

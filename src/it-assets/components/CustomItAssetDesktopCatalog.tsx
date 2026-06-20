@@ -37,13 +37,13 @@ export const CustomItAssetDesktopCatalog = memo(({ itAssets, handleDownClick }: 
             className="group relative flex flex-col overflow-hidden border-border/60 bg-background transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl"
           >
             {/* === ÁREA DE IMAGEN === */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted/20 flex items-center justify-center border-b border-border/40">
+            <div className="relative aspect-4/3 w-full overflow-hidden bg-muted/20 flex items-center justify-center border-b border-border/40">
               
               {/* Etiqueta de ID flotante (Izquierda) */}
               <div className="absolute top-3 left-3 z-20">
                 <Badge 
                   variant="outline" 
-                  className="bg-background/90 backdrop-blur-md border-border/50 shadow-sm text-[10px] font-mono px-2 py-0.5 whitespace-normal break-all max-w-[130px] text-left leading-tight flex flex-col items-start gap-0.5"
+                  className="bg-background/90 backdrop-blur-md border-border/50 shadow-sm text-[10px] font-mono px-2 py-0.5 whitespace-normal break-all max-w-32.5 text-left leading-tight flex flex-col items-start gap-0.5"
                 >
                   <span>#{asset.idInventary ?? asset.id}</span>
                 </Badge>
@@ -73,7 +73,7 @@ export const CustomItAssetDesktopCatalog = memo(({ itAssets, handleDownClick }: 
                   alt={asset.idInventary ?? t("itAssets.components.desktopCatalog.imageAlt")} 
                   className={cn(
                     "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105",
-                    asset.inUse && "grayscale-[50%] opacity-80"
+                    asset.inUse && "grayscale-50 opacity-80"
                   )}
                 />
               ) : (
@@ -86,7 +86,7 @@ export const CustomItAssetDesktopCatalog = memo(({ itAssets, handleDownClick }: 
                 />
               )}
               
-              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/5 to-transparent z-10 pointer-events-none" />
+              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/5 to-transparent z-10 pointer-events-none" />
             </div>
 
             {/* === CONTENIDO PRINCIPAL === */}

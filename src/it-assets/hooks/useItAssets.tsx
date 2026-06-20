@@ -25,7 +25,13 @@ export const useItAssets = () => {
   const offset = (page - 1) * limit;
   const query = searchParams.get("query")?.trim() || undefined;
 
-  const assetsQuery = useQuery({
+  const {
+    data: assetsData,
+    isLoading: isLoadingAssets,
+    isFetching: isFetchingAssets,
+    error: errorAssets,
+    refetch
+  } = useQuery({
     queryKey: ['it-assets', { limit, offset, query, brandId, modelId, status, typeId}],
     queryFn: () => getItAssetsAction({ limit, offset, query, brandId, modelId, status, typeId}),
     staleTime: 1000 * 60 * 5,
@@ -35,7 +41,12 @@ export const useItAssets = () => {
     }),
   });
 
-  const assetQuery = useQuery({
+  const {
+    data: assetData,
+    isLoading: isLoadingAsset,
+    isFetching: isFetchingAsset,
+    error: errorAsset
+  } = useQuery({
     queryKey: ['it-asset', id], 
     queryFn: () => getItAssetAction({ id: id! }), 
     enabled: !!id, 
@@ -69,17 +80,17 @@ export const useItAssets = () => {
   });
   
   return {
-    itAssets: assetsQuery.data?.itAssets ?? [],
-    meta: assetsQuery.data?.meta,
-    isLoading: assetsQuery.isLoading,
-    isFetching: assetsQuery.isFetching,
-    error: assetsQuery.error,
-    refetch: assetsQuery.refetch,
+    itAssets: assetsData?.itAssets ?? [],
+    meta: assetsData?.meta,
+    isLoading: isLoadingAssets,
+    isFetching: isFetchingAssets,
+    error: errorAssets,
+    refetch,
     
-    itAsset: assetQuery.data,
-    isLoadingAsset: assetQuery.isLoading,
-    isFetchingAsset: assetQuery.isFetching,
-    errorAsset: assetQuery.error,
+    itAsset: assetData,
+    isLoadingAsset,
+    isFetchingAsset,
+    errorAsset,
 
     changeStatusAsync: changeStatusMutation.mutateAsync,
     isChangingStatus: changeStatusMutation.isPending,
@@ -90,4 +101,4 @@ export const useItAssets = () => {
     updateAssetMutation: updateAssetMutation,
     isUpdatingAsset: updateAssetMutation.isPending,
   };
-}
+};

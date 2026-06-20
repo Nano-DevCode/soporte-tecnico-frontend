@@ -26,6 +26,18 @@ interface ActionConfirmDialogProps {
   icon: LucideIcon;
 }
 
+const variantStyles = {
+  danger: "bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-400 ring-4 ring-red-50 dark:ring-red-900/20",
+  primary: "bg-blue-50 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400 ring-4 ring-blue-50 dark:ring-blue-900/20",
+  warning: "bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400 ring-4 ring-amber-50 dark:ring-amber-900/20",
+};
+
+const buttonStyles = {
+  danger: "bg-red-600 hover:bg-red-700 text-white shadow-sm shadow-red-200 dark:bg-red-600 dark:hover:bg-red-500 dark:shadow-none",
+  primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-200 dark:bg-blue-600 dark:hover:bg-blue-500 dark:shadow-none",
+  warning: "bg-amber-600 hover:bg-amber-700 text-white shadow-sm dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-amber-950",
+};
+
 export const CustomDialogConfirm = memo(({
   open,
   onOpenChange,
@@ -39,21 +51,9 @@ export const CustomDialogConfirm = memo(({
   icon: Icon,
 }: ActionConfirmDialogProps) => {
 
-  const variantStyles = {
-    danger: "bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-400 ring-4 ring-red-50 dark:ring-red-900/20",
-    primary: "bg-blue-50 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400 ring-4 ring-blue-50 dark:ring-blue-900/20",
-    warning: "bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400 ring-4 ring-amber-50 dark:ring-amber-900/20",
-  };
-
-  const buttonStyles = {
-    danger: "bg-red-600 hover:bg-red-700 text-white shadow-sm shadow-red-200 dark:bg-red-600 dark:hover:bg-red-500 dark:shadow-none",
-    primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-200 dark:bg-blue-600 dark:hover:bg-blue-500 dark:shadow-none",
-    warning: "bg-amber-600 hover:bg-amber-700 text-white shadow-sm dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-amber-950",
-  };
-
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="max-w-[400px] gap-0 overflow-hidden border-none p-0 sm:rounded-2xl">
+      <AlertDialogContent className="max-w-100 gap-0 overflow-hidden border-none p-0 sm:rounded-2xl">
         <div className="flex flex-col items-center justify-center pt-8 pb-4 px-6 text-center">
           <div className={cn(
             "mb-4 flex h-14 w-14 items-center justify-center rounded-full transition-transform hover:scale-110 duration-300", 

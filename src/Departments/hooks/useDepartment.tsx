@@ -4,8 +4,12 @@ import { getDepartmentByIdAction } from "../actions/get-department.actions";
 
 export const useDepartment = () => {
   const { id } = useParams();
-
-  const departmentQuery = useQuery({
+  const { 
+    data: department, 
+    isLoading, 
+    isFetching, 
+    error 
+  } = useQuery({
     queryKey: ['department', id],
     queryFn: () => getDepartmentByIdAction(id!),
     enabled: !!id,
@@ -14,9 +18,9 @@ export const useDepartment = () => {
   });
 
   return {
-    department: departmentQuery.data,
-    isLoading: departmentQuery.isLoading,
-    isFetching: departmentQuery.isFetching,
-    error: departmentQuery.error,
+    department,
+    isLoading,
+    isFetching,
+    error,
   };
 };

@@ -15,10 +15,22 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 import { useDepartment } from "../hooks/useDepartment";
-import { formatDate } from "@/users/util/formatDate"; // Ajusta la ruta si es necesario
+import { formatDate } from "@/users/util/formatDate"; 
 import { CustomSkeletonInformation } from "@/components/custom/CustomSkeletonInformation";
 import { CustomBackToList } from "@/components/custom/CustomBackToList";
 import { t } from "i18next";
+
+interface DepartmentDateProps {
+  date?: string | Date;
+}
+
+const DepartmentDate = ({ date }: DepartmentDateProps) => {
+  return date ? (
+    <>{formatDate(date)}</>
+  ) : (
+    <span className="text-muted-foreground italic">N/A</span>
+  );
+};
 
 export const DepartmentDetailsPage = () => {
   const navigate = useNavigate();
@@ -44,10 +56,6 @@ export const DepartmentDetailsPage = () => {
       </div>
     );
   }
-
-  const renderDate = (dateString?: string | Date) => {
-    return dateString ? formatDate(dateString) : <span className="text-muted-foreground italic">N/A</span>;
-  };
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
@@ -123,7 +131,7 @@ export const DepartmentDetailsPage = () => {
                   <dt className="font-medium text-muted-foreground">Fecha de Creación</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
-                    {renderDate(department?.createdAt)}
+                    <DepartmentDate date={department?.createdAt} />
                   </dd>
                 </div>
 
@@ -131,7 +139,7 @@ export const DepartmentDetailsPage = () => {
                   <dt className="font-medium text-muted-foreground">{t("department_deatils_last_modification")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
-                    {renderDate(department?.updatedAt)}
+                    <DepartmentDate date={department?.updatedAt} />
                   </dd>
                 </div>
 

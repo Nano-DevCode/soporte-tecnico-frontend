@@ -21,7 +21,7 @@ export const NotAuthenticatedRoute = ({ children }: PropsWithChildren) => {
   return children;
 };
 
-type UserRole = keyof ReturnType<typeof useUserRoles>;
+export type UserRole = keyof ReturnType<typeof useUserRoles>;
 
 interface RoleRouteProps extends PropsWithChildren {
   allowedRoles: UserRole[];

@@ -6,8 +6,15 @@ import { createItAssetsTypeAction } from '../actions/create-itAssets-type';
 export const useItAssetsTypes = (searchTerm: string = "") => {
   const queryClient = useQueryClient();
 
-  // 1. Configuración del Infinite Query para lectura y paginación
-  const query = useInfiniteQuery({
+  const {
+    data: queryData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    error
+  } = useInfiniteQuery({
     queryKey: ['itAssetsTypes', searchTerm],
     queryFn: ({ pageParam = 0 }) => 
       getItAssetsTypesAction({ 
@@ -17,41 +24,33 @@ export const useItAssetsTypes = (searchTerm: string = "") => {
       }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      // Calculamos el siguiente offset
       if (lastPage.meta.page >= lastPage.meta.lastPage) return undefined;
       return lastPage.meta.page * 10;
     },
-    staleTime: 1000 * 60 * 5, // 5 minutos de caché
+    staleTime: 1000 * 60 * 5, 
   });
 
-  // 2. Configuración de la Mutación para creación
   const createMutation = useMutation({
     mutationFn: createItAssetsTypeAction,
     onSuccess: () => {
-      // Invalida la caché para forzar una recarga y mostrar el nuevo tipo creado
       queryClient.invalidateQueries({ queryKey: ['itAssetsTypes'] });
     },
   });
 
-  // 3. Aplanamos las páginas para obtener un solo arreglo continuo
   const memorizedItAssetsTypes = useMemo(() => {
-    // IMPORTANTE: Verifica en tu interfaz `ItAssetsTypesResponse` cómo se llama el arreglo que devuelve.
-    // Aquí asumo que se llama "types" (page.types). Si se llama "data", "items", etc., cámbialo aquí.
-    return query.data?.pages.flatMap((page) => page.itAssetsTypes) ?? [];
-  }, [query.data]); 
+    return queryData?.pages.flatMap((page) => page.itAssetsTypes) ?? [];
+  }, [queryData]); // <-- Ahora escucha únicamente a queryData
 
   return {
-    // Datos de lectura
     itAssetsTypes: memorizedItAssetsTypes, 
-    meta: query.data?.pages.at(-1)?.meta,
-    fetchNextPage: query.fetchNextPage,
-    hasNextPage: query.hasNextPage,
-    isFetchingNextPage: query.isFetchingNextPage,
-    isLoading: query.isLoading,
-    isError: query.isError,
-    error: query.error,
+    meta: queryData?.pages.at(-1)?.meta,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    error,
     
-    // Datos de escritura
     createType: createMutation.mutateAsync,
     isCreating: createMutation.isPending,
     createError: createMutation.error,

@@ -97,11 +97,11 @@ export const CustomItAssetsMovementDesktopTable = memo(({ movements }: Props) =>
                 <TableCell className="align-middle py-4 max-w-none">
                   <div className="flex flex-col min-w-0">
                     {/* Se quitó truncate y se agregó whitespace-normal break-words */}
-                    <span className="text-sm font-bold text-foreground whitespace-normal break-words block leading-snug">
+                    <span className="text-sm font-bold text-foreground whitespace-normal wrap-break-word block leading-snug">
                       {mov.itAsset.serialNumber}
                     </span>
                     {/* Se cambió el label a "ID INVENTARIO INTERNO" y se agregó whitespace-normal break-words */}
-                    <span className="text-xs text-muted-foreground font-mono whitespace-normal break-words block mt-0.5">
+                    <span className="text-xs text-muted-foreground font-mono whitespace-normal wrap-break-word block mt-0.5">
                       ID INVENTARIO INTERNO: {mov.itAsset.idInventary || t("itAssets.components.movementDesktopTable.assetInfo.na")}
                     </span>
                   </div>
