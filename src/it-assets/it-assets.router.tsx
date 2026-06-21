@@ -12,7 +12,6 @@ const ItAssetsMovementsPage = lazy(() => import("./pages/ItAssetsMovementsPage")
 const ItAssetsMovementViewPage = lazy(() => import("./pages/ItAssetsMovementViewPage"));
 const ItAssetsDetailsPage = lazy(() => import("./pages/ItAssetsDetailsPage"));
 
-// Lista de roles centralizada para evitar repetición de código
 const ALLOWED_ROLES: UserRole[] = [
   "isCoordinator", 
   "isBossCC", 
@@ -21,86 +20,86 @@ const ALLOWED_ROLES: UserRole[] = [
 ];
 
 export const ItAssetsRoutes = () => {
-  return useRoutes([
-    {
-      index: true,
-      element: (
-        <SuspenseWrapper>
-          <RoleRoute allowedRoles={ALLOWED_ROLES}>
-            <ItAssetsPage />
-          </RoleRoute>
-        </SuspenseWrapper>
-      )
-    },
-    {
-      path: "new",
-      element: (
-        <SuspenseWrapper>
-          <RoleRoute allowedRoles={ALLOWED_ROLES}>
-            <ItAssetsCreatePage />
-          </RoleRoute>
-        </SuspenseWrapper>
-      )
-    },
-    {
-      path: "edit/:id",
-      element: (
-        <SuspenseWrapper>
-          <RoleRoute allowedRoles={ALLOWED_ROLES}>
-            <ItAssetsUpdatePage />
-          </RoleRoute>
-        </SuspenseWrapper>
-      )
-    },
-    {
-      path: "out/:id",
-      element: (
-        <SuspenseWrapper>
-          <RoleRoute allowedRoles={ALLOWED_ROLES}>
-            <ItAssetsMovementOut />
-          </RoleRoute>
-        </SuspenseWrapper>
-      )
-    },
-    {
-      path: "in/:id",
-      element: (
-        <SuspenseWrapper>
-          <RoleRoute allowedRoles={ALLOWED_ROLES}>
-            <ItAssetsMovementIn />
-          </RoleRoute>
-        </SuspenseWrapper>
-      )
-    },
-    {
-      path: "movements",
-      element: (
-        <SuspenseWrapper>
-          <RoleRoute allowedRoles={ALLOWED_ROLES}>
-            <ItAssetsMovementsPage />
-          </RoleRoute>
-        </SuspenseWrapper>
-      )
-    },
-    {
-      path: "movements/:id",
-      element: (
-        <SuspenseWrapper>
-          <RoleRoute allowedRoles={ALLOWED_ROLES}>
-            <ItAssetsMovementViewPage />
-          </RoleRoute>
-        </SuspenseWrapper>
-      )
-    },
-    {
-      path: ":id",
-      element: (
-        <SuspenseWrapper>
-          <RoleRoute allowedRoles={ALLOWED_ROLES}>
-            <ItAssetsDetailsPage />
-          </RoleRoute>
-        </SuspenseWrapper>
-      )
-    }
-  ]);
+    return useRoutes([
+        {
+            index: true,
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ItAssetsPage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'new',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ItAssetsCreatePage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'edit/:id',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ItAssetsUpdatePage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'out/:id',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ItAssetsMovementOut />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'in/:id',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ItAssetsMovementIn />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'movements',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ItAssetsMovementsPage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'movements/:id',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ItAssetsMovementViewPage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: ':id',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ItAssetsDetailsPage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        }
+    ]);
 };

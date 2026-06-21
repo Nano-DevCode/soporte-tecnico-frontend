@@ -15,7 +15,7 @@ interface Forget {
   email: string;
 }
 
-export const ForgotPasswordPage = () => {
+const ForgotPasswordPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -129,7 +129,7 @@ export const ForgotPasswordPage = () => {
             <img
               src={LogoIto} 
               alt="Centro de Cómputo"
-              className="w-full max-w-[280px] h-auto object-contain transition-transform hover:scale-105 duration-500 mix-blend-multiply dark:mix-blend-plus-lighter"
+              className="w-full max-w-70 h-auto object-contain transition-transform hover:scale-105 duration-500 mix-blend-multiply dark:mix-blend-plus-lighter"
             />
           </div>
 
@@ -144,3 +144,5 @@ export const ForgotPasswordPage = () => {
     </div>
   );
 };
+
+export default ForgotPasswordPage;

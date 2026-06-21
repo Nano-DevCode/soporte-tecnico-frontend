@@ -11,7 +11,7 @@ import type { AxiosError } from "axios";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { CustomBackToList } from "@/components/custom/CustomBackToList";
 
-export const UserCreatePage = () => {
+const UserCreatePage = () => {
   const navigate = useNavigate();
   
   const { data: departments, isLoading: isLoadingDepartments } = useDepartments();
@@ -78,3 +78,5 @@ export const UserCreatePage = () => {
     </div>
   );
 };
+
+export default UserCreatePage;

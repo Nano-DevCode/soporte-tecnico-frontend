@@ -47,7 +47,7 @@ export const CustomUserForm = ({
   } = useForm<UserFormData>({
     values: {
       email: user?.email || "",
-      password: "", // Siempre vacío al inicio
+      password: "", 
       name: user?.staff?.name || "",
       paternalSurname: user?.staff?.paternalSurname || "",
       maternalSurname: user?.staff?.maternalSurname || "",
@@ -64,22 +64,21 @@ export const CustomUserForm = ({
   const isCoordinador = roles?.find((r: Role) => r.id === selectedRoleId)?.name?.toLowerCase() === "coordinador";
 
   const onFormSubmit = async (data: UserFormData) => {
-    // Le pasamos la data limpia al componente padre para que él decida si crea o actualiza
     await onSubmitCallback(data);
   };
 
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} autoComplete="off" className="rounded-xl border border-border bg-card p-6 shadow-sm">
       <div style={{ width: 0, height: 0, overflow: 'hidden', position: 'absolute', zIndex: -1 }}>
-        <input type="text" name="fakeusernameremembered" tabIndex={-1} autoComplete="username" />
-        <input type="password" name="fakepasswordremembered" tabIndex={-1} autoComplete="current-password" />
+        {/* ✅ FIX: Añadimos aria-label y aria-hidden para que el linter y los lectores de pantalla ignoren estos inputs trampa */}
+        <input type="text" name="fakeusernameremembered" tabIndex={-1} autoComplete="username" aria-label="Usuario falso oculto" aria-hidden="true" />
+        <input type="password" name="fakepasswordremembered" tabIndex={-1} autoComplete="current-password" aria-label="Contraseña falsa oculta" aria-hidden="true" />
       </div>
 
-      {/* --- ENCABEZADO DINÁMICO --- */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-6">
         <div className="flex items-center gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-            {isEditMode ? <UserCog className="h-6 w-6" /> : <UserPlus className="h-6 w-6" />}
+            {isEditMode ? <UserCog className="h-6 w-6" aria-hidden="true" /> : <UserPlus className="h-6 w-6" aria-hidden="true" />}
           </div>
           <div className="space-y-1">
             <h3 className="text-xl font-bold text-foreground leading-none">
@@ -92,7 +91,6 @@ export const CustomUserForm = ({
         </div>
       </div>
 
-      {/* --- DATOS PERSONALES --- */}
       <div className="pt-6">
         <h4 className="text-sm font-semibold text-foreground mb-4 border-l-2 border-primary pl-2">{t("custom_user_form_personal_data")}</h4>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -123,7 +121,7 @@ export const CustomUserForm = ({
 
           <div className="space-y-2">
             <Label htmlFor="num_control" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.num_control && "text-red-500")}>
-              <Hash className="h-3.5 w-3.5" /> {t("custom_user_form_n_control")} <span className="text-red-500">*</span>
+              <Hash className="h-3.5 w-3.5" aria-hidden="true" /> {t("custom_user_form_n_control")} <span className="text-red-500">*</span>
             </Label>
             <Input id="num_control" autoComplete="nope" className={cn("bg-muted/10", errors.num_control && "border-red-500")} {...register("num_control", { required: t("custom_user_form_n_control_required"), pattern: { value: alphanumericRegex, message: t("custom_user_form_n_control_error") } })} />
             {errors.num_control && <p className="text-xs font-medium text-red-500">{errors.num_control.message}</p>}
@@ -140,7 +138,7 @@ export const CustomUserForm = ({
           {isCoordinador && (
             <div className="space-y-2 animate-in fade-in zoom-in-95 duration-200">
               <Label htmlFor="idTelegram" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.idTelegram && "text-red-500")}>
-                <Send className="h-3.5 w-3.5" /> {t("custom_user_form_id_telegram")} <span className="text-red-500">*</span>
+                <Send className="h-3.5 w-3.5" aria-hidden="true" /> {t("custom_user_form_id_telegram")} <span className="text-red-500">*</span>
               </Label>
               <Input id="idTelegram" autoComplete="nope" className={cn("bg-muted/10", errors.idTelegram && "border-red-500")} {...register("idTelegram", { required: t("custom_user_form_id_telegram_required"), pattern: { value: alphanumericRegex, message: t("custom_user_form_id_telegram_error") } })} />
               {errors.idTelegram && <p className="text-xs font-medium text-red-500">{errors.idTelegram.message}</p>}
@@ -149,20 +147,19 @@ export const CustomUserForm = ({
         </div>
       </div>
       
-      {/* --- ASIGNACIÓN --- */}
       <div className="pt-6 mt-6 border-t border-border/50">
         <h4 className="text-sm font-semibold text-foreground mb-4 border-l-2 border-primary pl-2">Asignación</h4>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           
           <div className="space-y-2">
-            <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.roleId && "text-red-500")}> {t("custom_user_form_role")} <span className="text-red-500">*</span></Label>
+            <Label id="label-role" className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.roleId && "text-red-500")}> {t("custom_user_form_role")} <span className="text-red-500">*</span></Label>
             <Controller
               control={control}
               name="roleId"
               rules={{ required: t("custom_user_form_role_required") }}
               render={({ field }) => (
                 <Select name={field.name} onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
-                  <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.roleId && "border-red-500")}>
+                  <SelectTrigger aria-labelledby="label-role" className={cn("w-full h-10 bg-muted/10", errors.roleId && "border-red-500")}>
                     <SelectValue placeholder={t("custom_user_form_role_placeholder")} />
                   </SelectTrigger>
                   <SelectContent>
@@ -177,14 +174,14 @@ export const CustomUserForm = ({
           </div>
 
           <div className="space-y-2">
-            <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.departmentId && "text-red-500")}> {t("custom_user_form_department")} <span className="text-red-500">*</span></Label>
+            <Label id="label-department" className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.departmentId && "text-red-500")}> {t("custom_user_form_department")} <span className="text-red-500">*</span></Label>
             <Controller
               control={control}
               name="departmentId"
               rules={{ required: t("custom_user_form_department_required") }}
               render={({ field }) => (
                 <Select name={field.name} onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
-                  <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.departmentId && "border-red-500")}>
+                  <SelectTrigger aria-labelledby="label-department" className={cn("w-full h-10 bg-muted/10", errors.departmentId && "border-red-500")}>
                     <SelectValue placeholder={t("custom_user_form_department_placeholder")} />
                   </SelectTrigger>
                   <SelectContent>
@@ -200,14 +197,14 @@ export const CustomUserForm = ({
 
           {isCoordinador && (
             <div className="space-y-2 animate-in fade-in zoom-in-95 duration-200">
-              <Label className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.coordinationId && "text-red-500")}> {t("custom_user_form_coordination")} <span className="text-red-500">*</span></Label>
+              <Label id="label-coordination" className={cn("text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.coordinationId && "text-red-500")}> {t("custom_user_form_coordination")} <span className="text-red-500">*</span></Label>
               <Controller
                 control={control}
                 name="coordinationId"
                 rules={{ required: t("custom_user_form_coordination_required") }}
                 render={({ field }) => (
                   <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
-                    <SelectTrigger className={cn("w-full h-10 bg-muted/10", errors.coordinationId && "border-red-500")}>
+                    <SelectTrigger aria-labelledby="label-coordination" className={cn("w-full h-10 bg-muted/10", errors.coordinationId && "border-red-500")}>
                       <SelectValue placeholder={t("custom_user_form_coordination_placeholder")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -224,13 +221,12 @@ export const CustomUserForm = ({
         </div>
       </div>
 
-      {/* --- CREDENCIALES --- */}
       <div className="pt-6 mt-6 border-t border-border/50">
         <h4 className="text-sm font-semibold text-foreground mb-4 border-l-2 border-primary pl-2">Credenciales de Acceso</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="space-y-2">
             <Label htmlFor="email" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.email && "text-red-500")}>
-              <Mail className="h-3.5 w-3.5" /> {t("custom_user_form_email")} <span className="text-red-500">*</span>
+              <Mail className="h-3.5 w-3.5" aria-hidden="true" /> {t("custom_user_form_email")} <span className="text-red-500">*</span>
             </Label>
             <Input id="email" type="email" autoComplete="nope" className={cn("bg-muted/10", errors.email && "border-red-500")} {...register("email", { required: t("custom_user_form_email_required"), pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: t("custom_user_form_email_error") } })} />
             {errors.email && <p className="text-xs font-medium text-red-500">{errors.email.message}</p>}
@@ -238,7 +234,7 @@ export const CustomUserForm = ({
 
           <div className="space-y-2">
             <Label htmlFor="password" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.password && "text-red-500")}>
-              <Lock className="h-3.5 w-3.5" /> {isEditMode ? t("custom_user_form_password_new") : t("custom_user_form_password_edit")} {isEditMode ? "" : <span className="text-red-500">*</span>}
+              <Lock className="h-3.5 w-3.5" aria-hidden="true" /> {isEditMode ? t("custom_user_form_password_new") : t("custom_user_form_password_edit")} {isEditMode ? "" : <span className="text-red-500">*</span>}
             </Label>
             <div className="relative">
               <Input 
@@ -248,27 +244,34 @@ export const CustomUserForm = ({
                 placeholder={isEditMode ? t("custom_user_form_password_edit_placeholder") : t("custom_user_form_password_new_placeholder")} 
                 className={cn("pr-10 bg-muted/10", errors.password && "border-red-500")} 
                 {...register("password", { 
-                  required: isEditMode ? false : t("custom_user_form_password_new_required"), // Requerido solo en Create
+                  required: isEditMode ? false : t("custom_user_form_password_new_required"), 
                   minLength: { value: 8, message: t("custom_user_form_password_min_lenght") }, 
                   pattern: { value: passwordRegex, message: t("custom_user_form_password_regex_error") } 
                 })} 
               />
-              <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground" onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
+
+              <Button 
+                type="button" 
+                variant="ghost"
+                size="icon"
+                aria-label={showPassword ? t("hide_password", "Ocultar contraseña") : t("show_password", "Mostrar contraseña")}
+                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground hover:text-foreground" 
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" aria-hidden="true" /> : <Eye className="h-4 w-4" aria-hidden="true" />}
+              </Button>
             </div>
             {errors.password && <p className="text-xs font-medium text-red-500">{errors.password.message}</p>}
           </div>
         </div>
       </div>
 
-      {/* --- BOTONES FINALES --- */}
       <div className="mt-8 flex flex-col sm:flex-row justify-end gap-3 border-t border-border pt-6">
         <Button type="button" variant="outline" onClick={() => navigate('/users')} className="w-full sm:w-auto" disabled={isMutating}>
-          <X className="mr-2 h-4 w-4" /> {t("cancel")}
+          <X className="mr-2 h-4 w-4" aria-hidden="true" /> {t("cancel")}
         </Button>
         <Button type="submit" className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 text-white" disabled={isMutating}>
-          <Save className="mr-2 h-4 w-4" /> 
+          <Save className="mr-2 h-4 w-4" aria-hidden="true" /> 
           {isMutating 
             ? (isEditMode ? t("custom_user_form_editing") : t("custom_user_form_creating")) 
             : (isEditMode ? t("custom_user_form_editing_save") : t("custom_user_form_creating_save"))}

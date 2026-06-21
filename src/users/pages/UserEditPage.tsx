@@ -12,7 +12,7 @@ import type { UserFormData } from "../schema/user-form.schema";
 import type { AxiosError } from "axios";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 
-export const UserEditPage = () => {
+const UserEditPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   
@@ -69,7 +69,12 @@ export const UserEditPage = () => {
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
-      <button onClick={() => navigate('/users')} className="group flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+      {/* ✅ FIX: Añadimos type="button" explícitamente para evitar submits accidentales */}
+      <button 
+        type="button" 
+        onClick={() => navigate('/users')} 
+        className="group flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+      >
         <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" /> Regresar a Usuarios
       </button>
 
@@ -92,3 +97,5 @@ export const UserEditPage = () => {
     </div>
   );
 };
+
+export default UserEditPage;

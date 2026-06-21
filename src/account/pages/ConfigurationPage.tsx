@@ -4,7 +4,7 @@ import { CustomPasswordConfiguration } from "../components/CustomPasswordConfigu
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { useTranslation } from "react-i18next";
 
-export const ConfigurationPage = () => {
+const ConfigurationPage = () => {
   const { t } = useTranslation();
   return (
     <div className="flex w-full max-w-4xl flex-col p-4 md:p-8 mx-auto animate-in fade-in duration-500">
@@ -25,3 +25,5 @@ export const ConfigurationPage = () => {
     </div>
   );
 };
+
+export default ConfigurationPage;

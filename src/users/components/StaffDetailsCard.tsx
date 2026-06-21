@@ -3,26 +3,24 @@ import { useTranslation } from "react-i18next";
 import { useStaff } from "@/users/hooks/useStaff"; 
 import { Badge } from "@/components/ui/badge";
 
+const getInitials = (name?: string, surname?: string) => {
+  return `${name?.charAt(0) || ""}${surname?.charAt(0) || ""}`.toUpperCase() || "U";
+};
+
 interface StaffDetailsCardProps {
   staffId?: string;
 }
 
 export const StaffDetailsCard = ({ staffId }: StaffDetailsCardProps) => {
   const { t } = useTranslation();
-  
-  // Hacemos la peticion solo si existe el staffId
+
   const { staff: fullStaff, isLoadingStaff } = useStaff("", staffId);
 
   if (!staffId) return null;
 
-  // Extraemos las iniciales para el avatar falso (Ej: "Juan Perez" -> "JP")
-  const getInitials = (name?: string, surname?: string) => {
-    return `${name?.charAt(0) || ""}${surname?.charAt(0) || ""}`.toUpperCase() || "U";
-  };
-
   return (
     <div className="relative overflow-hidden bg-amber-50/50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/50 rounded-xl p-5 transition-all hover:shadow-md sm:col-span-1">
-        {/* Ícono de fondo (marca de agua) */}
+        {/* Ícono de fondo */}
         <div className="absolute -right-4 -bottom-4 text-amber-500/5 dark:text-amber-400/5 pointer-events-none">
             <User className="h-32 w-32" />
         </div>

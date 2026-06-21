@@ -4,7 +4,6 @@ import { CustomAppSidebar } from "./components_v2/CustomAppSidebar";
 import { useState } from "react";
 import { CustomAppHeader } from "./components_v2/CustomAppHeader";
 
-
 const PanelLayoutV2 = () => {
     const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 1024);
 
@@ -19,8 +18,12 @@ const PanelLayoutV2 = () => {
     return (
         <div className="flex h-screen min-h-0 w-full overflow-hidden">
             {sidebarOpen && (
-                <div
-                    className="fixed inset-0 z-40 bg-black/50 transition-opacity lg:hidden"
+                // ✅ FIX: Cambiamos el div por un button type="button" para tener accesibilidad nativa.
+                // Añadimos h-full, w-full, border-none y outline-none para que se comporte visualmente como un fondo.
+                <button
+                    type="button"
+                    aria-label="Cerrar menú lateral"
+                    className="fixed inset-0 z-40 h-full w-full border-none bg-black/50 outline-none transition-opacity lg:hidden"
                     onClick={handleSidebarClose}
                 />
             )}

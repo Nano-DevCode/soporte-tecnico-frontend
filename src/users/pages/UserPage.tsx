@@ -17,8 +17,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { t } from "i18next";
 
-export const UserPage = () => {
-  // Desestructuramos usando el mismo patrón limpio que en useDepartments
+const UserPage = () => {
   const { users = [], meta, isLoading: skelettonLoading, isUpdating, changeStatus } = useUsers();
 
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
@@ -143,3 +142,5 @@ export const UserPage = () => {
     </div>
   );
 }
+
+export default UserPage;

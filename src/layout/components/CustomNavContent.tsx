@@ -1,4 +1,4 @@
-import { memo } from "react"; // <-- 1. Importamos memo
+import { memo } from "react"; 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Collapsible,
@@ -40,8 +40,6 @@ const getSubItemClass = (isActive: boolean) => cn(
 
 const triggerClass = "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors cursor-pointer group/collapsible";
 
-
-// 3. ENVOLVEMOS EL COMPONENTE EN React.memo()
 export const CustomNavContent = memo(() => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
@@ -65,7 +63,8 @@ export const CustomNavContent = memo(() => {
         {(isSuperAdmin || isCoordinator || isBossCC) && 
           (<Collapsible className="group/collapsible" defaultOpen={pathname.startsWith("/user") || pathname.startsWith("/department")}>
             <CollapsibleTrigger asChild>
-              <button className={triggerClass}>
+              {/* ✅ FIX: Añadimos type="button" */}
+              <button type="button" className={triggerClass}>
                 <Users className="h-5 w-5 shrink-0" />
                 <span className="flex-1 text-left">
                   {t("users")}
@@ -76,7 +75,6 @@ export const CustomNavContent = memo(() => {
 
             <CollapsibleContent>
               <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
-
                 <Link to='/users' className={getItemClass(pathname.startsWith("/users"))}>
                   <List className="h-4 w-4" /> {t("custom_nav_content_users")}
                 </Link>
@@ -84,8 +82,6 @@ export const CustomNavContent = memo(() => {
                 <Link to='/departments' className={getItemClass(pathname.startsWith("/departments"))}>
                   <List className="h-4 w-4" /> {t("custom_nav_content_depatment")}
                 </Link>
-
-
               </div>
             </CollapsibleContent>
           </Collapsible>)
@@ -98,10 +94,10 @@ export const CustomNavContent = memo(() => {
           </Link>)
         }
 
-
         <Collapsible className="group/collapsible" defaultOpen={pathname.startsWith("/user") || pathname.startsWith("/department")}>
           <CollapsibleTrigger asChild>
-            <button className={triggerClass}>
+            {/* ✅ FIX: Añadimos type="button" */}
+            <button type="button" className={triggerClass}>
               <Users className="h-5 w-5 shrink-0" />
               <span className="flex-1 text-left">
                 Inventarios
@@ -112,12 +108,9 @@ export const CustomNavContent = memo(() => {
 
           <CollapsibleContent>
             <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
-
               <Link to='/equipments' className={getItemClass(pathname.startsWith("/equipments"))}>
                 <List className="h-4 w-4" /> Lista de equipos
               </Link>
-
-
             </div>
           </CollapsibleContent>
         </Collapsible>
@@ -137,80 +130,11 @@ export const CustomNavContent = memo(() => {
           <span className="flex-1">{t("custom_nav_content_subitem_list_center_managers")}</span>
         </Link>
 
-        {/* --- ITEM COLAPSABLE: TICKETS --- */}
-        {/* Puedes pasarle 'defaultOpen={true}' al Collapsible si un hijo está activo */}
-        {/* <Collapsible className="group/collapsible" defaultOpen={pathname.includes('/ticket')}>
-          <CollapsibleTrigger asChild>
-            <button className={triggerClass}>
-              <Tickets className="h-5 w-5 shrink-0" />
-              <span className="flex-1 text-left">
-                {t("custom_nav_content_tickets")}
-              </span>
-              <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-            </button>
-          </CollapsibleTrigger>
-
-          <CollapsibleContent>
-            <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
-
-              <Link to='/ticket' className={getSubItemClass(true)}>
-                <List className="h-4 w-4" /> {t("custom_nav_content_subitem_list_tickets")}
-              </Link>
-
-            </div>
-          </CollapsibleContent>
-        </Collapsible> */}
-
-        {/* --- ITEM COLAPSABLE: PERIODO ESCOLAR --- */}
-        {/* <Collapsible className="group/collapsible" defaultOpen={pathname.includes('/school-period')}>
-          <CollapsibleTrigger asChild>
-            <button className={triggerClass}>
-              <CalendarRange className="h-5 w-5 shrink-0" />
-              <span className="flex-1 text-left">
-                {t("custom_nav_content_school_periods")}
-              </span>
-              <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-            </button>
-          </CollapsibleTrigger>
-
-          <CollapsibleContent>
-            <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
-
-              <Link to='/school-period' className={getSubItemClass(true)}>
-                <List className="h-4 w-4" /> {t("custom_nav_content_subitem_list_school_periods")}
-              </Link>
-
-            </div>
-          </CollapsibleContent>
-        </Collapsible> */}
-
-        {/* --- ITEM COLAPSABLE: Jefe cc --- */}
-        {/* <Collapsible className="group/collapsible" defaultOpen={pathname.includes('/center-managers')}>
-          <CollapsibleTrigger asChild>
-            <button className={triggerClass}>
-              <ShieldUser className="h-5 w-5 shrink-0" />
-              <span className="flex-1 text-left">
-                {t("custom_nav_content_center_managers")}
-              </span>
-              <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-            </button>
-          </CollapsibleTrigger>
-
-          <CollapsibleContent>
-            <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
-
-              <Link to='/center-managers' className={getSubItemClass(true)}>
-                <List className="h-4 w-4" /> {t("custom_nav_content_subitem_list_center_managers")}
-              </Link>
-
-            </div>
-          </CollapsibleContent>
-        </Collapsible> */}
-
         {/* --- ITEM COLAPSABLE: CONFIGURACIÓN --- */}
         <Collapsible className="group/collapsible">
           <CollapsibleTrigger asChild>
-            <button className={triggerClass}>
+            {/* ✅ FIX: Añadimos type="button" */}
+            <button type="button" className={triggerClass}>
               <Settings className="h-5 w-5 shrink-0" />
               <span className="flex-1 text-left">{t("settings")}</span>
               <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />

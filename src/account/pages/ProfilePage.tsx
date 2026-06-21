@@ -9,7 +9,7 @@ import { useProfile } from "../hooks/useUserProfile";
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { useTranslation } from "react-i18next";
 
-export const ProfilePage = () => {
+const ProfilePage = () => {
   const { t } = useTranslation();
   const { data: user, isLoading} = useProfile();
 
@@ -124,3 +124,5 @@ export const ProfilePage = () => {
     </div>
   );
 };
+
+export default ProfilePage;

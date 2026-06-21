@@ -1,15 +1,15 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router"; 
+import { lazy } from "react";
 import { InicioPage } from "./inicio/pages/InicioPage";
 import { AuthLayout } from './auth/layout/AuthLayout';
-import { lazy } from "react";
 import { AuthenticatedRoute, NotAuthenticatedRoute } from "./auth/routes/ProtectedRoutes";
-import { userRoutes } from "./users/users.router";
-import { accountRoutes } from "./account/account.router";
+import { UsersRoutes } from "./users/users.router";
+import { AccountRoutes } from "./account/account.router";
 import { SchoolPeriodsRoutes } from "./school-periods/school-periods.router";
 import { CenterManagersRoutes } from "./computing-center-managers/center-manager.router";
 import { DepartmentRoutes } from "./Departments/departments.routes";
 import { TicketsRoutes } from "./tickets/tickets.router";
-import { authRoutes } from "./auth/auth.router";
+
 import { equipmentRoutes } from "./Equipments/equipments.routes";
 import { toolRoutes } from "./tools/tools.router";
 import { ItAssetsRoutes } from "./it-assets/it-assets.router";
@@ -17,17 +17,20 @@ import { TechnicalReportsRoutes } from "./technical-reports/technical-reports.ro
 import { FoliosRoutes } from "./folios/folio.router";
 import { consumableRoutes } from "./Consumables/consumables.routes";
 import { movementConsumableRoutes } from "./Consumables/movementConsumables.routes";
+import { SuspenseWrapper } from "./components/custom/SuspenseWrapper";
+import { AuthRoutes } from "./auth/auth.router";
 
-// TODO: proteger rutas dependiendo del status del ticket
 // const PanelLayout = lazy(() => import("./layout/PanelLayout"))
 const PanelLayoutV2 = lazy(() => import("./layout/PanelLayoutV2"))
 
-export const appRouter = createBrowserRouter([
+const router = createBrowserRouter([
     {
         path: '/',
         element: (
             <AuthenticatedRoute>
-                <PanelLayoutV2 />
+                <SuspenseWrapper>
+                    <PanelLayoutV2 />
+                </SuspenseWrapper>
             </AuthenticatedRoute>
         ),
         children: [
@@ -36,8 +39,8 @@ export const appRouter = createBrowserRouter([
                 element: <InicioPage />
             },
             {
-                path: 'users',
-                children: userRoutes,
+                path: 'users/*',
+                element: <UsersRoutes/>
             },
             {
                 path: 'tickets',
@@ -53,10 +56,10 @@ export const appRouter = createBrowserRouter([
             },
             {
                 path: 'account',
-                children: accountRoutes,
+                element: <AccountRoutes />,
             },
             {
-                path: 'departments',
+                path: 'departments/*', 
                 element: <DepartmentRoutes/>,
             },
             {
@@ -72,7 +75,7 @@ export const appRouter = createBrowserRouter([
                 children: TechnicalReportsRoutes,
             },
             {
-                path: 'it-assets',
+                path: 'it-assets/*', 
                 element: <ItAssetsRoutes/>
             },
             {
@@ -87,20 +90,28 @@ export const appRouter = createBrowserRouter([
                 path: 'consumable-movements',
                 children: movementConsumableRoutes,
             },
-
         ],
     },
-    // Auth Routes
     {
-        path: '/auth',
-        element:
+        path: '/auth/*',
+        element: (
             <NotAuthenticatedRoute>
                 <AuthLayout />
-            </NotAuthenticatedRoute>,
-        children: authRoutes
+            </NotAuthenticatedRoute>
+        ),
+        children: [
+            {
+                path: '*',
+                element: <AuthRoutes/>
+            }
+        ]
     },
     {
         path: '*',
         element: <Navigate to='/' />
     }
-])
+]);
+
+export const AppRouter = () => {
+    return <RouterProvider router={router} />;
+};

@@ -4,7 +4,15 @@ import { getStaffRoleSpecificAction } from '@/users/actions/get-staffRoleSpecifi
 import { getStaffByIdAction } from '../actions/get-staff';
 
 export const useStaff = (searchTerm: string = "", id?: string) => {
-  const listQuery = useInfiniteQuery({
+  const {
+    data: listData,
+    isLoading: isLoadingList,
+    isError: isErrorList,
+    error: errorList,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useInfiniteQuery({
     queryKey: ['staffList', searchTerm],
     queryFn: ({ pageParam = 0 }) => 
       getStaffRoleSpecificAction({ 
@@ -18,14 +26,19 @@ export const useStaff = (searchTerm: string = "", id?: string) => {
       if (nextOffset >= lastPage.meta.total) return undefined;
       return nextOffset;
     },
-    staleTime: 1000 * 60 * 5, // 5 minutos de caché
+    staleTime: 1000 * 60 * 5,
   });
 
   const memorizedStaffMembers = useMemo(() => {
-    return listQuery.data?.pages.flatMap((page) => page.staffs) ?? [];
-  }, [listQuery.data]); 
+    return listData?.pages.flatMap((page) => page.staffs) ?? [];
+  }, [listData]); 
 
-  const singleQuery = useQuery({
+  const {
+    data: staff,
+    isLoading: isLoadingStaff,
+    isFetching: isFetchingStaff,
+    error: errorStaff
+  } = useQuery({
     queryKey: ['staff', id],
     queryFn: () => getStaffByIdAction(id!),
     enabled: !!id,
@@ -33,22 +46,21 @@ export const useStaff = (searchTerm: string = "", id?: string) => {
   });
 
   return {
-    // --- Datos de la Lista ---
     staffMembers: memorizedStaffMembers, 
-    meta: listQuery.data?.pages.at(-1)?.meta,
-    isLoadingList: listQuery.isLoading,
-    isErrorList: listQuery.isError,
-    errorList: listQuery.error,
+    meta: listData?.pages.at(-1)?.meta,
+    isLoadingList,
+    isErrorList,
+    errorList,
     
-    // Controles del Infinite Scroll
-    fetchNextPage: listQuery.fetchNextPage,
-    hasNextPage: listQuery.hasNextPage,
-    isFetchingNextPage: listQuery.isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     
-    // --- Datos Individuales (Detalles) ---
-    staff: singleQuery.data,
-    isLoadingStaff: singleQuery.isLoading,
-    isFetchingStaff: singleQuery.isFetching,
-    errorStaff: singleQuery.error,
+    staff,
+    isLoadingStaff,
+    isFetchingStaff,
+    errorStaff,
   };
 };
+
+export default useStaff;

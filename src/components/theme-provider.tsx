@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState, useMemo } from "react"
 import { ThemeProviderContext, type Theme } from "./useTheme"
 
 type ThemeProviderProps = {
@@ -17,28 +17,35 @@ export function ThemeProvider({
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   )
 
-  useEffect(() => {
+  // Función interna para aplicar el estilo al DOM inmediatamente
+  const applyTheme = (newTheme: Theme) => {
     const root = window.document.documentElement
     root.classList.remove("light", "dark")
 
-    if (theme === "system") {
+    if (newTheme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
         : "light"
       root.classList.add(systemTheme)
-      return
+    } else {
+      root.classList.add(newTheme)
     }
-
-    root.classList.add(theme)
-  }, [theme])
-
-  const value = {
-    theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
-      setTheme(theme)
-    },
   }
+
+  // ✅ Aplicamos el tema al cargar la app (único caso donde necesitamos useEffect)
+  // Nota: También podrías poner esto en un script en tu index.html para evitar parpadeo inicial.
+  // useEffect(() => { applyTheme(theme) }, []) 
+
+  const value = useMemo(() => ({
+    theme,
+    setTheme: (newTheme: Theme) => {
+      localStorage.setItem(storageKey, newTheme)
+      setTheme(newTheme)
+      // ✅ FIX: Ejecutamos la lógica AQUÍ, directamente cuando ocurre el clic,
+      // eliminando la necesidad de un useEffect que "observe" al estado.
+      applyTheme(newTheme)
+    },
+  }), [theme, storageKey])
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>

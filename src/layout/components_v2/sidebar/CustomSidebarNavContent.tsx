@@ -1,5 +1,5 @@
-import { memo, useMemo } from "react";
-import { Link, useLocation } from "react-router"; // <-- Cuidado aquí, en React Router v6 suele ser 'react-router-dom'
+import React, { memo, useMemo } from "react";
+import { Link, useLocation } from "react-router"; 
 import { useTranslation } from 'react-i18next';
 import { useUserRoles } from "@/auth/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
@@ -21,6 +21,28 @@ type NavItem = {
   subItems?: NavSubItem[];
   show: boolean;
 };
+
+// Funciones puras movidas FUERA del componente para no desperdiciar memoria
+const getItemClass = (isActive: boolean) => cn(
+  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
+  isActive
+    ? "bg-primary text-primary-foreground shadow-sm"
+    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+);
+
+const getSubItemClass = (isActive: boolean) => cn(
+  "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors",
+  isActive
+    ? "font-medium text-foreground bg-muted"
+    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+);
+
+const getTriggerClass = (isActiveGroup: boolean) => cn(
+  "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer group/collapsible",
+  isActiveGroup
+    ? "text-foreground bg-slate-50 dark:bg-slate-800/50"
+    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+);
 
 export const CustomSidebarNavContent = memo(() => {
   const { t } = useTranslation();
@@ -139,39 +161,20 @@ export const CustomSidebarNavContent = memo(() => {
     }
   ], [t, isSuperAdmin, isBossCC, isCoordinator, isBoss, isPlaning, isSecretaryCC, isTechnician]);
 
-  const getItemClass = (isActive: boolean) => cn(
-    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer",
-    isActive
-      ? "bg-primary text-primary-foreground shadow-sm"
-      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-  );
-
-  const getSubItemClass = (isActive: boolean) => cn(
-    "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors",
-    isActive
-      ? "font-medium text-foreground bg-muted"
-      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-  );
-
-  const getTriggerClass = (isActiveGroup: boolean) => cn(
-    "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer group/collapsible",
-    isActiveGroup
-      ? "text-foreground bg-slate-50 dark:bg-slate-800/50"
-      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-  );
-
   return (
     <ScrollArea className="flex-1 min-h-0 px-3 py-4">
       <nav className="flex flex-col gap-1">
-        {navItems.filter(item => item.show).map((item, index) => {
+        {navItems.reduce((acc: React.ReactNode[], item) => {
+          if (!item.show) return acc;
 
           if (item.subItems) {
             const isActiveGroup = item.subItems.some(sub => pathname === sub.path);
 
-            return (
-              <Collapsible key={index} className="group/collapsible" defaultOpen={isActiveGroup}>
+            acc.push(
+              // Aquí item.title está bien porque los collapsibles tienen títulos únicos
+              <Collapsible key={item.title} className="group/collapsible" defaultOpen={isActiveGroup}>
                 <CollapsibleTrigger asChild>
-                  <button className={getTriggerClass(isActiveGroup)}>
+                  <button type="button" className={getTriggerClass(isActiveGroup)}>
                     <item.icon className="h-5 w-5 shrink-0" />
                     <span className="flex-1 text-left">{item.title}</span>
                     <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -180,27 +183,33 @@ export const CustomSidebarNavContent = memo(() => {
 
                 <CollapsibleContent>
                   <div className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
-                    {item.subItems.filter(sub => sub.show).map((sub, subIdx) => (
-                      <Link key={subIdx} to={sub.path} className={getSubItemClass(pathname === sub.path)}>
-                        {
-                          sub.icon ? <sub.icon className="h-4 w-4" /> : <List className="h-4 w-4" />
-                        }
-                        {sub.title}
-                      </Link>
-                    ))}
+                    {item.subItems.reduce((subAcc: React.ReactNode[], sub) => {
+                      if (!sub.show) return subAcc;
+                      subAcc.push(
+                        // Aquí ya usabas sub.path, ¡lo cual es correcto!
+                        <Link key={sub.path} to={sub.path} className={getSubItemClass(pathname === sub.path)}>
+                          {sub.icon ? <sub.icon className="h-4 w-4" /> : <List className="h-4 w-4" />}
+                          {sub.title}
+                        </Link>
+                      );
+                      return subAcc;
+                    }, [])}
                   </div>
                 </CollapsibleContent>
               </Collapsible>
             );
+          } else {
+            acc.push(
+              // 🔥 EL ARREGLO ESTÁ AQUÍ: Cambiamos item.title por item.path! 🔥
+              <Link key={item.path!} to={item.path!} className={getItemClass(pathname === item.path)}>
+                <item.icon className="h-5 w-5 shrink-0" />
+                <span className="flex-1">{item.title}</span>
+              </Link>
+            );
           }
 
-          return (
-            <Link key={index} to={item.path!} className={getItemClass(pathname === item.path)}>
-              <item.icon className="h-5 w-5 shrink-0" />
-              <span className="flex-1">{item.title}</span>
-            </Link>
-          );
-        })}
+          return acc;
+        }, [])}
       </nav>
     </ScrollArea>
   );

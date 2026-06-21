@@ -28,7 +28,7 @@ export const LoginPage = () => {
     defaultValues: { email: '', password: '' }
   });
 
-  const passwordRegex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+  const passwordRegex = /^(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 
   const handleLogin = async (data: Inputs) => {
     setPosting(true);

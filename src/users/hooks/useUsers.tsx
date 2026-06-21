@@ -16,8 +16,13 @@ export const useUsers = () => {
   const query = searchParams.get("search")?.trim() || undefined; 
 
   const status = searchParams.get('status') || undefined;
-
-  const usersQuery = useQuery({
+  const { 
+    data, 
+    isLoading, 
+    isFetching, 
+    error, 
+    refetch 
+  } = useQuery({
     queryKey: ['users', { limit, offset, departmentId, status, query }],
     queryFn: () => getUsersActions({ limit, offset, departmentId, status, query }),
     staleTime: 1000 * 60 * 5,
@@ -41,14 +46,14 @@ export const useUsers = () => {
 
   return {
     // Datos procesados
-    users: usersQuery.data?.users ?? [],
-    meta: usersQuery.data?.meta,
+    users: data?.users ?? [],
+    meta: data?.meta,
     
     // Estados de carga
-    isLoading: usersQuery.isLoading,
-    isFetching: usersQuery.isFetching,
-    error: usersQuery.error,
-    refetch: usersQuery.refetch,
+    isLoading,
+    isFetching,
+    error,
+    refetch,
 
     // Acciones de mutación
     changeStatus: statusMutation.mutateAsync,

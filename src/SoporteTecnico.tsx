@@ -1,5 +1,3 @@
-import { RouterProvider } from 'react-router'
-import { appRouter } from './app.router'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from "sileo";
@@ -10,6 +8,8 @@ import { useAuthStore } from './auth/store/auth.store';
 import { ThemeProvider } from './components/theme-provider';
 import { TooltipProvider } from './components/ui/tooltip';
 import { SessionTimer } from './auth/components/SessionTimer';
+
+import { AppRouter } from './app.router' 
 
 const queryClient = new QueryClient();
 
@@ -41,7 +41,7 @@ export const SoporteTecnico = () => {
       <ThemeProvider defaultTheme="system" storageKey="soporte-tecnico-theme">
         <TooltipProvider>
           <CheckAuthProvider>
-            <RouterProvider router={appRouter} />
+            <AppRouter />
           </CheckAuthProvider>
         </TooltipProvider>
 

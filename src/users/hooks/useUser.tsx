@@ -4,15 +4,15 @@ import { useParams } from "react-router";
 
 export const useUser = () => {
   const { id } = useParams();
-  const query = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['user', id],
     queryFn: () => getUserAction(id!),
     enabled: !!id,
   });
 
   return {
-    user: query.data,
-    isLoading: query.isLoading,
-    isError: query.isError,
+    user: data,
+    isLoading,
+    isError,
   };
 };

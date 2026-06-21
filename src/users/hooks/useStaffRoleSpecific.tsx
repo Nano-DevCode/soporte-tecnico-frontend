@@ -3,7 +3,15 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { getStaffRoleSpecificAction } from '@/users/actions/get-staffRoleSpecific';
 
 export const useStaffRoleSpecific = (searchTerm: string = "") => {
-  const query = useInfiniteQuery({
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useInfiniteQuery({
     queryKey: ['staffRoleSpecific', searchTerm],
     // pageParam aquí representa nuestro 'offset'
     queryFn: ({ pageParam = 0 }) => 
@@ -27,22 +35,22 @@ export const useStaffRoleSpecific = (searchTerm: string = "") => {
 
   // Aplanamos todas las páginas devueltas en un solo arreglo continuo
   const memorizedStaffMembers = useMemo(() => {
-    return query.data?.pages.flatMap((page) => page.staffs) ?? [];
-  }, [query.data]); 
+    return data?.pages.flatMap((page) => page.staffs) ?? [];
+  }, [data]); 
 
   return {
     // Datos de lectura
     staffMembers: memorizedStaffMembers, 
-    meta: query.data?.pages.at(-1)?.meta,
+    meta: data?.pages.at(-1)?.meta,
     
     // Controles del Infinite Scroll
-    fetchNextPage: query.fetchNextPage,
-    hasNextPage: query.hasNextPage,
-    isFetchingNextPage: query.isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     
     // Estados generales
-    isLoading: query.isLoading,
-    isError: query.isError,
-    error: query.error,
+    isLoading,
+    isError,
+    error,
   };
 };
