@@ -15,6 +15,7 @@ import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { t } from "i18next";
+import { logError } from "@/utils/logger";
 
 export const DepartmentPage = () => {
   const { departments, meta, isLoading: skelettonLoading, isUpdating, changeStatus } = useDepartments();
@@ -37,7 +38,7 @@ export const DepartmentPage = () => {
       });
       setStatusDialogOpen(false);
     } catch (error) {
-      console.error("Error al actualizar el estado:", error);
+      logError(error, "DepartmentPage");
     }
   };
 

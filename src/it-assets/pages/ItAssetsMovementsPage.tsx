@@ -13,7 +13,6 @@ import { CustomItAssetsMovementsFilters } from "../components/CustomItAssetsMove
 const ItAssetsMovementsPage = () => {
   const { t } = useTranslation();
   const { itAssetsMovements, meta, isLoadingMovements } = useItAssetsMovements();
-  console.log(itAssetsMovements, meta);
   
   return (
     <div className="space-y-6">

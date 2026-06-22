@@ -3,6 +3,7 @@ import { AppRoles, type AuthResponse } from '../interfaces/authResponse.interfac
 import { loginAction } from '../actions/login.action';
 import { checkAuthAction } from '../actions/check-auth.action';
 import { logoutAction } from '../actions/logout';
+import { logError } from '@/utils/logger';
 
 type AuthStatus = 'authenticated' | 'not-authenticated' | 'checking';
 
@@ -64,7 +65,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     try {
       await logoutAction();
     } catch (error) {
-      console.error('Error al cerrar sesión', error);
+      logError(error, "AuthStore", "Error al cerrar sesión");
     } finally {
       // Limpiamos todo al salir
       set({ user: null, authStatus: 'not-authenticated', lastCheck: null, sessionStart: null });

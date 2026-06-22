@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from "react-router";
 import { getDepartmentsActions } from "../actions/get-departments.action";
 import { setStatusDepartmentAction } from "../actions/set-status-departament.action";
+import { logError } from '@/utils/logger';
 
 export const useDepartments = () => {
   const [searchParams] = useSearchParams();
@@ -36,7 +37,7 @@ export const useDepartments = () => {
       queryClient.invalidateQueries({ queryKey: ['departments'] });
     },
     onError: (error) => {
-      console.error("Error en la mutación:", error);
+      logError(error, "useDepartments");
     }
   });
 

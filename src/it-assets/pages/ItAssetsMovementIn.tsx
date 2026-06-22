@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { LogIn, Loader2, ArrowLeft, Monitor, RefreshCw, Info } from "lucide-react";
+import { LogIn, Loader2, Monitor, RefreshCw, Info } from "lucide-react";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import { useTranslation } from "react-i18next";
@@ -18,6 +18,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import CustomItAssetPreview from "../components/CustomItAssetPreview";
 import { CustomConfirmChangeStatusItAsset } from "../components/CustomConfirmChangeStatusItAsset";
+import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
+import { logError } from "@/utils/logger";
 
 const ItAssetsMovementIn = () => {
   const { id } = useParams();
@@ -102,7 +104,7 @@ const ItAssetsMovementIn = () => {
       );
       navigate("/it-assets"); // Ajusta esta ruta a donde quieres redirigir
     } catch (error) {
-      console.error(error);
+      logError(error, "ItAssetsMovementIn");
     }
   };
 
@@ -131,15 +133,11 @@ const ItAssetsMovementIn = () => {
     <div className="space-y-6 max-w-6xl mx-auto pb-10">
       
       {/* CABECERA */}
-      <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" onClick={() => navigate(-1)}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">{t("itAssets.movementIn.header.title")}</h1>
-          <p className="text-muted-foreground text-sm">{t("itAssets.movementIn.header.description")}</p>
-        </div>
-      </div>
+      <CustomTitlePageWithBack
+        backLink="/it-assets"
+        title={t("itAssets.movementIn.header.title")}
+        description={t("itAssets.movementIn.header.description")}
+      />
 
       <div className="flex flex-col md:grid md:grid-cols-12 gap-8 items-start">
         

@@ -1001,6 +1001,49 @@
         }
       }
     },
+    "detailsPage": {
+      "loading": "Loading asset details...",
+      "notFound": "Asset not found",
+      "backToList": "Back to list",
+      "noImage": "No image available",
+      "common": {
+        "yes": "Yes",
+        "no": "No",
+        "assigned": "Assigned",
+        "available": "Available",
+        "noDescription": "No detailed description."
+      },
+      "header": {
+        "title": "Asset Details",
+        "description": "Complete IT asset information."
+      },
+      "card": {
+        "info": {
+          "title": "General Information",
+          "description": "Identification and status data."
+        },
+        "additional": {
+          "title": "Additional Data"
+        },
+        "image": {
+          "title": "Photograph"
+        }
+      },
+      "fields": {
+        "serialNumber": "Serial Number",
+        "idInventary": "Inventory ID",
+        "type": "Type",
+        "brand": "Brand",
+        "model": "Model",
+        "status": "Physical Status",
+        "isActive": "Active",
+        "inUse": "In Use",
+        "invoice": "Invoice",
+        "createdAt": "Creation Date",
+        "updatedAt": "Last Update",
+        "description": "Description"
+      }
+    },
     "components": {
       "assetStatusSelect": {
         "label": "Physical status at time of movement",
@@ -1290,6 +1333,14 @@
             "defaultMessage": "Error creating type"
           }
         }
+      }
+    }
+  },
+  "staff": {
+    "components": {
+      "staffDetailsCard": {
+        "title": "Assigned Staff",
+        "noData": "Staff data not available."
       }
     }
   }

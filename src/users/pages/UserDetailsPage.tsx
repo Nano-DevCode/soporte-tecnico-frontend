@@ -16,10 +16,10 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 import { CustomUserSkeleton } from "../components/CustomUserSkeleton";
-import { CustomBackToList } from "@/components/custom/CustomBackToList";
 import { sileo } from "sileo";
 import { formatDate } from "../util/formatDate";
 import { t } from "i18next";
+import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 
 const FormattedDateDisplay = ({ dateString }: { dateString?: string | Date }) => {
   if (!dateString) {
@@ -49,7 +49,7 @@ const UserDetailsPage = () => {
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
       
-      <CustomBackToList onBack={() => navigate('/users')} backLabel={t("user_details_page_back_to_user")} actionUrl="user"/>
+      <CustomTitlePageWithBack backLink="/users" title="Detalles del Usuario" description="Consulta la información detallada del usuario seleccionado." />
 
       <Card>
 
@@ -131,7 +131,6 @@ const UserDetailsPage = () => {
                   <dt className="font-medium text-muted-foreground">{t("user_details_page_date_register")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
-                    {/* ✅ 3. Usamos el nuevo componente en lugar de la función en línea */}
                     <FormattedDateDisplay dateString={user.createdAt} />
                   </dd>
                 </div>
@@ -140,7 +139,6 @@ const UserDetailsPage = () => {
                   <dt className="font-medium text-muted-foreground">{t("user_details_page_update_credentials")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
-                    {/* ✅ Usamos el nuevo componente */}
                     <FormattedDateDisplay dateString={user.updatedAt} />
                   </dd>
                 </div>
@@ -149,7 +147,6 @@ const UserDetailsPage = () => {
                   <dt className="font-medium text-muted-foreground">{t("user_details_page_update_info")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
-                    {/* ✅ Usamos el nuevo componente */}
                     <FormattedDateDisplay dateString={user.staff?.updatedAt} />
                   </dd>
                 </div>

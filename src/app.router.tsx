@@ -4,7 +4,6 @@ import { InicioPage } from "./inicio/pages/InicioPage";
 import { AuthLayout } from './auth/layout/AuthLayout';
 import { AuthenticatedRoute, NotAuthenticatedRoute } from "./auth/routes/ProtectedRoutes";
 import { UsersRoutes } from "./users/users.router";
-import { AccountRoutes } from "./account/account.router";
 import { SchoolPeriodsRoutes } from "./school-periods/school-periods.router";
 import { CenterManagersRoutes } from "./computing-center-managers/center-manager.router";
 import { DepartmentRoutes } from "./Departments/departments.routes";
@@ -19,6 +18,7 @@ import { consumableRoutes } from "./Consumables/consumables.routes";
 import { movementConsumableRoutes } from "./Consumables/movementConsumables.routes";
 import { SuspenseWrapper } from "./components/custom/SuspenseWrapper";
 import { AuthRoutes } from "./auth/auth.router";
+import { AccountRoutes } from './account/account.router';
 
 // const PanelLayout = lazy(() => import("./layout/PanelLayout"))
 const PanelLayoutV2 = lazy(() => import("./layout/PanelLayoutV2"))
@@ -55,8 +55,8 @@ const router = createBrowserRouter([
                 children: CenterManagersRoutes
             },
             {
-                path: 'account',
-                element: <AccountRoutes />,
+                path: 'account/*',
+                element: <AccountRoutes/>
             },
             {
                 path: 'departments/*', 

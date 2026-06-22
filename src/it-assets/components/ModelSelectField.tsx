@@ -7,6 +7,7 @@ import { InfiniteScrollSelect } from "@/components/custom/InfiniteScrollSelect";
 import { useTranslation } from "react-i18next";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { isAxiosError } from "axios";
+import { logError } from "@/utils/logger";
 
 export const ModelSelectField = ({ disabled, initialData }: { disabled?: boolean, initialData?: { id: string, name: string } | null }) => {
   const { t } = useTranslation();
@@ -93,7 +94,7 @@ export const ModelSelectField = ({ disabled, initialData }: { disabled?: boolean
                     
                     if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
                     setDebouncedSearch("");
-                  } catch (error) { console.error(error); }
+                  } catch (error) { logError(error, "ModelSelectField ItAssets"); }
                 }}
               />
             </FormControl>

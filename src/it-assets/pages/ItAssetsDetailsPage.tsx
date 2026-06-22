@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { 
-  Loader2, 
-  ArrowLeft, 
+  Loader2,  
   ImageIcon, 
   CheckCircle2, 
   XCircle,
@@ -22,6 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { useItAssets } from "../hooks/useItAssets";
 import DetailItem from "@/components/custom/DetailItem";
+import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 
 const formatDate = (dateString?: string | Date) => {
   if (!dateString) return "N/A";
@@ -38,7 +38,7 @@ const ItAssetsDetailsPage = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-muted-foreground">{t("itAssets.detailsPage.loading", "Cargando detalles del activo...")}</p>
+        <p className="text-muted-foreground">{t("itAssets.detailsPage.loading")}</p>
       </div>
     );
   }
@@ -47,9 +47,9 @@ const ItAssetsDetailsPage = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
         <XCircle className="h-12 w-12 text-destructive" />
-        <h2 className="text-xl font-semibold">{t("itAssets.detailsPage.notFound", "Activo no encontrado")}</h2>
+        <h2 className="text-xl font-semibold">{t("itAssets.detailsPage.notFound")}</h2>
         <Button variant="outline" onClick={() => navigate("/it-assets")}>
-          {t("itAssets.detailsPage.backToList", "Volver a la lista")}
+          {t("itAssets.detailsPage.backToList")}
         </Button>
       </div>
     );
@@ -58,19 +58,11 @@ const ItAssetsDetailsPage = () => {
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-10">
 
-      <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" type="button" onClick={() => navigate(-1)}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            {t("itAssets.detailsPage.header.title", "Detalles del Activo")}
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            {t("itAssets.detailsPage.header.description", "Información completa del activo de TI.")}
-          </p>
-        </div>
-      </div>
+      <CustomTitlePageWithBack 
+        backLink="/it-assets" 
+        title={t("itAssets.detailsPage.header.title")} 
+        description={t("itAssets.detailsPage.header.description")} 
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
@@ -78,19 +70,19 @@ const ItAssetsDetailsPage = () => {
         <div className="md:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>{t("itAssets.detailsPage.card.info.title", "Información General")}</CardTitle>
+              <CardTitle>{t("itAssets.detailsPage.card.info.title")}</CardTitle>
               <CardDescription>
-                {t("itAssets.detailsPage.card.info.description", "Datos de identificación y estado.")}
+                {t("itAssets.detailsPage.card.info.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
-              <DetailItem icon={Barcode} label={t("itAssets.fields.serialNumber", "Número de Serie")} value={itAsset.serialNumber || "N/A"} />
-              <DetailItem icon={Hash} label={t("itAssets.fields.idInventary", "ID Inventario")} value={itAsset.idInventary || "N/A"} />
-              <DetailItem icon={Monitor} label={t("itAssets.fields.type", "Tipo")} value={itAsset.itAssetsType?.name || "N/A"} />
-              <DetailItem icon={Building2} label={t("itAssets.fields.brand", "Marca")} value={itAsset.model?.brand?.name || "N/A"} />
-              <DetailItem icon={Tag} label={t("itAssets.fields.model", "Modelo")} value={itAsset.model?.name || "N/A"} />
-              <DetailItem icon={Activity} label={t("itAssets.fields.status", "Estado Físico")} value={itAsset.itAssetStatus?.name || "N/A"} />
+              <DetailItem icon={Barcode} label={t("itAssets.detailsPage.fields.serialNumber")} value={itAsset.serialNumber || "N/A"} />
+              <DetailItem icon={Hash} label={t("itAssets.detailsPage.fields.idInventary")} value={itAsset.idInventary || "N/A"} />
+              <DetailItem icon={Monitor} label={t("itAssets.detailsPage.fields.type")} value={itAsset.itAssetsType?.name || "N/A"} />
+              <DetailItem icon={Building2} label={t("itAssets.detailsPage.fields.brand")} value={itAsset.model?.brand?.name || "N/A"} />
+              <DetailItem icon={Tag} label={t("itAssets.detailsPage.fields.model")} value={itAsset.model?.name || "N/A"} />
+              <DetailItem icon={Activity} label={t("itAssets.detailsPage.fields.status")} value={itAsset.itAssetStatus?.name || "N/A"} />
               
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2.5">
@@ -98,12 +90,12 @@ const ItAssetsDetailsPage = () => {
                     <Activity className="h-3.5 w-3.5 text-foreground/70" />
                   </div>
                   <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-                    {t("itAssets.fields.isActive", "Activo")}
+                    {t("itAssets.detailsPage.fields.isActive")}
                   </span>
                 </div>
                 <div className="pl-1 mt-1">
                   <Badge variant={itAsset.status ? "default" : "destructive"}>
-                    {itAsset.status ? t("common.yes", "Sí") : t("common.no", "No")}
+                    {itAsset.status ? t("itAssets.detailsPage.common.yes") : t("itAssets.detailsPage.common.no")}
                   </Badge>
                 </div>
               </div>
@@ -114,7 +106,7 @@ const ItAssetsDetailsPage = () => {
                     <CheckCircle2 className="h-3.5 w-3.5 text-foreground/70" />
                   </div>
                   <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-                    {t("itAssets.fields.inUse", "En Uso")}
+                    {t("itAssets.detailsPage.fields.inUse")}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 pl-1 mt-1">
@@ -123,7 +115,7 @@ const ItAssetsDetailsPage = () => {
                   ) : (
                     <XCircle className="h-5 w-5 text-gray-400" />
                   )}
-                  <span className="text-sm font-semibold">{itAsset.inUse ? t("common.inUse", "Asignado") : t("common.available", "Disponible")}</span>
+                  <span className="text-sm font-semibold">{itAsset.inUse ? t("itAssets.detailsPage.common.assigned") : t("itAssets.detailsPage.common.available")}</span>
                 </div>
               </div>
             </CardContent>
@@ -131,20 +123,20 @@ const ItAssetsDetailsPage = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>{t("itAssets.detailsPage.card.additional.title", "Datos Adicionales")}</CardTitle>
+              <CardTitle>{t("itAssets.detailsPage.card.additional.title")}</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
-              <DetailItem icon={FileText} label={t("itAssets.fields.invoice", "Factura")} value={itAsset.invoice?.idInternal || "N/A"} />
+              <DetailItem icon={FileText} label={t("itAssets.detailsPage.fields.invoice")} value={itAsset.invoice?.idInternal || "N/A"} />
               <div className="hidden sm:block"></div> 
               
-              <DetailItem icon={Calendar} label={t("itAssets.fields.createdAt", "Fecha de Creación")} value={formatDate(itAsset.createdAt)} />
-              <DetailItem icon={Clock} label={t("itAssets.fields.updatedAt", "Última Actualización")} value={formatDate(itAsset.updatedAt)} />
+              <DetailItem icon={Calendar} label={t("itAssets.detailsPage.fields.createdAt")} value={formatDate(itAsset.createdAt)} />
+              <DetailItem icon={Clock} label={t("itAssets.detailsPage.fields.updatedAt")} value={formatDate(itAsset.updatedAt)} />
               
               <DetailItem 
                 icon={AlignLeft} 
-                label={t("itAssets.fields.description", "Descripción")} 
-                value={itAsset.description || t("common.noDescription", "Sin descripción detallada.")} 
+                label={t("itAssets.detailsPage.fields.description")} 
+                value={itAsset.description || t("itAssets.detailsPage.common.noDescription")} 
                 isTextarea={true} 
               />
 
@@ -156,7 +148,7 @@ const ItAssetsDetailsPage = () => {
         <div className="md:col-span-1">
           <Card className="h-full sticky top-6">
             <CardHeader>
-              <CardTitle>{t("itAssets.detailsPage.card.image.title", "Fotografía")}</CardTitle>
+              <CardTitle>{t("itAssets.detailsPage.card.image.title")}</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center">
               {itAsset.imageUrl ? (
@@ -170,7 +162,7 @@ const ItAssetsDetailsPage = () => {
               ) : (
                 <div className="flex flex-col items-center justify-center w-full aspect-square bg-muted/30 rounded-md border border-dashed gap-2 text-muted-foreground">
                   <ImageIcon className="h-10 w-10 opacity-50" />
-                  <span className="text-sm">{t("itAssets.detailsPage.noImage", "Sin imagen disponible")}</span>
+                  <span className="text-sm">{t("itAssets.detailsPage.noImage")}</span>
                 </div>
               )}
             </CardContent>

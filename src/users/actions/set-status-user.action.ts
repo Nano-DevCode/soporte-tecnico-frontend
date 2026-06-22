@@ -7,12 +7,6 @@ interface ChangeUserStatusOptions {
 }
 
 export const setStatusUserAction = async ({ id, status }: ChangeUserStatusOptions): Promise<User> => {
-  try {
-    const { data } = await soporteTecnicoApi.patch<User>(`/users/change/${id}`, { status });
-    
-    return data;
-  } catch (error) {
-    console.error("Error changing user status:", error);
-    throw new Error("No se pudo cambiar el estado del usuario");
-  }
+  const { data } = await soporteTecnicoApi.patch<User>(`/users/change/${id}`, { status });
+  return data;
 };

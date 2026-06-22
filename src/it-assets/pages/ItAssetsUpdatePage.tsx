@@ -18,6 +18,8 @@ import { useItAssets } from "../hooks/useItAssets";
 import useItAssetsStatus from "../hooks/useItAssetsStatus";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { ItAssetsForm } from "../components/ItAssetsFormPage";
+import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
+import { logError } from "@/utils/logger";
 
 const ItAssetsUpdatePage = () => {
   const navigate = useNavigate();
@@ -113,7 +115,7 @@ const ItAssetsUpdatePage = () => {
       );
       navigate("/it-assets");
     } catch (error) {
-      console.error(error);
+      logError(error, "ItAssetsUpdatePage");
     }
   };
 
@@ -130,6 +132,11 @@ const ItAssetsUpdatePage = () => {
     <div className="space-y-6 max-w-4xl mx-auto pb-10">
       
       {/* HEADER */}
+      <CustomTitlePageWithBack
+        backLink="/it-assets"
+        title={t("itAssets.updatePage.header.title")}
+        description={t("itAssets.updatePage.header.description")}
+      />
       <div className="flex items-center gap-4">
         <Button variant="outline" size="icon" type="button" onClick={() => navigate(-1)}>
           <ArrowLeft className="h-4 w-4" />

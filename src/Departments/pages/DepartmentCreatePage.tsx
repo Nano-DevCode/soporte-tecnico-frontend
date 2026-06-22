@@ -5,7 +5,8 @@ import { useCreateDepartment } from "../hooks/useCreateDepartment";
 import { CustomDepartmentForm } from "../components/CustomDepartmentForm";
 import type { Department } from "../interfaces/department.interface";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
-import { CustomBackToList } from "@/components/custom/CustomBackToList";
+import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
+import { logError } from "@/utils/logger";
 
 export const DepartmentCreatePage = () => {
   const navigate = useNavigate();
@@ -46,15 +47,16 @@ export const DepartmentCreatePage = () => {
       });
       navigate("/departments");
     } catch (error) {
-      console.error("Error en la creación:", error);
+      logError(error, "DepartmentCreatePage");
     }
   };
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-4">
-      <CustomBackToList 
-        onBack={() => navigate('/departments')} 
-        backLabel="Lista de Departamentos"
+      <CustomTitlePageWithBack 
+        backLink="/departments"
+        title="Crear Departamento"
+        description="Completa los datos del nuevo departamento"
       />
 
       <CustomDepartmentForm 

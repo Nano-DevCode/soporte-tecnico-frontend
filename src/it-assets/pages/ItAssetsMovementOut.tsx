@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { LogOut, Loader2, ArrowLeft, Monitor } from "lucide-react";
+import { LogOut, Loader2, Monitor } from "lucide-react";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import { useTranslation } from "react-i18next";
@@ -26,6 +26,8 @@ import CustomItAssetPreview from "../components/CustomItAssetPreview";
 import { StaffOutSection } from "../components/StaffOutSection";
 import { TicketOutSection } from "../components/TicketOutSection";
 import { AssetStatusSelect } from "../components/AssetStatusSelect"; // <-- NUEVO COMPONENTE
+import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
+import { logError } from "@/utils/logger";
 
 type MovementMode = "sin_ticket" | "con_ticket";
 
@@ -132,7 +134,7 @@ const ItAssetsMovementOut = () => {
         });
       navigate("/it-assets");
     } catch (error) {
-      console.error(error);
+      logError(error, "ItAssetsMovementOut");
     }
   };
 
@@ -159,15 +161,11 @@ const ItAssetsMovementOut = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-10">
       
-      <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" onClick={() => navigate('/it-assets')}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">{t("itAssets.movementOut.header.title")}</h1>
-          <p className="text-muted-foreground text-sm">{t("itAssets.movementOut.header.description")}</p>
-        </div>
-      </div>
+      <CustomTitlePageWithBack
+        backLink="/it-assets"
+        title={t("itAssets.movementOut.header.title")}
+        description={t("itAssets.movementOut.header.description")}
+      />
 
       <div className="flex flex-col md:grid md:grid-cols-12 gap-8 items-start">
         

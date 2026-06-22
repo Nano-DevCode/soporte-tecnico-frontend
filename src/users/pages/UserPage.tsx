@@ -16,6 +16,7 @@ import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { t } from "i18next";
+import { logError } from "@/utils/logger";
 
 const UserPage = () => {
   const { users = [], meta, isLoading: skelettonLoading, isUpdating, changeStatus } = useUsers();
@@ -38,7 +39,7 @@ const UserPage = () => {
       });
       setStatusDialogOpen(false);
     } catch (error) {
-      console.error("Error al actualizar el estado del usuario:", error);
+      logError(error, "UserPage");
     }
   };
 

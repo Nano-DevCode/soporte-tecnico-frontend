@@ -21,7 +21,7 @@ export const CustomSkeletonInformation = () => {
             className="flex flex-col gap-2 rounded-lg border border-border bg-muted/10 p-4"
           >
             <Skeleton className="h-4 w-32" />
-            <Skeleton className="h-5 w-full max-w-[200px]" />
+            <Skeleton className="h-5 w-full max-w-50" />
           </div>
         ))}
       </div>

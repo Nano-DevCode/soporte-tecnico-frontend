@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Save, Loader2, ArrowLeft } from "lucide-react";
+import { Save, Loader2 } from "lucide-react";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import { useTranslation } from "react-i18next";
@@ -14,6 +14,8 @@ import { useItAssets } from "../hooks/useItAssets";
 import useItAssetsStatus from "../hooks/useItAssetsStatus";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { ItAssetsForm } from "../components/ItAssetsFormPage";
+import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
+import { logError } from "@/utils/logger";
 
 const ItAssetsCreatePage = () => {
   const { t } = useTranslation();
@@ -89,22 +91,17 @@ const ItAssetsCreatePage = () => {
       );
       navigate("/it-assets");
     } catch (error) {
-      console.error(error);
+      logError(error, "ItAssetsCreatePage");
     }
   };
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-10">
       
-      <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" type="button" onClick={() => navigate(-1)}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">{t("itAssets.createPage.header.title")}</h1>
-          <p className="text-muted-foreground text-sm">{t("itAssets.createPage.header.description")}</p>
-        </div>
-      </div>
+      <CustomTitlePageWithBack backLink="/it-assets" 
+        title={t("itAssets.createPage.header.title")} 
+        description={t("itAssets.createPage.header.description")} 
+      />
 
       <Card>
         <CardHeader>

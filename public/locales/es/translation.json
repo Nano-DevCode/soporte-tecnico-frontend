@@ -2319,6 +2319,49 @@
         }
       }
     },
+    "detailsPage": {
+      "loading": "Cargando detalles del activo...",
+      "notFound": "Activo no encontrado",
+      "backToList": "Volver a la lista",
+      "noImage": "Sin imagen disponible",
+      "common": {
+        "yes": "Sí",
+        "no": "No",
+        "assigned": "Asignado",
+        "available": "Disponible",
+        "noDescription": "Sin descripción detallada."
+      },
+      "header": {
+        "title": "Detalles del Activo",
+        "description": "Información completa del activo de TI."
+      },
+      "card": {
+        "info": {
+          "title": "Información General",
+          "description": "Datos de identificación y estado."
+        },
+        "additional": {
+          "title": "Datos Adicionales"
+        },
+        "image": {
+          "title": "Fotografía"
+        }
+      },
+      "fields": {
+        "serialNumber": "Número de Serie",
+        "idInventary": "ID Inventario",
+        "type": "Tipo",
+        "brand": "Marca",
+        "model": "Modelo",
+        "status": "Estado Físico",
+        "isActive": "Activo",
+        "inUse": "En Uso",
+        "invoice": "Factura",
+        "createdAt": "Fecha de Creación",
+        "updatedAt": "Última Actualización",
+        "description": "Descripción"
+      }
+    },
     "components": {
       "assetStatusSelect": {
         "label": "Estado físico al momento de mover",

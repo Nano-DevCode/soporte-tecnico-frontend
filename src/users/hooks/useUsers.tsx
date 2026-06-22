@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router";
 import { getUsersActions } from "../actions/get-users.action";
 import { setStatusUserAction } from "../actions/set-status-user.action";
 import type { UserResponse } from "../interfaces/users.response";
+import { logError } from "@/utils/logger";
 
 export const useUsers = () => {
   const [searchParams] = useSearchParams();
@@ -40,7 +41,7 @@ export const useUsers = () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
     onError: (error) => {
-      console.error("Error al cambiar el estado del usuario:", error);
+      logError(error,"Error changing user status");
     }
   });
 

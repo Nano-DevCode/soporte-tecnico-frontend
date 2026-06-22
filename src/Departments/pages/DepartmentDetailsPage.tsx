@@ -17,8 +17,8 @@ import { Badge } from "@/components/ui/badge";
 import { useDepartment } from "../hooks/useDepartment";
 import { formatDate } from "@/users/util/formatDate"; 
 import { CustomSkeletonInformation } from "@/components/custom/CustomSkeletonInformation";
-import { CustomBackToList } from "@/components/custom/CustomBackToList";
 import { t } from "i18next";
+import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 
 interface DepartmentDateProps {
   date?: string | Date;
@@ -51,7 +51,11 @@ export const DepartmentDetailsPage = () => {
   if (isLoading) {
     return (
       <div className="mx-auto w-full max-w-4xl space-y-4">
-        <CustomBackToList onBack={() => navigate('/departments')} backLabel="Regresar a Departamentos" />
+        <CustomTitlePageWithBack 
+          backLink="/departments"
+          title="Detalles del Departamento"
+          description="Información detallada del departamento seleccionado"
+        />
         <CustomSkeletonInformation/>
       </div>
     );
@@ -60,7 +64,11 @@ export const DepartmentDetailsPage = () => {
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
       
-      <CustomBackToList onBack={() => navigate('/departments')} backLabel="Regresar a Departamentos" actionUrl="department"/>
+      <CustomTitlePageWithBack 
+        backLink="/departments"
+        title="Detalles del Departamento"
+        description="Información detallada del departamento seleccionado"
+      />
 
       <Card>
         <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-6">

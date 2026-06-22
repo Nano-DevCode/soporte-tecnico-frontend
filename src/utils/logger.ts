@@ -1,4 +1,4 @@
-export const logError = (error: unknown, context: string): void => {
+export const logError = (error: unknown, context: string, extraMessage?: string): void => {
   // 1. Vite pone esto en 'true' automáticamente cuando programas localmente
   const isDev = import.meta.env.DEV; 
 
@@ -8,6 +8,12 @@ export const logError = (error: unknown, context: string): void => {
   // Solo mostramos logs si es desarrollo O si lo pedimos explícitamente en el .env
   if (isDev || forceLogs) {
     console.group(`Error en: ${context}`);
+    
+    // Si mandaste un mensaje extra, lo mostramos aquí
+    if (extraMessage) {
+      console.info(`Detalle: ${extraMessage}`);
+    }
+    
     console.error(error);
     console.groupEnd();
   }

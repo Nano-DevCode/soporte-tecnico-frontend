@@ -1,5 +1,6 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 import type { AuthResponse } from "../interfaces/authResponse.interface";
+import { logError } from "@/utils/logger";
 
 export const loginAction = async(email: string, password: string): Promise<AuthResponse> => {
     try {
@@ -9,7 +10,7 @@ export const loginAction = async(email: string, password: string): Promise<AuthR
       });
       return data;
     } catch (error) {
-      console.log(error);
+      logError(error, "loginAction");
       throw error;
     }
 }

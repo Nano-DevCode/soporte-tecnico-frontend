@@ -7,12 +7,6 @@ interface ChangeStatusOptions {
 }
 
 export const setStatusDepartmentAction = async ({ id, status }: ChangeStatusOptions): Promise<Department> => {
-  try {
-    const { data } = await soporteTecnicoApi.patch<Department>(`/departments/change/${id}`, { status });
-    
-    return data;
-  } catch (error) {
-    console.error("Error changing department status:", error);
-    throw new Error("No se pudo cambiar el estado del departamento");
-  }
+  const { data } = await soporteTecnicoApi.patch<Department>(`/departments/change/${id}`, { status });
+  return data;
 };

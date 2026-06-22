@@ -25,7 +25,6 @@ export const getItAssetsAction = async (
     status = undefined,
   } = options;
 
-  console.log(status);
   const { data } = await soporteTecnicoApi.get<ItAssetsResponse>(
     "/it-assets",
     {

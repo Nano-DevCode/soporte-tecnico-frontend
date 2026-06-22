@@ -1,29 +1,32 @@
-import { lazy } from "react";
-import { Navigate, useRoutes } from "react-router"; // ✅ Añadimos useRoutes
+import { Navigate, Route, Routes } from "react-router";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
-
-const ProfilePage = lazy(() => import("./pages/ProfilePage"));
-const ConfigurationPage = lazy(() => import("./pages/ConfigurationPage"));
+import ProfilePage from "./pages/ProfilePage";
+import ConfigurationPage from "./pages/ConfigurationPage";
 
 export const AccountRoutes = () => {
-    return useRoutes([
-        {
-            index: true,
-            element: <Navigate to='/account/profile'/>
-        },
-        {
-            path: 'profile',
-            element: 
-                <SuspenseWrapper>
-                    <ProfilePage />
-                </SuspenseWrapper>
-        },
-        {
-            path: 'configuration',
-            element: 
-                <SuspenseWrapper>
-                    <ConfigurationPage />
-                </SuspenseWrapper>
-        },
-    ]);
+    return (
+        <Routes>
+            <Route
+                index
+                element={<Navigate to="profile" replace />}
+            />
+            <Route
+                path="profile"
+                element={
+                    <SuspenseWrapper>
+                        <ProfilePage />
+                    </SuspenseWrapper>
+                }
+            />
+            <Route
+                path="configuration"
+                element={
+                    <SuspenseWrapper>
+                        <ConfigurationPage />
+                    </SuspenseWrapper>
+                }
+            />
+            <Route path="*" element={<Navigate to="profile" replace />} />
+        </Routes>
+    );
 };

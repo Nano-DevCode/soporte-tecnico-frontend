@@ -5,9 +5,10 @@ import { useDepartment } from "../hooks/useDepartment";
 import { useUpdateDepartment } from "../hooks/useUpdateDepartment";
 import { CustomDepartmentForm } from "../components/CustomDepartmentForm";
 import { CustomSkeletonInformation } from "@/components/custom/CustomSkeletonInformation";
-import { CustomBackToList } from "@/components/custom/CustomBackToList";
 import type { Department } from "../interfaces/department.interface";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
+import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
+import { logError } from "@/utils/logger";
 
 export const DepartmentEditPage = () => {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ export const DepartmentEditPage = () => {
       });
       navigate("/departments");
     } catch (error) {
-      console.error("Error en la actualización:", error);
+      logError(error, "DepartmentEditPage");
     }
   };
 
@@ -59,9 +60,10 @@ export const DepartmentEditPage = () => {
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-4">
-      <CustomBackToList 
-        onBack={() => navigate('/departments')} 
-        backLabel="Lista de Departamentos"
+      <CustomTitlePageWithBack
+        backLink="/departments"
+        title="Editar Departamento"
+        description="Modifica la información del departamento seleccionado."
       />
 
       <CustomDepartmentForm 

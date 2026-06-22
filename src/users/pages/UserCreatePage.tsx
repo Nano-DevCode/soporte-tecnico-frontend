@@ -9,7 +9,8 @@ import { sileo } from "sileo";
 import type { UserFormData } from "../schema/user-form.schema";
 import type { AxiosError } from "axios";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
-import { CustomBackToList } from "@/components/custom/CustomBackToList";
+import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
+import { logError } from "@/utils/logger";
 
 const UserCreatePage = () => {
   const navigate = useNavigate();
@@ -52,13 +53,13 @@ const UserCreatePage = () => {
       });
       navigate("/users");
     } catch (error) {
-      console.error("Error:", error);
+      logError(error, "UserCreatePage");
     }
   };
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
-      <CustomBackToList onBack={() => navigate('/users')} backLabel="Regresar a Usuarios" actionUrl="user"/>
+      <CustomTitlePageWithBack backLink="/users" title="Crear Usuario" description="Completa el formulario para crear un nuevo usuario." />
 
       {isLoading ? (
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-8">

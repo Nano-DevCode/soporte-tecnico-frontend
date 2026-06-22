@@ -10,11 +10,11 @@ export const CustomSkeletonTableCard = () => {
             
             {/* Cabecera (Simulando los 5 TableHeads) */}
             <div className="flex items-center p-4 border-b bg-muted/30 gap-4">
-              <div className="w-[150px]"><Skeleton className="h-4 w-20" /></div>
-              <div className="w-[120px] flex justify-center"><Skeleton className="h-4 w-12" /></div>
-              <div className="w-[80px] flex justify-center"><Skeleton className="h-4 w-10" /></div>
+              <div className="w-37.5"><Skeleton className="h-4 w-20" /></div>
+              <div className="w-30 flex justify-center"><Skeleton className="h-4 w-12" /></div>
+              <div className="w-20 flex justify-center"><Skeleton className="h-4 w-10" /></div>
               <div className="flex-1"><Skeleton className="h-4 w-32" /></div>
-              <div className="w-[100px] flex justify-center"><Skeleton className="h-4 w-16" /></div>
+              <div className="w-25 flex justify-center"><Skeleton className="h-4 w-16" /></div>
             </div>
 
             {/* Filas */}
@@ -22,28 +22,28 @@ export const CustomSkeletonTableCard = () => {
               <div key={i} className="flex items-center p-4 border-b last:border-0 gap-4">
                 
                 {/* 1. Fecha */}
-                <div className="w-[150px]">
+                <div className="w-37.5">
                   <Skeleton className="h-4 w-28" />
                 </div>
                 
                 {/* 2. Tipo (Simulando el Badge) */}
-                <div className="w-[120px] flex justify-center">
+                <div className="w-30 flex justify-center">
                   <Skeleton className="h-6 w-20 rounded-full" />
                 </div>
                 
                 {/* 3. Foto (Simulando el AssetThumbnail cuadrado) */}
-                <div className="w-[80px] flex justify-center">
+                <div className="w-20 flex justify-center">
                   <Skeleton className="h-10 w-10 rounded-md" />
                 </div>
                 
                 {/* 4. Activo / Serie (Simulando los dos textos apilados) */}
                 <div className="flex-1 space-y-2">
-                  <Skeleton className="h-4 w-[60%] max-w-[200px]" />
-                  <Skeleton className="h-3 w-[40%] max-w-[120px]" />
+                  <Skeleton className="h-4 w-[60%] max-w-50" />
+                  <Skeleton className="h-3 w-[40%] max-w-30" />
                 </div>
                 
                 {/* 5. Detalles (Simulando el Botón del ojo) */}
-                <div className="w-[100px] flex justify-center">
+                <div className="w-25 flex justify-center">
                   <Skeleton className="h-8 w-8 rounded-md" />
                 </div>
                 

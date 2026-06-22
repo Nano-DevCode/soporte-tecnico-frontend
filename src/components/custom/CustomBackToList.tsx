@@ -21,7 +21,7 @@ export const CustomBackToList = ({
   return (
     <div className="flex items-center justify-between pb-4 mb-4 border-b border-border/50">
       <button 
-        type="button" // <-- ¡Aquí está la corrección!
+        type="button"
         onClick={onBack}
         className="group flex items-center gap-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
       >
