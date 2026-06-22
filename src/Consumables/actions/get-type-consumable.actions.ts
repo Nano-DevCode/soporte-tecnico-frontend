@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface TypeConsumable {
@@ -38,8 +38,8 @@ export const getTypeConsumablesAction = async (options: Options = {}): Promise<T
         });
 
         return data;
-    } catch (error) {
-        console.error(t("api_type_consumables_fetch_error"), error);
+    } catch {
+        // console.error(t("api_type_consumables_fetch_error"), error);
         return {
             typeConsumables: [],
             meta: {
@@ -62,8 +62,8 @@ export const getTypeConsumableByIdAction = async (
     try {
         const { data } = await soporteTecnicoApi.get<TypeConsumable>(`/type-consumables/${id}`);
         return data;
-    } catch (error) {
-        console.error(`${t("api_type_consumable_by_id_error")} ${id}:`, error);
+    } catch {
+        // console.error(`${t("api_type_consumable_by_id_error")} ${id}:`, error);
         return null; // Retorno seguro para evitar excepciones no controladas en el Front
     }
 };

@@ -1,7 +1,6 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
-import type { ConsumableItem } from "./get-consumables.action"; // Importa tu interfaz de consumibles existente
-
+// import { t } from "i18next";
+import type { Consumable } from "../interfaces/consumable.interfaces"; 
 export interface BatchProductItem {
   id: string;
   num_requirement: string;
@@ -12,7 +11,7 @@ export interface BatchProductItem {
   cost_unit: number;
   created_at: string;
   updated_at: string;
-  id_consumable: ConsumableItem;
+  id_consumable: Consumable;
 }
 
 interface GetBatchesOptions {
@@ -44,8 +43,8 @@ export const getBatchesProductsAction = async (options: GetBatchesOptions) => {
       meta: responseMeta
     };
 
-  } catch (error) {
-    console.error(t("api_batches_fetch_error"), error);
+  } catch  {
+    //console.error(t("api_batches_fetch_error"), error);
     return {
       data: [],
       meta: { total: 0, lastPage: 1, page: 1 }
@@ -59,8 +58,8 @@ export const getBatchProductByIdAction = async (id: string) => {
     const response = await soporteTecnicoApi.get<BatchProductItem>(url);
     
     return response.data;
-  } catch (error) {
-    console.error(t("api_batch_fetch_by_id_error"), error);
-    throw error;
+  } catch  {
+    //console.error(t("api_batch_fetch_by_id_error"), error);
+    return null; // Retorno seguro para evitar excepciones no controladas en el Front
   }
 };

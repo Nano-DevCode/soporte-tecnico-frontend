@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+//import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface MovementType {
@@ -38,8 +38,8 @@ export const getMovementTypesAction = async (options: Options = {}): Promise<Mov
         });
 
         return data;
-    } catch (error) {
-        console.error(t("api_movement_types_fetch_error"), error);
+    } catch {
+        //console.error(t("api_movement_types_fetch_error"), error);
         return {
             movementTypes: [],
             meta: {
@@ -62,8 +62,8 @@ export const getMovementTypeByIdAction = async (
     try {
         const { data } = await soporteTecnicoApi.get<MovementType>(`/movement-types/${id}`);
         return data;
-    } catch (error) {
-        console.error(`${t("api_movement_type_by_id_error")} ${id}:`, error);
+    } catch {
+        // console.error(`${t("api_movement_type_by_id_error")} ${id}:`, error);
         return null; // Retorno seguro para evitar excepciones no controladas en el Front
     }
 };

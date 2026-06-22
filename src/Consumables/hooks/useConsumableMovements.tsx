@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useSearchParams } from "react-router";
-import { registerConsumableOutput } from "../actions/consumableMovements.actions";
+import { registerConsumableOutput } from "../actions/post-consumable-movements.actions";
 import { getMovementConsumablesAction } from "../actions/get-movement-consumables.actions";
 import type { 
     CreateConsumableMovementDto,

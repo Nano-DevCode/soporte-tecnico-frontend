@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 export interface DepartmentResponse {
     data: Department[];
@@ -50,12 +50,12 @@ export const getDepartmentsActions = async (options: Options): Promise<Departmen
     return data;
 }
 
-export const getDepartmentByIdAction = async (id: string): Promise<Department> => {
+export const getDepartmentByIdAction = async (id: string): Promise<Department | null> => {
     try {
         const { data } = await soporteTecnicoApi.get<Department>(`/departments/${id}`);
         return data;
-    } catch (error) {
-        console.error(`${t("api_departments_by_id_error")} ${id}:`, error);
-        throw error;
+    } catch  {
+        //console.error(`${t("api_departments_by_id_error")} ${id}:`, error);
+        return null; // Retorno seguro para evitar excepciones no controladas en el Front
     }
 };

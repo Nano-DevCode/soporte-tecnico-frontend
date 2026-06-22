@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface Tickets {
@@ -46,8 +46,8 @@ export const getTicketsAction = async (options: Options = {}): Promise<TicketsRe
             data: mappedData // Devolvemos los tickets ya con su propiedad 'name' integrada
         };
 
-    } catch (error) {
-        console.error(t("api_tickets_fetch_error"), error);
+    } catch {
+        //console.error(t("api_tickets_fetch_error"), error);
         return {
             data: [],
             meta: {
@@ -75,8 +75,8 @@ export const getTicketsByIdAction = async (
             };
         }
         return data;
-    } catch (error) {
-        console.error(`${t("api_tickets_by_id_error")} ${id}:`, error);
+    } catch {
+        // console.error(`${t("api_tickets_by_id_error")} ${id}:`, error);
         return null;
     }
 };

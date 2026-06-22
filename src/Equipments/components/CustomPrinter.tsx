@@ -59,8 +59,8 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
             if (newItem) {
                 setValue("printer.id_type_function", newItem, { shouldValidate: true });
             }
-        } catch (e) {
-            console.error(e);
+        } catch {
+            // Bloque vacío para evitar impresiones en consola
         }
     };
 
@@ -82,11 +82,10 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
             if (newItem) {
                 setValue("printer.id_type_printing", newItem, { shouldValidate: true });
             }
-        } catch (e) {
-            console.error(e);
+        } catch {
+            // Bloque vacío para evitar impresiones en consola
         }
     };
-
     // Helper rápido para obtener los errores anidados de la propiedad printer
     const printerErrors = errors?.printer as Record<string, FieldError> | undefined;
 

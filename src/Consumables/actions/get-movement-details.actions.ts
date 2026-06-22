@@ -6,8 +6,8 @@ export const getMovementsByFolioAction = async (codeMovementApplication: string)
   try {
     const { data } = await soporteTecnicoApi.get<MovementsConsumableItem[]>(`/movements-consumibles/folio/${codeMovementApplication}`);
     return data;
-  } catch (error) {
-    console.error("Error fetching movements by folio:", error);
+  } catch {
+    // console.error("Error fetching movements by folio:", error);
     return [];
   }
 };

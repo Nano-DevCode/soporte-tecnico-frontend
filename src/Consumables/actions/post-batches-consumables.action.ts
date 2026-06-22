@@ -1,39 +1,49 @@
+/* eslint-disable no-useless-catch */
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import type { BatchProductItem } from "./get-batches-consumables"; // Asegúrate de apuntar a tu archivo de lectura
+import type { BatchProductItem } from "./get-batches-consumables"; 
 
 // 1. Interfaz para el elemento individual de la bolsa de herramientas (Detalle)
 export interface CreateBatchItemPayload {
-  id_consumable: string;   // Debe ser un UUID v4 válido
-  arrival_amount: number;  // Entero positivo (cantidad física recibida)
-  cost_batch: number;      // Número decimal positivo (costo total del lote)
+  id_consumable: string;   
+  arrival_amount: number;  
+  cost_batch: number;      
 }
 
 // 2. Interfaz del Payload Maestro-Detalle que espera el CreateBatchesproductDto
 export interface CreateBatchProductPayload {
-  num_requirement: string;            // Número de requisición único
-  items: CreateBatchItemPayload[];   // Bolsa con mínimo 1 artículo
+  num_requirement: string;            
+  items: CreateBatchItemPayload[];   
 }
 
 // 3. Interfaz de la respuesta exitosa del servidor tras el commit de la transacción
 export interface CreateBatchProductResponse {
+  errors: string[];
   message: string;
   total_processed: number;
-  batches: BatchProductItem[]; // Lista de lotes creados con sus IDs y timestamps definitivos
+  batches: BatchProductItem[]; 
 }
 
-export const createBatchesProductAction = async (payload: CreateBatchProductPayload): Promise<CreateBatchProductResponse> => {
+export const createBatchesProductAction = async (
+  payload: CreateBatchProductPayload
+): Promise<CreateBatchProductResponse> => {
   const url = '/batches-products';
 
-  // Limpieza preventiva de strings antes de enviar los datos al backend
+  // Normalización de datos (Excelente práctica para evitar strings vacíos o flotantes raros)
   const normalizedPayload: CreateBatchProductPayload = {
     num_requirement: payload.num_requirement.trim(),
     items: payload.items.map(item => ({
       id_consumable: item.id_consumable,
-      arrival_amount: Math.floor(Number(item.arrival_amount)), // Aseguramos que sea entero
-      cost_batch: Number(item.cost_batch),                     // Aseguramos formato flotante numérico
+      arrival_amount: Math.floor(Number(item.arrival_amount)),
+      cost_batch: Number(item.cost_batch),
     }))
   };
 
-  const response = await soporteTecnicoApi.post<CreateBatchProductResponse>(url, normalizedPayload);
-  return response.data;
+  try {
+    const response = await soporteTecnicoApi.post<CreateBatchProductResponse>(url, normalizedPayload);
+    return response.data;
+  } catch (error) {
+    // ¡CRÍTICO! Relanzamos el error para que el 'catch' de tu 'CreateBatchPage' 
+    // pueda atraparlo y pasárselo a la función 'handleBackendError'.
+    throw error;
+  }
 };

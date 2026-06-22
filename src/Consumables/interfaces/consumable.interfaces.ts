@@ -6,6 +6,7 @@ export interface CatalogItem {
 export interface Consumable {
   id: string;
   item_code: string;
+  name: string;
   description: string;
   number_uses: number;
   imageUrl: string | null;

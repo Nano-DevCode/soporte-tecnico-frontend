@@ -1,22 +1,11 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
+import type { ConsumablesResponse } from '../interfaces/consumable.interfaces';
 
-export interface ConsumableItem {
-  id: string;
-  item_code: string;
-  description: string;
-  number_uses: number;
-  imageUrl?: string | null;
-  id_brand_consumable: { id: string; name: string };
-  id_type_consumable: { id: number; name: string };
-  id_unit_measurement: { id: number; name: string };
-  id_ubication_consumable: { id: string; name: string };
-  created_at: string;
-  updated_at: string;
-  available_stock: number;
-}
+// --- INTERFAZ DE OPCIONES PARA LA PETICIÓN ---
+// Alineado con el FilterConsumableDto del backend de NestJS
 interface GetConsumablesOptions {
-  search?: string;
+  query?: string;
   limit?: number | string;
   offset?: number | string;
   id_type_consumable?: number | string;
@@ -24,107 +13,64 @@ interface GetConsumablesOptions {
   id_ubication_consumable?: string;
 }
 
-export const getConsumablesAction = async (options: GetConsumablesOptions) => {
+/**
+ * Petición HTTP optimizada para obtener el catálogo de consumibles paginado.
+ */
+export const getConsumablesAction = async (
+  options: GetConsumablesOptions
+): Promise<ConsumablesResponse> => {
   const {
     limit = 10,
     offset = 0,
-    search,
+    query,
     id_type_consumable,
     id_unit_measurement,
-    id_ubication_consumable
+    id_ubication_consumable,
   } = options;
 
   try {
-    const { data } = await soporteTecnicoApi.get('/consumables', {
-      
+    const { data } = await soporteTecnicoApi.get<ConsumablesResponse>('/consumables', {
       params: {
-        query: search && search.trim() !== '' ? search.trim() : undefined,
+        query: query && query.trim() !== '' ? query.trim() : undefined,
         limit: isNaN(Number(limit)) ? 10 : Number(limit),
         offset: isNaN(Number(offset)) ? 0 : Number(offset),
         id_type_consumable: id_type_consumable || undefined,
         id_unit_measurement: id_unit_measurement || undefined,
         id_ubication_consumable: id_ubication_consumable || undefined,
-      }
+      },
     });
 
+    // --- NORMALIZACIÓN SEGURA ---
     const responseData = data?.consumables || [];
     const responseMeta = data?.meta || { total: 0, page: 1, lastPage: 1 };
-    const BASE_URL = import.meta.env.VITE_API_URL;
+    const BASE_URL = import.meta.env.VITE_API_URL || '';
 
-    const consumablesWithImages = responseData.map((consumable: ConsumableItem) => ({
+    // Mapeamos las imágenes concatenando la URL del servidor si el path existe
+    const consumablesWithImages = responseData.map((consumable) => ({
       ...consumable,
-      imageUrl: consumable.imageUrl ? `${BASE_URL}${consumable.imageUrl}` : null
+      imageUrl: consumable.imageUrl ? `${BASE_URL}${consumable.imageUrl}` : null,
     }));
 
     return {
-      consumables: consumablesWithImages as ConsumableItem[],
-      meta: responseMeta
+      consumables: consumablesWithImages,
+      meta: {
+        total: Number(responseMeta.total),
+        page: Number(responseMeta.page),
+        lastPage: Number(responseMeta.lastPage),
+      },
     };
 
-  } catch (error) {
-    console.error(t("api_consumables_fetch_error"), error);
+  } catch  {
+    //console.error(t("api_consumables_fetch_error"), error);
+
+    // Recuperación elástica para que la UI no se quede colgada ni parpadee en blanco
     return {
       consumables: [],
-      meta: { total: 0, lastPage: 1, page: 1 }
+      meta: { 
+        total: 0, 
+        lastPage: 1, 
+        page: Math.floor(Number(offset) / Number(limit)) + 1 
+      },
     };
   }
 };
-// import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-// import { t } from "i18next";
-
-// export interface ConsumableItem {
-//   id: string;
-//   item_code: string;
-//   description: string;
-//   number_uses: number;
-//   imageUrl?: string | null;
-//   id_brand_consumable: { id: string; name: string };
-//   id_type_consumable: { id: number; name: string };
-//   id_unit_measurement: { id: number; name: string };
-//   id_ubication_consumable: { id: string; name: string };
-//   created_at: string;
-//   updated_at: string;
-//   available_stock: number;
-// }
-
-
-// interface GetConsumablesOptions {
-//   search?: string;
-//   limit?: number | string;
-//   offset?: number | string;
-// }
-
-// export const getConsumablesAction = async (options: GetConsumablesOptions) => {
-//   const { limit = 10, offset = 0, search } = options;
-
-//   try {
-//     const { data } = await soporteTecnicoApi.get('/consumables', {
-//       params: {
-//         query: search && search.trim() !== '' ? search.trim() : undefined,
-//         limit: isNaN(Number(limit)) ? 10 : Number(limit),
-//         offset: isNaN(Number(offset)) ? 0 : Number(offset),
-//       }
-//     });
-
-//     const responseData = data?.consumables || [];
-//     const responseMeta = data?.meta || { total: 0, page: 1, lastPage: 1 };
-//     const BASE_URL = import.meta.env.VITE_API_URL;
-
-//     const consumablesWithImages = responseData.map((consumable: ConsumableItem) => ({
-//       ...consumable,
-//       imageUrl: consumable.imageUrl ? `${BASE_URL}${consumable.imageUrl}` : null
-//     }));
-
-//     return {
-//       consumables: consumablesWithImages as ConsumableItem[],
-//       meta: responseMeta
-//     };
-
-//   } catch (error) {
-//     console.error(t("api_consumables_fetch_error"), error);
-//     return {
-//       consumables: [],
-//       meta: { total: 0, lastPage: 1, page: 1 }
-//     };
-//   }
-// };

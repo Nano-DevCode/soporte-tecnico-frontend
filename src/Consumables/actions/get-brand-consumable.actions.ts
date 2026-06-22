@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface BrandConsumable {
@@ -38,8 +38,8 @@ export const getBrandConsumablesAction = async (options: Options = {}): Promise<
         });
 
         return data;
-    } catch (error) {
-        console.error(t("api_brand_consumables_fetch_error"), error);
+    } catch  {
+        //console.error(t("api_brand_consumables_fetch_error"), error);
         return {
             brandConsumables: [],
             meta: {
@@ -62,8 +62,8 @@ export const getBrandConsumableByIdAction = async (
     try {
         const { data } = await soporteTecnicoApi.get<BrandConsumable>(`/brand-consumables/${id}`);
         return data;
-    } catch (error) {
-        console.error(`${t("api_brand_consumable_by_id_error")} ${id}:`, error);
+    } catch  {
+        //console.error(`${t("api_brand_consumable_by_id_error")} ${id}:`, error);
         return null; // Retorno seguro para evitar excepciones no controladas en el Front
     }
 };

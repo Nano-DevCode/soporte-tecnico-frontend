@@ -96,7 +96,7 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
 
     const watchedBrand = useWatch({ control, name: "id_brand" });
     const watchedType = useWatch({ control, name: "id_type_equipment" });
-    
+
     const selectedBrandId = watchedBrand?.id;
     const typeId = String(watchedType?.id || "");
 
@@ -120,21 +120,34 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
 
     const handleCreateTypeEquipment = async (name: string) => {
         if (!name || name.trim() === "") {
-            sileo.error({ title: t("eq_form_alert_empty_title"), description: t("eq_form_alert_type_empty_desc") });
+            sileo.error({
+                title: t("eq_form_alert_empty_title"),
+                description: t("eq_form_alert_type_empty_desc")
+            });
             return;
         }
+
         try {
+            // Al fallar eqTypesHook.onCreate, sileo.promise maneja el modal/toast con su callback 'error'
             const newItem = await sileo.promise(eqTypesHook.onCreate({ name: name.trim() }), {
                 loading: { title: t("eq_form_sileo_type_loading") },
-                success: { title: t("eq_form_sileo_type_success"), description: t("eq_form_sileo_type_success_desc", { name: name.trim() }), duration: 4000 },
+                success: {
+                    title: t("eq_form_sileo_type_success"),
+                    description: t("eq_form_sileo_type_success_desc", { name: name.trim() }),
+                    duration: 4000
+                },
                 error: (err) => ({
                     title: t("eq_form_sileo_error_title"),
                     description: getBackendErrorMessage(err, t("eq_form_sileo_type_error_desc")),
                     duration: 5000
                 })
             });
-            if (newItem) setValue("id_type_equipment", newItem, { shouldValidate: true });
-        } catch (e) { console.error(e); }
+
+            if (newItem) {
+                setValue("id_type_equipment", newItem, { shouldValidate: true });
+            }
+        } catch {
+        }
     };
 
     const handleCreateBrand = async (name: string) => {
@@ -157,7 +170,8 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                 // Limpia el modelo de forma explícita al crear una marca nueva
                 setValue("id_model", null, { shouldValidate: true });
             }
-        } catch (e) { console.error(e); }
+        } catch {
+        }
     };
 
     const handleCreateModel = async (newModelName: string) => {
@@ -180,7 +194,8 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                 })
             });
             if (newModelFromDB) setValue("id_model", newModelFromDB, { shouldValidate: true });
-        } catch (error) { console.error(error); }
+        } catch {
+        }
     };
 
     const onFormSubmit = async (data: FieldValues) => {
@@ -372,11 +387,11 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                                 hook={modelsHook}
                                 value={field.value}
                                 onChange={(val) => {
-                                    field.onChange(val); 
+                                    field.onChange(val);
                                 }}
                                 disabled={!selectedBrandId || isReadOnly}
                                 placeholder={!selectedBrandId ? t("eq_form_placeholder_model_no_brand") : t("eq_form_placeholder_model")}
-                                allowCreate={true} 
+                                allowCreate={true}
                                 onCreate={handleCreateModel}
                             />
                         )}
@@ -403,49 +418,49 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                             <PlusCircle size={14} /> {t("eq_form_btn_add")}
                         </Button>
                     </div>
-                        <Controller
-                            name="id_responsable"
-                            control={control}
-                            rules={{ required: t("eq_form_validate_responsible_required") }}
-                            render={({ field }) => {
-                                const selectedValue = field.value;
-                                let displayValue = null;
+                    <Controller
+                        name="id_responsable"
+                        control={control}
+                        rules={{ required: t("eq_form_validate_responsible_required") }}
+                        render={({ field }) => {
+                            const selectedValue = field.value;
+                            let displayValue = null;
 
-                                if (selectedValue) {
-                                    if (typeof selectedValue === 'object') {
-                                        const currentId = selectedValue.id_res || selectedValue.id;
-                                        
-                                        let fullName = "";
-                                        if (selectedValue.name && (selectedValue.first_name || selectedValue.last_name)) {
-                                            fullName = `${selectedValue.name || ''} ${selectedValue.first_name || ''} ${selectedValue.last_name || ''}`.replace(/\s+/g, ' ').trim();
-                                            if (selectedValue.area) {
-                                                fullName += ` - ${t("eq_form_label_area")}: ${selectedValue.area}`;
-                                            }
-                                        } else {
-                                            fullName = selectedValue.name || "";
+                            if (selectedValue) {
+                                if (typeof selectedValue === 'object') {
+                                    const currentId = selectedValue.id_res || selectedValue.id;
+
+                                    let fullName = "";
+                                    if (selectedValue.name && (selectedValue.first_name || selectedValue.last_name)) {
+                                        fullName = `${selectedValue.name || ''} ${selectedValue.first_name || ''} ${selectedValue.last_name || ''}`.replace(/\s+/g, ' ').trim();
+                                        if (selectedValue.area) {
+                                            fullName += ` - ${t("eq_form_label_area")}: ${selectedValue.area}`;
                                         }
-
-                                        displayValue = {
-                                            id: currentId,
-                                            name: fullName
-                                        };
                                     } else {
-                                        displayValue = { id: selectedValue, name: "" };
+                                        fullName = selectedValue.name || "";
                                     }
-                                }
 
-                                return (
-                                    <CatalogSelector
-                                        hook={responsiblesHook}
-                                        allowCreate={false}
-                                        value={displayValue}
-                                        onChange={field.onChange}
-                                        disabled={isReadOnly}
-                                        placeholder={t("eq_form_placeholder_responsible")}
-                                    />
-                                );
-                            }}
-                        />
+                                    displayValue = {
+                                        id: currentId,
+                                        name: fullName
+                                    };
+                                } else {
+                                    displayValue = { id: selectedValue, name: "" };
+                                }
+                            }
+
+                            return (
+                                <CatalogSelector
+                                    hook={responsiblesHook}
+                                    allowCreate={false}
+                                    value={displayValue}
+                                    onChange={field.onChange}
+                                    disabled={isReadOnly}
+                                    placeholder={t("eq_form_placeholder_responsible")}
+                                />
+                            );
+                        }}
+                    />
                     {errors.id_responsable && (
                         <p className="text-xs font-semibold text-red-500 mt-1 flex items-center gap-1">
                             <AlertCircle size={12} /> {String(errors.id_responsable.message)}
@@ -590,14 +605,14 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                             }, { shouldValidate: true });
 
                             responsiblesHook.setSelectedId(newResp.id);
-                            
-                            return newResp; 
+
+                            return newResp;
                         }
                     } catch (error) {
                         console.error("Error en la creación independiente del responsable:", error);
-                        throw error; 
+                        throw error;
                     }
-                }} 
+                }}
                 isSubmitting={isSubmitting}
             />
         </form>

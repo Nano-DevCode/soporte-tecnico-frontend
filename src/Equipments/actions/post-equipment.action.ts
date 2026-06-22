@@ -62,7 +62,7 @@ export const createEquipmentAction = async (payload: EquipmentPayload) => {
         return data;
     } catch (error) {
         if (isAxiosError(error)) {
-            console.error(t("api_equipments_server_create_error"), error.response?.data);
+            // console.error(t("api_equipments_server_create_error"), error.response?.data);
             
             // IMPORTANTE: Lanza el error completo, NO solo el .data
             // Esto permite que Sileo y el utilitario handleBackendFormErrors identifiquen que es un error de Axios
@@ -82,7 +82,7 @@ export const updateEquipmentAction = async (id: string, payload: Partial<Equipme
         return data;
     } catch (error) {
         if (isAxiosError(error)) {
-            console.error(t("api_equipments_server_update_error"), error.response?.data);
+            // console.error(t("api_equipments_server_update_error"), error.response?.data);
             throw error.response?.data;
         }
         throw error;

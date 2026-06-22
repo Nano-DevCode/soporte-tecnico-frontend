@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface UnitMeasurementConsumable {
@@ -38,8 +38,8 @@ export const getUnitMeasurementConsumablesAction = async (options: Options = {})
         });
 
         return data;
-    } catch (error) {
-        console.error(t("api_unit_measurement_consumables_fetch_error"), error);
+    } catch {
+        // console.error(t("api_unit_measurement_consumables_fetch_error"), error);
         return {
             unitMeasurementConsumables: [],
             meta: {
@@ -62,8 +62,8 @@ export const getUnitMeasurementConsumableByIdAction = async (
     try {
         const { data } = await soporteTecnicoApi.get<UnitMeasurementConsumable>(`/unit-measurements/${id}`);
         return data;
-    } catch (error) {
-        console.error(`${t("api_unit_measurement_consumable_by_id_error")} ${id}:`, error);
+    } catch {
+        // console.error(`${t("api_unit_measurement_consumable_by_id_error")} ${id}:`, error);
         return null; // Retorno seguro para evitar excepciones no controladas en el Front
     }
 };

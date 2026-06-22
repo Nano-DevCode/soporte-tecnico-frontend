@@ -1,14 +1,13 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
-import type { ConsumableItem } from "./get-consumables.action"; 
+// import { t } from "i18next";
+import type { Consumable } from "../interfaces/consumable.interfaces"; 
 import type { BatchProductItem } from "./get-batches-consumables";
 import type { Department } from "./get-departament.actions";
 import type { GroupedMovement } from "../interfaces/consumable-movement.interfaces";
 
 export interface MovementsConsumableItem {
-  id_movement_aplication: CatalogItem;
   id: string;
-  id_batches_product: BatchProductItem; 
+  id_movement_aplication: CatalogItem;
   id_movement_type: CatalogItem; 
   id_movement_application: CatalogItem; 
   id_ticket: CatalogItem;
@@ -19,15 +18,18 @@ export interface MovementsConsumableItem {
   movement_cost: string | number; 
   created_at: string; 
   updated_at: string;
-  id_consumable: ConsumableItem; 
+  batch?: BatchProductItem;       // En lugar de id_batches_product
+  consumable?: Consumable;        // En lugar de id_consumable
+
+  // Mantenerlos opcionales por si el tipado de GroupedMovement los requiere heredar
+  id_batches_product?: BatchProductItem; 
+  id_consumable?: Consumable; 
 }
 
 export interface CatalogItem {
   id: string | number;
   name: string;
 }
-
-// 🌟 Interfaz extendida para soportar los nuevos filtros del backend
 interface GetMovementConsumablesOptions {
   search?: string; 
   limit: number;
@@ -67,17 +69,16 @@ export const getMovementConsumablesAction = async (options: GetMovementConsumabl
       }
     });
 
-    // 🌟 Mantenemos tu estructura de retorno, pero asignándole el tipo correcto (GroupedMovement)
     const responseData = response.data?.movements || [];
     const responseMeta = response.data?.meta || { total: 0, page: 1, lastPage: 1 };
 
     return {
-      data: responseData as GroupedMovement[], // 🌟 Cambiado a tu interfaz de la UI agrupada
+      data: responseData as GroupedMovement[],
       meta: responseMeta
     };
 
-  } catch (error) {
-    console.error(t("api_batches_fetch_error"), error);
+  } catch {
+    // console.error(t("api_batches_fetch_error"), error);
     return {
       data: [],
       meta: { total: 0, lastPage: 1, page: 1 }
@@ -86,14 +87,15 @@ export const getMovementConsumablesAction = async (options: GetMovementConsumabl
 };
 
 // --- ACCIÓN 2: OBTENER UN SOLO LOTE POR SU ID ---
-export const getMovementConsumableByIdAction = async (id: string) => {
+// --- ACCIÓN 2: OBTENER EL DESGLOSE DE UN MOVIMIENTO AGRUPADO POR SU FOLIO/CÓDIGO ---
+export const getMovementConsumableByIdAction = async (code: string) => {
   try {
-    const url = `/consumable-movements/${id}`;
-    const response = await soporteTecnicoApi.get<MovementsConsumableItem>(url);
+    // Apuntamos al backend pasándole el código de aplicación (folio único)
+    const url = `/consumable-movements/summary/${encodeURIComponent(code)}`;
+    const response = await soporteTecnicoApi.get<GroupedMovement>(url);
 
     return response.data;
-  } catch (error) {
-    console.error(t("api_batch_fetch_by_id_error"), error);
-    throw error; 
+  } catch {
+    return null; 
   }
 };

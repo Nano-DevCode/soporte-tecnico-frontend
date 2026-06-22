@@ -1,33 +1,81 @@
-// pages/CreateBatchPage.tsx
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
+import { t } from "i18next";
 import { useConsumableBagStore } from "../hooks/useConsumableBagStore";
 import { useConsumablesBagData } from "../hooks/useConsumables";
 import { createBatchesProductAction, type CreateBatchProductPayload } from "../actions/post-batches-consumables.action";
 import { CreateBatchForm } from "../components/CustomCreateBatchForm";
 import { Button } from "@/components/ui/button";
+import { sileo } from "sileo";
 import { Loader2, PackagePlus, PackageOpen } from "lucide-react";
 import { CustomBackToList } from "@/components/custom/CustomBackToList";
+import { handleBackendErrors } from "../utils/handleBackendErrors";
+import type { UseFormSetError } from "react-hook-form";
 
 export default function CreateBatchPage() {
     const navigate = useNavigate();
+    const location = useLocation(); 
     const { bagIds, removeItem, clearBag } = useConsumableBagStore();
     const { bagConsumables, isBagLoading } = useConsumablesBagData(bagIds);
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleFormSubmit = async (data: CreateBatchProductPayload) => {
-        setIsSubmitting(true);
+    const autoCreatedId = location.state?.autoCreatedId;
+
+    // Recibimos 'setError' desde el Formulario si este lo expone al hacer el submit
+    const handleFormSubmit = async (data: CreateBatchProductPayload, setErrorForm?: UseFormSetError<CreateBatchProductPayload>) => {
         try {
-            const response = await createBatchesProductAction(data);
-            clearBag();
-            alert(response.message || "Lote guardado con éxito.");
-            navigate("/batches-products");
-        } catch (error) {
-            console.error("Error al guardar el lote:", error);
-            alert("Hubo un error al procesar el lote en el servidor.");
-        } finally {
-            setIsSubmitting(false);
+            await sileo.promise(
+                createBatchesProductAction(data),
+                {
+                    loading: { title: t("createBatch.loadingTitle") },
+                    success: (response) => {
+                        clearBag();
+                        return {
+                            title: t("createBatch.successTitle"),
+                            description: response?.message || t("createBatch.successDesc"),
+                            duration: 8000
+                        };
+                    },
+                    error: (err) => {
+                        let dynamicDescription = t("createBatch.dynamicErrorDesc");
+
+                        // Si el formulario nos provee su setError, mapeamos las respuestas del backend
+                        if (setErrorForm) {
+                            handleBackendErrors(
+                                err,
+                                setErrorForm,
+                                [
+                                    { backendKeyword: "invoice", fieldPath: "invoice_number" },
+                                    { backendKeyword: "quantity", fieldPath: "quantity_received" },
+                                    { backendKeyword: "cost", fieldPath: "total_cost" },
+                                ],
+                                (cleanMessage) => {
+                                    dynamicDescription = cleanMessage;
+                                }
+                            );
+                        }
+
+                        return {
+                            title: t("createBatch.errorTitle"),
+                            description: dynamicDescription,
+                            duration: 8000
+                        };
+                    }
+                }
+            );
+
+            navigate("/consumables");
+
+        } catch (e) {
+            console.error("Flujo de envío interrumpido:", e);
         }
+    };
+
+    // Manejador centralizado para la cancelación del formulario
+    const handleCancelForm = () => {
+        if (autoCreatedId) {
+            // Si el usuario cancela tras crear un consumible, lo sacamos de la bolsa
+            removeItem(autoCreatedId);
+        }
+        navigate("/consumables");
     };
 
     if (isBagLoading) {
@@ -39,28 +87,28 @@ export default function CreateBatchPage() {
     }
 
     return (
-        <div className="w-full space-y-4 ">
+        <div className="w-full space-y-4">
 
-            {/* ENCABEZADO ESTILO ENLACE DE RETORNO (Igual a la imagen) */}
+            {/* ENCABEZADO ESTILO ENLACE DE RETORNO */}
             <div className="w-full items-center justify-between">
                 <CustomBackToList
-                    onBack={() => navigate("/consumables")}
-                    backLabel="Listar Consumibles"
+                    onBack={handleCancelForm}
+                    backLabel={t("createBatch.backLabel")}
                 />
             </div>
 
-            {/* TÍTULO PRINCIPAL CON ÍCONO Y DESCRIPCIÓN (Coherente con Generar Salida) */}
+            {/* TÍTULO PRINCIPAL CON ÍCONO Y DESCRIPCIÓN */}
             <div className="space-y-2">
                 <div className="flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-muted shadow-sm dark:bg-muted-foreground/25 shrink-0">
                         <PackagePlus className="w-5 h-5" />
                     </div>
                     <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-                        Registrar Entrada de Lote
+                        {t("createBatch.title")}
                     </h1>
                 </div>
-                <p className="text-sm text-muted-foreground  pl-1">
-                    Revisa los artículos seleccionados para el reabastecimiento e ingresa el número de requisición o factura, las unidades físicas recibidas y sus costo total.
+                <p className="text-sm text-muted-foreground pl-1">
+                    {t("createBatch.subtitle")}
                 </p>
             </div>
 
@@ -71,26 +119,26 @@ export default function CreateBatchPage() {
                         <PackageOpen className="w-10 h-10" />
                     </div>
                     <div className="space-y-1.5">
-                        <h3 className="text-base font-semibold tracking-tight">No hay remesas por procesar</h3>
+                        <h3 className="text-base font-semibold tracking-tight">{t("createBatch.emptyTitle")}</h3>
                         <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-                            No has agregado ningún consumible a la bolsa para estructurar un nuevo lote de mercancía.
+                            {t("createBatch.emptyDesc")}
                         </p>
                     </div>
                     <Button
                         onClick={() => navigate("/consumables")}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-sm h-10 px-4"
                     >
-                        Explorar Catálogo
+                        {t("createBatch.btnExplore")}
                     </Button>
                 </div>
             ) : (
                 <div className="animate-in fade-in duration-200">
                     <CreateBatchForm
                         bagConsumables={bagConsumables}
-                        isSubmitting={isSubmitting}
                         onSubmit={handleFormSubmit}
                         onRemoveItem={removeItem}
-                        onCancel={() => navigate(-1)}
+                        onCancel={handleCancelForm} 
+                        isSubmitting={false}                    
                     />
                 </div>
             )}

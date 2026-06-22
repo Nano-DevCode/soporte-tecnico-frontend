@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface MovementAplication {
@@ -39,8 +39,8 @@ export const getMovementAplicationsAction = async (options: Options = {}): Promi
         });
 
         return data;
-    } catch (error) {
-        console.error(t("api_movement_applications_fetch_error"), error);
+    } catch {
+        // console.error(t("api_movement_applications_fetch_error"), error);
         return {
             movementAplications: [],
             meta: {
@@ -62,8 +62,8 @@ export const getMovementApplicationByIdAction = async (
     try {
         const { data } = await soporteTecnicoApi.get<MovementAplication>(`/movement-applications/${id}`);
         return data;
-    } catch (error) {
-        console.error(`${t("api_movement_application_by_id_error")} ${id}:`, error);
+    } catch  {
+        // console.error(`${t("api_movement_application_by_id_error")} ${id}:`, error);
         return null; // Retorno seguro para evitar excepciones no controladas en el Front
     }
 };

@@ -10,12 +10,17 @@ import { CatalogSelector } from "./CatalogSelector";
 import type { ConsumableItemDto, CreateConsumableMovementDto } from "../interfaces/consumable-movement.interfaces";
 import type { Consumable } from "../interfaces/consumable.interfaces";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { sileo } from "sileo"; // Importamos sileo para las promesas controladas
+import { handleBackendErrors } from "../utils/handleBackendErrors"; // Ajusta la ruta a tu archivo de utilidad
 import {
     AlertCircle, Package, Layers, ClipboardList, ShoppingBag,
-    X, Tag, Box, Trash2, Info, AlertTriangle
+    Tag, Box, Trash2, Info, Save,
+    X,
+    Layers3,
+    AlertTriangle
 } from "lucide-react";
 import { useNavigate } from "react-router";
+import { t } from "i18next";
 
 // Importaciones de Shadcn UI para el diálogo/modal
 import {
@@ -48,7 +53,7 @@ interface OutputFormValues {
 }
 
 export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess, onRemoveItem }) => {
-    const { executeOutputMovement, isSubmitting, error } = useConsumableMovements();
+    const { executeOutputMovement, isSubmitting } = useConsumableMovements();
     const navigate = useNavigate();
     const ticketsHook = useTicketsConsumables();
     const departmentsHook = useDepartmentsConsumables();
@@ -62,6 +67,7 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
         handleSubmit,
         watch,
         setValue,
+        setError, // Extraemos setError para mapear las alertas a los inputs
         reset,
         formState: { errors }
     } = useForm<OutputFormValues>({
@@ -77,6 +83,29 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
 
     const applicationId = watch("id_movement_aplication");
     const currentQuantities = watch("quantities");
+
+    // Función que maneja el cambio controlado del tipo de aplicación (Disparo Único)
+    const handleApplicationChange = (targetId: number) => {
+        setValue("id_movement_aplication", targetId);
+
+        if (targetId === 3 || targetId === 4) {
+            const departmentsList: CatalogOption[] = departmentsHook.options || [];
+            const defaultDept = departmentsList.find(
+                (dept) => dept.name.trim().toLowerCase() === "departamento de centro de cómputo" ||
+                    dept.name.trim().toLowerCase() === "departamento de centro de computo"
+            );
+
+            if (defaultDept) {
+                setValue("selectedDepartment", defaultDept);
+            } else {
+                setValue("selectedDepartment", { id: "", name: "Departamento de Centro de Cómputo" });
+            }
+            setValue("selectedTicket", null);
+        } else if (targetId === 2) {
+            setValue("selectedDepartment", null);
+            setValue("observations", "");
+        }
+    };
 
     useEffect(() => {
         const updatedQuantities = { ...currentQuantities };
@@ -99,7 +128,7 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
         setShowConfirmDialog(true);
     };
 
-    // 2. Segundo paso: Si confirma en el modal, se ejecuta la petición PEPS real
+    // 2. Segundo paso: Si confirma en el modal, se ejecuta la petición PEPS real controlada por Sileo
     const handleConfirmMovement = async () => {
         if (!pendingData) return;
 
@@ -108,7 +137,6 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
             quantity_consumable: pendingData.quantities[item.id] || 1,
         }));
 
-        // Si es aplicación 2 (ticket) conservamos las observaciones si el usuario escribió algo
         const payload: CreateConsumableMovementDto = {
             id_movement_aplication: pendingData.id_movement_aplication,
             id_departament_consumable: pendingData.selectedDepartment?.id ? String(pendingData.selectedDepartment.id) : undefined,
@@ -118,52 +146,90 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
         };
 
         try {
-            await executeOutputMovement(payload, () => {
-                reset({
-                    id_movement_aplication: 2,
-                    selectedTicket: null,
-                    selectedDepartment: null,
-                    observations: "",
-                    quantities: {},
-                });
-                setShowConfirmDialog(false);
-                setPendingData(null);
-                onSuccess();
+            // Sileo manejará la notificación flotante interactiva y capturará los errores dinámicos del backend
+            await sileo.promise(
+                new Promise((resolve, reject) => {
+                    executeOutputMovement(payload, () => resolve(true)).catch(reject);
+                }),
+                {
+                    loading: { title: t("consumableForm.loadingTitle") },
+                    success: { title: t("consumableForm.successTitle") },
+                    error: (err) => {
+                        let dynamicDescription = t("consumableForm.errorUnexpected");
+
+                        // Mapeamos los errores hacia react-hook-form usando la utilidad común
+                        handleBackendErrors(
+                            err,
+                            setError,
+                            [
+                                { backendKeyword: "ticket", fieldPath: "selectedTicket" },
+                                { backendKeyword: "departament", fieldPath: "selectedDepartment" },
+                                { backendKeyword: "observations", fieldPath: "observations" },
+                                { backendKeyword: "quantity", fieldPath: "quantities" },
+                                { backendKeyword: "aplication", fieldPath: "id_movement_aplication" }
+                            ],
+                            (cleanMessage) => {
+                                dynamicDescription = cleanMessage;
+                            }
+                        );
+
+                        // Cerramos el modal de confirmación para que el usuario pueda ver qué input falló
+                        setShowConfirmDialog(false);
+
+                        return {
+                            title: t("consumableForm.errorInventoryTitle"),
+                            description: dynamicDescription,
+                            duration: 6000
+                        };
+                    }
+                }
+            );
+
+            // Si todo sale bien, limpiamos y disparamos el éxito
+            reset({
+                id_movement_aplication: 2,
+                selectedTicket: null,
+                selectedDepartment: null,
+                observations: "",
+                quantities: {},
             });
+            setShowConfirmDialog(false);
+            setPendingData(null);
+            onSuccess();
+
         } catch (e) {
-            console.error(e);
+            console.error("Error capturado en el flujo de salida:", e);
         }
     };
 
     const applicationButtons = [
-        { id: 2, label: "Ticket", icon: <ClipboardList className="w-4 h-4" /> },
-        { id: 3, label: "Uso Interno", icon: <Layers className="w-4 h-4" /> },
-        { id: 4, label: "Material Dañado", icon: <AlertCircle className="w-4 h-4" /> },
+        { id: 2, label: t("consumableForm.labels.ticket"), icon: <ClipboardList className="w-4 h-4" /> },
+        { id: 3, label: t("consumableForm.labels.internalUse"), icon: <Layers className="w-4 h-4" /> },
+        { id: 4, label: t("consumableForm.labels.damagedMaterial"), icon: <AlertCircle className="w-4 h-4" /> },
     ];
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmitForm)} className="w-full  space-y-6">
-                <div className=" w-full  rounded-xl overflow-hidden space-y-6">
+            <form onSubmit={handleSubmit(onSubmitForm)} className="w-full space-y-6">
+                <div className="w-full rounded-xl overflow-hidden space-y-6">
                     {/* SECCIÓN SUPERIOR: CONSUMIBLES SELECCIONADOS */}
-                    <div className=" rounded-xl border-2 border-zinc-200/75 bg-card shadow-sm  w-full">
+                    <div className="rounded-xl border-2 bg-card shadow-sm w-full">
                         <div className="p-5 flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-border/60">
-                            {/* Contenedor del Título y la Descripción */}
                             <div className="space-y-1 flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
                                     <ShoppingBag className="w-4 h-4 text-orange-500 shrink-0" />
                                     <div className="text-base font-semibold tracking-tight text-foreground">
-                                        Consumibles seleccionados para consumo
+                                        {t("consumableForm.sections.selectedTitle")}
                                     </div>
                                 </div>
                                 <div className="text-sm text-muted-foreground">
-                                    Agrega la cantidad del consumible a usar y rellena el formulario para completar el movimiento.
+                                    {t("consumableForm.sections.selectedDescription")}
                                 </div>
                             </div>
-
-                            {/* Contador de Consumibles - Ajustado para alinearse a la derecha en MD y abajo en Mobile */}
                             <span className="self-start md:mt-0.5 bg-orange-100 dark:bg-orange-950/40 text-orange-700 dark:text-orange-400 text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm border border-orange-200/40 shrink-0">
-                                {selectedItems.length} {selectedItems.length === 1 ? 'Consumible' : 'Consumibles'}
+                                {selectedItems.length === 1
+                                    ? t("consumableForm.sections.count_one", { count: selectedItems.length })
+                                    : t("consumableForm.sections.count_other", { count: selectedItems.length })}
                             </span>
                         </div>
 
@@ -171,40 +237,49 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
                         <div className="p-4 pt-0 border-b border-border/60 space-y-2 bg-muted/20 w-full mt-0">
                             <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-foreground pt-3">
                                 <Info size={14} className="text-orange-500 shrink-0" />
-                                <span>Notas de Operación</span>
+                                <span>{t("consumableForm.notes.title")}</span>
                             </div>
                             <ul className="space-y-1 text-sm text-muted-foreground leading-relaxed">
                                 <li className="flex items-start gap-1.5">
                                     <span className="text-orange-500 font-medium select-none">•</span>
-                                    <span>
-                                        Si el consumible es <strong className="font-semibold text-foreground">fraccionario</strong>, ingresa el número de usos.
+                                    <span className="text-sm text-muted-foreground leading-relaxed">
+                                        {t("consumableForm.notes.fractionalBefore")}
+                                        <strong className="font-semibold text-foreground">
+                                            {t("consumableForm.notes.fractionalBold")}
+                                        </strong>
+                                        {t("consumableForm.notes.fractionalAfter")}
                                     </span>
                                 </li>
                                 <li className="flex items-start gap-1.5">
                                     <span className="text-orange-500 font-medium select-none">•</span>
-                                    <span>
-                                        Si el consumible es <strong className="font-semibold text-foreground">unitario</strong>, ingresa el número de piezas ocupadas.
+                                    <span className="text-sm text-muted-foreground leading-relaxed">
+                                        {t("consumableForm.notes.unitaryBefore")}
+                                        <strong className="font-semibold text-foreground">
+                                            {t("consumableForm.notes.unitaryBold")}
+                                        </strong>
+                                        {t("consumableForm.notes.unitaryAfter")}
                                     </span>
                                 </li>
                             </ul>
                         </div>
+
                         {/* Lista de Consumibles */}
                         <div className="divide-y divide-border/60 overflow-y-auto bg-background/50">
                             {selectedItems.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center py-12 text-center px-4 space-y-2">
                                     <Package className="w-8 h-8 text-muted-foreground opacity-30" />
-                                    <p className="text-sm font-medium text-muted-foreground italic">No hay consumibles en la bolsa.</p>
+                                    <p className="text-sm font-medium text-muted-foreground italic">{t("consumableForm.list.empty")}</p>
                                 </div>
                             ) : (
                                 selectedItems.map((item) => (
                                     <div key={item.id} className="p-4 flex flex-col gap-3 hover:bg-muted/30 transition-colors">
                                         <div className="flex items-start justify-between gap-4">
-                                            <div className="flex flex-col min-w-0 flex-1 space-y-0.5">
-                                                <span className="text-xs font-mono font-semibold text-muted-foreground">
+                                            <div className="flex flex-col min-w-0 flex-1 space-y-0.5" title={item.description}>
+                                                <span className="text-xs font-mono font-semibold text-muted-foreground" >
                                                     {item.item_code || "N/A"}
                                                 </span>
                                                 <span className="text-sm font-medium leading-snug text-foreground line-clamp-2">
-                                                    {item.description}
+                                                    {item.name}
                                                 </span>
                                             </div>
 
@@ -213,7 +288,7 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
                                                     type="button"
                                                     onClick={() => onRemoveItem(item.id)}
                                                     className="p-2 h-9 w-9 flex items-center justify-center rounded-lg text-muted-foreground hover:text-destructive active:bg-destructive/20 transition-colors"
-                                                    title="Quitar consumible"
+                                                    title={t("consumableForm.list.removeTooltip")}
                                                 >
                                                     <Trash2 size={16} />
                                                 </button>
@@ -281,9 +356,9 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
                                                     </div>
 
                                                     {item.available_stock <= 0 ? (
-                                                        <span className="text-[10px] text-destructive font-semibold uppercase tracking-wide px-1">Agotado</span>
+                                                        <span className="text-[10px] text-destructive font-semibold uppercase tracking-wide px-1">{t("consumableForm.list.outOfStock")}</span>
                                                     ) : item.available_stock <= 3 ? (
-                                                        <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium px-1">Solo {item.available_stock} disp.</span>
+                                                        <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium px-1">{t("consumableForm.list.lowStock", { count: item.available_stock })}</span>
                                                     ) : null}
                                                 </div>
                                             </div>
@@ -292,15 +367,15 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
                                         <div className="flex flex-wrap gap-1.5 text-xs font-medium text-muted-foreground">
                                             <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded-md border border-border/60">
                                                 <Tag size={12} className="text-muted-foreground/70" />
-                                                {item.id_brand_consumable?.name || "Sin Marca"}
+                                                {item.id_brand_consumable?.name || t("consumableForm.list.noBrand")}
                                             </span>
                                             <span className={`flex items-center gap-1 px-2 py-0.5 rounded-md border ${item.id_unit_measurement?.id === 1 ? "bg-orange-50 dark:bg-orange-950/20 text-orange-700 dark:text-orange-400 border-orange-200/60" : "bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-400 border-blue-200/60"}`}>
                                                 <Tag size={12} />
-                                                {item.id_unit_measurement?.name || "Sin identificar"}
+                                                {item.id_unit_measurement?.name || t("consumableForm.list.unidentified")}
                                             </span>
                                             <span className={`flex items-center gap-1 px-2 py-0.5 rounded-md border ${item.available_stock < 10 ? "bg-destructive/5 text-destructive border-destructive/25" : "bg-muted text-muted-foreground border-border"}`}>
                                                 <Box size={12} />
-                                                Stock: {item.available_stock}
+                                                {t("consumableForm.list.stockLabel", { count: item.available_stock })}
                                             </span>
                                         </div>
                                     </div>
@@ -309,22 +384,27 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
                         </div>
 
                         <div className="p-3 border-t border-border bg-muted/40 flex justify-between items-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                            <span>Método de Almacén:</span>
-                            <span className="font-semibold text-muted-foreground">Primero en Entrar, Primero en Salir.</span>
+                            <span>{t("consumableForm.footer.methodLabel")}</span>
+                            <span className="font-semibold text-muted-foreground">{t("consumableForm.footer.methodValue")}</span>
                         </div>
                     </div>
 
                     {/* SECCIÓN INFERIOR: FORMULARIO DE DETALLES */}
-                    <div className="rounded-xl border border-border/80 bg-card p-5 sm:p-6 shadow-sm space-y-5">
-                        <div>
-                            <h3 className="text-base font-semibold tracking-tight text-foreground">Detalles del Movimiento</h3>
-                            <p className="text-xs text-muted-foreground mt-0.5">Especifica el destino y motivo de la salida del inventario.</p>
+                    <div className="rounded-xl border-2 bg-card p-5 sm:p-6 shadow-sm space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Layers3 className="w-4 h-4 text-blue-700 shrink-0" />
+                            <div className="text-base font-semibold tracking-tight text-foreground">
+                                {t("consumableForm.details.title")}
+                            </div>
+                        </div>
+                        <div className="">
+                            <p className="text-sm text-muted-foreground mt-1">{t("consumableForm.details.description")}</p>
                         </div>
 
                         {/* Selector de Aplicación */}
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase tracking-wider block">
-                                ¿En qué vas a ocupar los consumibles? <span className="text-destructive">*</span>
+                                {t("consumableForm.details.applicationQuestion")} <span className="text-destructive">*</span>
                             </label>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 bg-muted p-1 rounded-lg border border-border/60">
                                 {applicationButtons.map((btn) => {
@@ -333,11 +413,7 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
                                         <button
                                             key={btn.id}
                                             type="button"
-                                            onClick={() => {
-                                                setValue("id_movement_aplication", btn.id);
-                                                if (btn.id === 2) setValue("observations", "");
-                                                else setValue("selectedTicket", null);
-                                            }}
+                                            onClick={() => handleApplicationChange(btn.id)}
                                             className={`flex items-center justify-center gap-2 py-2 px-3 rounded-md text-xs font-medium transition-all duration-200 ${isSelected ? "bg-background text-foreground shadow-sm border border-border/20 font-semibold" : "text-muted-foreground hover:text-foreground hover:bg-background/50"}`}
                                         >
                                             {btn.icon}
@@ -354,18 +430,27 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
                             {applicationId === 2 && (
                                 <div className="space-y-1.5 animate-in fade-in duration-200">
                                     <label className="text-xs font-bold uppercase tracking-wider block">
-                                        Selecciona el Folio del Ticket <span className="text-destructive">*</span>
+                                        {t("consumableForm.details.ticketLabel")} <span className="text-destructive">*</span>
                                     </label>
-                                    <CatalogSelector
-                                        hookResult={ticketsHook}
-                                        value={watch("selectedTicket")}
-                                        onChange={(val) => setValue("selectedTicket", val)}
-                                        allowCreate={false}
-                                        placeholder="Buscar por folio o descripción del ticket..."
+                                    <Controller
+                                        name="selectedTicket"
+                                        control={control}
+                                        rules={{ required: t("consumableForm.errors.ticketRequired") }}
+                                        render={({ field }) => (
+                                            <div className="space-y-1.5 w-full">
+                                                <CatalogSelector
+                                                    hookResult={ticketsHook}
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    allowCreate={false}
+                                                    placeholder={t("consumableForm.details.ticketPlaceholder")}
+                                                />
+                                            </div>
+                                        )}
                                     />
                                     {errors.selectedTicket && (
-                                        <span className="text-xs text-destructive font-medium block mt-1">
-                                            {errors.selectedTicket.message}
+                                        <span className="text-xs text-destructive font-medium flex items-center gap-1 mt-1 animate-in slide-in-from-top-1">
+                                            <AlertCircle size={13} /> {errors.selectedTicket.message}
                                         </span>
                                     )}
                                 </div>
@@ -373,133 +458,149 @@ export const ConsumableOutputForm: React.FC<Props> = ({ selectedItems, onSuccess
 
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold uppercase tracking-wider block">
-                                    Departamento Destino (Opcional)
+                                    {t("consumableForm.details.departmentLabel", {
+                                        context: applicationId === 2 ? "optional" : "default"
+                                    })}
                                 </label>
                                 <CatalogSelector
                                     hookResult={departmentsHook}
                                     value={watch("selectedDepartment")}
                                     onChange={(val) => setValue("selectedDepartment", val)}
                                     allowCreate={false}
-                                    placeholder="Seleccionar departamento de destino..."
+                                    placeholder={t("consumableForm.details.departmentPlaceholder")}
                                 />
+                                {errors.selectedDepartment && (
+                                    <span className="text-xs text-destructive font-medium flex items-center gap-1 mt-1 animate-in slide-in-from-top-1">
+                                        <AlertCircle size={13} /> {errors.selectedDepartment.message}
+                                    </span>
+                                )}
                             </div>
 
                             <div className="space-y-1.5 animate-in fade-in duration-200">
                                 <label className="text-xs font-bold uppercase tracking-wider block">
-                                    Descripción / Justificación de la salida
+                                    {t("consumableForm.details.observationsLabel")}
                                     {applicationId !== 2 && <span className="text-destructive"> *</span>}
-                                    {applicationId === 2 && <span className="text-muted-foreground font-normal lowercase italic"> (opcional)</span>}
+                                    {applicationId === 2 && <span className="text-muted-foreground font-normal lowercase italic"> ({t("consumableForm.details.optional")})</span>}
                                 </label>
 
                                 <Controller
                                     name="observations"
                                     control={control}
                                     rules={{
-                                        required: applicationId !== 2 ? "La justificación es obligatoria" : false
+                                        required: applicationId !== 2 ? t("consumableForm.errors.justificationRequired") : false
                                     }}
                                     render={({ field }) => (
                                         <textarea
                                             {...field}
                                             placeholder={
                                                 applicationId === 2
-                                                    ? "Notas u observaciones adicionales sobre el despacho de este ticket (opcional)..."
+                                                    ? t("consumableForm.details.observationsPlaceholderTicket")
                                                     : applicationId === 3
-                                                        ? "Especifica detalladamente el motivo o destino del uso interno..."
-                                                        : "Describe las condiciones o mermas del daño detectado en el material..."
+                                                        ? t("consumableForm.details.observationsPlaceholderInternal")
+                                                        : t("consumableForm.details.observationsPlaceholderDamaged")
                                             }
-                                            className="w-full p-3 rounded-lg border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring h-24 resize-none transition-all shadow-sm"
+                                            className={`w-full p-3 rounded-lg border bg-background text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring h-24 resize-none transition-all shadow-sm ${errors.observations ? "border-destructive focus-visible:ring-destructive" : "border-input"}`}
                                         />
                                     )}
                                 />
 
                                 {errors.observations && (
-                                    <span className="text-xs text-destructive font-medium block mt-1">
-                                        {errors.observations.message}
+                                    <span className="text-xs text-destructive font-medium flex items-center gap-1 mt-1 animate-in slide-in-from-top-1">
+                                        <AlertCircle size={13} /> {errors.observations.message}
                                     </span>
                                 )}
                             </div>
                         </div>
 
-                        {/* Botones de acción del Formulario */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-border/60">
+                        {/* Botón Principal de Envío */}
+                        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t border-border w-full">
                             <Button
                                 type="button"
                                 variant="outline"
                                 onClick={() => navigate('/consumables')}
-                                className="w-full order-2 sm:order-1 font-semibold h-10 text-sm flex items-center justify-center gap-2 rounded-lg"
+                                className="w-full sm:w-auto h-11 px-5 text-sm font-medium flex items-center justify-center gap-2"
                             >
-                                <X size={15} /> Cancelar
+                                <X size={15} />
+                                {t("consumableForm.details.cancel")}
                             </Button>
+
                             <Button
                                 type="submit"
                                 disabled={isSubmitting || selectedItems.length === 0}
-                                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm w-full sm:w-auto order-1 sm:order-2 h-10 text-sm rounded-lg transition-all"
+                                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2 h-11 px-5 text-sm font-semibold rounded-lg shadow-sm"
                             >
-                                Confirmar y Despachar
+                                <Save size={16} />
+                                {t("consumableForm.details.submitButton")}
                             </Button>
                         </div>
+
                     </div>
-
-                    {error && (
-                        <Alert variant="destructive" className="bg-destructive/5 border-destructive/20 text-destructive rounded-xl animate-in fade-in">
-                            <AlertCircle className="h-4 w-4" />
-                            <AlertTitle className="font-semibold text-sm">Error de Inventario</AlertTitle>
-                            <AlertDescription className="text-xs opacity-90 font-medium">{error}</AlertDescription>
-                        </Alert>
-                    )}
-
                 </div>
             </form>
 
-            {/* MODAL DE ADVERTENCIA CRÍTICA / PEPS */}
+            {/* MODAL DE CONFIRMACIÓN IRREVERSIBLE */}
             <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-                <DialogContent className="sm:max-w-[440px] rounded-2xl gap-5 p-6 border border-border/80 bg-card shadow-lg animate-in zoom-in-95 duration-200">
-                    <DialogHeader className="space-y-3">
-                        <div className="mx-auto sm:mx-0 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 shrink-0">
+                <DialogContent className="sm:max-w-md border-border/80 shadow-lg">
+                    <DialogHeader className="space-y-1.5">
+                        <div className="mx-auto sm:mx-0 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0">
                             <AlertTriangle className="h-6 w-6" />
                         </div>
-                        <div className="space-y-1 text-center sm:text-left">
-                            <DialogTitle className="text-lg font-bold tracking-tight text-foreground">
-                                ¿Confirmar salida de almacén?
-                            </DialogTitle>
-                            <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
-                                Una vez registrado este movimiento en el sistema, <strong className="text-foreground font-semibold">no se podrá editar, modificar ni eliminar</strong> para mantener la consistencia del historial de auditoría y las capas PEPS.
-                            </DialogDescription>
-                        </div>
+                        <DialogTitle className="text-base font-bold text-foreground">
+                            {t("consumableForm.dialog.title")}
+                        </DialogTitle>
+                        <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
+                            {t("consumableForm.dialog.description")}
+                        </DialogDescription>
                     </DialogHeader>
 
-                    {/* Resumen rápido de lo que se va a despachar */}
-                    <div className="p-3.5 rounded-xl bg-muted/40 border border-border/40 text-xs text-muted-foreground space-y-1.5">
-                        <span className="font-bold uppercase tracking-wider text-[10px] text-foreground block">Resumen del despacho:</span>
-                        <div className="flex justify-between font-medium">
-                            <span>Artículos únicos:</span>
-                            <span className="text-foreground">{selectedItems.length}</span>
-                        </div>
-                        <div className="flex justify-between font-medium">
-                            <span>Tipo de aplicación:</span>
-                            <span className="text-foreground">
-                                {applicationButtons.find(b => b.id === applicationId)?.label || "N/A"}
+                    <div className="rounded-xl border border-border/60 bg-card overflow-hidden shadow-sm">
+                        {/* Encabezado Principal */}
+                        <div className="p-3 bg-muted/50 border-b border-border/60 flex justify-between items-center">
+                            <span className="font-bold uppercase tracking-wider text-[10px] text-foreground">
+                                {t("consumableForm.dialog.summaryTitle")}
                             </span>
+                            <span className="text-[11px] font-semibold bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">
+                                {selectedItems.length} {selectedItems.length === 1
+                                    ? t("consumableForm.dialog.itemCount_one")
+                                    : t("consumableForm.dialog.itemCount_other")}
+                            </span>
+                        </div>
+
+                        {/* Encabezados de la Tabla */}
+                        <div className="grid grid-cols-12 gap-2 px-4 py-1.5 bg-muted/20 border-b border-border/40 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80">
+                            <div className="col-span-8 sm:col-span-9">{t("consumableForm.dialog.tableHeaderConsumable")}</div>
+                            <div className="col-span-4 sm:col-span-3 text-right">{t("consumableForm.dialog.tableHeaderQuantity")}</div>
+                        </div>
+
+                        {/* Cuerpo de la Tabla con Scroll */}
+                        <div className="max-h-40 overflow-y-auto divide-y divide-border/40 text-xs px-4 bg-background [scrollbar-width:thin]">
+                            {selectedItems.map((item) => (
+                                <div
+                                    key={item.id}
+                                    className="grid grid-cols-12 gap-2 py-2.5 items-center hover:bg-muted/10 transition-colors"
+                                >
+                                    <div className="col-span-8 sm:col-span-9 pr-2">
+                                        <span className="block truncate font-medium text-foreground" title={item.name}>
+                                            {item.name}
+                                        </span>
+                                    </div>
+
+                                    <div className="col-span-4 sm:col-span-3 text-right">
+                                        <span className="inline-block font-mono bg-muted/80 dark:bg-muted/40 px-2 py-0.5 rounded font-semibold text-foreground text-[11px]">
+                                            {currentQuantities[item.id]} u
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
-                    <DialogFooter className="grid grid-cols-2 gap-2 sm:gap-0">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => setShowConfirmDialog(false)}
-                            disabled={isSubmitting}
-                            className="w-full font-semibold h-10 text-sm rounded-lg"
-                        >
-                            Volver y revisar
+                    <DialogFooter className="flex flex-col-reverse sm:flex-row gap-2 pt-2 border-t border-border">
+                        <Button type="button" variant="outline" onClick={() => setShowConfirmDialog(false)} disabled={isSubmitting}>
+                            {t("consumableForm.dialog.btnReview")}
                         </Button>
-                        <Button
-                            type="button"
-                            onClick={handleConfirmMovement}
-                            disabled={isSubmitting}
-                            className="w-full bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-500 text-white font-semibold h-10 text-sm rounded-lg flex items-center justify-center gap-1.5"
-                        >
-                            {isSubmitting ? "Procesando..." : "Sí, registrar salida"}
+                        <Button type="button" onClick={handleConfirmMovement} disabled={isSubmitting} className="bg-blue-600 hover:bg-blue-700 text-white">
+                            {t("consumableForm.dialog.btnConfirm")}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

@@ -57,7 +57,8 @@ export const ComputerFields = ({ control, register, setValue, disabled, errors }
                 error: (err) => ({ title: t("ui_computer_type_error_title"), description: getBackendErrorMessage(err, t("ui_computer_type_error_desc")), duration: 5000 })
             });
             if (newItem) setValue("computer.id_type_equipment_computer", newItem, { shouldValidate: true });
-        } catch (e) { console.error(e); }
+        } catch {
+        }
     };
 
     const handleCreateOS = async (name: string) => {
@@ -68,7 +69,8 @@ export const ComputerFields = ({ control, register, setValue, disabled, errors }
                 error: (err) => ({ title: t("ui_os_error_title"), description: getBackendErrorMessage(err, t("ui_os_error_desc")), duration: 5000 })
             });
             if (newItem) setValue("computer.id_type_operating_system", newItem, { shouldValidate: true });
-        } catch (e) { console.error(e); }
+        } catch {
+        }
     };
 
     const handleCreateStorage = async (name: string) => {
@@ -79,7 +81,8 @@ export const ComputerFields = ({ control, register, setValue, disabled, errors }
                 error: (err) => ({ title: t("ui_storage_error_title"), description: getBackendErrorMessage(err, t("ui_storage_error_desc")), duration: 5000 })
             });
             if (newItem) setValue("computer.id_type_storage", newItem, { shouldValidate: true });
-        } catch (e) { console.error(e); }
+        } catch {
+        }
     };
 
     const handleCreateProcessor = async (data: Record<string, string>) => {
@@ -101,9 +104,7 @@ export const ComputerFields = ({ control, register, setValue, disabled, errors }
                 processorHookInstance.setSelectedId(newItem.id);
                 return newItem;
             }
-        } catch (error) {
-            console.error("Error en la creación independiente del procesador:", error);
-            throw error;
+        } catch {
         }
     };
 

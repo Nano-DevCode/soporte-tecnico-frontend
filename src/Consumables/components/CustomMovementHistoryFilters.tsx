@@ -1,6 +1,6 @@
 import { memo, useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router";
-import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 import { FilterX, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,6 @@ import {
 } from "../hooks/useConsumableCatalog";
 
 export const CustomMovementHistoryFilters = memo(() => {
-    const { t } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const typeHook = useMovementTypesConsumables();
@@ -130,7 +129,7 @@ export const CustomMovementHistoryFilters = memo(() => {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60" />
                     <Input
                         type="text"
-                        placeholder="Buscar por Folio, observaciones o descripción..."
+                        placeholder={t("movementFilters.searchPlaceholder")}
                         className="w-full pl-9 bg-background h-10 focus-visible:ring-primary"
                         value={textSearch}
                         onChange={(e) => setTextSearch(e.target.value)}
@@ -141,7 +140,7 @@ export const CustomMovementHistoryFilters = memo(() => {
                     hookResult={departmentHook}
                     value={selectedDept}
                     onChange={(val) => handleSelectChange("id_departament_consumable", val)}
-                    placeholder="Departamento"
+                    placeholder={t("movementFilters.department")}
                     allowCreate={false}
                 />
             </div>
@@ -154,7 +153,7 @@ export const CustomMovementHistoryFilters = memo(() => {
                         hookResult={typeHook}
                         value={selectedType}
                         onChange={(val) => handleSelectChange("id_movement_type", val)}
-                        placeholder="Tipo Movimiento"
+                        placeholder={t("movementFilters.movementType")}
                         allowCreate={false}
                     />
 
@@ -162,19 +161,19 @@ export const CustomMovementHistoryFilters = memo(() => {
                         hookResult={applicationHook}
                         value={selectedApp}
                         onChange={(val) => handleSelectChange("id_movement_aplication", val)}
-                        placeholder="Aplicación"
+                        placeholder={t("movementFilters.application")}
                         allowCreate={false}
                     />
 
                     <CustomFilterDate
-                        label={t('tickets.filters.date.from') || "Desde"}
+                        label={t("movementFilters.dateFrom")}
                         value={startDateFilter}
                         onChange={(val) => updateMultipleFilters({ startDate: val })}
                         maxDate={endDateFilter ? new Date(`${endDateFilter}T00:00:00`) : undefined}
                     />
 
                     <CustomFilterDate
-                        label={t('tickets.filters.date.to') || "Hasta"}
+                        label={t("movementFilters.dateTo")}
                         value={endDateFilter}
                         onChange={(val) => updateMultipleFilters({ endDate: val })}
                         minDate={startDateFilter ? new Date(`${startDateFilter}T00:00:00`) : undefined}
@@ -190,7 +189,7 @@ export const CustomMovementHistoryFilters = memo(() => {
                         className="h-10 px-4 text-xs font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 border border-input transition-all rounded-md flex items-center justify-center gap-2 whitespace-nowrap shrink-0 w-full lg:w-auto"
                     >
                         <FilterX className="h-4 w-4" />
-                        <span>{t("common.filters.clean") || "Limpiar"}</span>
+                        <span>{t("movementFilters.clear")}</span>
                     </Button>
                 )}
             </div>

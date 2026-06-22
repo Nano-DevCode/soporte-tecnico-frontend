@@ -1,6 +1,6 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil } from "lucide-react";
 import { Link } from "react-router";
 import { t } from "i18next";
 import type { Consumable } from "../interfaces/consumable.interfaces";
@@ -8,12 +8,12 @@ import type { Consumable } from "../interfaces/consumable.interfaces";
 
 interface Props {
   consumable: Consumable;
-  handleDownClick: (consumable: Consumable) => void; // Ejecuta el borrado o confirmación
+  // handleDownClick: (consumable: Consumable) => void; // Ejecuta el borrado o confirmación
 }
 
 export const CustomConsumableActionsMenu = ({
   consumable,
-  handleDownClick
+  // handleDownClick
 }: Props) => {
 
   return (
@@ -32,12 +32,12 @@ export const CustomConsumableActionsMenu = ({
         <DropdownMenuContent align="end" className="w-48">
 
           {/* VER DETALLES */}
-          <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
+          {/* <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
             <Link to={`/consumables/details/${consumable.id}`}>
               <Eye className="h-4 w-4 text-muted-foreground" />
               {t("custom_consumable_actions_menu_view_details")}
             </Link>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
 
           {/* EDITAR */}
           <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
@@ -47,16 +47,14 @@ export const CustomConsumableActionsMenu = ({
             </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuSeparator />
-
           {/* ACCIÓN DE ELIMINAR / BAJA */}
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             className="gap-2 cursor-pointer font-medium text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950/30 transition-colors"
             onClick={() => handleDownClick(consumable)}
           >
             <Trash2 className="h-4 w-4" />
             {t("custom_consumable_actions_menu_delete")}
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
 
         </DropdownMenuContent>
       </DropdownMenu>

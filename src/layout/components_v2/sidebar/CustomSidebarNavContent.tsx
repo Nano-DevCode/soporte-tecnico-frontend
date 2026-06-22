@@ -47,7 +47,7 @@ const getTriggerClass = (isActiveGroup: boolean) => cn(
 export const CustomSidebarNavContent = memo(() => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const { isSuperAdmin, isBossCC, isCoordinator, isBoss, isPlaning, isSecretaryCC, isTechnician } = useUserRoles();
+  const { isSuperAdmin, isBossCC, isCoordinator, isBoss, isPlaning, isSecretaryCC, isTechnician, isInventory } = useUserRoles();
 
   const navItems: NavItem[] = useMemo(() => [
     {
@@ -89,17 +89,18 @@ export const CustomSidebarNavContent = memo(() => {
     {
       title: t("custom_nav_content_subitem_list_consumables"),
       icon: Blocks,
-      show: isSuperAdmin || isCoordinator || isBossCC,
+      show: isSuperAdmin || isInventory || isBossCC || isCoordinator,
       subItems: [
-        { title: ("Consumibles"), path: "/consumables", show: true },
-        { title: ("Historial de movimientos"), path: "/consumable-movements", show: true },
+        { title: t("custom_nav_content_catalog_consumables"), path: "/consumables", show: isSuperAdmin || isInventory || isBossCC || isCoordinator, },
+        { title: t("custom_nav_content_movements_history"), path: "/consumable-movements", show: isSuperAdmin || isInventory || isBossCC || isCoordinator, },
       ]
     },
     {
-      title: t("equipment_list", "Inventario de Equipos"),
+      title: t("custom_nav_content_list_equipments"),
       icon: Archive,
+      show: isSuperAdmin || isTechnician || isCoordinator || isBossCC,
       path: "/equipments",
-      show: true,
+      // show: true,
     },
     {
       title: t("custom_nav_content_subitem_list_tickets"),

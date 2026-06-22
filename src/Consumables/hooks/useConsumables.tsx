@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from "react-router";
 import { getConsumablesAction } from '../actions/get-consumables.action';
-import type { Consumable, ConsumablesResponse } from '../interfaces/consumable.interfaces';
+import type { ConsumablesResponse } from '../interfaces/consumable.interfaces';
 
 export const useConsumables = () => {
     const [searchParams] = useSearchParams();
@@ -21,10 +21,9 @@ export const useConsumables = () => {
         ],
         queryFn: async () => {
             const response = await getConsumablesAction({ 
-                search: query, 
+                query, 
                 limit, 
                 offset,
-                // Agrega estas llaves a la firma o tipado de tus opciones de Action si te marca TypeScript
                 id_type_consumable,
                 id_unit_measurement,
                 id_ubication_consumable
@@ -57,30 +56,40 @@ export const useConsumables = () => {
         refetch: consumablesQuery.refetch,
     };
 };
-
 // --- HOOK: DETALLES DE LA BOLSA (SELECCIONADOS) ---
 export const useConsumablesBagData = (ids: string[]) => {
-    const bagQuery = useQuery<ConsumablesResponse, Error, Consumable[]>({
+    const bagQuery = useQuery({
         queryKey: ['consumables-bag-details', ids],
         queryFn: async () => {
-            if (ids.length === 0) return { consumables: [], meta: { total: 0, page: 1, lastPage: 1 } };
-            const response = await getConsumablesAction({ limit: 100, offset: 0 });
-            const normalizedResponse: ConsumablesResponse = {
-                ...response,
-                consumables: response.consumables.map((item) => ({
-                    ...item,
-                    imageUrl: item.imageUrl ?? null,
-                })),
-            };
-            return normalizedResponse;
+            if (ids.length === 0) return [];
+
+            // 1. Hacemos la primera llamada para saber cuántas páginas hay
+            const firstPage = await getConsumablesAction({ limit: 100, offset: 0 });
+            const totalPages = Math.ceil(firstPage.meta.total / 100);
+
+            // 2. Si hay más páginas, traemos el resto en paralelo
+            const allConsumables = [...firstPage.consumables];
+            
+            if (totalPages > 1) {
+                const promises = [];
+                for (let i = 1; i < totalPages; i++) {
+                    promises.push(getConsumablesAction({ limit: 100, offset: i * 100 }));
+                }
+                const results = await Promise.all(promises);
+                results.forEach(res => {
+                    allConsumables.push(...res.consumables);
+                });
+            }
+
+            // 3. Normalizamos y retornamos
+            return allConsumables.map((item) => ({
+                ...item,
+                imageUrl: item.imageUrl ?? null,
+            }));
         },
         enabled: ids.length > 0,
-        staleTime: 0,
-        refetchOnMount: true,
-        select: (response) => {
-            const dataArray = response?.consumables || [];
-            return dataArray.filter((item) => ids.includes(String(item.id)));
-        }
+        // Filtramos aquí contra los IDs de la bolsa
+        select: (data) => data.filter((item) => ids.includes(String(item.id)))
     });
 
     return {

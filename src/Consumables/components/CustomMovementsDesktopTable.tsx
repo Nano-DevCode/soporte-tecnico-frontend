@@ -1,5 +1,6 @@
 import { ArrowDownRight, ArrowUpRight, Eye } from "lucide-react";
 import { Link } from "react-router";
+import { t } from "i18next";
 import type { GroupedMovement } from "../interfaces/consumable-movement.interfaces";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +14,7 @@ export const CustomMovementsDesktopTable = ({ movements }: Props) => {
     if (movements.length === 0) {
         return (
             <div className="hidden md:block text-center p-8 border rounded-lg bg-card text-muted-foreground">
-                No se encontraron movimientos registrados en este bloque.
+                {t("movementTable.noMovements")}
             </div>
         );
     }
@@ -23,13 +24,13 @@ export const CustomMovementsDesktopTable = ({ movements }: Props) => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="min-w-27.5 max-w-50">Código de Movimiento</TableHead>
-                        <TableHead className="min-w-27.5 max-w-30">Tipo</TableHead>
-                        <TableHead className="min-w-27.5 max-w-50">Aplicación / Destino</TableHead>
-                        <TableHead className="min-w-27.5 w-50 max-w-60">Fecha</TableHead>
-                        <TableHead className="text-center min-w-27.5 max-w-40">Total de consumo</TableHead>
-                        <TableHead className="text-right w-30">Costo Total</TableHead>
-                        <TableHead className="w-20 text-center">Acciones</TableHead>
+                        <TableHead className="min-w-27.5 max-w-50">{t("movementTable.thCode")}</TableHead>
+                        <TableHead className="min-w-27.5 max-w-30">{t("movementTable.thType")}</TableHead>
+                        <TableHead className="min-w-27.5 max-w-50">{t("movementTable.thApplication")}</TableHead>
+                        <TableHead className="min-w-27.5 w-50 max-w-60">{t("movementTable.thDate")}</TableHead>
+                        <TableHead className="text-center min-w-27.5 max-w-40">{t("movementTable.thTotalQuantity")}</TableHead>
+                        <TableHead className="text-right w-30">{t("movementTable.thTotalCost")}</TableHead>
+                        <TableHead className="w-20 text-center">{t("movementTable.thActions")}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -73,7 +74,6 @@ export const CustomMovementsDesktopTable = ({ movements }: Props) => {
                                 </TableCell>
                                 <TableCell className="space-y-1">
                                     {(() => {
-                                        // Forzamos el sufijo 'Z' si el backend no lo incluyó para que JS sepa que es UTC nativo
                                         const dateStr = group.created_at.endsWith("Z") ? group.created_at : `${group.created_at}Z`;
 
                                         return new Date(dateStr).toLocaleString('es-MX', {
@@ -81,15 +81,18 @@ export const CustomMovementsDesktopTable = ({ movements }: Props) => {
                                         });
                                     })()}
                                 </TableCell>
-                                <TableCell className="text-center ">
-                                    {group.total_quantity > 1 ? `${group.total_quantity} unidades` : `${group.total_quantity} unidad`}
+                                <TableCell className="text-center">
+                                    {group.total_quantity}{" "}
+                                    <span className="text-xs text-muted-foreground font-medium">
+                                        {group.total_quantity === 1 ? t("movementTable.unit") : t("movementTable.units")}
+                                    </span>
                                 </TableCell>
                                 <TableCell className="text-right font-bold text-blue-600 dark:text-blue-400">
                                     ${group.total_cost.toFixed(2)}
                                 </TableCell>
                                 <TableCell className="text-center">
                                     <Button size="icon" variant="ghost" className="h-8 w-8 rounded-md" asChild>
-                                        <Link to={`/consumable-movements/details/${group.code_movement_aplication}`}>
+                                        <Link to={`/consumable-movements/details/${encodeURIComponent(group.code_movement_aplication)}`}>
                                             <Eye className="h-4 w-4 text-muted-foreground hover:text-foreground" />
                                         </Link>
                                     </Button>

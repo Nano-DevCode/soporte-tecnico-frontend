@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { InfiniteScrollSelectconsumables } from "./infinite-scroll-selectconsu";
 
 interface Option {
@@ -56,15 +56,18 @@ export const CatalogSelector = ({
     }
   }, [value?.id, setSelectedId]);
 
-  // Mapeo seguro de los tipos primitivos del backend a la estructura Option
-  const normalizedOptions = options.map((item) => ({
-    id: String(item.id),
-    name: item.name || "",
-  }));
+  // Se envuelve en useMemo para mantener una referencia de memoria idéntica si los datos no cambian
+  const normalizedOptions = useMemo(() => {
+    return options.map((item) => ({
+      id: String(item.id),
+      name: item.name || "",
+    }));
+  }, [options]);
 
-  const normalizedValue = value
-    ? { id: String(value.id), name: value.name || "" }
-    : null;
+  // Se estabiliza el objeto value mapeado de forma segura
+  const normalizedValue = useMemo(() => {
+    return value ? { id: String(value.id), name: value.name || "" } : null;
+  }, [value]);
 
   return (
     <InfiniteScrollSelectconsumables

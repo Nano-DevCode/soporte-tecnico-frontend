@@ -38,28 +38,27 @@ export const NetworkFields = ({ control, register, setValue, disabled, errors }:
 
     // --- Handler de Creación Rápida Inline con Sileo ---
     const handleCreateNetworkType = async (name: string) => {
-        try {
-            const newItem = await sileo.promise(networkHook.onCreate({ name: name.trim() }), {
-                loading: { title: t("eq_network_toast_loading") },
-                success: {
-                    title: t("eq_network_toast_success_title"),
-                    description: `${t("eq_network_toast_success_desc_1")} "${name}" ${t("eq_network_toast_success_desc_2")}`,
-                    duration: 4000
-                },
-                error: (err) => ({
-                    title: t("eq_network_toast_error_title"),
-                    description: getBackendErrorMessage(err, t("eq_network_toast_error_desc")),
-                    duration: 5000
-                })
-            });
+    try {
+        const newItem = await sileo.promise(networkHook.onCreate({ name: name.trim() }), {
+            loading: { title: t("eq_network_toast_loading") },
+            success: {
+                title: t("eq_network_toast_success_title"),
+                description: `${t("eq_network_toast_success_desc_1")} "${name}" ${t("eq_network_toast_success_desc_2")}`,
+                duration: 4000
+            },
+            error: (err) => ({
+                title: t("eq_network_toast_error_title"),
+                description: getBackendErrorMessage(err, t("eq_network_toast_error_desc")),
+                duration: 5000
+            })
+        });
 
-            if (newItem) {
-                setValue("network.id_type_equipment_network", newItem, { shouldValidate: true });
-            }
-        } catch (e) {
-            console.error(e);
+        if (newItem) {
+            setValue("network.id_type_equipment_network", newItem, { shouldValidate: true });
         }
-    };
+    } catch {
+    }
+};
 
     // Helper rápido para obtener los errores anidados de la propiedad network
     const networkErrors = errors?.network as Record<string, FieldError> | undefined;

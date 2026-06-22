@@ -1,10 +1,9 @@
-
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FilterX, Search } from "lucide-react";
 import { useSearchParams } from "react-router";
-import { t } from "i18next";
+import { t } from "i18next"; // <-- Cambiado por el hook reactivo
 
 // Importación de tus selectores e infraestructura factory
 import { CatalogSelector } from "./CatalogSelector";
@@ -25,45 +24,55 @@ export const CustomConsumableFilters = memo(() => {
     // Estado local de la barra de búsqueda (Debounce)
     const currentSearch = searchParams.get("search") || "";
     const [textSearch, setTextSearch] = useState(currentSearch);
+    
+    const isUserTyping = useRef(false);
 
     useEffect(() => {
-        setTextSearch(currentSearch);
+        if (!isUserTyping.current) {
+            setTextSearch(currentSearch);
+        }
     }, [currentSearch]);
 
     useEffect(() => {
+        if (!isUserTyping.current) return;
+
         const timer = setTimeout(() => {
             const newParams = new URLSearchParams(searchParams);
+            
             if (textSearch.trim() === "") {
                 newParams.delete("search");
             } else {
                 newParams.set("search", textSearch.trim());
             }
-            newParams.set("page", "1");
+            
+            newParams.set("page", "1"); 
+            
+            isUserTyping.current = false;
             setSearchParams(newParams);
         }, 300);
 
         return () => clearTimeout(timer);
-    }, [textSearch, setSearchParams]);
+    }, [textSearch, setSearchParams, searchParams]);
 
     // Rehidratación de los valores de los selectores
     const selectedType = searchParams.get("id_type_consumable")
         ? {
             id: searchParams.get("id_type_consumable")!,
-            name: typeHook.options.find(o => String(o.id) === searchParams.get("id_type_consumable"))?.name || ("Seleccionado...")
+            name: typeHook.options.find(o => String(o.id) === searchParams.get("id_type_consumable"))?.name || t("consumables.filters.selected_fallback")
         }
         : null;
 
     const selectedUnit = searchParams.get("id_unit_measurement")
         ? {
             id: searchParams.get("id_unit_measurement")!,
-            name: unitHook.options.find(o => String(o.id) === searchParams.get("id_unit_measurement"))?.name || ("Seleccionado...")
+            name: unitHook.options.find(o => String(o.id) === searchParams.get("id_unit_measurement"))?.name || t("consumables.filters.selected_fallback")
         }
         : null;
 
     const selectedUbication = searchParams.get("id_ubication_consumable")
         ? {
             id: searchParams.get("id_ubication_consumable")!,
-            name: ubicationHook.options.find(o => String(o.id) === searchParams.get("id_ubication_consumable"))?.name || ("Seleccionado...")
+            name: ubicationHook.options.find(o => String(o.id) === searchParams.get("id_ubication_consumable"))?.name || t("consumables.filters.selected_fallback")
         }
         : null;
 
@@ -84,6 +93,7 @@ export const CustomConsumableFilters = memo(() => {
         searchParams.has("id_ubication_consumable");
 
     const resetFilters = () => {
+        isUserTyping.current = false;
         setSearchParams({});
         setTextSearch("");
     };
@@ -95,10 +105,13 @@ export const CustomConsumableFilters = memo(() => {
             <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />
                 <Input
-                    placeholder={t("custom_consumable_filters_placeholder_search")}
+                    placeholder={t("consumables.filters.search_placeholder")}
                     className="pl-9 h-10 bg-background  w-full"
                     value={textSearch}
-                    onChange={(e) => setTextSearch(e.target.value)}
+                    onChange={(e) => {
+                        isUserTyping.current = true;
+                        setTextSearch(e.target.value);
+                    }}
                 />
             </div>
 
@@ -111,7 +124,7 @@ export const CustomConsumableFilters = memo(() => {
                         hookResult={typeHook}
                         value={selectedType}
                         onChange={(val) => handleSelectChange("id_type_consumable", val)}
-                        placeholder="Clasificación"
+                        placeholder={t("consumables.filters.classification_placeholder")}
                         allowCreate={false}
                     />
 
@@ -120,7 +133,7 @@ export const CustomConsumableFilters = memo(() => {
                         hookResult={unitHook}
                         value={selectedUnit}
                         onChange={(val) => handleSelectChange("id_unit_measurement", val)}
-                        placeholder="Unidad de Medida"
+                        placeholder={t("consumables.filters.unit_placeholder")}
                         allowCreate={false}
                     />
 
@@ -129,7 +142,7 @@ export const CustomConsumableFilters = memo(() => {
                         hookResult={ubicationHook}
                         value={selectedUbication}
                         onChange={(val) => handleSelectChange("id_ubication_consumable", val)}
-                        placeholder="Ubicación Almacén"
+                        placeholder={t("consumables.filters.ubication_placeholder")}
                         allowCreate={false}
                     />
                 </div>
@@ -143,7 +156,7 @@ export const CustomConsumableFilters = memo(() => {
                         className="h-10 px-3 text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/10 border border-input transition-all rounded-md flex items-center justify-center gap-1.5 whitespace-nowrap"
                     >
                         <FilterX className="h-3.5 w-3.5" />
-                        <span>{t("clear")}</span>
+                        <span>{t("consumables.filters.clear_btn")}</span>
                     </Button>
                 )}
             </div>

@@ -14,11 +14,10 @@ import { Button } from "@/components/ui/button";
 import { t } from "i18next";
 
 export const ConsumablePage = () => {
-  const { consumables, meta, isLoading: skeletonLoading } = useConsumables();
+  const { consumables, meta, isLoading } = useConsumables();
   const { bagIds, toggleBagItem, isInBag } = useConsumableBagStore();
-
+  
   return (
-    // w-full asegura la expansión total del contenedor principal
     <div className="w-full space-y-6 px-1">
       {/* --- ENCABEZADO DE LA PÁGINA --- */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between w-full">
@@ -30,13 +29,12 @@ export const ConsumablePage = () => {
           />
         </div>
         
-        {/* CONTENEDOR DE ACCIONES (Expandido horizontalmente) */}
+        {/* CONTENEDOR DE ACCIONES */}
         <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto shrink-0">
-          {/* OPCIÓN 1: REGISTRAR LOTES/REMESAS (Entrada) */}
           <Link to="batches/create" className="w-full sm:w-auto">
             <Button className="relative w-full sm:w-auto bg-green-700 hover:bg-green-800 text-white font-semibold shadow-sm transition-all duration-200">
               <Package className="mr-2 h-4 w-4" />
-              Registrar remesa ({bagIds.length})
+              {t("consumablePage.btnRegisterBatch", { count: bagIds.length })}
               {bagIds.length > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 bg-destructive text-destructive-foreground text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow-sm">
                   {bagIds.length}
@@ -45,11 +43,10 @@ export const ConsumablePage = () => {
             </Button>
           </Link>
 
-          {/* NUEVA OPCIÓN 2: GENERAR MOVIMIENTO DE SALIDA */}
           <Link to="consumables/outputs/create" className="w-full sm:w-auto">
             <Button className="relative w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-sm transition-all duration-200">
               <Package className="mr-2 h-4 w-4" />
-              Generar Salida ({bagIds.length})
+              {t("consumablePage.btnGenerateOutput", { count: bagIds.length })}
               {bagIds.length > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 bg-blue-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow-sm">
                   {bagIds.length}
@@ -58,7 +55,6 @@ export const ConsumablePage = () => {
             </Button>
           </Link>
 
-          {/* CREAR NUEVO CONSUMIBLE EN EL CATÁLOGO */}
           <Link to="/consumables/create" className="w-full sm:w-auto">
             <Button className="w-full bg-blue-700 hover:bg-blue-800 font-semibold shadow-sm transition-all duration-200">
               <Plus className="mr-2 h-4 w-4" />
@@ -74,16 +70,16 @@ export const ConsumablePage = () => {
       </div>
 
       {/* --- RENDERIZADO CONDICIONAL --- */}
-      {skeletonLoading ? (
+      {isLoading ? (
         <div className="w-full">
           <CustomSkeletonTableCard />
         </div>
       ) : (
         <>
-          {/* 
-            Grid de pantalla completa optimizado: 
-            Aumenta dinámicamente hasta 5 y 6 columnas en pantallas ultra anchas (FullHD, 2K o superiores)
-          */}
+          <h4 className="text-sm text-muted-foreground font-semibold mb-1 flex items-center gap-1.5">
+            {t("consumablePage.totalOperations", { count: meta?.total ?? 0 })}
+          </h4>
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-5 w-full">
             {consumables.map((item: Consumable) => {
               const stringId = String(item.id);
@@ -95,9 +91,6 @@ export const ConsumablePage = () => {
                   item={item}
                   isInBag={itemIsInBag}
                   onToggleBag={() => toggleBagItem(stringId)}
-                  handleDownClick={(consumable) => {
-                    console.log("Acciones para:", consumable.description);
-                  }}
                 />
               );
             })}
@@ -105,13 +98,15 @@ export const ConsumablePage = () => {
 
           {consumables.length === 0 && (
             <div className="w-full text-center py-16 text-muted-foreground border border-dashed rounded-xl bg-background/50 shadow-sm">
-              No se encontraron consumibles registrados
+              {t("consumablePage.emptyCatalog")}
             </div>
           )}
 
-          {/* Barra de paginación expandida */}
+          {/* Barra de paginación expandida y controlada */}
           <div className="w-full pt-4">
-            <CustomPagination totalPages={meta?.lastPage ?? 1} />
+            <CustomPagination 
+              totalPages={meta?.lastPage ?? 1} 
+            />
           </div>
         </>
       )}

@@ -8,6 +8,7 @@ export const AppRoles = {
     Planeacion: 'Planeación',
     SecretariaCC: 'Secretaria CC',
     Visitante: 'Visitante',
+    Inventario: 'Inventario'
 } as const;
 
 // 2. Extraemos los tipos de ese objeto para usarlos en nuestras interfaces

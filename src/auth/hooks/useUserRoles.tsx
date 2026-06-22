@@ -13,5 +13,6 @@ export const useUserRoles = () => {
     isPlaning:     roleName === AppRoles.Planeacion,
     isSecretaryCC: roleName === AppRoles.SecretariaCC,
     isVisitor:     roleName === AppRoles.Visitante,
+    isInventory:   roleName === AppRoles.Inventario,
   };
 };
