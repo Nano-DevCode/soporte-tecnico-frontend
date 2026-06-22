@@ -36,7 +36,7 @@ export const ToolDetailsPage = () => {
       
       <CustomBackToList 
         onBack={() => navigate('/tools')} 
-        backLabel={t("tools.backList.backLabel")} 
+        backLabel={t("tools.backList.backLabel", "Volver a la lista de herramientas"  )} 
         actionUrl="tools"
       />
 
@@ -61,7 +61,7 @@ export const ToolDetailsPage = () => {
                 </h3>
                 <p className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
                   <Tag className="h-3.5 w-3.5" />
-                  {t("tools.details.brand")} <span className="text-foreground uppercase">{tool?.model?.brand?.name}</span>
+                  {t("tools.details.brand", "Marca")} <span className="text-foreground uppercase">{tool?.model?.brand?.name}</span>
                 </p>
               </div>
             </div>
@@ -84,12 +84,12 @@ export const ToolDetailsPage = () => {
               <div>
                 <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
                   <Wrench className="h-4 w-4 text-muted-foreground" />
-                  {t("tools.details.subTitle")}
+                  {t("tools.details.subTitle", "Detalles de la herramienta")}
                 </h4>
                 <dl className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 text-sm">
                   
                   <div className="space-y-1 sm:col-span-2">
-                    <dt className="font-medium text-muted-foreground">{t("tools.details.idTitle")}</dt>
+                    <dt className="font-medium text-muted-foreground">{t("tools.details.idTitle", "ID")}</dt>
                     <dd className="font-mono text-xs text-foreground break-all flex items-center gap-1.5">
                       <Fingerprint className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                       {tool?.id || "N/A"}
@@ -97,7 +97,7 @@ export const ToolDetailsPage = () => {
                   </div>
 
                   <div className="space-y-1">
-                    <dt className="font-medium text-muted-foreground">{t("tools.details.typeTitle")}</dt>
+                    <dt className="font-medium text-muted-foreground">{t("tools.details.typeTitle", "Tipo")}</dt>
                     <dd className="font-semibold flex items-center gap-1.5">
                       <Layers className="h-3.5 w-3.5 text-muted-foreground" />
                       {tool?.type?.name || "N/A"}
@@ -105,7 +105,7 @@ export const ToolDetailsPage = () => {
                   </div>
 
                   <div className="space-y-1">
-                    <dt className="font-medium text-muted-foreground">{t("tools.details.modelTitle")}</dt>
+                    <dt className="font-medium text-muted-foreground">{t("tools.details.modelTitle", "Modelo")}</dt>
                     <dd className="font-semibold flex items-center gap-1.5">
                       <Tag className="h-3.5 w-3.5 text-muted-foreground" />
                       {tool?.model?.name || "N/A"}
@@ -113,10 +113,10 @@ export const ToolDetailsPage = () => {
                   </div>
 
                   <div className="space-y-1 sm:col-span-2">
-                    <dt className="font-medium text-muted-foreground">{t("tools.details.descriptionTitle")}</dt>
+                    <dt className="font-medium text-muted-foreground">{t("tools.details.descriptionTitle", "Descripción")}</dt>
                     <dd className="font-medium bg-muted/30 p-3 rounded-md border border-border/50 text-muted-foreground mt-1 flex items-start gap-2">
                       <Info className="h-4 w-4 shrink-0 mt-0.5 text-blue-500" />
-                      {tool?.description || t("tools.details.nonDescription")}
+                      {tool?.description || t("tools.details.nonDescription", "Sin descripción")}
                     </dd>
                   </div>
 
@@ -131,7 +131,7 @@ export const ToolDetailsPage = () => {
               <div>
                 <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
                   <ImageIcon className="h-4 w-4 text-muted-foreground" />
-                  Fotografía de la Herramienta
+                  {t("tools.details.imageTitle", "Fotografía de la Herramienta")}
                 </h4>
                 <div className="relative h-64 w-full overflow-hidden rounded-xl border-2 border-dashed border-primary/20 bg-muted/30 shadow-sm flex items-center justify-center p-2">
                   {tool?.imageUrl ? (
@@ -153,20 +153,20 @@ export const ToolDetailsPage = () => {
               <div className="mt-4">
                 <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
                   <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                  Información Adicional
+                  {t("tools.details.additionalInfo", "Información Adicional")}
                 </h4>
                 <dl className="grid grid-cols-1 gap-y-4 text-sm">
                   
                   <div className="rounded-lg bg-muted/30 p-3 border border-border/50">
-                    <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">Estado</dt>
+                    <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">{t("tools.details.statusTitle", "Estado")}</dt>
                     <dd className={cn("font-bold text-base", tool?.status ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400")}>
-                      {tool?.status ? t("tools.details.active") : t("tools.details.inactive")}
+                      {tool?.status ? t("tools.details.active", "Activa") : t("tools.details.inactive", "Inactiva")}
                     </dd>
                   </div>
 
                   <div className="rounded-lg bg-muted/30 p-3 border border-border/50 space-y-3">
                     <div>
-                      <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">{t("tools.details.dateCreateTitle")}</dt>
+                      <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">{t("tools.details.dateCreateTitle", "Fecha de Creación")}</dt>
                       <dd className="font-semibold flex items-center gap-1.5 text-base">
                         <CalendarDays className="h-4 w-4 text-muted-foreground" />
                         {renderDate(tool?.createdAt)}
@@ -174,7 +174,7 @@ export const ToolDetailsPage = () => {
                     </div>
                     
                     <div className="border-t border-border/50 pt-3">
-                      <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">{t("tools.details.dateEditTitle")}</dt>
+                      <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">{t("tools.details.dateEditTitle", "Fecha de Edición")}</dt>
                       <dd className="font-semibold flex items-center gap-1.5 text-base">
                         <CalendarDays className="h-4 w-4 text-muted-foreground" />
                         {renderDate(tool?.updatedAt)}
@@ -190,7 +190,7 @@ export const ToolDetailsPage = () => {
           </CardContent>
         </Card>
       ) : (
-        <CustomToolNotFound title={t("tools.notFound.title")} />
+        <CustomToolNotFound title={t("tools.notFound.title", "Herramienta no encontrada")} />
       )}
     </div>
   );

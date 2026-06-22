@@ -37,10 +37,10 @@ export const ToolEditPage = () => {
 
     try {
       await sileo.promise(updateToolAsync(payload), {
-        loading: { title: t("tools.edit.sileo.loading.title") },
+        loading: { title: t("tools.edit.sileo.loading.title", "Actualizando herramienta...") },
         success: { 
-          title: t("tools.edit.sileo.success.title"), 
-          description: t("tools.edit.sileo.success.description"),
+          title: t("tools.edit.sileo.success.title", "Herramienta actualizada exitosamente"), 
+          description: t("tools.edit.sileo.success.description", "La herramienta ha sido actualizada correctamente"),
           duration: 4000 
         },
         error: (err) => { 
@@ -50,7 +50,7 @@ export const ToolEditPage = () => {
             backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
           }
           return {
-            title: t("tools.edit.sileo.error.title"), 
+            title: t("tools.edit.sileo.error.title", "Error al actualizar la herramienta"), 
             description: backendMessage,
             duration: 5000,
             fill: "#18181b",
@@ -64,7 +64,7 @@ export const ToolEditPage = () => {
       
       navigate("/tools");
     } catch (error) {
-      console.error(t("tools.edit.logs.error"), error);
+      console.error(t("tools.edit.logs.error", "Error al actualizar la herramienta"), error);
     }
   };
 
@@ -72,7 +72,7 @@ export const ToolEditPage = () => {
     <div className="mx-auto w-full max-w-3xl space-y-4">
       <CustomBackToList 
         onBack={() => navigate('/tools')} 
-        backLabel={t("tools.backList.backLabel")}
+        backLabel={t("tools.backList.backLabel", "Volver a la lista de herramientas")}
       />
 
       {isLoadingTool ? (
@@ -85,7 +85,7 @@ export const ToolEditPage = () => {
           isMutating={isUpdating} 
         />
       ) : (
-        <CustomToolNotFound title={t("tools.notFound.title")} />
+        <CustomToolNotFound title={t("tools.notFound.title", "Herramienta no encontrada")} />
       )}
     </div>
   );

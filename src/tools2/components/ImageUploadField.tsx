@@ -1,0 +1,105 @@
+import { useState, useRef } from "react";
+import { useFormContext } from "react-hook-form";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { UploadCloud, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+
+interface ImageUploadProps {
+  disabled?: boolean;
+  currentImageUrl?: string | null;
+}
+
+export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps) => {
+  const { t } = useTranslation();
+  const { control } = useFormContext();
+  
+  const [localOverride, setLocalOverride] = useState<{ url: string | null } | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const displayUrl = localOverride ? localOverride.url : currentImageUrl;
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, onChange: (val: File | null) => void) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      onChange(file);
+      setLocalOverride({ url: URL.createObjectURL(file) });
+    }
+  };
+
+  const handleRemove = (onChange: (val: File | null) => void) => {
+    onChange(null);
+    setLocalOverride({ url: null });
+    if (inputRef.current) inputRef.current.value = "";
+  };
+
+  return (
+    <FormField
+      control={control}
+      name="imageFile"
+      render={({ field }) => (
+        <FormItem className="w-full md:col-span-2">
+          <FormLabel>
+            {t("tools.components.imageUploadField.label")}
+            {!displayUrl && <span className="text-red-500"> *</span>}
+          </FormLabel>
+          <FormControl>
+            <div className="flex flex-col items-center justify-center w-full">
+              <input
+                type="file"
+                accept="image/jpeg, image/png, image/webp"
+                className="hidden"
+                ref={inputRef}
+                disabled={disabled}
+                aria-label={t("tools.components.imageUploadField.label")}
+                onChange={(e) => handleFileChange(e, field.onChange)}
+              />
+
+              {!displayUrl ? (
+                <button 
+                  type="button"
+                  disabled={disabled}
+                  aria-label={t("tools.components.imageUploadField.clickToUpload")}
+                  onClick={() => inputRef.current?.click()}
+                  className={`w-full flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
+                    disabled ? "bg-muted cursor-not-allowed opacity-60" : "border-primary/30 bg-primary/5 hover:bg-primary/10"
+                  }`}
+                >
+                  <UploadCloud className="h-10 w-10 text-primary mb-3" />
+                  <p className="text-sm font-medium text-foreground mb-1">
+                    {t("tools.components.imageUploadField.clickToUpload")}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("tools.components.imageUploadField.formats")}
+                  </p>
+                </button>
+              ) : (
+                <div className="relative w-full sm:w-1/2 rounded-lg overflow-hidden border border-border bg-muted/30 group">
+                  <img 
+                    src={displayUrl} 
+                    alt={t("tools.components.imageUploadField.previewAlt")} 
+                    className="w-full h-auto object-contain max-h-60"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button 
+                      type="button" 
+                      variant="destructive" 
+                      size="sm"
+                      disabled={disabled}
+                      onClick={() => handleRemove(field.onChange)}
+                      className="gap-2"
+                      aria-label={t("tools.components.imageUploadField.changePhoto")}
+                    >
+                      <X className="h-4 w-4" /> {t("tools.components.imageUploadField.changePhoto")}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};

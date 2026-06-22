@@ -1,4 +1,4 @@
-import type { Department } from "@/Departments/interfaces/department.interface";
+import type { Department } from "@/departments/interfaces/department.interface";
 import type { Role } from "./roles.response";
 
 export interface UserResponse {

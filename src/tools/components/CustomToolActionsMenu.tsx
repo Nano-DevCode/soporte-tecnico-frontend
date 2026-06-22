@@ -34,14 +34,14 @@ export const CustomToolActionsMenu = ({
           <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
             <Link to={`/tools/${tool.id}`}>
               <Eye className="h-4 w-4 text-muted-foreground" />
-              {t("tools.actionsMenu.view")}
+              {t("tools.actionsMenu.view", "view")}
             </Link>
           </DropdownMenuItem>
           
           <Link to={`/tools/edit/${tool.id}`}>
             <DropdownMenuItem className="gap-2 cursor-pointer">
               <Pencil className="h-4 w-4 text-muted-foreground" />
-              {t("tools.actionsMenu.edit")}
+              {t("tools.actionsMenu.edit", "edit")}
             </DropdownMenuItem>
           </Link>
           
@@ -59,12 +59,12 @@ export const CustomToolActionsMenu = ({
             {isActive ? (
               <>
                 <PowerOff className="h-4 w-4" />
-                {t("tools.actionsMenu.down")}
+                {t("tools.actionsMenu.down", "deactivate")}
               </>
             ) : (
               <>
                 <CheckCircle className="h-4 w-4" />
-                {t("tools.actionsMenu.up")}
+                {t("tools.actionsMenu.up", "reactivate")}
               </>
             )}
           </DropdownMenuItem>

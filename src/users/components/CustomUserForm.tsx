@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { alphanumericRegex, lettersOnlyRegex, passwordRegex, rfcRegex } from "../util/regex";
 import type { Coordination, CoordinationResponse, User } from "../interfaces/users.response";
 import type { Role, RolesResponse } from "../interfaces/roles.response";
-import type { Department, DepartmentResponseAll } from "@/Departments/interfaces/department.interface";
+import type { Department, DepartmentResponseAll } from "@/departments/interfaces/department.interface";
 import { t } from "i18next";
 
 interface CustomUserFormProps {

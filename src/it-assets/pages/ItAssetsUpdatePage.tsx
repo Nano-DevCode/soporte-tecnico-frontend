@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Save, Loader2, ArrowLeft } from "lucide-react";
+import { Save, Loader2 } from "lucide-react";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import { useTranslation } from "react-i18next";
@@ -137,15 +137,6 @@ const ItAssetsUpdatePage = () => {
         title={t("itAssets.updatePage.header.title")}
         description={t("itAssets.updatePage.header.description")}
       />
-      <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" type="button" onClick={() => navigate(-1)}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">{t("itAssets.updatePage.header.title")}</h1>
-          <p className="text-muted-foreground text-sm">{t("itAssets.updatePage.header.description")}</p>
-        </div>
-      </div>
 
       <Card>
         <CardHeader>

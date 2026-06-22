@@ -128,7 +128,7 @@ export const LoginPage = () => {
             <img
               src={LogoIto}
               alt="Logo"
-              className="w-full max-w-[280px] h-auto object-contain transition-transform hover:scale-105 duration-500 mix-blend-multiply dark:mix-blend-plus-lighter"
+              className="w-full max-w-70 h-auto object-contain transition-transform hover:scale-105 duration-500 mix-blend-multiply dark:mix-blend-plus-lighter"
             />
           </div>
 

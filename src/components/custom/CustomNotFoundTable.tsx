@@ -12,7 +12,7 @@ const CustomNotFoundTable = ({ title, description, icon: Icon}: Props) => {
     <TableRow>
         <TableCell 
         colSpan={6} 
-        className="h-[300px] text-center text-muted-foreground"
+        className="h-75 text-center text-muted-foreground"
         >
         <div className="flex flex-col items-center gap-3">
             <div className="h-14 w-14 rounded-full bg-muted flex items-center justify-center border border-border">

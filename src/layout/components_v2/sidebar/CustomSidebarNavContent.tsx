@@ -81,6 +81,15 @@ export const CustomSidebarNavContent = memo(() => {
       ]
     },
     {
+      title: "Herramientas",
+      icon: MonitorCog,
+      show: isSuperAdmin || isCoordinator || isBossCC,
+      subItems: [
+        { title: "Inventario", path: "/tools", show: true },
+        { title: "Bicatora", path: "/tools/movements", show: true },
+      ]
+    },
+    {
       title: t("custom_nav_content_subitem_list_tickets"),
       icon: Hammer,
       path: "/tools",

@@ -31,10 +31,10 @@ export const ToolCreatePage = () => {
 
     try {
       await sileo.promise(createToolAsync(payload), {
-        loading: { title: t("tools.create.sileo.loading.title") },
+        loading: { title: t("tools.create.sileo.loading.title", "Creando herramienta...") },
         success: { 
-          title: t("tools.create.sileo.success.title"), 
-          description: t("tools.create.sileo.success.title"),
+          title: t("tools.create.sileo.success.title", "Herramienta creada exitosamente"), 
+          description: t("tools.create.sileo.success.description", "La herramienta ha sido creada correctamente"),
           duration: 4000 
         },
         error: (err) => { 
@@ -44,7 +44,7 @@ export const ToolCreatePage = () => {
             backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
           }
           return {
-            title: t("tools.create.sileo.error.title"), 
+            title: t("tools.create.sileo.error.title", "Error al crear la herramienta"), 
             description: backendMessage,
             duration: 5000,
             fill: "#18181b",
@@ -57,7 +57,7 @@ export const ToolCreatePage = () => {
       });
       navigate("/tools");
     } catch (error) {
-      console.error(t("tools.create.logs.error"), error);
+      console.error(t("tools.create.logs.error", "Error al crear la herramienta"), error);
     }
   };
 
@@ -65,7 +65,7 @@ export const ToolCreatePage = () => {
     <div className="mx-auto w-full max-w-3xl space-y-4">
       <CustomBackToList 
         onBack={() => navigate('/tools')} 
-        backLabel={t("tools.backList.backLabel")}
+        backLabel={t("tools.backList.backLabel", "Volver a la lista de herramientas")}
       />
 
       <CustomToolForm 

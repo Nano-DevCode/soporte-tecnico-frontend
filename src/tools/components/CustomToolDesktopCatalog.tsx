@@ -37,8 +37,8 @@ export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props)
     return (
       <Card className="w-full shadow-sm">
         <CustomNotFoundTable 
-          title={t("tools.notFound.title")}
-          description={t("tools.notFound.description")}
+          title={t("tools.notFound.title", "No se encontraron herramientas")}
+          description={t("tools.notFound.description", "No hay herramientas disponibles en este momento")}
           icon={Wrench}
         />
       </Card>
@@ -79,7 +79,7 @@ export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props)
                     {tool.type.name}
                   </Badge>
                   <Badge variant={tool.status ? "default" : "destructive"} className="text-[10px] uppercase font-semibold px-2 py-0.5 shadow-none">
-                    {tool.status ? t("tools.listTable.active") : t("tools.listTable.inactive")}
+                    {tool.status ? t("tools.listTable.active", "Activa") : t("tools.listTable.inactive", "Inactiva ")}
                   </Badge>
                 </div>
                 

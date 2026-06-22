@@ -1,6 +1,5 @@
 import { isAxiosError } from "axios";
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
 
 export interface EquipmentPayload {
     id?: string;
