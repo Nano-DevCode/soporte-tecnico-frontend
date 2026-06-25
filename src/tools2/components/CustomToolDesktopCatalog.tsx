@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Monitor, Barcode, LogIn, LogOut } from "lucide-react"; 
+import { Monitor, LogIn, LogOut } from "lucide-react"; 
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router"; 
@@ -36,22 +36,21 @@ export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props)
             key={tool.id} 
             className="group relative flex flex-col overflow-hidden border-border/60 bg-background transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl"
           >
-            {/* Envolvemos la imagen y el contenido en un Link hacia los detalles del Tool */}
             <Link to={`/tools/${tool.id}`} className="flex flex-col flex-1 cursor-pointer">
               {/* === ÁREA DE IMAGEN === */}
               <div className="relative aspect-4/3 w-full overflow-hidden bg-muted/20 flex items-center justify-center border-b border-border/40">
                 
-                {/* Etiqueta de ID flotante (Izquierda) */}
+                {/* ID flotante (Sin restricciones de ancho) */}
                 <div className="absolute top-3 left-3 z-20">
                   <Badge 
                     variant="outline" 
-                    className="bg-background/90 backdrop-blur-md border-border/50 shadow-sm text-[10px] font-mono px-2 py-0.5 whitespace-normal break-all max-w-32.5 text-left leading-tight flex flex-col items-start gap-0.5"
+                    className="bg-background/90 backdrop-blur-md border-border/50 shadow-sm text-[10px] font-mono px-2 py-0.5 whitespace-nowrap flex items-center"
                   >
                     <span>#{tool.idInventary ?? tool.id}</span>
                   </Badge>
                 </div>
 
-                {/* Badge de Disponibilidad flotante (Derecha - ARRIBA) */}
+                {/* Badge de Disponibilidad */}
                 <div className="absolute top-3 right-3 z-20">
                   <Badge 
                     variant="outline" 
@@ -68,11 +67,10 @@ export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props)
                   </Badge>
                 </div>
 
-                {/* Imagen del Activo */}
                 {tool.imageUrl ? (
                   <img 
                     src={tool.imageUrl} 
-                    alt={tool.idInventary ?? t("tools.components.desktopCatalog.imageAlt")} 
+                    alt={t("tools.components.desktopCatalog.imageAlt")} 
                     className={cn(
                       "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105",
                       tool.inUse && "grayscale-50 opacity-80"
@@ -94,7 +92,6 @@ export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props)
               {/* === CONTENIDO PRINCIPAL === */}
               <CardContent className="relative z-20 flex flex-1 flex-col p-5 gap-3.5">
                 
-                {/* Fila Superior: Tipo y Status */}
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest line-clamp-1">
                     {tool.toolType?.name || "—"}
@@ -113,8 +110,7 @@ export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props)
                   </div>
                 </div>
 
-                {/* Título (Modelo) y Marca */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 mt-auto">
                   <div>
                     <span className="text-[9px] font-bold uppercase text-muted-foreground/70 tracking-wider">Modelo</span>
                     <h3 className="line-clamp-1 text-base font-bold tracking-tight text-foreground leading-snug" title={tool.model?.name}>
@@ -128,26 +124,10 @@ export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props)
                     </p>
                   </div>
                 </div>
-
-                {/* Serial Number */}
-                <div className="mt-auto pt-2">
-                  <div className="flex items-start gap-2.5 rounded-md bg-muted/30 px-3 py-2">
-                    <Barcode className="h-4 w-4 text-muted-foreground/70 shrink-0 mt-1" />
-                    <div className="flex flex-col">
-                      <span className="text-[9px] font-bold uppercase text-muted-foreground/70 tracking-wider">S/N (Serial)</span>
-                      <span className="font-mono text-xs text-muted-foreground break-all whitespace-normal leading-tight" title={tool.serialNumber}>
-                        {tool.serialNumber || t("tools.components.desktopCatalog.serialNumber.empty")}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
               </CardContent>
             </Link>
 
-            {/* === FOOTER CON BOTONES DE ACCIÓN === */}
             <CardFooter className="p-4 bg-muted/10 border-t border-border/40 flex justify-between items-center gap-3 relative z-30">
-              
               <div className="flex-1">
                 {tool.inUse ? (
                   <Link 
@@ -173,11 +153,8 @@ export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props)
                   </Link>
                 )}
               </div>
-
-              {/* Menú de acciones extra en la derecha */}
               <CustomToolActionsMenu tool={tool} handleDownClick={handleDownClick} />
             </CardFooter>
-
           </Card>
         );
       })}

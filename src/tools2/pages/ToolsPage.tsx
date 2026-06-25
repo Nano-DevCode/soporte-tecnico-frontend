@@ -21,10 +21,6 @@ const ToolsPage = () => {
   const { t } = useTranslation();
   const { isLoading, tools, changeStatusAsync, isChangingStatus, meta } = useTools();
 
-  console.log("=== DEBUG CATÁLOGO DESKTOP ===");
-  console.log("Lista completa de herramientas:", tools);
-  if (tools.length > 0) console.log("Primera herramienta:", tools[0]);
-
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [toolSelect, setToolSelect] = useState<Tool | null>(null);
 

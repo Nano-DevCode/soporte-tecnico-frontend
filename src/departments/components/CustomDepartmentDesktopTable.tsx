@@ -3,8 +3,8 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table } from "@
 import { Badge } from "@/components/ui/badge";
 import { Building2, Layers } from "lucide-react";
 import type { Department } from "../interfaces/department.interface";
-import { CustomDepartmentActionsMenu } from "./CustomDepartmentActionsMenu";
 import { t } from "i18next";
+import { CustomDepartmentActionsMenu } from "./CustomDepartmentActionsMenu";
 
 interface Props {
   departments: Department[];

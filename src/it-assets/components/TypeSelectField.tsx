@@ -44,7 +44,12 @@ export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean,
       control={control}
       name="typeId"
       render={({ field }) => {
-        const selectedOption = options.find(opt => opt.id === field.value) || (field.value === initialData?.id ? initialData : null);
+        const currentValue = field.value ? String(field.value) : "";
+        let selectedOption = options.find(opt => String(opt.id) === currentValue);
+
+        if (!selectedOption && initialData && String(initialData.id) === currentValue) {
+          selectedOption = initialData;
+        }
 
         return (
           <FormItem className="w-full">
@@ -53,7 +58,15 @@ export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean,
               <InfiniteScrollSelect
                 options={options}
                 value={selectedOption || null}
-                onChange={(val) => field.onChange(val?.id || "")}
+                
+                onChange={(val) => {
+                  if (!val) {
+                    field.onChange("");
+                    return;
+                  }
+                  const newId = typeof val === "object" && "id" in val ? val.id : val;
+                  field.onChange(String(newId));
+                }}
                 onSearch={handleSearch}
                 fetchNextPage={fetchNextPage}
                 hasNextPage={!!hasNextPage}
@@ -80,7 +93,8 @@ export const TypeSelectField = ({ disabled, initialData }: { disabled?: boolean,
                         };
                       }
                     });
-                    field.onChange(newType.id);
+                    
+                    field.onChange(String(newType.id));
                     
                     if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
                     setDebouncedSearch("");

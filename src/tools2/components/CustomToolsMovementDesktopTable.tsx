@@ -93,16 +93,11 @@ export const CustomToolsMovementDesktopTable = memo(({ movements }: Props) => {
                   />
                 </TableCell>
 
-                {/* ACTIVO / SERIAL */}
+                {/* ACTIVO / ID */}
                 <TableCell className="align-middle py-4 max-w-none">
                   <div className="flex flex-col min-w-0">
-                    {/* Se quitó truncate y se agregó whitespace-normal break-words */}
-                    <span className="text-sm font-bold text-foreground whitespace-normal wrap-break-word block leading-snug">
-                      {mov.tool.serialNumber}
-                    </span>
-                    {/* Se cambió el label a "ID INVENTARIO INTERNO" y se agregó whitespace-normal break-words */}
-                    <span className="text-xs text-muted-foreground font-mono whitespace-normal wrap-break-word block mt-0.5">
-                      ID INVENTARIO INTERNO: {mov.tool.idInventary || t("tools.components.movementDesktopTable.assetInfo.na")}
+                    <span className="text-sm font-bold font-mono text-foreground whitespace-normal break-all block leading-snug">
+                      #{mov.tool.idInventary || mov.tool.id}
                     </span>
                   </div>
                 </TableCell>

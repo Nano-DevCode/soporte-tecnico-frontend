@@ -5,7 +5,6 @@ import {
   ImageIcon, 
   CheckCircle2, 
   XCircle,
-  Barcode, 
   Hash, 
   Monitor, 
   Building2, 
@@ -77,7 +76,6 @@ const ToolsDetailsPage = () => {
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
-              <DetailItem icon={Barcode} label={t("tools.detailsPage.fields.serialNumber")} value={tool.serialNumber || "N/A"} />
               <DetailItem icon={Hash} label={t("tools.detailsPage.fields.idInventary")} value={tool.idInventary || "N/A"} />
               <DetailItem icon={Monitor} label={t("tools.detailsPage.fields.type")} value={tool.toolType?.name || "N/A"} />
               <DetailItem icon={Building2} label={t("tools.detailsPage.fields.brand")} value={tool.model?.brand?.name || "N/A"} />
@@ -155,7 +153,7 @@ const ToolsDetailsPage = () => {
                 <div className="relative w-full aspect-square overflow-hidden rounded-md border shadow-sm">
                   <img 
                     src={tool.imageUrl} 
-                    alt={tool.serialNumber} 
+                    alt={tool.idInventary || "Tool Image"} 
                     className="object-cover w-full h-full"
                   />
                 </div>

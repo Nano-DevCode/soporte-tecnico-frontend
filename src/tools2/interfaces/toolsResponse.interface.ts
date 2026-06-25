@@ -11,7 +11,6 @@ export interface ToolsResponse {
 export interface Tool {
     id:            string;
     idInventary:   string;
-    serialNumber:  string;
     status:        boolean;
     inUse:         boolean;
     description:   string;

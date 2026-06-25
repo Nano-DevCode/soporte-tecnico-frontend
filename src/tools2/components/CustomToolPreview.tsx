@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { Barcode, Layers, Monitor, Package, Activity } from 'lucide-react'
+import { Layers, Monitor, Package, Activity } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { Tool } from '../interfaces/toolsResponse.interface'
 
@@ -54,26 +54,17 @@ const CustomToolPreview = ({ tool, mode = 'out' }: Props) => {
             </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 text-sm">
+            {/* Cambiamos a grid-cols-1 para que el Tipo y el Estado se apilen perfectamente sin huecos */}
+            <div className="grid grid-cols-1 gap-3 text-sm">
               <div className="bg-muted/40 rounded p-2.5 flex flex-col gap-1 border border-border/50">
                   <span className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
                   <Package className="h-3 w-3" /> {t("tools.components.assetPreview.type")}
                   </span>
                   <span className="font-medium truncate">{tool.toolType?.name}</span>
               </div>
-              
-              <div className="bg-muted/40 rounded p-2.5 flex flex-col gap-1 border border-border/50">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
-                  <Barcode className="h-3 w-3" /> {t("tools.components.assetPreview.serial")}
-                  </span>
-                  {/* 2. SERIAL: Quitamos truncate y ponemos break-all whitespace-normal */}
-                  <span className="font-mono text-xs break-all whitespace-normal leading-tight" title={tool.serialNumber}>
-                  {tool.serialNumber || t("tools.components.assetPreview.na")}
-                  </span>
-              </div>
 
               {/* CAMPO: Estado Físico Actual */}
-              <div className="col-span-2 bg-muted/40 rounded p-2.5 flex flex-col gap-1 border border-border/50">
+              <div className="bg-muted/40 rounded p-2.5 flex flex-col gap-1 border border-border/50">
                   <span className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
                   <Activity className="h-3 w-3" /> {t("tools.components.assetPreview.statusLabel")}
                   </span>

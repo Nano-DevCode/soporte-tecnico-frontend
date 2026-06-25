@@ -29,9 +29,8 @@ const ToolsUpdatePage = () => {
   const { updateToolsMutation, tool, isLoading: isLoadingTool } = useTools();
   const { toolsStatus, isLoading: isLoadingStatus } = useToolsStatus();
 
-  // Esquema de validación memorizado para que reaccione a cambios de idioma
+  // 1. Esquema sin serialNumber
   const updateToolSchema = useMemo(() => z.object({
-    serialNumber: z.string().min(1, t("tools.updatePage.validation.serialNumber")).trim(),
     idInventary: z.string().trim().optional(),
     typeId: z.string().min(1, t("tools.updatePage.validation.typeId")),
     brandId: z.string().min(1, t("tools.updatePage.validation.brandId")),
@@ -39,7 +38,7 @@ const ToolsUpdatePage = () => {
     statusId: z.string().min(1, t("tools.updatePage.validation.statusId")),
     invoiceId: z.string().optional(),
     description: z.string().trim().optional(),
-    imageFile: z.any().optional(), // Opcional en modo edición
+    imageFile: z.any().optional(), 
   }), [t]);
 
   type UpdateToolFormValues = z.infer<typeof updateToolSchema>;
@@ -47,7 +46,6 @@ const ToolsUpdatePage = () => {
   const form = useForm<UpdateToolFormValues>({
     resolver: zodResolver(updateToolSchema),
     defaultValues: {
-      serialNumber: "",
       idInventary: "",
       typeId: "",
       brandId: "", 
@@ -59,11 +57,10 @@ const ToolsUpdatePage = () => {
     },
   });
 
-  // Hidratamos el formulario usando los nombres de propiedades de tu interfaz Tools
+  // 2. Hidratación sin serialNumber
   useEffect(() => {
     if (tool) {
       form.reset({
-        serialNumber: tool.serialNumber,
         idInventary: tool.idInventary || "",
         typeId: tool.toolType?.id || "",
         brandId: tool.model?.brand?.id || "", 
@@ -80,7 +77,7 @@ const ToolsUpdatePage = () => {
 
   const onSubmit = async (data: UpdateToolFormValues) => {
     const formData = new FormData();
-    formData.append("serialNumber", data.serialNumber);
+    // 3. FormData sin serialNumber
     formData.append("modelId", data.modelId);
     formData.append("statusId", data.statusId);
     formData.append("typeId", data.typeId);
@@ -130,8 +127,6 @@ const ToolsUpdatePage = () => {
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-10">
-      
-      {/* HEADER */}
       <CustomTitlePageWithBack
         backLink="/tools"
         title={t("tools.updatePage.header.title")}
@@ -148,13 +143,12 @@ const ToolsUpdatePage = () => {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              
               <ToolsForm 
                 isSaving={isUpdating}
                 toolsStatus={toolsStatus}
                 isLoadingStatus={isLoadingStatus}
-                showObservations={false} // Se ocultan observaciones al editar
-                toolInitialData={tool} // Pasa los datos iniciales tipados para sincronizar selectores
+                showObservations={false}
+                toolInitialData={tool}
               />
 
               <div className="flex justify-end gap-4 pt-4 border-t">
@@ -169,7 +163,6 @@ const ToolsUpdatePage = () => {
                   )}
                 </Button>
               </div>
-
             </form>
           </Form>
         </CardContent>

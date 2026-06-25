@@ -36,7 +36,8 @@ export const ToolPreviewCard = ({ tool }: Props) => {
           {tool.imageUrl ? (
             <img 
               src={tool.imageUrl} 
-              alt={t("tools.components.assetPreviewCard.imageAlt", { serial: tool.serialNumber })} 
+              // Quitamos la variable del serial de la traducción y usamos un alt genérico o el ID
+              alt={t("tools.components.assetPreviewCard.imageAlt")} 
               className="w-full h-full object-contain drop-shadow-xl transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
@@ -59,12 +60,10 @@ export const ToolPreviewCard = ({ tool }: Props) => {
                 {t("tools.components.assetPreviewCard.title")}
               </p>
             </div>
-            <h3 className="text-xl font-black leading-tight text-foreground mb-2 break-all whitespace-normal">
-              {tool.serialNumber}
+            {/* Título Principal: Reemplazamos el serial por el ID con fuente monospace */}
+            <h3 className="font-mono text-xl font-black leading-tight text-foreground mb-2 break-all whitespace-normal">
+              #{tool.idInventary || tool.id}
             </h3>
-            <div className="inline-flex items-center rounded-md bg-muted/60 px-2 py-1 text-xs font-mono text-muted-foreground border border-border/50 break-all whitespace-normal text-left">
-              {t("tools.components.assetPreviewCard.id")}: {tool.idInventary || t("tools.components.assetPreviewCard.noId")}
-            </div>
           </div>
 
           {/* Lista de Detalles Estilizada */}

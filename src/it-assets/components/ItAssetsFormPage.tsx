@@ -15,16 +15,16 @@ import { ModelSelectField } from "./ModelSelectField";
 import { InvoiceSelectField } from "./InvoiceSelectField";
 import { ImageUploadField } from "./ImageUploadField";
 
-// Tipados (Asegúrate de que las rutas relativas a tu carpeta de interfaces sean correctas)
+// Tipados
 import type { ItAssetsStatus } from "../interfaces/itAssetsStatusResponse.interface";
 import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
 
 interface ItAssetsFormProps {
   isSaving: boolean;
   showObservations?: boolean;
-  itAssetsStatus: ItAssetsStatus[]; // Tipado con tu interfaz
+  itAssetsStatus: ItAssetsStatus[];
   isLoadingStatus: boolean;
-  itAssetInitialData?: ItAsset | null; // Tipado con tu interfaz
+  itAssetInitialData?: ItAsset | null;
 }
 
 export const ItAssetsForm = ({
@@ -76,7 +76,7 @@ export const ItAssetsForm = ({
           )}
         />
 
-        {/* SELECTORES INFINITOS (Usando el tipado de itAssetInitialData) */}
+        {/* SELECTORES INFINITOS */}
         <TypeSelectField 
           disabled={isSaving} 
           initialData={itAssetInitialData?.itAssetsType ? { id: itAssetInitialData.itAssetsType.id, name: itAssetInitialData.itAssetsType.name } : null} 
@@ -84,7 +84,6 @@ export const ItAssetsForm = ({
         
         <BrandSelectField 
           disabled={isSaving} 
-          // (Asumiendo que dentro de Model existe la propiedad Brand con id y name)
           initialData={itAssetInitialData?.model?.brand ? { id: itAssetInitialData.model.brand.id, name: itAssetInitialData.model.brand.name } : null} 
         />
         
@@ -95,7 +94,6 @@ export const ItAssetsForm = ({
         
         <InvoiceSelectField 
           disabled={isSaving} 
-          // Forzamos el tipado a any en idInternal si Invoice no lo exporta explícitamente en su interfaz base
           initialData={itAssetInitialData?.invoice ? { id: itAssetInitialData.invoice.id, name: itAssetInitialData.invoice.idInternal || "Factura" } : null} 
         />
 
@@ -110,7 +108,12 @@ export const ItAssetsForm = ({
                   ? t("itAssets.components.form.status.labelEdit") 
                   : t("itAssets.components.form.status.labelCreate")} <span className="text-red-500">*</span>
               </FormLabel>
-              <Select onValueChange={field.onChange} value={field.value} disabled={isLoadingStatus || isSaving}>
+              <Select 
+                // IDÉNTICO A TOOLS:
+                onValueChange={field.onChange} 
+                value={field.value || ""} 
+                disabled={isLoadingStatus || isSaving}
+              >
                 <FormControl>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder={t("itAssets.components.form.status.placeholder")} />
@@ -168,7 +171,7 @@ export const ItAssetsForm = ({
         )}
       />
 
-      {/* OBSERVACIONES CONDICIONALES (Solo Creación) */}
+      {/* OBSERVACIONES CONDICIONALES */}
       {showObservations && (
         <FormField
           control={form.control}

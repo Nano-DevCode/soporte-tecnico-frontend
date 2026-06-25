@@ -62,14 +62,9 @@ export const CustomToolsMovementMobileCard = memo(({ movements }: Props) => {
                 </span>
               </div>
 
-              {/* Se quitó 'truncate' y se agregó 'whitespace-normal break-words' */}
-              <p className="text-sm font-bold text-foreground leading-snug whitespace-normal wrap-break-word">
-                {mov.tool.serialNumber}
-              </p>
-
-              {/* Se cambió a 'ID INVENTARIO INTERNO', se quitó 'truncate' y se agregó 'whitespace-normal break-words' */}
-              <p className="text-xs text-muted-foreground font-mono whitespace-normal wrap-break-word">
-                ID INVENTARIO INTERNO: {mov.tool.idInventary || t("tools.components.movementMobileCard.assetInfo.na")}
+              {/* TÍTULO PRINCIPAL: ID DEL ACTIVO (En lugar del número de serie) */}
+              <p className="text-sm font-bold font-mono text-foreground leading-snug whitespace-normal break-all">
+                #{mov.tool.idInventary || mov.tool.id}
               </p>
             </div>
 

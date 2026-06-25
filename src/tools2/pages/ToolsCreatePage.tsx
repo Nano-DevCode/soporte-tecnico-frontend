@@ -26,7 +26,6 @@ const ToolsCreatePage = () => {
   // Metemos el esquema dentro del componente, pero lo memorizamos 
   // para que solo se vuelva a crear si el idioma cambia.
   const createToolSchema = useMemo(() => z.object({
-    serialNumber: z.string().min(1, t("tools.createPage.validation.serialNumber")).trim(),
     idInventary: z.string().trim().optional(),
     typeId: z.string().min(1, t("tools.createPage.validation.typeId")),
     brandId: z.string().min(1, t("tools.createPage.validation.brandId")),
@@ -43,7 +42,6 @@ const ToolsCreatePage = () => {
   const form = useForm<CreateToolFormValues>({
     resolver: zodResolver(createToolSchema),
     defaultValues: {
-      serialNumber: "",
       idInventary: "",
       typeId: "",
       brandId: "", 
@@ -58,7 +56,6 @@ const ToolsCreatePage = () => {
 
   const onSubmit = async (data: CreateToolFormValues) => {
     const formData = new FormData();
-    formData.append("serialNumber", data.serialNumber);
     formData.append("modelId", data.modelId);
     formData.append("statusId", data.statusId);
     formData.append("typeId", data.typeId);

@@ -41,21 +41,6 @@ export const ToolsForm = ({
     <div className="space-y-6">
       {/* === GRID DE 2 COLUMNAS PARA CAMPOS CORTOS === */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-        
-        {/* NUMERO DE SERIE */}
-        <FormField
-          control={form.control}
-          name="serialNumber"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>{t("tools.components.form.serialNumber.label")} <span className="text-red-500">*</span></FormLabel>
-              <FormControl>
-                <Input placeholder={t("tools.components.form.serialNumber.placeholder")} {...field} disabled={isSaving} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         {/* ID INVENTARIO */}
         <FormField

@@ -6,7 +6,6 @@ import { AuthenticatedRoute, NotAuthenticatedRoute } from "./auth/routes/Protect
 import { UsersRoutes } from "./users/users.router";
 import { SchoolPeriodsRoutes } from "./school-periods/school-periods.router";
 import { CenterManagersRoutes } from "./computing-center-managers/center-manager.router";
-import { DepartmentRoutes } from "./departments/departments.routes";
 import { TicketsRoutes } from "./tickets/tickets.router";
 
 import { equipmentRoutes } from "./Equipments/equipments.routes";
@@ -20,6 +19,7 @@ import { SuspenseWrapper } from "./components/custom/SuspenseWrapper";
 import { AuthRoutes } from "./auth/auth.router";
 import { AccountRoutes } from './account/account.router';
 import { ToolsRoutes } from "./tools2/tools.router";
+import { DepartmentRoutes } from "./departments/departments.routes";
 
 // const PanelLayout = lazy(() => import("./layout/PanelLayout"))
 const PanelLayoutV2 = lazy(() => import("./layout/PanelLayoutV2"))
