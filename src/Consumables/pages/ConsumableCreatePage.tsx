@@ -7,6 +7,7 @@ import { ConsumableFields } from "../components/CustomConsumableForm";
 import { CustomBackToList } from "@/components/custom/CustomBackToList";
 import { getConsumableBagIds, saveConsumableBagIds } from "../utils/bagStorage";
 import { handleBackendErrors } from "../utils/handleBackendErrors";
+import { CanAction } from "../permissions/Can";
 
 export const ConsumableCreatePage = () => {
     const navigate = useNavigate();
@@ -52,7 +53,7 @@ export const ConsumableCreatePage = () => {
         try {
             // Sileo resolverá o lanzará el error al flujo del catch
             const createdItem = await sileo.promise(
-                createConsumableAsync(formData), 
+                createConsumableAsync(formData),
                 {
                     loading: { title: t("consumableCreate.loadingTitle") },
                     success: { title: t("consumableCreate.successTitle") },
@@ -92,40 +93,41 @@ export const ConsumableCreatePage = () => {
             if (createdItem && createdItem.id) {
                 const currentIds = getConsumableBagIds();
                 const stringId = String(createdItem.id);
-                
+
                 if (!currentIds.includes(stringId)) {
                     saveConsumableBagIds([...currentIds, stringId]);
                 }
-                
-                navigate("/consumables/batches/create", { 
-                    state: { autoCreatedId: stringId } 
+
+                navigate("/consumables/batches/create", {
+                    state: { autoCreatedId: stringId }
                 });
             }
 
-        } catch (e) { 
-            // Sileo internamente atrapa el error pero el flujo de JS cae aquí si la promesa falla
-            console.error("Error controlado en el formulario:", e); 
+        } catch (e) {
+            void e;
         }
     };
 
     return (
-        <div className="w-full space-y-4">
-            <CustomBackToList 
-                onBack={() => navigate("/consumables")} 
-                backLabel={t("consumableCreate.backLabel")} 
-            />
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-                <ConsumableFields 
-                    control={control} 
-                    register={register} 
-                    setValue={setValue} 
-                    disabled={isCreating} 
-                    errors={errors} 
-                    watch={watch} 
-                    mode="create" 
-                    onCancel={() => navigate("/consumables")}
+        <CanAction permission="CREATE_CONSUMABLE">
+            <div className="w-full space-y-4">
+                <CustomBackToList
+                    onBack={() => navigate("/consumables")}
+                    backLabel={t("consumableCreate.backLabel")}
                 />
-            </form>
-        </div>
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+                    <ConsumableFields
+                        control={control}
+                        register={register}
+                        setValue={setValue}
+                        disabled={isCreating}
+                        errors={errors}
+                        watch={watch}
+                        mode="create"
+                        onCancel={() => navigate("/consumables")}
+                    />
+                </form>
+            </div>
+        </CanAction>
     );
 };

@@ -11,6 +11,7 @@ import { useEquipments } from "../hooks/useEquipments";
 import type { EquipmentCategory } from "../interfaces/equipment.interface";
 import { EquipmentActionDialog } from "../components/EquipmentActionDialog";
 import { t } from "i18next";
+import { CanAction } from "@/Consumables/permissions/Can";
 
 const GET_HEADER_CONFIG = (category: string) => {
   const configs: Record<string, { title: string; icon: LucideIcon }> = {
@@ -34,6 +35,7 @@ export const EquipmentPage = () => {
   const { equipments, meta, isLoading } = useEquipments();
 
   return (
+    <CanAction permission='VIEW_EQUIPMENTS_CATALOG'>
     <div className="space-y-6 p-4 md:p-8 animate-in fade-in duration-500">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         
@@ -47,13 +49,14 @@ export const EquipmentPage = () => {
             {t("eq_page_total_label")}: {meta.total} {meta.total === 1 ? t("eq_page_total_singular") : t("eq_page_total_plural")}
           </span> */}
         </div>
-
+        <CanAction permission='CREATE_EQUIPMENT'>
         <Button asChild className="bg-blue-700 hover:bg-blue-800">
           <Link to={currentCategory === 'all' ? '/equipments/create' : `/equipments/create?category=${currentCategory}`}>
             <Plus className="mr-2 h-4 w-4" />
             {t("eq_page_btn_add")}
           </Link>
         </Button>
+        </CanAction>
       </div>
       <CustomEquipmentFilters />
       <h4 className=" text-sm text-muted-foreground font-semibold mb-1">
@@ -82,6 +85,7 @@ export const EquipmentPage = () => {
       {/* Sigue manejando de forma global el estado de tus diálogos */}
       <EquipmentActionDialog />
     </div>
+    </CanAction>
   );
 };
 

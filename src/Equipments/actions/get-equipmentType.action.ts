@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface EquipmentType {
@@ -37,7 +37,8 @@ export const getEquipmentTypesAction = async (options: FilterOptions): Promise<E
 
     return data;
   } catch (error) {
-    console.error(t("api_equipment_types_fetch_error"), error);
+    // console.error(t("api_equipment_types_fetch_error"), error);
+    void error;
     
     return {
       equipmentTypes: [],
@@ -61,7 +62,8 @@ export const getEquipmentTypeByIdAction = async (
     const { data } = await soporteTecnicoApi.get<EquipmentType>(`/equipmenttypes/${id}`);
     return data;
   } catch (error) {
-    console.error(`${t("api_equipment_type_by_id_error")} ${id}:`, error);
+    // console.error(`${t("api_equipment_type_by_id_error")} ${id}:`, error);
+    void error;
     return null;
   }
 };

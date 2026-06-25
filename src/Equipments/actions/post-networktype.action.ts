@@ -27,10 +27,10 @@ export const createNetworkTypeAction = async (payload: string | { name: string }
         const errorMessage = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
 
         if (Array.isArray(errorMessage)) {
-            throw new Error(errorMessage.join(", "));
+            throw new Error(errorMessage.join(", "), { cause: error });
         }
 
         // Proporcionamos un mensaje de error por defecto si el servidor no envía uno
-        throw new Error(errorMessage || t("api_network_type_create_error"));
+        throw new Error(errorMessage || t("api_network_type_create_error"), { cause: error });
     }
 };

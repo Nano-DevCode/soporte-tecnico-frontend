@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface TypeNetwork {
@@ -39,7 +39,8 @@ export const getNetworkTypesAction = async (options: Options = {}): Promise<Type
 
         return data;
     } catch (error) {
-        console.error(t("api_network_types_fetch_error"), error);
+        // console.error(t("api_network_types_fetch_error"), error);
+        void error;
         return {
             typeNetworks: [],
             meta: {
@@ -63,7 +64,8 @@ export const getNetworkTypeByIdAction = async (
         const { data } = await soporteTecnicoApi.get<TypeNetwork>(`/typenetworks/${id}`);
         return data;
     } catch (error) {
-        console.error(`${t("api_network_type_by_id_error")} ${id}:`, error);
+        // console.error(`${t("api_network_type_by_id_error")} ${id}:`, error);
+        void error;
         return null; // Retorno seguro para evitar excepciones no controladas en el Front
     }
 };

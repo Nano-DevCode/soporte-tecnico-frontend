@@ -26,9 +26,9 @@ export const createComputerTypeEquipmentAction = async (payload: string | Create
         const errorMessage = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
 
         if (Array.isArray(errorMessage)) {
-            throw new Error(errorMessage.join(",gola "));
+            throw new Error(errorMessage.join(", "), { cause: error });
         }
 
-        throw new Error(errorMessage || t("api_computer_type_create_error"));
+        throw new Error(errorMessage || t("api_computer_type_create_error"), { cause: error });
     }
 };

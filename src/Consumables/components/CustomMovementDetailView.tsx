@@ -143,7 +143,7 @@ export const MovementDetailView = ({ movement }: Props) => {
 
                                 return (
                                     <TableRow key={sub.id} className="hover:bg-muted/20 transition-colors text-xs font-semibold">
-                                        <TableCell className="font-medium text-foreground" title={sub.consumable?.description}>
+                                        <TableCell className="font-medium text-foreground cursor-help" title={sub.consumable?.description}>
                                             {sub.consumable?.name || t("movementDetail.notAvailable")}
                                         </TableCell>
                                         <TableCell>

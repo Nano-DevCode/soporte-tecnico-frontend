@@ -28,9 +28,9 @@ export const createOperatingSystemAction = async (payload: string | { name: stri
 
         // Manejo de errores de validación del backend (ej. nombres duplicados)
         if (Array.isArray(errorMessage)) {
-            throw new Error(errorMessage.join(", "));
+            throw new Error(errorMessage.join(", "), { cause: error });
         }
 
-        throw new Error(errorMessage || t("api_operating_system_create_error"));
+        throw new Error(errorMessage || t("api_operating_system_create_error"), { cause: error });
     }
 };

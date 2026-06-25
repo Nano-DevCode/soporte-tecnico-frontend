@@ -8,13 +8,13 @@ import { SchoolPeriodsRoutes } from "./school-periods/school-periods.router";
 import { CenterManagersRoutes } from "./computing-center-managers/center-manager.router";
 import { TicketsRoutes } from "./tickets/tickets.router";
 
-import { equipmentRoutes } from "./Equipments/equipments.routes";
+import { EquipmentRoutes } from "./Equipments/equipments.routes";
 import { toolRoutes } from "./tools/tools.router";
 import { ItAssetsRoutes } from "./it-assets/it-assets.router";
 import { TechnicalReportsRoutes } from "./technical-reports/technical-reports.router";
 import { FoliosRoutes } from "./folios/folio.router";
-import { consumableRoutes } from "./Consumables/consumables.routes";
-import { movementConsumableRoutes } from "./Consumables/movementConsumables.routes";
+import { ConsumableRoutes } from "./Consumables/consumables.routes";
+import { MovementConsumableRoutes } from "./Consumables/movementConsumables.routes";
 import { SuspenseWrapper } from "./components/custom/SuspenseWrapper";
 import { AuthRoutes } from "./auth/auth.router";
 import { AccountRoutes } from './account/account.router';
@@ -64,8 +64,8 @@ const router = createBrowserRouter([
                 element: <DepartmentRoutes/>,
             },
             {
-                path: 'equipments',
-                children: equipmentRoutes,
+                path: 'equipments/*',
+                element: <EquipmentRoutes/>,
             },
             {
                 path: 'tools2',
@@ -88,12 +88,12 @@ const router = createBrowserRouter([
                 children: FoliosRoutes,
             },
             {
-                path: 'consumables',
-                children: consumableRoutes,
+                path: 'consumables/*',
+                element: <ConsumableRoutes/>,
             },
             {
-                path: 'consumable-movements',
-                children: movementConsumableRoutes,
+                path: 'consumable-movements/*',
+                element: <MovementConsumableRoutes/>,
             },
         ],
     },

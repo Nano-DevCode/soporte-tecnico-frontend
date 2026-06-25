@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface PrinterTypeFunction {
@@ -41,8 +41,8 @@ export const getPrinterTypeFunctionAction = async (
 
         return data;
     } catch (error) {
-        console.error(t("api_printer_functions_fetch_error"), error);
-
+        // console.error(t("api_printer_functions_fetch_error"), error);
+        void error;
         return {
             printerTypeFunctions: [],
             meta: {
@@ -65,7 +65,8 @@ export const getPrinterTypeFunctionByIdAction = async (
         const { data } = await soporteTecnicoApi.get<PrinterTypeFunction>(`/printerfunctiontypes/${id}`);
         return data;
     } catch (error) {
-        console.error(`${t("api_printer_function_by_id_error")} ${id}:`, error);
+        // console.error(`${t("api_printer_function_by_id_error")} ${id}:`, error);
+        void error;
         return null;
     }
 };

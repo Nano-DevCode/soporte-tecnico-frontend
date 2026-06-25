@@ -16,7 +16,7 @@ export const registerConsumableOutput = async (
         throw new Error(
             Array.isArray(backendMessage)
                 ? backendMessage.join(", ")
-                : backendMessage || "Error al procesar el movimiento de almacén."
+                : backendMessage || "Error al procesar el movimiento de almacén.", { cause: error }
         );
     }
 };

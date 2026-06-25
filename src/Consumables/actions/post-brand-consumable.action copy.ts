@@ -23,7 +23,7 @@ export const createBrandConsumableAction = async (payload: string | { name: stri
         throw new Error(
             Array.isArray(errorMessage)
                 ? errorMessage.join(", ")
-                : errorMessage || t("api_brand_create_error")
+                : errorMessage || t("api_brand_create_error"), { cause: error }
         );
     }
 };

@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 export interface Brand {
   id: string;
   name: string;
@@ -32,7 +32,8 @@ export const getBrandsAction = async (options: Options = {}): Promise<BrandsResp
     });
     return data;
   } catch (error) {
-    console.error(t("api_brands_fetch_error"), error);
+    // console.error(t("api_brands_fetch_error"), error);
+    void error;
     return {
       brands: [],
       meta: {

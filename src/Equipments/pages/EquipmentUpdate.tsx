@@ -10,6 +10,7 @@ import { CustomBackToList } from "@/components/custom/CustomBackToList";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import { t } from "i18next";
+import { CanAction } from "@/Consumables/permissions/Can";
 
 export const UpdateEquipmentPage = () => {
     const { id } = useParams();
@@ -33,7 +34,7 @@ export const UpdateEquipmentPage = () => {
             updateEquipmentAsync({
                 id,
                 payload: formData
-            }), 
+            }),
             {
                 loading: {
                     title: t("eq_update_loading_title"),
@@ -72,15 +73,18 @@ export const UpdateEquipmentPage = () => {
 
     if (isLoading && !equipment) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-400px">
-                <Loader2 className="animate-spin mb-2 text-primary" size={40} />
-                <p className="font-medium text-muted-foreground">{t("eq_update_fetching_info")}</p>
-            </div>
+            <CanAction permission="EDIT_EQUIPMENT">
+                <div className="flex flex-col items-center justify-center min-h-400px">
+                    <Loader2 className="animate-spin mb-2 text-primary" size={40} />
+                    <p className="font-medium text-muted-foreground">{t("eq_update_fetching_info")}</p>
+                </div>
+            </CanAction>
         );
     }
 
     if (isError || !equipment) {
         return (
+
             <div className="max-w-md mx-auto mt-20 text-center p-8 bg-red-50 rounded-2xl border border-red-100">
                 <h2 className="text-red-800 font-bold text-xl mb-2">{t("eq_update_not_found_title")}</h2>
                 <p className="text-red-600/80 mb-6">{t("eq_update_not_found_desc")}</p>
@@ -92,19 +96,21 @@ export const UpdateEquipmentPage = () => {
     }
 
     return (
-        <div className="p-8 space-y-6">
-            <CustomBackToList 
-                onBack={() => navigate('/equipments')} 
-                backLabel={t("eq_update_back_list_btn")} 
-                actionUrl="equipments" 
-            />
-            
-            <EquipmentForm
-                onSubmit={handleUpdate}
-                isSubmitting={isUpdating}
-                initialData={equipment}
-                mode="update"
-            />
-        </div>
+        <CanAction permission="EDIT_EQUIPMENT">
+            <div className="p-8 space-y-6">
+                <CustomBackToList
+                    onBack={() => navigate('/equipments')}
+                    backLabel={t("eq_update_back_list_btn")}
+                    actionUrl="equipments"
+                />
+
+                <EquipmentForm
+                    onSubmit={handleUpdate}
+                    isSubmitting={isUpdating}
+                    initialData={equipment}
+                    mode="update"
+                />
+            </div>
+        </CanAction>
     );
 };

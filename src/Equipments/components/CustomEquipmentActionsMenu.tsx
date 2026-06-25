@@ -11,6 +11,7 @@ import { Link } from "react-router"; // Asegúrate de que sea react-router-dom
 import type { Equipment } from "../interfaces/equipment.interface";
 import { useEquipmentDialogStore } from "../store/equipment-dialog.store";
 import { t } from "i18next";
+import { CanAction } from "@/Consumables/permissions/Can";
 
 interface Props {
   equipment: Equipment;
@@ -37,24 +38,28 @@ export const CustomEquipmentActionsMenu = ({ equipment }: Props) => {
         </div>
 
         {/* VER DETALLES */}
+        <CanAction permission='VIEW_DETAILS_EQUIPMENT'>
         <DropdownMenuItem className="gap-2 cursor-pointer py-2.5" asChild>
           <Link to={`/equipments/details/${equipment.id}`}>
             <Eye className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm">{t("ui_menu_view_details")}</span>
           </Link>
         </DropdownMenuItem>
-
+        </CanAction>
         {/* EDITAR */}
+        <CanAction permission='EDIT_EQUIPMENT'>
         <DropdownMenuItem className="gap-2 cursor-pointer py-2.5" asChild>
           <Link to={`/equipments/edit/${equipment.id}`}>
             <Pencil className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm">{t("ui_menu_edit_record")}</span>
           </Link>
         </DropdownMenuItem>
+        </CanAction>
 
         <DropdownMenuSeparator className="opacity-50" />
 
         {/* ACTIVAR: Solo si status es false */}
+        <CanAction permission='MODIFICATION_STATUS'>
         {equipment.status === false && (
           <DropdownMenuItem
             className="flex items-center gap-2 cursor-pointer py-2.5 text-emerald-600 focus:text-emerald-600 focus:bg-emerald-50 font-medium"
@@ -75,6 +80,7 @@ export const CustomEquipmentActionsMenu = ({ equipment }: Props) => {
             <span className="text-sm">{t("ui_menu_deactivate_equipment")}</span>
           </DropdownMenuItem>
         )}
+        </CanAction>
       </DropdownMenuContent>
     </DropdownMenu>
   );

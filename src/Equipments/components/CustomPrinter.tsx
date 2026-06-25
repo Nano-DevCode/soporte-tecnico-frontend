@@ -42,7 +42,7 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
 
     // --- Handlers de Creación Rápida Inline con Sileo ---
     const handleCreatePrinterFunction = async (name: string) => {
-        try {
+        // try {
             const newItem = await sileo.promise(functionsHook.onCreate({ name: name.trim() }), {
                 loading: { title: t("eq_printer_toast_func_loading") },
                 success: {
@@ -59,13 +59,13 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
             if (newItem) {
                 setValue("printer.id_type_function", newItem, { shouldValidate: true });
             }
-        } catch {
-            // Bloque vacío para evitar impresiones en consola
-        }
+        // } catch {
+        //     // Bloque vacío para evitar impresiones en consola
+        // }
     };
 
     const handleCreatePrintingType = async (name: string) => {
-        try {
+        // try {
             const newItem = await sileo.promise(typesHook.onCreate({ name: name.trim() }), {
                 loading: { title: t("eq_printer_toast_type_loading") },
                 success: {
@@ -82,9 +82,9 @@ export const PrinterFields = ({ control, register, setValue, disabled, errors }:
             if (newItem) {
                 setValue("printer.id_type_printing", newItem, { shouldValidate: true });
             }
-        } catch {
-            // Bloque vacío para evitar impresiones en consola
-        }
+        // } catch {
+        //     // Bloque vacío para evitar impresiones en consola
+        // }
     };
     // Helper rápido para obtener los errores anidados de la propiedad printer
     const printerErrors = errors?.printer as Record<string, FieldError> | undefined;

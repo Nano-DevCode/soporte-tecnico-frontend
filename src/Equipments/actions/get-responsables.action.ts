@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface Responsible {
@@ -55,8 +55,8 @@ export const getResponsiblesAction = async (options: Options = {}): Promise<Resp
 
         return data;
     } catch (error) {
-        console.error(t("api_responsibles_fetch_error"), error);
-
+        // console.error(t("api_responsibles_fetch_error"), error);
+        void error;
         // Retorno estructuralmente seguro para evitar fallos de lectura de propiedades en la UI (.map(), etc.)
         return {
             responsibles: [],
@@ -88,7 +88,8 @@ export const getResponsibleByIdAction = async (
             name: `${data.name || ''} ${data.first_name || ''} ${data.last_name || ''}`.trim()
         };
     } catch (error) {
-        console.error(`${t("api_responsible_by_id_error")} ${id}:`, error);
+        // console.error(`${t("api_responsible_by_id_error")} ${id}:`, error);
+        void error;
         return null; // Evita excepciones no controladas en el ciclo de vida de los componentes
     }
 };

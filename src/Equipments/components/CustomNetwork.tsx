@@ -38,7 +38,7 @@ export const NetworkFields = ({ control, register, setValue, disabled, errors }:
 
     // --- Handler de Creación Rápida Inline con Sileo ---
     const handleCreateNetworkType = async (name: string) => {
-    try {
+    // try {
         const newItem = await sileo.promise(networkHook.onCreate({ name: name.trim() }), {
             loading: { title: t("eq_network_toast_loading") },
             success: {
@@ -56,8 +56,8 @@ export const NetworkFields = ({ control, register, setValue, disabled, errors }:
         if (newItem) {
             setValue("network.id_type_equipment_network", newItem, { shouldValidate: true });
         }
-    } catch {
-    }
+    // } catch {
+    // }
 };
 
     // Helper rápido para obtener los errores anidados de la propiedad network

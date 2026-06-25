@@ -13,7 +13,7 @@ export const handleBackendErrors = <T extends FieldValues>(
     mappings: ErrorMapping[],
     defaultCallback?: (message: string) => void
 ) => {
-    let backendMessage: string | string[] = "";
+    let backendMessage: string | string[];
 
     // 1. Intentar recuperar si es un error de Axios puro
     if (isAxiosError<BackendError>(error) && error.response?.data?.message) {

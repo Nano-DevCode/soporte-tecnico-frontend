@@ -11,28 +11,27 @@ interface UseCatalogResult {
   isLoading: boolean;
   onCreate: (payload: { name: string }) => Promise<CatalogItem>;
 }
-
 const createCatalogHook = (endpoint: string) => {
   return (): UseCatalogResult => {
     const [data, setData] = useState<CatalogItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await soporteTecnicoApi.get(endpoint);
-        // Ajusta según cómo responda tu backend (ej. response.data.data o directamente response.data)
-        setData(response.data || []);
-      } catch (error) {
-        console.error(`Error fetching from ${endpoint}`, error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
+    // Se recomienda envolver con useCallback o meter la declaración dentro del efecto
     useEffect(() => {
+      const fetchData = async () => {
+        try {
+          setIsLoading(true);
+          const response = await soporteTecnicoApi.get(endpoint);
+          setData(response.data || []);
+        } catch (error) {
+          void error;
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
       fetchData();
-    }, []);
+    }, [endpoint]); 
 
     const handleCreate = async (payload: { name: string }): Promise<CatalogItem> => {
       const response = await soporteTecnicoApi.post(endpoint, payload);

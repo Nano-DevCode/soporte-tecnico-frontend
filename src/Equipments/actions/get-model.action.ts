@@ -39,7 +39,8 @@ export const getModelsAction = async (options: Options = {}): Promise<ModelsResp
 
         return data;
     } catch (error) {
-        console.error(t("api_models_fetch_error"), error);
+        // console.error(t("api_models_fetch_error"), error);
+        void error;
         return {
             models: [],
             meta: { total: 0, page: 1, lastPage: 1 }
@@ -69,7 +70,8 @@ export const getModelsByBrandAction = async (
 
         return data;
     } catch (error) {
-        console.error(`${t("api_models_by_brand_error")} ${brandId}:`, error);
+        // console.error(`${t("api_models_by_brand_error")} ${brandId}:`, error);
+        void error;
         return {
             models: [],
             meta: { total: 0, page: 1, lastPage: 1 }
@@ -88,12 +90,13 @@ export const getModelByIdAction = async (
         const { data } = await soporteTecnicoApi.get<Model>(`/models/${id}`);
         return data;
     } catch (error) {
-        console.error(`${t("api_model_by_id_error")} ${id}:`, error);
+        // console.error(`${t("api_model_by_id_error")} ${id}:`, error);
+        void error;
         return null;
     }
 };
 
-export const createModelAction = async (name: string, brandId: string): Promise<Model> => {
+export const createModelAction = async (name: string, brandId: string): Promise<Model | null> => {
     try {
         const { data } = await soporteTecnicoApi.post<Model>('/models', {
             name,
@@ -102,6 +105,7 @@ export const createModelAction = async (name: string, brandId: string): Promise<
         return data;
     } catch (error: unknown) {
         const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
-        throw new Error(Array.isArray(message) ? message.join(", ") : message || t("api_model_create_error"));
+        console.error(Array.isArray(message) ? message.join(", ") : message || t("api_model_create_error"), error);
+        return null;
     }
 };

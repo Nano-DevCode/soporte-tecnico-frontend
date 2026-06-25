@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface TypePrinting {
@@ -39,8 +39,8 @@ export const getTypePrintingsAction = async (options: Options = {}): Promise<Typ
 
         return data;
     } catch (error) {
-        console.error(t("api_printing_types_fetch_error"), error);
-
+        // console.error(t("api_printing_types_fetch_error"), error);
+        void error;
         return {
             typePrintings: [],
             meta: {
@@ -62,7 +62,8 @@ export const getTypePrintingByIdAction = async (
         const { data } = await soporteTecnicoApi.get<TypePrinting>(`/printingtypes/${id}`);
         return data;
     } catch (error) {
-        console.error(`${t("api_printing_type_by_id_error")} ${id}:`, error);
+        // console.error(`${t("api_printing_type_by_id_error")} ${id}:`, error);
+        void error;
         return null;
     }
 };

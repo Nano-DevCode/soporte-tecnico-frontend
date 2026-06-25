@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface TypeStorage {
@@ -38,7 +38,8 @@ export const getTypeStoragesAction = async (options: Options = {}): Promise<Type
 
         return data;
     } catch (error) {
-        console.error(t("api_storages_fetch_error"), error);
+        // console.error(t("api_storages_fetch_error"), error);
+        void error;
         return {
             typeStorages: [],
             meta: {
@@ -62,7 +63,8 @@ export const getTypeStorageByIdAction = async (
         const { data } = await soporteTecnicoApi.get<TypeStorage>(`/storagetypes/${id}`);
         return data;
     } catch (error) {
-        console.error(`${t("api_storage_by_id_error")} ${id}:`, error);
+        // console.error(`${t("api_storage_by_id_error")} ${id}:`, error);
+        void error;
         return null;
     }
 };

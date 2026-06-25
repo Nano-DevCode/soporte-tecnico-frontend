@@ -50,43 +50,43 @@ export const ComputerFields = ({ control, register, setValue, disabled, errors }
 
     // --- Handlers de Creación Rápida Inline con Sileo ---
     const handleCreateComputerType = async (name: string) => {
-        try {
+        // try {
             const newItem = await sileo.promise(typeHook.onCreate({ name: name.trim() }), {
                 loading: { title: t("ui_computer_type_loading") },
                 success: { title: t("ui_computer_type_success_title"), description: t("ui_computer_type_success_desc", { name }), duration: 4000 },
                 error: (err) => ({ title: t("ui_computer_type_error_title"), description: getBackendErrorMessage(err, t("ui_computer_type_error_desc")), duration: 5000 })
             });
             if (newItem) setValue("computer.id_type_equipment_computer", newItem, { shouldValidate: true });
-        } catch {
-        }
+        // } catch {
+        // }
     };
 
     const handleCreateOS = async (name: string) => {
-        try {
+        // try {
             const newItem = await sileo.promise(osHook.onCreate({ name: name.trim() }), {
                 loading: { title: t("ui_os_loading") },
                 success: { title: t("ui_os_success_title"), description: t("ui_os_success_desc", { name }), duration: 4000 },
                 error: (err) => ({ title: t("ui_os_error_title"), description: getBackendErrorMessage(err, t("ui_os_error_desc")), duration: 5000 })
             });
             if (newItem) setValue("computer.id_type_operating_system", newItem, { shouldValidate: true });
-        } catch {
-        }
+        // } catch {
+        // }
     };
 
     const handleCreateStorage = async (name: string) => {
-        try {
+        // try {
             const newItem = await sileo.promise(storageHook.onCreate({ name: name.trim() }), {
                 loading: { title: t("ui_storage_loading") },
                 success: { title: t("ui_storage_success_title"), description: t("ui_storage_success_desc", { name }), duration: 4000 },
                 error: (err) => ({ title: t("ui_storage_error_title"), description: getBackendErrorMessage(err, t("ui_storage_error_desc")), duration: 5000 })
             });
             if (newItem) setValue("computer.id_type_storage", newItem, { shouldValidate: true });
-        } catch {
-        }
+        // } catch {
+        // }
     };
 
     const handleCreateProcessor = async (data: Record<string, string>) => {
-        try {
+        // try {
             const newItem = await sileo.promise(processorHookInstance.onCreate(data), {
                 loading: { title: t("ui_processor_loading") },
                 success: { title: t("ui_processor_success_title"), description: t("ui_processor_success_desc", { brand: data.brand, model: data.model }), duration: 4000 },
@@ -104,8 +104,8 @@ export const ComputerFields = ({ control, register, setValue, disabled, errors }
                 processorHookInstance.setSelectedId(newItem.id);
                 return newItem;
             }
-        } catch {
-        }
+        // } catch {
+        // }
     };
 
     const computerErrors = errors?.computer as Record<string, FieldError> | undefined;

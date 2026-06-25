@@ -58,8 +58,8 @@ export const useConsumables = () => {
 };
 // --- HOOK: DETALLES DE LA BOLSA (SELECCIONADOS) ---
 export const useConsumablesBagData = (ids: string[]) => {
-    const bagQuery = useQuery({
-        queryKey: ['consumables-bag-details', ids],
+    const {data,isLoading} = useQuery({
+        queryKey: ['consumables-bag-details'],
         queryFn: async () => {
             if (ids.length === 0) return [];
 
@@ -93,7 +93,9 @@ export const useConsumablesBagData = (ids: string[]) => {
     });
 
     return {
-        bagConsumables: bagQuery.data ?? [],
-        isBagLoading: bagQuery.isLoading,
+        // bagConsumables: bagQuery.data ?? [],
+        // isBagLoading: bagQuery.isLoading,
+        bagConsumables: (data ?? []).filter(item => ids.includes(String(item.id))),
+        isBagLoading: isLoading,
     };
 };

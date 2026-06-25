@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface ComputerTypeEquipment {
@@ -40,10 +40,8 @@ export const getComputerTypeEquipmentsAction = async (
         });
 
         return data;
-    } catch (error) {
-        console.error(t("api_computer_types_fetch_error"), error);
-
-        // Retorno estructuralmente seguro para evitar fallos de lectura de propiedades en cascada (UI)
+    } catch (e)  { void e;
+        // console.error(t("api_computer_types_fetch_error"), error);
         return {
             computerTypeEquipments: [],
             meta: {
@@ -66,8 +64,9 @@ export const getComputerTypeEquipmentByIdAction = async (
     try {
         const { data } = await soporteTecnicoApi.get<ComputerTypeEquipment>(`/computerequipmenttypes/${id}`);
         return data;
-    } catch (error) {
-        console.error(`${t("api_computer_types_by_id_error")} ${id}:`, error);
+    } catch (e)  {
+        void e;
+        // console.error(`${t("api_computer_types_by_id_error")} ${id}:`, error);
         return null; 
     }
 };

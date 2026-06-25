@@ -146,7 +146,8 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
             if (newItem) {
                 setValue("id_type_equipment", newItem, { shouldValidate: true });
             }
-        } catch {
+        } catch(error) {
+            void error;
         }
     };
 
@@ -170,7 +171,8 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                 // Limpia el modelo de forma explícita al crear una marca nueva
                 setValue("id_model", null, { shouldValidate: true });
             }
-        } catch {
+        } catch (error){
+            void error;
         }
     };
 
@@ -194,7 +196,8 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                 })
             });
             if (newModelFromDB) setValue("id_model", newModelFromDB, { shouldValidate: true });
-        } catch {
+        } catch (error) {
+            void error;
         }
     };
 
@@ -430,7 +433,7 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                                 if (typeof selectedValue === 'object') {
                                     const currentId = selectedValue.id_res || selectedValue.id;
 
-                                    let fullName = "";
+                                    let fullName;
                                     if (selectedValue.name && (selectedValue.first_name || selectedValue.last_name)) {
                                         fullName = `${selectedValue.name || ''} ${selectedValue.first_name || ''} ${selectedValue.last_name || ''}`.replace(/\s+/g, ' ').trim();
                                         if (selectedValue.area) {

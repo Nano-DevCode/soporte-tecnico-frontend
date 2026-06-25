@@ -8,6 +8,7 @@ import { useConsumablesCreateUpdate, useConsumable } from "../hooks/useConsumabl
 import { CustomBackToList } from "@/components/custom/CustomBackToList";
 import { handleBackendErrors } from "../utils/handleBackendErrors";
 import { Loader2 } from "lucide-react";
+import { CanAction } from "../permissions/Can";
 
 export const ConsumableEditPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -90,8 +91,9 @@ export const ConsumableEditPage = () => {
                 },
             });
             navigate("/consumables");
-        } catch (e) { 
-            console.error("Error en el flujo de actualización:", e); 
+        } catch (e) {
+            // console.error("Error en el flujo de actualización:", e); 
+            void e;
         }
     };
 
@@ -105,21 +107,23 @@ export const ConsumableEditPage = () => {
     }
 
     return (
-        <div className="w-full space-y-4">
-            <CustomBackToList onBack={() => navigate("/consumables")} backLabel={t("consumableEdit.backLabel")} />
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-                <ConsumableFields
-                    control={control}
-                    register={register}
-                    setValue={setValue}
-                    disabled={isUpdating}
-                    errors={errors}
-                    watch={watch}
-                    mode="update"
-                    initialData={consumable ? { imageUrl: consumable.imageUrl } : undefined}
-                    onCancel={() => navigate("/consumables")}
-                />
-            </form>
-        </div>
+        <CanAction permission="EDIT_CONSUMABLE">
+            <div className="w-full space-y-4">
+                <CustomBackToList onBack={() => navigate("/consumables")} backLabel={t("consumableEdit.backLabel")} />
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+                    <ConsumableFields
+                        control={control}
+                        register={register}
+                        setValue={setValue}
+                        disabled={isUpdating}
+                        errors={errors}
+                        watch={watch}
+                        mode="update"
+                        initialData={consumable ? { imageUrl: consumable.imageUrl } : undefined}
+                        onCancel={() => navigate("/consumables")}
+                    />
+                </form>
+            </div>
+        </CanAction>
     );
 };

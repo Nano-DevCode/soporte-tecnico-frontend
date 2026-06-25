@@ -7,6 +7,7 @@ import type { Consumable } from "../interfaces/consumable.interfaces";
 import { CustomConsumableActionsMenu } from "./CustomConsumablesActionsMenu";
 import { Link } from "react-router";
 import { t } from "i18next"; // <-- Hook para traducción reactiva
+import { CanAction } from "../permissions/Can";
 
 interface Props {
     item: Consumable;
@@ -113,6 +114,7 @@ export function ConsumableCard({ item, isInBag, onToggleBag }: Props) {
                 {/* Footer con el botón de acción */}
                 <CardFooter className="justify-center items-center w-full p-4 pt-0">
                     <div className="flex items-center gap-2 w-full max-w-sm">
+                        <CanAction permission="ADD_CONSUMABLE_BAG">
                         <Button
                             onClick={(e) => {
                                 e.preventDefault(); 
@@ -138,12 +140,15 @@ export function ConsumableCard({ item, isInBag, onToggleBag }: Props) {
                                 </>
                             )}
                         </Button>
+                        </CanAction>
 
                         <div 
-                            className="flex items-center justify-center h-10 w-10 border rounded-lg border-zinc-200 bg-white hover:bg-zinc-50 dark:bg-zinc-950 dark:border-zinc-800 transition-all shadow-sm"
+                            className="border-muted-foreground"
                             onClick={(e) => e.preventDefault()}
                         >
+                            <CanAction permission="EDIT_CONSUMABLE">
                             <CustomConsumableActionsMenu consumable={item} />
+                            </CanAction>
                         </div>
                     </div>
                 </CardFooter>

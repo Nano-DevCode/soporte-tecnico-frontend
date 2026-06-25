@@ -23,9 +23,9 @@ export const createTypeEquipmentAction = async (payload: string | CreateComputer
         const errorMessage = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
 
         if (Array.isArray(errorMessage)) {
-            throw new Error(errorMessage.join(", "));
+            throw new Error(errorMessage.join(", "), { cause: error });
         }
 
-        throw new Error(errorMessage || t("api_equipment_type_create_error"));
+        throw new Error(errorMessage || t("api_equipment_type_create_error"), { cause: error });
     }
 };

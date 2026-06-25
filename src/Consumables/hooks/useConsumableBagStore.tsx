@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getConsumableBagIds, saveConsumableBagIds, CONSUMABLE_BAG_EVENT } from "../utils/bagStorage";
+import type { Consumable } from "../interfaces/consumable.interfaces";
 
 export const useConsumableBagStore = () => {
   const [bagIds, setBagIds] = useState<string[]>(() => getConsumableBagIds());
@@ -30,12 +31,22 @@ export const useConsumableBagStore = () => {
   const clearBag = () => {
     saveConsumableBagIds([]);
   };
+  const saveFormDraft = (data: Consumable) => {
+    localStorage.setItem("form_draft", JSON.stringify(data));
+  };
+
+  const getFormDraft = (): Consumable | null => {
+    const draft = localStorage.getItem("form_draft");
+    return draft ? (JSON.parse(draft) as Consumable) : null;
+  };
 
   return {
     bagIds,
     toggleBagItem,
     removeItem,
     clearBag,
+    saveFormDraft,
+    getFormDraft,
     isInBag: (id: string) => bagIds.includes(String(id)),
   };
 };

@@ -928,7 +928,7 @@
   "movementDetail.table.subtotal": "Subtotal",
   "movementDetail.noDescription": "Consumable without description",
   "movementDetail.unitShort": "u.",
-  "movementFilters.searchPlaceholder": "Search by Folio, observations or description...",
+  "movementFilters.searchPlaceholder": "Search by Movement Code, num. requirement, observations ...",
   "movementFilters.department": "Department",
   "movementFilters.movementType": "Movement Type",
   "movementFilters.application": "Movement application",
@@ -1018,7 +1018,11 @@
   "custom_nav_content_catalog_consumables": "Consumables catalog",
   "custom_nav_content_movements_history": "Movement history",
   "custom_nav_content_list_equipments":"Equipments list",
-
+  "movements.removeConsumable":"Remove Consumible",
+  "consumablePage.totalConsumables": "Total filter-base consumables",
+  "consumablePage.totalConsumables_one": "Total filter-base consumable: 1 consumable",
+  "consumablePage.totalConsumables_other": "Total filter-base consumable: {{count}} consumables",
+  "movementsPage.totalOperations": "Total filter-based operations",
   "itAssets": {
     "mainPage": {
       "titleCard": {

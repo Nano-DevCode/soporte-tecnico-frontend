@@ -1,79 +1,156 @@
 import { lazy } from "react";
-import { RoleRoute } from "@/auth/routes/ProtectedRoutes";
+import { useRoutes } from "react-router";
+import { CanRoutePage } from "./permissions/CanRoute";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 
+// Carga perezosa de las páginas
 const ConsumablePage = lazy(() => import('./pages/ConsumablePage').then(m => ({ default: m.ConsumablePage })));
 const ConsumableCreatePage = lazy(() => import('./pages/ConsumableCreatePage').then(m => ({ default: m.ConsumableCreatePage })));
 const ConsumableEditPage = lazy(() => import('./pages/ConsumableEditPage').then(m => ({ default: m.ConsumableEditPage })));
 const ConsumableOutputPage = lazy(() => import('./pages/ConsumableOutputPage').then(m => ({ default: m.ConsumableOutputPage })));
-
-// Páginas que usan exportación por defecto (default export)
 const ConsumableDetailsPage = lazy(() => import('./pages/ConsumableDetailsPage'));
 const CreateBatchPage = lazy(() => import('./pages/CreateBatchePage'));
 
+export const ConsumableRoutes = () => {
+    return useRoutes([
+        {
+            index: true,
+            element: (
+                <SuspenseWrapper>
+                    <CanRoutePage permission="VIEW_CONSUMABLES_CATALOG">
+                        <ConsumablePage />
+                    </CanRoutePage>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'create',
+            element: (
+                <SuspenseWrapper>
+                    <CanRoutePage permission="CREATE_CONSUMABLE">
+                        <ConsumableCreatePage />
+                    </CanRoutePage>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'edit/:id',
+            element: (
+                <SuspenseWrapper>
+                    <CanRoutePage permission="EDIT_CONSUMABLE">
+                        <ConsumableEditPage />
+                    </CanRoutePage>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'details/:id',
+            element: (
+                <SuspenseWrapper>
+                    <CanRoutePage permission="VIEW_CONSUMABLE_DETAILS">
+                        <ConsumableDetailsPage />
+                    </CanRoutePage>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'batches/create',
+            element: (
+                <SuspenseWrapper>
+                    <CanRoutePage permission="CREATE_BATCH">
+                        <CreateBatchPage />
+                    </CanRoutePage>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'consumables/outputs/create',
+            element: (
+                <SuspenseWrapper>
+                    <CanRoutePage permission="CREATE_CONSUMABLE_OUTPUT">
+                        <ConsumableOutputPage />
+                    </CanRoutePage>
+                </SuspenseWrapper>
+            )
+        }
+    ]);
+};
+// import { lazy } from "react";
+// import { useRoutes } from "react-router";
+// import { RoleRoute } from "@/auth/routes/ProtectedRoutes";
+// import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 
-export const consumableRoutes = [
-    {
-        index: true,
-        element: (
-            <SuspenseWrapper>
-                <RoleRoute allowedRoles={["isSuperAdmin","isInventory","isBossCC","isCoordinator"]}>
-                    <ConsumablePage />
-                </RoleRoute>
-            </SuspenseWrapper>
-        )
-    },
-    {
-        path: 'create',
-        element: (
-            <SuspenseWrapper>
-                <RoleRoute allowedRoles={["isSuperAdmin","isInventory"]}>
-                    <ConsumableCreatePage />
-                </RoleRoute>
-            </SuspenseWrapper>
-        )
-    },
-    {
-        path: 'edit/:id',
-        element: (
-            <SuspenseWrapper>
-                <RoleRoute allowedRoles={["isSuperAdmin","isInventory"]}>
-                    <ConsumableEditPage />
-                </RoleRoute>
-            </SuspenseWrapper>
-        )
-    },
-    {
-        path: 'details/:id',
-        element: (
-            <SuspenseWrapper>
-                <RoleRoute allowedRoles={["isSuperAdmin","isInventory","isBossCC","isCoordinator"]}>
-                    <ConsumableDetailsPage />
-                </RoleRoute>
-            </SuspenseWrapper>
-        )
-    },
-    {
-        path: 'batches/create',
-        element: (
-            <SuspenseWrapper>
-                <RoleRoute allowedRoles={["isSuperAdmin","isInventory"]}>
-                    <CreateBatchPage />
-                </RoleRoute>
-            </SuspenseWrapper>
-        )
-    },
-    {
-        path: 'consumables/outputs/create',
-        element: (
-            <SuspenseWrapper>
-                <RoleRoute allowedRoles={["isSuperAdmin","isInventory"]}>
-                    <ConsumableOutputPage />
-                </RoleRoute>
-            </SuspenseWrapper>
-        )
-    }
-];
+// const ConsumablePage = lazy(() => import('./pages/ConsumablePage').then(m => ({ default: m.ConsumablePage })));
+// const ConsumableCreatePage = lazy(() => import('./pages/ConsumableCreatePage').then(m => ({ default: m.ConsumableCreatePage })));
+// const ConsumableEditPage = lazy(() => import('./pages/ConsumableEditPage').then(m => ({ default: m.ConsumableEditPage })));
+// const ConsumableOutputPage = lazy(() => import('./pages/ConsumableOutputPage').then(m => ({ default: m.ConsumableOutputPage })));
+// const ConsumableDetailsPage = lazy(() => import('./pages/ConsumableDetailsPage'));
+// const CreateBatchPage = lazy(() => import('./pages/CreateBatchePage'));
+
+// export const ConsumableRoutes = () => {
+//     return useRoutes([
+//         {
+//             index: true,
+//             element: (
+//                 <SuspenseWrapper>
+//                     <RoleRoute allowedRoles={["isSuperAdmin", "isInventory", "isBossCC", "isCoordinator"]}>
+//                         <ConsumablePage />
+//                     </RoleRoute>
+//                 </SuspenseWrapper>
+//             )
+//         },
+//         {
+//             path: 'create',
+//             element: (
+//                 <SuspenseWrapper>
+//                     <RoleRoute allowedRoles={["isSuperAdmin", "isInventory"]}>
+//                         <ConsumableCreatePage />
+//                     </RoleRoute>
+//                 </SuspenseWrapper>
+//             )
+//         },
+//         {
+//             path: 'edit/:id',
+//             element: (
+//                 <SuspenseWrapper>
+//                     <RoleRoute allowedRoles={["isSuperAdmin", "isInventory"]}>
+//                         <ConsumableEditPage />
+//                     </RoleRoute>
+//                 </SuspenseWrapper>
+//             )
+//         },
+//         {
+//             path: 'details/:id',
+//             element: (
+//                 <SuspenseWrapper>
+//                     <RoleRoute allowedRoles={["isSuperAdmin", "isInventory", "isBossCC", "isCoordinator"]}>
+//                         <ConsumableDetailsPage />
+//                     </RoleRoute>
+//                 </SuspenseWrapper>
+//             )
+//         },
+//         {
+//             path: 'batches/create',
+//             element: (
+//                 <SuspenseWrapper>
+//                     <RoleRoute allowedRoles={["isSuperAdmin", "isInventory"]}>
+//                         <CreateBatchPage />
+//                     </RoleRoute>
+//                 </SuspenseWrapper>
+//             )
+//         },
+//         {
+//             path: 'consumables/outputs/create',
+//             element: (
+//                 <SuspenseWrapper>
+//                     <RoleRoute allowedRoles={["isSuperAdmin", "isInventory"]}>
+//                         <ConsumableOutputPage />
+//                     </RoleRoute>
+//                 </SuspenseWrapper>
+//             )
+//         }
+//     ]);
+// };
 // import { ConsumableCreatePage } from "./pages/ConsumableCreatePage";
 // // import { ConsumableDetailsPage } from "./pages/ConsumableDetailsPage";
 // import { ConsumableEditPage } from "./pages/ConsumableEditPage";

@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface Processor {
@@ -43,7 +43,8 @@ export const getProcessorsAction = async (options: Options = {}): Promise<Proces
 
         return data;
     } catch (error) {
-        console.error(t("api_processors_fetch_error"), error);
+        // console.error(t("api_processors_fetch_error"), error);
+        void error;
         return {
             processors: [],
             meta: {
@@ -68,7 +69,8 @@ export const getProcessorByIdAction = async (
             name: `${data.brand || ''} ${data.model || ''} ${data.description || ''}`.trim()
         };
     } catch (error) {
-        console.error(`${t("api_processor_by_id_error")} ${id}:`, error);
+        // console.error(`${t("api_processor_by_id_error")} ${id}:`, error);
+        void error;
         return null;
     }
 };

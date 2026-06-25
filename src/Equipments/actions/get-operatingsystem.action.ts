@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 // --- INTERFACES ---
 export interface OperatingSystem {
@@ -44,7 +44,8 @@ export const getOperatingSystemsAction = async (options: Options = {}): Promise<
 
         return data;
     } catch (error) {
-        console.error(t("api_operating_systems_fetch_error"), error);
+        // console.error(t("api_operating_systems_fetch_error"), error);
+        void error;
         return {
             operatingSystems: [],
             meta: {
@@ -66,7 +67,8 @@ export const getOperatingSystemByIdAction = async (
         const { data } = await soporteTecnicoApi.get<OperatingSystem>(`/operatingsystems/${id}`);
         return data;
     } catch (error) {
-        console.error(`${t("api_operating_system_by_id_error")} ${id}:`, error);
+        // console.error(`${t("api_operating_system_by_id_error")} ${id}:`, error);
+        void error;
         return null;
     }
 };

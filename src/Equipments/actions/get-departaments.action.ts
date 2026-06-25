@@ -1,5 +1,5 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 export interface DepartmentResponse {
     data: Department[];
@@ -55,7 +55,8 @@ export const getDepartmentByIdAction = async (id: string): Promise<Department> =
         const { data } = await soporteTecnicoApi.get<Department>(`/departments/${id}`);
         return data;
     } catch (error) {
-        console.error(`${t("api_departments_by_id_error")} ${id}:`, error);
+        // console.error(`${t("api_departments_by_id_error")} ${id}:`, error);
+        void error;
         throw error;
     }
 };

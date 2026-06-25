@@ -4,6 +4,7 @@ export interface CatalogItem {
 }
 
 export interface Consumable {
+  consumableInfo: unknown;
   id: string;
   item_code: string;
   name: string;

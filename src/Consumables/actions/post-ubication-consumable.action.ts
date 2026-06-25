@@ -23,7 +23,7 @@ export const createUbicationConsumableAction = async (payload: string | { name: 
         throw new Error(
             Array.isArray(errorMessage)
                 ? errorMessage.join(", ")
-                : errorMessage || t("api_ubication_consumable_create_error")
+                : errorMessage || t("api_ubication_consumable_create_error"), { cause: error }
         );
     }
 };

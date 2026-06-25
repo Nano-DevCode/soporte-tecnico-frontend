@@ -26,6 +26,6 @@ export const createModelAction = async (payload: string | { name: string }, id_b
         return data; 
     } catch (error: unknown) {
         const errorMessage = (error as { response?: { data?: { message?: string } } }).response?.data?.message || t("api_model_create_error");
-        throw new Error(Array.isArray(errorMessage) ? errorMessage.join(", ") : errorMessage);
+        throw new Error(Array.isArray(errorMessage) ? errorMessage.join(", ") : errorMessage, { cause: error });
     }
 };

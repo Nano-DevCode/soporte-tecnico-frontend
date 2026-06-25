@@ -1,16 +1,20 @@
-import { ArrowDownRight, ArrowUpRight, Eye } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router";
 import { t } from "i18next";
 import type { GroupedMovement } from "../interfaces/consumable-movement.interfaces";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useCan } from "../permissions/useCan";
 
 interface Props {
     movements: GroupedMovement[];
 }
 
 export const CustomMovementsDesktopTable = ({ movements }: Props) => {
+    const { can } = useCan();
+    const canViewMovementDetails = can("VIEW_MOVEMENT_DETAILS");
+
     if (movements.length === 0) {
         return (
             <div className="hidden md:block text-center p-8 border rounded-lg bg-card text-muted-foreground">
@@ -91,11 +95,17 @@ export const CustomMovementsDesktopTable = ({ movements }: Props) => {
                                     ${group.total_cost.toFixed(2)}
                                 </TableCell>
                                 <TableCell className="text-center">
-                                    <Button size="icon" variant="ghost" className="h-8 w-8 rounded-md" asChild>
-                                        <Link to={`/consumable-movements/details/${encodeURIComponent(group.code_movement_aplication)}`}>
-                                            <Eye className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-                                        </Link>
-                                    </Button>
+                                    {canViewMovementDetails ? (
+                                        <Button size="icon" variant="ghost" className="h-8 w-8 rounded-md" asChild>
+                                            <Link to={`/consumable-movements/details/${encodeURIComponent(group.code_movement_aplication)}`}>
+                                                <Eye className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                                            </Link>
+                                        </Button>
+                                    ) : (
+                                        <Button size="icon" variant="ghost" className="h-8 w-8 rounded-md cursor-not-allowed opacity-40" disabled>
+                                            <EyeOff className="h-4 w-4 text-muted-foreground/50" />
+                                        </Button>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         );

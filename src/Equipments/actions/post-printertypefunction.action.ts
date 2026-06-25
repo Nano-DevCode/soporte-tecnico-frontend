@@ -28,9 +28,9 @@ export const createPrinterTypeFunctionAction = async (payload: string | { name: 
 
         // Manejo de errores de validación del backend
         if (Array.isArray(errorMessage)) {
-            throw new Error(errorMessage.join(", "));
+            throw new Error(errorMessage.join(", "), { cause: error });
         }
 
-        throw new Error(errorMessage || t("api_printer_function_create_error"));
+        throw new Error(errorMessage || t("api_printer_function_create_error"), { cause: error });
     }
 };

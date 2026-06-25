@@ -1,6 +1,6 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 import { getEquipmentTypesAction, type EquipmentType } from "./get-equipmentType.action";
-import { t } from "i18next";
+// import { t } from "i18next";
 
 export const getEquipmentsAction = async (options: {
   category: string;
@@ -50,7 +50,8 @@ export const getEquipmentsAction = async (options: {
     };
 
   } catch (error) {
-    console.error(t("api_equipments_fetch_error"), error);
+    // console.error(t("api_equipments_fetch_error"), error);
+    void error;
     return { data: [], meta: { total: 0, lastPage: 1, page: 1 } };
   }
 };

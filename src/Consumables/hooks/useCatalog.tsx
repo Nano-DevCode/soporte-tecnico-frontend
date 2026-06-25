@@ -105,7 +105,7 @@ export const CatalogSelector = ({
 
         // 2. Hidratación: Para cuando se carga un registro existente (singleData)
         if (singleData && !listOptions.some(opt => opt.id === String(singleData.id))) {
-            let singleName = "";
+            let singleName;
 
             if (singleData.folio) {
                 const singleDesc = singleData.description ? ` - ${singleData.description}` : '';
@@ -148,7 +148,7 @@ export const CatalogSelector = ({
                 });
             }
         } catch (error) {
-            console.error("Error controlado en CatalogSelector:", error);
+            console.error("Error Catalogs:", error);
         }
     };
 

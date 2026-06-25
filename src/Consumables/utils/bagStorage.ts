@@ -15,6 +15,7 @@ export const saveConsumableBagIds = (ids: string[]) => {
     // Notificamos a cualquier componente o custom hook que escuche
     window.dispatchEvent(new Event(CONSUMABLE_BAG_EVENT));
   } catch (error) {
-    console.error("Error guardando la bolsa:", error);
+    // console.error("Error en la bolsa:", error);
+    void error;
   }
 };

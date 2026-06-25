@@ -6,6 +6,7 @@ import { CustomBackToList } from "@/components/custom/CustomBackToList";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import { t } from "i18next";
+import { CanAction } from "@/Consumables/permissions/Can";
 
 export const CreateEquipmentPage = () => {
     const navigate = useNavigate();
@@ -32,28 +33,30 @@ export const CreateEquipmentPage = () => {
 
                 return {
                     title: t("eq_create_page_toast_error_title"),
-                    description: backendMessage, 
+                    description: backendMessage,
                     duration: 6000
                 };
             }
         });
 
         navigate("/equipments");
-    };  
+    };
 
     return (
-        <div className="">
-            <CustomBackToList
-                onBack={() => navigate('/equipments')}
-                backLabel={t("eq_create_page_back_label")}
-                actionUrl="equipments"
-            />
+        <CanAction permission="CREATE_EQUIPMENT">
+            <div className="">
+                <CustomBackToList
+                    onBack={() => navigate('/equipments')}
+                    backLabel={t("eq_create_page_back_label")}
+                    actionUrl="equipments"
+                />
 
-            <EquipmentForm
-                onSubmit={handleFormSubmit}
-                isSubmitting={isCreating}
-                mode={"create"}
-            />
-        </div>
+                <EquipmentForm
+                    onSubmit={handleFormSubmit}
+                    isSubmitting={isCreating}
+                    mode={"create"}
+                />
+            </div>
+        </CanAction>
     );
 };

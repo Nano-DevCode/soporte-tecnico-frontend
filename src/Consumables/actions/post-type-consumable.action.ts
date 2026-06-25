@@ -23,7 +23,7 @@ export const createTypeConsumableAction = async (payload: string | { name: strin
         throw new Error(
             Array.isArray(errorMessage)
                 ? errorMessage.join(", ")
-                : errorMessage || t("api_type_consumable_create_error")
+                : errorMessage || t("api_type_consumable_create_error"), { cause: error }
         );
     }
 };

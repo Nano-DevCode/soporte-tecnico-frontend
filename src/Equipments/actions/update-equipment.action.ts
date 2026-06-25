@@ -45,7 +45,8 @@ export const equipmentUpdateAction = async (id: string, dto: Partial<EquipmentPa
     throw new Error(
       Array.isArray(errorMessage) 
         ? errorMessage.join(" | ") 
-        : errorMessage || "Error al actualizar el equipo"
+        : errorMessage || "Error al actualizar el equipo",
+      { cause: error }
     );
   }
 };
