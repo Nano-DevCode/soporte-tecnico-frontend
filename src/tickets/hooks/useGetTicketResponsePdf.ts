@@ -1,10 +1,15 @@
-import { useMutation } from "@tanstack/react-query";
 import { getTicketResponsePdfAction } from "../actions/get-ticket-response-pdf";
+import { useState } from "react";
 
 export const useGetTicketResponsePdf = () => {
-    return useMutation({
-        mutationFn: getTicketResponsePdfAction,
-        onSuccess: (blob) => {
+    const [isPending, setIsPending] = useState(false);
+
+    // Mantenemos los mismos argumentos que requiere tu action
+    const mutate = async (...args: Parameters<typeof getTicketResponsePdfAction>) => {
+        setIsPending(true);
+        try {
+            const blob = await getTicketResponsePdfAction(...args);
+
             const fileUrl = window.URL.createObjectURL(
                 new Blob([blob], { type: 'application/pdf' })
             );
@@ -17,9 +22,12 @@ export const useGetTicketResponsePdf = () => {
             link.remove();
 
             setTimeout(() => window.URL.revokeObjectURL(fileUrl), 1000);
-        },
-        onError: (error) => {
+        } catch (error) {
             console.error("Error al obtener el PDF", error);
+        } finally {
+            setIsPending(false);
         }
-    });
+    };
+
+    return { mutate, mutateAsync: mutate, isPending };
 };

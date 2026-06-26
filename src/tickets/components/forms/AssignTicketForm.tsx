@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { BrushCleaning, Loader2, Send, UserPlus, X } from "lucide-react";
+import { BrushCleaning, Loader2, Send, Tickets, UserPlus, X } from "lucide-react";
 
 import {
     Form,
@@ -24,6 +24,8 @@ import React from "react";
 import type { Technician } from "@/common/technicians/interfaces/technicians.interface";
 import type { TicketDetailsResponse } from "@/tickets/interfaces/ticket-details.response";
 import { TicketStatus } from "@/tickets/utils/ticket-state-machine";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
+import { Badge } from "@/components/ui/badge";
 
 interface techValue {
     value: string;
@@ -136,16 +138,24 @@ export const AssignTicketForm = ({ onSubmit, isPending, onCancel, ticket, techni
                                                                     key={item.value}
                                                                     value={item}
                                                                     disabled={isDisabled}
-                                                                    className="flex flex-col items-start py-2 px-3"
                                                                 >
-                                                                    <span className="font-medium">{item.label}</span>
-
-                                                                    <div className="flex gap-2 text-xs text-muted-foreground">
-                                                                        <span className="font-semibold bg-secondary px-1.5 rounded-full">
-                                                                            {item.originalData.num_control}
-                                                                        </span>
-                                                                        <span className="truncate">{item.originalData.user.email}</span>
-                                                                    </div>
+                                                                    <Item size={"sm"} className="p-0 flex-1">
+                                                                        <ItemContent>
+                                                                            <ItemTitle >{item.label}</ItemTitle>
+                                                                            <ItemDescription className="flex gap-2 text-xs items-center">
+                                                                                <Badge variant={"secondary"}>
+                                                                                    {item.originalData.num_control}
+                                                                                </Badge>
+                                                                                <span className="truncate">{item.originalData.user.email}</span>
+                                                                            </ItemDescription>
+                                                                        </ItemContent>
+                                                                        <ItemActions className="ml-auto">
+                                                                            <Badge variant={"secondary"} className="font-bold">
+                                                                                <Tickets />
+                                                                                {item.originalData.assignTicketsCount}
+                                                                            </Badge>
+                                                                        </ItemActions>
+                                                                    </Item>
                                                                 </ComboboxItem>
                                                             );
                                                         }}

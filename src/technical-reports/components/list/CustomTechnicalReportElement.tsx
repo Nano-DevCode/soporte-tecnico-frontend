@@ -12,6 +12,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { toFormatLocalDateString } from "@/lib/helpers/to-format-local-date-string";
 import { TextHighlighter } from "@/components/custom/TextHoi";
 import { TechnicalIsResolvedBadge } from "../ui/TechnicalIsResolvedBadge";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router";
 
 export interface SimpleTicket {
     id: string;
@@ -35,7 +37,8 @@ interface Props {
 }
 
 export const CustomTechnicalReportElement = ({ ticket, searchTerm }: Props) => {
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(true);
 
     const reports = ticket.technical_reports || [];
@@ -81,9 +84,12 @@ export const CustomTechnicalReportElement = ({ ticket, searchTerm }: Props) => {
                                         <div className="absolute -left-1 top-7.5 bottom-0 w-1 bg-background" />
                                     )}
 
-                                    <div className="bg-card border shadow-sm rounded-xl p-3 transition-all hover:shadow-md hover:border-primary/20">
+                                    <div
+                                        onDoubleClick={() => navigate(`/technical-reports/${report.id}`)}
+                                        className="bg-card border shadow-sm rounded-xl py-2 px-3 transition-all hover:bg-muted hover:shadow-md hover:border-primary/40"
+                                    >
 
-                                        <div className="flex items-center justify-between mb-3 border-b pb-2">
+                                        <div className="flex items-center justify-between mb-2">
                                             <div className="flex items-center gap-2">
                                                 <FileText className="h-4 w-4 text-muted-foreground" />
                                                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -98,7 +104,7 @@ export const CustomTechnicalReportElement = ({ ticket, searchTerm }: Props) => {
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2 border-y">
                                             <div className="space-y-1.5">
                                                 <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                                                     <PackageSearch className="h-3.5 w-3.5" />
@@ -119,6 +125,22 @@ export const CustomTechnicalReportElement = ({ ticket, searchTerm }: Props) => {
                                                 </p>
                                             </div>
                                         </div>
+                                        <div className="flex flex-wrap gap-4 justify-end pt-2">
+                                            <Button size={"xs"} onClick={(e) => {
+                                                e.stopPropagation();
+                                                navigate(`/technical-reports/${report.id}`)
+                                            }
+                                            }>
+                                                {t('common.buttons.view')}
+                                            </Button>
+                                            <Button size={"xs"} onClick={(e) => {
+                                                e.stopPropagation();
+                                                navigate(`/technical-reports/${report.id}/edit`)
+                                            }
+                                            }>
+                                                {t('common.buttons.edit')}
+                                            </Button>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -137,6 +159,6 @@ export const CustomTechnicalReportElement = ({ ticket, searchTerm }: Props) => {
                     </div>
                 </CollapsibleContent>
             </Collapsible>
-        </div>
+        </div >
     );
 };

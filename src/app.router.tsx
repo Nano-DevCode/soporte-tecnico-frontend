@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router"; 
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import { lazy } from "react";
 import { InicioPage } from "./inicio/pages/InicioPage";
 import { AuthLayout } from './auth/layout/AuthLayout';
@@ -13,6 +13,7 @@ import { toolRoutes } from "./tools/tools.router";
 import { ItAssetsRoutes } from "./it-assets/it-assets.router";
 import { TechnicalReportsRoutes } from "./technical-reports/technical-reports.router";
 import { FoliosRoutes } from "./folios/folio.router";
+import { DashboardRoutes } from "./dashboard/dashboard.router";
 import { ConsumableRoutes } from "./Consumables/consumables.routes";
 import { MovementConsumableRoutes } from "./Consumables/movementConsumables.routes";
 import { SuspenseWrapper } from "./components/custom/SuspenseWrapper";
@@ -41,7 +42,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'users/*',
-                element: <UsersRoutes/>
+                element: <UsersRoutes />
             },
             {
                 path: 'tickets',
@@ -57,15 +58,15 @@ const router = createBrowserRouter([
             },
             {
                 path: 'account/*',
-                element: <AccountRoutes/>
+                element: <AccountRoutes />
             },
             {
-                path: 'departments/*', 
-                element: <DepartmentRoutes/>,
+                path: 'departments/*',
+                element: <DepartmentRoutes />,
             },
             {
                 path: 'equipments/*',
-                element: <EquipmentRoutes/>,
+                element: <EquipmentRoutes />,
             },
             {
                 path: 'tools2',
@@ -73,27 +74,31 @@ const router = createBrowserRouter([
             },
             {
                 path: 'tools/*',
-                element: <ToolsRoutes/>
+                element: <ToolsRoutes />
             },
             {
                 path: 'technical-reports',
                 children: TechnicalReportsRoutes,
             },
             {
-                path: 'it-assets/*', 
-                element: <ItAssetsRoutes/>
+                path: 'it-assets/*',
+                element: <ItAssetsRoutes />
             },
             {
                 path: 'folios',
                 children: FoliosRoutes,
             },
             {
+                path: 'dashboard',
+                children: DashboardRoutes,
+            },
+            {
                 path: 'consumables/*',
-                element: <ConsumableRoutes/>,
+                element: <ConsumableRoutes />,
             },
             {
                 path: 'consumable-movements/*',
-                element: <MovementConsumableRoutes/>,
+                element: <MovementConsumableRoutes />,
             },
         ],
     },
@@ -107,7 +112,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '*',
-                element: <AuthRoutes/>
+                element: <AuthRoutes />
             }
         ]
     },

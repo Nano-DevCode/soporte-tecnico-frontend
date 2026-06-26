@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { sileo } from "sileo";
 
 import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
-import { getAvailableActions, TicketEvent } from "../utils/ticket-state-machine";
+import { getAvailableActions, TicketActions } from "../utils/ticket-state-machine";
 import { useEditTicket } from "../hooks/useEditTicket";
 import { useGetTicketById } from "../hooks/useGetTicketById";
 import { useAllIssueTypes } from "@/IssueTypes/hooks/useAllIssueTypes";
@@ -91,7 +91,7 @@ export const EditTicketPage = () => {
     }
 
     const canWatchRejectionReport =
-        getAvailableActions(ticket.currentStatusCode).includes(TicketEvent.WATCH_REJECTION_REPORT);
+        getAvailableActions(ticket.currentStatusCode).includes(TicketActions.WATCH_REJECTION_REPORT);
 
     return (
         <CustomFormPageLayout

@@ -3,16 +3,18 @@ import { Separator } from "@/components/ui/separator"
 import type { TicketDetailsResponse } from "../../interfaces/ticket-details.response"
 import { CustomSectionInfo } from "@/components/custom/CustomSectionInfo";
 import { CustomInfoRow } from "@/components/custom/CustomInfoRow";
-import { AlignLeft, Building, Clock, Mail, MapPin, Ticket, UserRound, Wrench } from "lucide-react";
+import { AlignLeft, Building, Calendar, Clock, Info, Mail, MapPin, Ticket, UserRound, Wrench } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
 import { getFullName } from "@/lib/helpers/toFullName";
+import { toFormatLocalDateString } from "@/lib/helpers/to-format-local-date-string";
 
 export interface Props {
     ticket: TicketDetailsResponse;
 }
 export const DetailsTicket = ({ ticket }: Props) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+
     return (
         <Card>
             <CardHeader className="gap-0">
@@ -24,6 +26,21 @@ export const DetailsTicket = ({ ticket }: Props) => {
             </CardHeader>
             <Separator />
             <CardContent className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5">
+
+                    <CustomInfoRow
+                        icon={<Info className="w-4 h-4 text-muted-foreground" />}
+                        label={t('tickets.data.status')}
+                        value={ticket.currentStatusCode}
+                    />
+
+                    <CustomInfoRow
+                        icon={<Calendar className="w-4 h-4 text-muted-foreground" />}
+                        label={t('tickets.data.date')}
+                        value={toFormatLocalDateString(ticket.created_at, i18n.language, 'PPpp')}
+                    />
+                </div>
+                <Separator />
                 <CustomSectionInfo label={t('tickets.view_page.details.sections.sender_info')} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5">
                     <CustomInfoRow
@@ -42,6 +59,8 @@ export const DetailsTicket = ({ ticket }: Props) => {
                         value={ticket.jefe_depto.department.name}
                     />
                 </div>
+
+                <Separator />
 
                 <CustomSectionInfo label={t('tickets.view_page.details.sections.requester_info')} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5">

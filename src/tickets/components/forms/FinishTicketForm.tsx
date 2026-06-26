@@ -21,27 +21,29 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { FinishTicketSchema, type FinishTicketFormInput, type FinishTicketFormOutput } from "@/tickets/schemas/finish-ticket.schema";
 import type { MaintenanceType } from "@/common/maintenance-type/interfaces/maintenance-type.interface";
 import type { ServiceType } from "@/common/service-types/interfaces/service-type.interface";
+import type { ResponseDetails } from "@/responses/interfaces/get-response-by-ticket";
 
 
 interface Props {
     isPending: boolean;
     maintenanceTypes: MaintenanceType[];
     serviceTypes: ServiceType[];
+    response?: ResponseDetails;
     onSubmit: (data: FinishTicketFormOutput) => void;
     onCancel: () => void;
 }
 
-export const FinishTicketForm = ({ onSubmit, isPending, onCancel, maintenanceTypes, serviceTypes }: Props) => {
+export const FinishTicketForm = ({ response, onSubmit, isPending, onCancel, maintenanceTypes, serviceTypes }: Props) => {
     const { t } = useTranslation();
     const schema = useMemo(() => FinishTicketSchema(t), [t]);
 
     const form = useForm<FinishTicketFormInput, unknown, FinishTicketFormOutput>({
         resolver: zodResolver(schema),
         defaultValues: {
-            diagnosis: "",
-            work_done: "",
-            maintenance_type_id: "",
-            service_type_id: "",
+            diagnosis: response?.diagnosis || "",
+            work_done: response?.work_done || "",
+            maintenance_type_id: response?.maintenance_type.id || "",
+            service_type_id: response?.service_type.id || "",
         },
     });
 
@@ -209,7 +211,10 @@ export const FinishTicketForm = ({ onSubmit, isPending, onCancel, maintenanceTyp
                     ) : (
                         <Save className="mr-1.5 h-4 w-4" />
                     )}
-                    {t('tickets.form.finish.buttons.submit')}
+                    {response
+                        ? t('common.buttons.save_changes')
+                        : t('tickets.form.finish.buttons.submit')
+                    }
                 </Button>
             </CardFooter>
         </Card>

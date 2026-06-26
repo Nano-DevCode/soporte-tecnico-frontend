@@ -7,4 +7,6 @@ export const technicalReportsQueryKeys = {
     details: () => [...technicalReportsQueryKeys.all, 'detail'] as const,
 
     detail: (id: string) => [...technicalReportsQueryKeys.details(), id] as const,
+
+    byTicket: (ticketId: string) => [...technicalReportsQueryKeys.all, 'by-ticket', ticketId] as const,
 };

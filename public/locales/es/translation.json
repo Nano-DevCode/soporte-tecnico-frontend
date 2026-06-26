@@ -346,7 +346,7 @@
       "delete": "Eliminar",
       "cancel": "Cancelar",
       "save_changes": "Guardar cambios",
-      "view": "Detalles",
+      "view": "Ver Detalles",
       "refresh": "Recargar",
       "retry": "Reintentar",
       "clean": "Limpiar",
@@ -393,7 +393,8 @@
       "description": "Hubo un problema al conectar con el servidor. Te hemos redirigido a la lista principal por seguridad."
     },
     "inputs": {
-      "optional": "(Opcional)"
+      "optional": "(Opcional)",
+      "without_description": "Sin descripción"
     },
     "errors": {
       "title": "!Ha ocurrido un error!"
@@ -547,7 +548,9 @@
       "description": "Descripción detallada",
       "coordinator": "Coordinador",
       "asigned_to": "Asignado a",
-      "canalized_to": "Canalizado a "
+      "canalized_to": "Canalizado a ",
+      "date": "Fecha",
+      "status": "Estado"
     },
     "data_default": {
       "department": "Sin departamento",
@@ -643,6 +646,9 @@
       "create": {
         "label": "Crear"
       },
+      "on_behalf": {
+        "label": "Nuevo Ticket Para"
+      },
       "edit": {
         "label": "Editar"
       },
@@ -696,6 +702,9 @@
       },
       "intervene": {
         "label": "Registrar Bitácora"
+      },
+      "watch_response": {
+        "label": "Ver Orden de Trabajo"
       }
     },
     "documents": {
@@ -808,6 +817,18 @@
         "message": "Ocurrió un error al enviar la solicitud de soporte técnico."
       }
     },
+    "create_on_behalf_page": {
+      "title": "Nueva Solicitud de Soporte Técnico Para...",
+      "description": "Registra una nueva solicitud de soporte tecnico a nombre de un departamento en especifico.",
+      "success": {
+        "title": "Éxito",
+        "message": "Solicitud enviada."
+      },
+      "error": {
+        "title": "Error",
+        "message": "Ocurrió un error al enviar la solicitud de soporte técnico."
+      }
+    },
     "assign_page": {
       "title": "Asignar técnicos a la solicitud",
       "description": "Asigna a los técnicos que atenderan la solicitud.",
@@ -887,12 +908,12 @@
       },
       "intervene": {
         "header": {
-          "title": "Registro de Bitácora",
-          "description": "Detalla el trabajo realizado y el diagnóstico del equipo."
+          "title": "Formulario de la bitácora de intervención",
+          "description": "Completa los siguientes campos de la bitácora."
         },
         "fields": {
           "diagnosis": {
-            "label": "Diagnóstico",
+            "label": "Diagnóstico Técnico",
             "placeholder": "Ej. La fuente de poder estaba quemada por una variación de voltaje..."
           },
           "work_performed": {
@@ -900,9 +921,9 @@
             "placeholder": "Ej. Se reemplazó la fuente de poder y se hizo limpieza general..."
           },
           "required_materials": {
-            "label": "Materiales Utilizados / Requeridos",
-            "placeholder": "Ej. 1x Fuente de poder 500W, 2x Cinchos (Dejar en blanco si no aplica)",
-            "description": "Si no utilizaste ni requieres ninguna refacción o material extra, puedes dejar este campo en blanco."
+            "label": "Otros materiales utilizados",
+            "placeholder": "Ej. Se utilizó papel para limpiar. (Dejar en blanco si no aplica)",
+            "description": "Describe si se utilizó algun otro material ajeno al inventario, en caso contrario se debe registrar la salida de dicho material del inventario (Solicitalo al administrador del inventario)."
           },
           "is_resolved": {
             "label": "¿El problema de la solicitud fue solucionado?",
@@ -918,9 +939,9 @@
             }
           },
           "tags": {
-            "label": "Etiquetas de clasificación",
-            "placeholder": "Seleccionar etiquetas...",
-            "description": "Escribe y presiona Crear para anadir nuevas etiquetas.",
+            "label": "Agrega etiquetas de clasificación para la solicitud",
+            "placeholder": "Buscar etiquetas",
+            "description": "Escribe y presiona 'Crear' para anadir nuevas etiquetas.",
             "create": {
               "label": "Crear etiqueta"
             },
@@ -929,10 +950,25 @@
             },
             "searching": "Buscando coincidencias...",
             "loading_more": "Cargando más..."
+          },
+          "equipment_ids": {
+            "label": "Equipos afectados",
+            "placeholder": "Buscar equipos por número de inventario",
+            "description": "Busca y selecciona los equipos afectados en esta intervención...",
+            "not_found": {
+              "label": "No se encontraron equipos con ese número de inventario."
+            },
+            "searching": "Buscando coincidencias...",
+            "loading_more": "Cargando más..."
+          },
+          "fault_validity": {
+            "label": "Naturaleza del problema",
+            "placeholder": "Seleccione una opción...",
+            "description": "Selecciona la opción que mejor describa la causa del problema descrito en la solicitud."
           }
         },
         "buttons": {
-          "submit": "Guardar Intervención"
+          "submit": "Guardar Bitácora"
         },
         "errors": {
           "diagnosis_required": "El diagnóstico es obligatorio.",
@@ -948,7 +984,11 @@
           "tags_invalid": "La etiqueta debe ser un texto válido.",
           "tags_min": "Las etiquetas deben tener al menos 2 caracteres.",
           "tags_max": "Las etiquetas no pueden exceder los 30 caracteres.",
-          "tags_max_items": "No puedes agregar más de 10 etiquetas por intervención."
+          "tags_max_items": "No puedes agregar más de 10 etiquetas por intervención.",
+          "equipments_invalid": "La etiqueta debe ser un texto válido.",
+          "fault_validity_required": "Debe seleccionar la naturaleza de la intervención.",
+          "fault_validity_invalid": "La selección de validez no es válida.",
+          "tags_required_when_resolved": "Debe agregar al menos una etiqueta (tag) si el ticket fue solucionado."
         }
       },
       "finish": {
@@ -967,11 +1007,11 @@
           },
           "maintenance_type": {
             "label": "Tipo de Mantenimiento",
-            "placeholder": "Selecciona el tipo de mantenimiento realizado"
+            "placeholder": "Selecciona una opción..."
           },
           "service_type": {
             "label": "Tipo de Servicio",
-            "placeholder": "Selecciona el tipo servicio realizado"
+            "placeholder": "Selecciona una opción..."
           }
         },
         "buttons": {
@@ -1041,6 +1081,16 @@
           "technicians_max": "No puedes asignar este ticket a más de 4 técnicos."
         }
       },
+      "create_on_behalf": {
+        "fields": {
+          "department_manager": {
+            "label": "Jefe de Departamento",
+            "description": "La solicitud saldra a nombre del jefe de departamento seleccionado",
+            "placeholder": "Busca y Selecciona al jefe de departamento...",
+            "empty": "No se encontraron coincidencias con ese nombre"
+          }
+        }
+      },
       "fields": {
         "affected_name": {
           "label": "Nombre del responsable directo del equipo",
@@ -1085,7 +1135,9 @@
         "equipment_location_required": "La ubicación del equipo es obligatoria.",
         "equipment_location_max": "La ubicación no puede exceder los 200 caracteres.",
         "issue_type_required": "Debes seleccionar una categoría o tipo de problema.",
-        "issue_type_invalid": "El tipo de problema seleccionado no es válido."
+        "issue_type_invalid": "El tipo de problema seleccionado no es válido.",
+        "user_id_invalid": "El usuario seleccionado no es válido.",
+        "user_id_required": "El Jefe de Departamento es obligatorio."
       }
     },
     "components": {
@@ -1130,17 +1182,24 @@
     }
   },
   "technical_reports": {
+    "name_list": "Bitácora No.",
     "data": {
       "diagnosis": "Diagnóstico Técnico",
       "work_done": "Trabajo Realizado",
-      "materials_used": "Materiales Utilizados",
+      "materials_used": "Otros Materiales Utilizados",
       "materials_none_used": "Ninguno",
+      "fault_validity": "Naturaleza de la intervención",
+      "equipments": "Equipos Afectados",
       "date": "Fecha",
       "is_resolved": {
         "label": "Estado del problema",
         "true": "Solucionado",
         "false": "No solucionado"
       }
+    },
+    "not_fund": {
+      "title": "No se encontro la bitácora.",
+      "description": "Por favor intente de nuevo"
     },
     "menu_item": {
       "title": "Bitácoras"
@@ -1157,9 +1216,70 @@
         "description": "Intenta ajustar los filtros de busqueda"
       }
     },
+    "view_page": {
+      "title": "Detalles de la bitácora",
+      "description": "Visualiza los detalles de la bitácora",
+      "details": {
+        "header": {
+          "title": "Información de la Bitácora",
+          "description": "Información sobre la atención realizada la solicitud"
+        },
+        "sections": {
+          "requester_info": "Información del solicitante",
+          "issue_details": "Detalles del problema",
+          "sender_info": "Información del remitente"
+        }
+      }
+    },
+    "edit_page": {
+      "title": "Editar bitácora",
+      "description": "Edita la información de la bitácora",
+      "details": {
+        "sections": {
+          "requester_info": "Información del solicitante",
+          "issue_details": "Detalles del problema",
+          "sender_info": "Información del remitente"
+        }
+      }
+    },
     "error": {
       "title": "Error al cargar",
       "description": "No se pudieron obtener las Bitácoras. Revisa tu conexión."
+    }
+  },
+  "responses": {
+    "data": {
+      "diagnosis": "Diagnóstico",
+      "work_done": "Trabajo Realizado",
+      "date": "Fecha",
+      "ticket_folio": "Folio de la solicitud",
+      "response_folio": "Folio de la orden de trabajo",
+      "maintenance_type": "Tipo de mantenimiento",
+      "service_type": "Tipo de servicio"
+    },
+    "not_fund": {
+      "title": "No se encontro la orden de trabajo.",
+      "description": "Por favor intente de nuevo"
+    },
+    "view_page": {
+      "title": "Detalles de la Orden de trabajo",
+      "description": "Visualiza los detalles de la orden de trabajo",
+      "details": {
+        "header": {
+          "title": "Información de la orden de trabajo",
+          "description": "Información sobre la respuesta emitida al solicitante."
+        }
+      }
+    },
+    "edit_page": {
+      "title": "Editar Orden de trabajo",
+      "description": "Edita la información de la orden de trabajo",
+      "details": {
+        "header": {
+          "title": "Información de la orden de trabajo",
+          "description": "Información sobre la respuesta emitida al solicitante."
+        }
+      }
     }
   },
   "folios": {
@@ -1362,6 +1482,68 @@
       "error": {
         "title": "No se pudieron cargar los folios",
         "description": "Hubo un problema de conexión con el servidor. Por favor, intenta de nuevo."
+      }
+    }
+  },
+  "dashboards": {
+    "title": "Panel de Control",
+    "metrics": {
+      "error": "Error al cargar la métrica",
+      "mttr": {
+        "title": "Tiempo Promedio de Recuperación",
+        "meta_text": "Meta: ≤ {{meta}} horas",
+        "under_target": "por debajo de la meta (Excelente)",
+        "over_target": "por encima de la meta (Crítico)",
+        "hours_suffix": "hrs",
+        "vs_previous": "vs. trimestre anterior",
+        "previous_period": "MTTR anterior: {{previous}} hrs"
+      },
+      "critical_availability": {
+        "title": "Disponibilidad de Servicios Críticos",
+        "meta_text": "Meta establecida: {{meta}}%",
+        "above_target": "por encima de la meta",
+        "below_target": "por debajo de la meta"
+      },
+      "critical_interruptions": {
+        "title": "Interrupciones Críticas por Mes",
+        "description": "Solicitudes con prioridad crítica reportadas",
+        "empty": "No se registraron solicitudes críticas en este periodo.",
+        "bar_label": "Fallas críticas"
+      },
+      "resolution_time": {
+        "title": "Tiempo Promedio de Resolución (Horas)",
+        "priority_1": "Crítica",
+        "priority_2": "Alta",
+        "priority_3": "Media",
+        "priority_4": "Baja"
+      },
+      "first_level_resolution": {
+        "title": "Resolución en 1er Nivel (FCR)",
+        "above_target": "por encima de la meta",
+        "below_target": "por debajo de la meta",
+        "meta_text": "Meta establecida: {{meta}}%",
+        "details_text": "{{first}} de {{total}} tickets resueltos sin escalar"
+      },
+      "sla_compliance": {
+        "title": "Cumplimiento de SLA",
+        "above_target": "por encima de la meta",
+        "below_target": "por debajo de la meta",
+        "meta_text": "Meta establecida: {{meta}}%",
+        "details_text": "{{met}} de {{total}} tickets resueltos a tiempo"
+      },
+      "maintenance": {
+        "title": "Equipos con Mantenimiento",
+        "at_target": "meta alcanzada",
+        "below_target": "por debajo de la meta",
+        "meta_text": "Meta programada: {{meta}}%",
+        "details_text": "{{maintained}} de {{total}} equipos atendidos"
+      },
+      "cost_per_incident": {
+        "title": "Costo por Incidente",
+        "under_budget": "por debajo del límite",
+        "over_budget": "por encima del límite",
+        "meta_text": "Límite establecido: {{meta}}",
+        "details_text": "Gasto total: {{cost}} en {{total}} tickets"
       }
     }
   },

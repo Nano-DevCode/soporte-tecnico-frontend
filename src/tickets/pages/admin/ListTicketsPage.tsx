@@ -18,8 +18,8 @@ export function ListTicketPage() {
       <div className="space-y-3 md:space-y-6">
 
 
-        <Can permission={"CREATE_TICKET"} >
-          <div className="flex justify-end">
+        <div className="ml-auto flex flex-wrap gap-2 justify-end">
+          <Can permission={"CREATE_TICKET"} >
             <Link to="/tickets/new">
               <Button>
                 <Plus className="h-4 w-4" />
@@ -27,8 +27,18 @@ export function ListTicketPage() {
 
               </Button>
             </Link>
-          </div>
-        </Can >
+          </Can >
+
+          <Can permission={"CREATE_TICKET_ON_BEHALF"} >
+            <Link to="/tickets/on-behalf">
+              <Button>
+                <Plus className="h-4 w-4" />
+                {t("tickets.actions.on_behalf.label")}
+
+              </Button>
+            </Link>
+          </Can >
+        </div>
 
         <CustomListTickets />
       </div >

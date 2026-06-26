@@ -89,7 +89,7 @@ export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault
                                                     {t('tickets.form.route.fields.coordinator.not_found')}
                                                 </ComboboxEmpty>
                                                 <ComboboxList>
-                                                    {(coordinator) => (
+                                                    {(coordinator: Coordinator) => (
                                                         <ComboboxItem
                                                             key={coordinator.id}
                                                             value={coordinator}
@@ -103,7 +103,7 @@ export const RouteTicketForm = ({ onSubmit, isPending, onCancel, priorityDefault
 
                                                             <div className="flex gap-2 text-xs text-muted-foreground mt-1">
                                                                 <span className="font-semibold bg-secondary px-1.5 rounded">
-                                                                    {coordinator.user.role.name}
+                                                                    {coordinator.coordination.name}
                                                                 </span>
                                                             </div>
                                                         </ComboboxItem>

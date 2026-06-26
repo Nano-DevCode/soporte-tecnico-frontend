@@ -2,25 +2,25 @@ import { Can } from '@/common/permission/Can';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { ACTION_UI_CONFIG } from '@/tickets/utils/action-ui-config';
-import { getAvailableActions, TicketEvent, type TicketStatus } from '@/tickets/utils/ticket-state-machine';
+import { getAvailableActions, type TicketActionsType, type TicketStatusType } from '@/tickets/utils/ticket-state-machine';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 interface TicketActionsProps {
-    currentState: TicketStatus;
+    currentState: TicketStatusType;
     ticketId: string;
-    pendingEvent?: TicketEvent | null;
-    onDirectAction: (event: TicketEvent) => void;
+    pendingEvent?: TicketActionsType | null;
+    onDirectAction: (event: TicketActionsType) => void;
 }
 
-export function TicketActions({ currentState, pendingEvent, ticketId, onDirectAction }: TicketActionsProps) {
+export function TicketActionsComponent({ currentState, pendingEvent, ticketId, onDirectAction }: TicketActionsProps) {
     const availableActions = getAvailableActions(currentState);
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const [eventToConfirm, setEventToConfirm] = useState<TicketEvent | null>(null);
+    const [eventToConfirm, setEventToConfirm] = useState<TicketActionsType | null>(null);
 
     if (availableActions.length === 0) return null;
 

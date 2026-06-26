@@ -72,7 +72,7 @@ export function DataTable<TData>({
                         <TableRow
                             key={row.id}
                             data-state={row.getIsSelected() && "selected"}
-                            onClick={() => onRowClick?.(row)}
+                            onDoubleClick={() => onRowClick?.(row)}
                         >
                             {row.getVisibleCells().map((cell) => (
                                 <TableCell className="max-w-none" key={cell.id}>

@@ -1,6 +1,6 @@
 import type { PermissionsTypes } from "@/common/permission/permissions";
-import { Archive, Edit3, Flag, Inbox, Lock, Send, UserPlus, Wrench, XCircle, type LucideIcon } from "lucide-react";
-import { TicketEvent } from "./ticket-state-machine";
+import { Archive, Edit3, Flag, Inbox, Lock, MessageSquareReply, Send, UserPlus, Wrench, XCircle, type LucideIcon } from "lucide-react";
+import { TicketActions, type TicketActionsType } from "./ticket-state-machine";
 
 export type ActionBehavior = 'navigate' | 'direct' | 'confirm';
 export type Variants = 'default' | 'destructive' | 'outline' | 'secondary';
@@ -15,7 +15,8 @@ type ActionTranslationKey =
     | 'finish'
     | 'close'
     | 'archive'
-    | 'intervene';
+    | 'intervene'
+    | 'watch_response';
 
 type ConfirmActionTranslationKey = 'attend' | 'close' | 'archive';
 
@@ -34,8 +35,8 @@ interface ActionUIConfig {
     confirmMessage?: TicketActionConfirmKey;
 }
 
-export const ACTION_UI_CONFIG: Partial<Record<TicketEvent, ActionUIConfig>> = {
-    [TicketEvent.RECIBIR]: {
+export const ACTION_UI_CONFIG: Partial<Record<TicketActionsType, ActionUIConfig>> = {
+    [TicketActions.RECIBIR]: {
         label: 'tickets.actions.create.label',
         icon: Inbox,
         variant: 'default',
@@ -43,7 +44,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketEvent, ActionUIConfig>> = {
         behavior: 'navigate',
         route: () => '/tickets/create'
     },
-    [TicketEvent.CORREGIR]: {
+    [TicketActions.CORREGIR]: {
         label: 'tickets.actions.edit.label',
         icon: Edit3,
         variant: 'outline',
@@ -51,7 +52,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketEvent, ActionUIConfig>> = {
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/edit`
     },
-    [TicketEvent.RECHAZAR]: {
+    [TicketActions.RECHAZAR]: {
         label: 'tickets.actions.reject.label',
         icon: XCircle,
         variant: 'destructive',
@@ -59,7 +60,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketEvent, ActionUIConfig>> = {
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/reject`
     },
-    [TicketEvent.CANALIZAR]: {
+    [TicketActions.CANALIZAR]: {
         label: 'tickets.actions.route.label',
         icon: Send,
         variant: 'default',
@@ -67,7 +68,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketEvent, ActionUIConfig>> = {
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/route`
     },
-    [TicketEvent.ASIGNAR]: {
+    [TicketActions.ASIGNAR]: {
         label: 'tickets.actions.assign.label',
         icon: UserPlus,
         variant: 'default',
@@ -75,7 +76,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketEvent, ActionUIConfig>> = {
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/assign`
     },
-    [TicketEvent.ATENDER]: {
+    [TicketActions.ATENDER]: {
         label: 'tickets.actions.attend.label',
         icon: Wrench,
         variant: 'default',
@@ -84,7 +85,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketEvent, ActionUIConfig>> = {
         confirmTitle: 'tickets.actions.attend.confirm_title',
         confirmMessage: 'tickets.actions.attend.confirm_message'
     },
-    [TicketEvent.FINALIZAR]: {
+    [TicketActions.FINALIZAR]: {
         label: 'tickets.actions.finish.label',
         icon: Flag,
         variant: 'default',
@@ -92,7 +93,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketEvent, ActionUIConfig>> = {
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/finish`
     },
-    [TicketEvent.CERRAR]: {
+    [TicketActions.CERRAR]: {
         label: 'tickets.actions.close.label',
         icon: Lock,
         variant: 'outline',
@@ -101,7 +102,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketEvent, ActionUIConfig>> = {
         confirmTitle: 'tickets.actions.close.confirm_title',
         confirmMessage: 'tickets.actions.close.confirm_message'
     },
-    [TicketEvent.ARCHIVAR]: {
+    [TicketActions.ARCHIVAR]: {
         label: 'tickets.actions.archive.label',
         icon: Archive,
         variant: 'secondary',
@@ -110,13 +111,21 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketEvent, ActionUIConfig>> = {
         confirmTitle: 'tickets.actions.archive.confirm_title',
         confirmMessage: 'tickets.actions.archive.confirm_message'
     },
-    [TicketEvent.INTERVENIR]: {
+    [TicketActions.INTERVENIR]: {
         label: 'tickets.actions.intervene.label',
         icon: Edit3,
         variant: 'default',
         permission: 'INTERVENE_TICKET',
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/intervene`
+    },
+    [TicketActions.WATCH_RESPONSE_REPORT]: {
+        label: 'tickets.actions.watch_response.label',
+        icon: MessageSquareReply,
+        variant: 'default',
+        permission: 'WATCH_RESPONSE_REPORT',
+        behavior: 'navigate',
+        route: (id) => `/tickets/${id}/response`
     },
 };
 

@@ -58,7 +58,7 @@ export const ViewMyTicketFolioDepartmentPage = () => {
                     <CardFooter>
                         <Button
                             className="ml-auto"
-                            variant={"default"}
+                            variant={"primary"}
                             onClick={() => navigate('/folios/tickets/my-department/edit')}
                         >
                             <PencilLine />

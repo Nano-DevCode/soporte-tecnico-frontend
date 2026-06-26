@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { X } from "lucide-react";
+import { ChevronDownIcon, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { enUS, es } from "date-fns/locale";
 import { toFormatLocalDateString } from "@/lib/helpers/to-format-local-date-string";
@@ -42,13 +42,18 @@ export const CustomFilterDate = ({ label, value, onChange, maxDate, minDate }: P
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="flex-1 justify-start px-3 font-normal">
-          <span className="text-muted-foreground">{label}:</span>
-          {dateValue ? (
-            toFormatLocalDateString(dateValue, i18n.language, 'PP')
-          ) : (
-            t('tickets.filters.date.wathever')
-          )}
+        <Button variant="outline" className="flex-1 justify-between px-3 font-normal">
+          <span>
+            <span className="text-muted-foreground ms-2">{label}:</span>
+            {dateValue ? (
+              toFormatLocalDateString(dateValue, i18n.language, 'PP')
+            ) : (
+              <span className="ms-2">
+                {t('tickets.filters.date.wathever')}
+              </span>
+            )}
+          </span>
+          <ChevronDownIcon className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent align="start" className="w-auto p-0">

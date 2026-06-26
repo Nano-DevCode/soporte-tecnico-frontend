@@ -14,7 +14,7 @@ export const useInterveneTicket = () => {
                 queryKey: ticketsQueryKeys.lists()
             });
             queryClient.invalidateQueries({
-                queryKey: technicalReportsQueryKeys.details()
+                queryKey: technicalReportsQueryKeys.lists()
             });
             queryClient.setQueryData(
                 ticketsQueryKeys.detail(ticket.id),

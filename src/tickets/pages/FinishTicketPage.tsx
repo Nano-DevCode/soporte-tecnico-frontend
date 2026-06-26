@@ -13,8 +13,8 @@ import type { FinishTicketFormOutput } from "../schemas/finish-ticket.schema";
 import { FinishTicketForm } from "../components/forms/FinishTicketForm";
 import { FinishTicketFormSkeleton } from "../components/Skeletons/FinishTicketFormSkeleton";
 import { CustomFormPageLayout } from "@/components/custom/CustomFormPageLayout";
-import { TechnicalReportsAccordion } from "../components/details/TechnicalReportsAccordion";
-import { TechnicalReportsAccordionSkeleton } from "../components/Skeletons/TechnicalReportsAccordionSkeleton";
+import { TechnicalReportsAccordion } from "../../technical-reports/components/TechnicalReportsAccordion";
+import { TechnicalReportsAccordionSkeleton } from "../../technical-reports/components/skeletons/TechnicalReportsAccordionSkeleton";
 
 export const FinishTicketPage = () => {
     const { id } = useParams();

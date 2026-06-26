@@ -15,7 +15,7 @@ export const CustomInfoRow = ({ icon, label, value, tooltipDescription }: Custom
     return (
         <div className="flex items-start gap-3 flex-1">
             <span className="mt-0.5 shrink-0">{icon}</span>
-            <div className="flex flex-col min-w-0">
+            <div className="flex flex-col w-full">
                 <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {tooltipDescription ?
                         (<Tooltip>

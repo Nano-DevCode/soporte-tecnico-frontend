@@ -1,10 +1,11 @@
 export interface Technician {
-    id:              string;
-    name:            string;
-    paternalSurname: string;
-    maternalSurname: string;
-    num_control:     string;
-    user:            User;
+    id:                 string;
+    name:               string;
+    paternalSurname:    string;
+    maternalSurname:    string;
+    num_control:        string;
+    assignTicketsCount: number;
+    user:               User;
 }
 
 export interface User {

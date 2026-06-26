@@ -15,8 +15,8 @@ import { useAllIssueTypes } from "@/IssueTypes/hooks/useAllIssueTypes";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useTicketFilters } from "../hooks/useTicketFilters";
 import { CustomFilterSelect } from "@/components/custom/CustomFilterSelect";
-import { InfiniteScrollCombobox } from "./InfiniteScrollCombobox";
 import { CustomFilterDate } from "@/components/custom/CustomFilterDate";
+import { InfiniteScrollComboboxTags } from "@/common/tags/components/InfiniteScrollComboboxTags";
 
 interface Props {
   table: Table<Ticket>;
@@ -152,7 +152,7 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
                 />
               </div>
               <div className="w-full shrink-0">
-                <InfiniteScrollCombobox
+                <InfiniteScrollComboboxTags
                   value={filters.tags}
                   onChange={(newTagsArray) => updateFilter("tags", newTagsArray)}
                   creatable={false}

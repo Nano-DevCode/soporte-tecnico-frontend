@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 import { Loader2, ClipboardSignature, Save, X, BrushCleaning } from "lucide-react";
@@ -22,15 +22,21 @@ import { InterveneTicketSchema, type InterveneTicketFormInput, type InterveneTic
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Field, FieldContent, FieldDescription, FieldLabel, FieldTitle } from "@/components/ui/field";
 import { CustomOptionalInput } from "@/components/custom/CustomOptionalInput";
-import { InfiniteScrollCombobox } from "../InfiniteScrollCombobox";
+import { InfiniteScrollComboboxEquipments } from "@/Equipments/components/InfiniteScrollComboboxEquipments";
+import type { FaultValidity } from "@/common/fault-validities/interfaces/fault-validity.interface";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { Tag } from "@/common/tags/interfaces/tag.interface";
+import { InfiniteScrollComboboxTags } from "@/common/tags/components/InfiniteScrollComboboxTags";
 
 interface Props {
     isPending: boolean;
+    faultValidities: FaultValidity[];
+    ticketTags?: Tag[];
     onSubmit: (data: InterveneTicketFormOutput) => void;
     onCancel: () => void;
 }
 
-export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) => {
+export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, faultValidities, ticketTags }: Props) => {
     const { t } = useTranslation();
     const schema = useMemo(() => InterveneTicketSchema(t), [t]);
 
@@ -39,9 +45,11 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) =>
         defaultValues: {
             diagnosis: "",
             work_performed: "",
-            required_materials: "",
+            materials_used: "",
             is_resolved: undefined,
-            tags: [],
+            tags: ticketTags?.map((tag) => tag.name) || [],
+            equipment_ids: [],
+            fault_validity_id: "",
         },
     });
 
@@ -52,6 +60,11 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) =>
         }
         onCancel();
     };
+
+    const isResolved = useWatch({
+        control: form.control,
+        name: 'is_resolved',
+    });
 
     const isBusy = isPending || form.formState.isSubmitting;
 
@@ -111,10 +124,11 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) =>
 
                             <FormField
                                 control={form.control}
-                                name="required_materials"
+                                name="materials_used"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>{t('tickets.form.intervene.fields.required_materials.label')}<CustomOptionalInput /></FormLabel>
+                                        <FormDescription>{t('tickets.form.intervene.fields.required_materials.description')}</FormDescription>
                                         <FormControl>
                                             <Textarea
                                                 placeholder={t('tickets.form.intervene.fields.required_materials.placeholder')}
@@ -128,44 +142,6 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) =>
                                 )}
                             />
 
-                            <FormField
-                                control={form.control}
-                                name="tags"
-                                render={({ field, fieldState }) => {
-
-                                    let errorMessage = fieldState.error?.message;
-                                    if (!errorMessage && Array.isArray(fieldState.error)) {
-                                        const firstNestedError = fieldState.error.find((err) => err != null);
-                                        if (firstNestedError) {
-                                            errorMessage = firstNestedError.message;
-                                        }
-                                    }
-
-                                    return (
-                                        <FormItem>
-                                            <FormLabel>{t('tickets.form.intervene.fields.tags.label')}<CustomOptionalInput /></FormLabel>
-                                            <FormControl>
-                                                <InfiniteScrollCombobox
-                                                    onChange={field.onChange}
-                                                    value={field.value}
-                                                    disabled={isBusy}
-                                                />
-                                            </FormControl>
-                                            <FormDescription>
-                                                {t('tickets.form.intervene.fields.tags.description')}
-                                            </FormDescription>
-                                            {errorMessage &&
-                                                <p
-                                                    data-slot="form-message"
-                                                    className={"text-sm text-destructive"}
-                                                >
-                                                    {errorMessage}
-                                                </p>
-                                            }
-                                        </FormItem>
-                                    )
-                                }}
-                            />
 
                             <FormField
                                 control={form.control}
@@ -219,9 +195,99 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel }: Props) =>
                                 )}
                             />
 
+                            <FormField
+                                control={form.control}
+                                name="equipment_ids"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('tickets.form.intervene.fields.equipment_ids.label')}<CustomOptionalInput /></FormLabel>
+                                        <FormDescription>{t('tickets.form.intervene.fields.equipment_ids.description')}</FormDescription>
+                                        <FormControl>
+                                            <InfiniteScrollComboboxEquipments
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                disabled={isBusy}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="fault_validity_id"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('tickets.form.intervene.fields.fault_validity.label')}</FormLabel>
+                                        <FormDescription>{t('tickets.form.intervene.fields.fault_validity.description')}</FormDescription>
+                                        <Select
+                                            disabled={isBusy}
+                                            name={field.name}
+                                            value={field.value}
+                                            onValueChange={field.onChange}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder={t('tickets.form.intervene.fields.fault_validity.placeholder')} />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    {faultValidities.map((fault) => (
+                                                        <SelectItem key={fault.id} value={fault.id.toString()}>{fault.name}</SelectItem>
+                                                    ))}
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="tags"
+                                render={({ field, fieldState }) => {
+
+                                    let errorMessage = fieldState.error?.message;
+                                    if (!errorMessage && Array.isArray(fieldState.error)) {
+                                        const firstNestedError = fieldState.error.find((err) => err != null);
+                                        if (firstNestedError) {
+                                            errorMessage = firstNestedError.message;
+                                        }
+                                    }
+
+                                    return (
+                                        <FormItem>
+                                            <FormLabel>{t('tickets.form.intervene.fields.tags.label')}{!isResolved && <CustomOptionalInput />}</FormLabel>
+                                            <FormControl>
+                                                <InfiniteScrollComboboxTags
+                                                    onChange={field.onChange}
+                                                    value={field.value}
+                                                    disabled={isBusy}
+                                                />
+                                            </FormControl>
+                                            <FormDescription>
+                                                {t('tickets.form.intervene.fields.tags.description')}
+                                            </FormDescription>
+                                            {errorMessage &&
+                                                <p
+                                                    data-slot="form-message"
+                                                    className={"text-sm text-destructive"}
+                                                >
+                                                    {errorMessage}
+                                                </p>
+                                            }
+                                        </FormItem>
+                                    )
+                                }}
+                            />
+
                         </div>
                     </form>
                 </Form>
+
             </CardContent>
             <Separator />
             <CardFooter className="flex flex-wrap-reverse sm:flex-row justify-end gap-3">

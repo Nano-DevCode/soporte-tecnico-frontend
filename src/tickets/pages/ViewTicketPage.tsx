@@ -9,12 +9,10 @@ import { DetailsTicket } from '../components/details/DetailsTicket';
 import { DetailHeaderTicket } from '../components/details/DetailHeaderTicket';
 import { TicketTimeLine } from '../components/details/TicketTimeLine';
 import { useStartTicket } from '../hooks/useStartTicket';
-import { TicketEvent, TicketStatus } from '../utils/ticket-state-machine';
+import { getAvailableActions, TicketActions, type TicketActionsType } from '../utils/ticket-state-machine';
 import { useCloseTicket } from '../hooks/useCloseTicket';
 import { useArchiveTicket } from '../hooks/useArchiveTicket';
 import { getAxiosErrorMessage } from '@/lib/helpers/getAxiosErrorMessage';
-import { TicketActions } from '../components/details/TicketActions';
-import { TechnicalReportsAccordion } from '../components/details/TechnicalReportsAccordion';
 import { TicketDocuments } from '../components/details/TicketDocuments';
 import { Can } from '@/common/permission/Can';
 import { useSmartNavigation } from '@/components/hooks/useSmartNavigation';
@@ -25,7 +23,9 @@ import { TicketStepperSkeleton } from '../components/Skeletons/TicketStepperSkel
 import { TicketTimeLineSkeleton } from '../components/Skeletons/TicketTimeLineSkeleton';
 import { DetailsTicketSkeleton } from '../components/Skeletons/DetailsTicketSkeleton';
 import { TicketDocumentsSkeleton } from '../components/Skeletons/TicketDocumentsSkeleton';
-import { TechnicalReportsAccordionSkeleton } from '../components/Skeletons/TechnicalReportsAccordionSkeleton';
+import { TechnicalReportsAccordionSkeleton } from '../../technical-reports/components/skeletons/TechnicalReportsAccordionSkeleton';
+import { TicketActionsComponent } from '../components/details/TicketActions';
+import { TechnicalReportsOfTicketItems } from '@/technical-reports/components/TechnicalReportsItemsOfTicket';
 
 export const ViewTicketPage = () => {
     const { id } = useParams();
@@ -50,10 +50,10 @@ export const ViewTicketPage = () => {
         }
     }, [isError, isLoading, ticket, t, navigateFallback]);
 
-    const handleDirectAction = (event: TicketEvent) => {
+    const handleDirectAction = (event: TicketActionsType) => {
         if (!ticket) return;
 
-        if (event === TicketEvent.ATENDER) {
+        if (event === TicketActions.ATENDER) {
             startTicket({ ticketId: ticket.id }, {
                 onSuccess: () => {
                     sileo.success({
@@ -69,7 +69,7 @@ export const ViewTicketPage = () => {
                 }
             });
         }
-        else if (event === TicketEvent.CERRAR) {
+        else if (event === TicketActions.CERRAR) {
             closeTicket({ ticketId: ticket.id }, {
                 onSuccess: () => {
                     sileo.success({
@@ -85,7 +85,7 @@ export const ViewTicketPage = () => {
                 }
             });
         }
-        else if (event === TicketEvent.ARCHIVAR) {
+        else if (event === TicketActions.ARCHIVAR) {
             archiveTicket({ ticketId: ticket.id }, {
                 onSuccess: () => {
                     sileo.success({
@@ -106,9 +106,9 @@ export const ViewTicketPage = () => {
     };
 
     const currentPendingEvent =
-        isStarting ? TicketEvent.ATENDER :
-            isClosing ? TicketEvent.CERRAR :
-                isArchiving ? TicketEvent.ARCHIVAR :
+        isStarting ? TicketActions.ATENDER :
+            isClosing ? TicketActions.CERRAR :
+                isArchiving ? TicketActions.ARCHIVAR :
                     null;
 
     if (isLoading || !ticket) {
@@ -144,9 +144,8 @@ export const ViewTicketPage = () => {
         );
     }
 
-    const canWatchTechnicalReports = ticket.ticket_histories.some((th) =>
-        th.status.code === TicketStatus.NO_SOLUCIONADA ||
-        th.status.code === TicketStatus.SOLUCIONADA
+    const canWatchTechnicalReports = ticket.ticket_histories.some((history) =>
+        getAvailableActions(history.status.code).includes(TicketActions.WATCH_TECHNICAL_REPORT)
     );
 
     return (
@@ -159,7 +158,7 @@ export const ViewTicketPage = () => {
 
             <DetailHeaderTicket ticket={ticket} />
 
-            <TicketActions
+            <TicketActionsComponent
                 currentState={ticket.currentStatusCode}
                 ticketId={ticket.id}
                 onDirectAction={handleDirectAction}
@@ -180,7 +179,7 @@ export const ViewTicketPage = () => {
                     <DetailsTicket ticket={ticket} />
 
                     <Can permission='WATCH_TECHNICAL_REPORT'>
-                        {canWatchTechnicalReports && <TechnicalReportsAccordion ticketId={ticket.id} />}
+                        {canWatchTechnicalReports && <TechnicalReportsOfTicketItems ticketId={ticket.id} />}
                     </Can>
 
                     <TicketDocuments documents={ticket.documents} />

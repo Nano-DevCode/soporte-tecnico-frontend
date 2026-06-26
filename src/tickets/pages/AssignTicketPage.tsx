@@ -71,7 +71,7 @@ export const AssignTicketPage = () => {
                     description: t('tickets.assign_page.success.message'),
                     duration: 5000,
                 });
-                navigateSmartBack(`/tickets/${id}`);
+                navigateFallback(`/tickets/${id}`);
             },
             onError: (error) => {
                 console.error("Error en la mutación:", error);

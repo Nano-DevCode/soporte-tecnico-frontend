@@ -38,7 +38,7 @@ const PanelLayoutV2 = () => {
                 />
 
                 <main className="flex-1  p-4 md:p-6 lg:p-8">
-                    <div className="mx-auto max-w-7xl">
+                    <div className="mx-auto">
                         <Outlet />
                     </div>
                 </main>

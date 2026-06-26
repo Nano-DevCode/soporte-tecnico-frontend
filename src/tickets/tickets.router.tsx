@@ -1,6 +1,9 @@
 import { lazy } from "react";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { CanRoute } from "@/common/permission/CanRoute";
+import { CreateTicketOnBehalfPage } from "./pages/CreateTicketOnBehalfPage";
+import { ViewResponsePage } from "./pages/ViewResponsePage";
+import { EditResponsePage } from "./pages/EditResponsePage";
 
 const ListTicketPage = lazy(() => import("./pages/admin/ListTicketsPage").then(module => ({ default: module.ListTicketPage })));
 const AssignTicketPage = lazy(() => import("./pages/AssignTicketPage").then(module => ({ default: module.AssignTicketPage })));
@@ -28,6 +31,15 @@ export const TicketsRoutes = [
             <SuspenseWrapper>
                 <CanRoute permission="CREATE_TICKET">
                     <CreateTicketPage />
+                </CanRoute>
+            </SuspenseWrapper>
+    },
+    {
+        path: 'on-behalf',
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="CREATE_TICKET_ON_BEHALF">
+                    <CreateTicketOnBehalfPage />
                 </CanRoute>
             </SuspenseWrapper>
     },
@@ -91,6 +103,24 @@ export const TicketsRoutes = [
             <SuspenseWrapper>
                 <CanRoute permission="REJECT_TICKET">
                     <RejectTicketPage />
+                </CanRoute>
+            </SuspenseWrapper>
+    },
+    {
+        path: ':id/response',
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="WATCH_RESPONSE_REPORT">
+                    <ViewResponsePage />
+                </CanRoute>
+            </SuspenseWrapper>
+    },
+    {
+        path: ':id/response/edit',
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="EDIT_RESPONSE_REPORT">
+                    <EditResponsePage />
                 </CanRoute>
             </SuspenseWrapper>
     },

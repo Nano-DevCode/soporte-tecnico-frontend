@@ -7,3 +7,6 @@ export interface CreateTicketPayload {
     equipment_location: string;
     issue_type:         number;
 }
+export interface CreateTicketOnBehalfPayload extends CreateTicketPayload{
+    user_id: string;
+}
