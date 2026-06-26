@@ -1,0 +1,70 @@
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { User } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
+
+export const TicketOnBehalfFormSkeleton = () => {
+    const { t } = useTranslation();
+
+    return (
+        <Card>
+            <CardHeader className="gap-0">
+                <CustomHeaderCard
+                    title={t('tickets.form.header.title')}
+                    description={t('tickets.form.header.description')}
+                    icon={User}
+                />
+            </CardHeader>
+            <Separator />
+            <CardContent>
+                <div className="grid grid-cols-1 gap-x-5 gap-y-6 md:grid-cols-2 items-start">
+
+                    <div className="space-y-2 col-span-2">
+                        <Skeleton className="h-3.5 w-32" />
+                        <Skeleton className="h-3.5 w-120" />
+                        <Skeleton className="h-9 w-full rounded-md" />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Skeleton className="h-3.5 w-32" />
+                        <Skeleton className="h-9 w-full rounded-md" />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Skeleton className="h-3.5 w-36" />
+                        <Skeleton className="h-9 w-full rounded-md" />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Skeleton className="h-3.5 w-40" />
+                        <Skeleton className="h-15 w-full rounded-md" />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Skeleton className="h-3.5 w-36" />
+                        <Skeleton className="h-15 w-full rounded-md" />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Skeleton className="h-3.5 w-32" />
+                        <Skeleton className="h-9 w-full rounded-md" />
+                    </div>
+
+                    <div className="space-y-2 md:col-span-2">
+                        <Skeleton className="h-3.5 w-44" />
+                        <Skeleton className="h-30 w-full rounded-md" />
+                    </div>
+
+                </div>
+            </CardContent>
+            <Separator />
+            <CardFooter className="flex flex-wrap-reverse sm:flex-row justify-end gap-3">
+                <Skeleton className="h-9 w-full sm:w-25" />
+                <Skeleton className="h-9 w-full sm:w-28" />
+                <Skeleton className="h-9 w-full sm:w-32" />
+            </CardFooter>
+        </Card>
+    );
+};

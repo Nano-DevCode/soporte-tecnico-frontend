@@ -11,13 +11,14 @@ import { CustomEmptyListState } from "@/components/custom/CustomEmptyListState";
 import { CustomPagination } from "@/components/custom/CustomPagination";
 import { CustomFilterTicketFolios } from "./CustomFilterTicketFolios";
 import { getTicketFoliosColumns } from "../hooks/useGetTicketFoliosColumns";
+import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
 
 export const ListTicketFolioDepartments = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
-    const { data, isLoading: skeletonLoading, isError, refetch, isFetching } = useGetTicketFolioDepartments();
+    const { data, isLoading: skeletonLoading, isError, refetch, isFetching, error } = useGetTicketFolioDepartments();
 
     const limitNum = Number(searchParams.get('limit')) || 10;
     const pageNum = Number(searchParams.get('page')) || 1;
@@ -58,11 +59,6 @@ export const ListTicketFolioDepartments = () => {
 
     return (
         <>
-            <CustomFilterTicketFolios
-                table={table}
-                totalData={table.getRowCount()}
-                isLoadingData={skeletonLoading} />
-
             {isError ? (
                 <Empty>
                     <EmptyHeader>
@@ -73,7 +69,7 @@ export const ListTicketFolioDepartments = () => {
                             {t('folios.list_page.error.title')}
                         </EmptyTitle>
                         <EmptyDescription>
-                            {t('folios.list_page.error.description')}
+                            {getAxiosErrorMessage(error) || t('folios.list_page.error.description')}
                         </EmptyDescription>
                     </EmptyHeader>
                     <Button
@@ -86,6 +82,11 @@ export const ListTicketFolioDepartments = () => {
                 </Empty>
             ) :
                 (<>
+                    <CustomFilterTicketFolios
+                        table={table}
+                        totalData={table.getRowCount()}
+                        isLoadingData={skeletonLoading} />
+
                     <DataTable
                         table={table}
                         columnsLength={columns.length}

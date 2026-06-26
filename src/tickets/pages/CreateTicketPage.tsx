@@ -11,13 +11,14 @@ import type { TicketFormOutput } from "../schemas/ticket.schema";
 import { CreateTicketForm } from "../components/forms/CreateTicketForm";
 import { TicketFormSkeleton } from "../components/Skeletons/TicketFormSkeleton";
 import { CustomFormPageLayout } from "@/components/custom/CustomFormPageLayout";
+import { isAxiosError } from "axios";
 
 
 export const CreateTicketPage = () => {
     const { t } = useTranslation();
     const { navigateFallback, navigateSmartBack } = useSmartNavigation('/tickets');
 
-    const { mutate, isPending, isSuccess } = useCreateTicket();
+    const { mutateAsync, isPending, isSuccess } = useCreateTicket();
 
     const { data: issueTypes, isLoading, isError } = useAllIssueTypes();
 
@@ -34,25 +35,29 @@ export const CreateTicketPage = () => {
         }
     }, [isError, isLoading, issueTypes, navigateFallback, t]);
 
-    const handleSubmit = (values: TicketFormOutput) => {
-        mutate(values, {
-            onSuccess: () => {
-                sileo.success({
-                    title: t('tickets.create_page.success.title'),
-                    description: t('tickets.create_page.success.message'),
-                    duration: 5000,
-                });
-                navigateSmartBack();
-            },
-            onError: (error) => {
-                console.error("Error en la mutación:", error);
-                sileo.error({
-                    title: t('tickets.create_page.error.title'),
-                    description: getAxiosErrorMessage(error),
-                    duration: 7000,
-                });
-            },
-        });
+    const handleSubmit = async (values: TicketFormOutput, idempotencyKey: string) => {
+        try {
+            await mutateAsync({ data: values, idempotencyKey });
+
+            sileo.success({
+                title: t('tickets.create_page.success.title'),
+                description: t('tickets.create_page.success.message'),
+                duration: 5000,
+            });
+
+            navigateSmartBack();
+
+        } catch (error) {
+            if (isAxiosError(error) && error.response?.status === 409) {
+                return;
+            }
+            console.error("Error en la mutación:", error);
+            sileo.error({
+                title: t('tickets.create_page.error.title'),
+                description: getAxiosErrorMessage(error as Error),
+                duration: 7000,
+            });
+        }
     };
 
     const handleCancel = () => {

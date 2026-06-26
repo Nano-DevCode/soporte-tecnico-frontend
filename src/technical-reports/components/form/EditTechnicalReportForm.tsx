@@ -1,67 +1,51 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { BrushCleaning, Loader2, Save, User, X } from "lucide-react";
-
+import { Loader2, ClipboardSignature, Save, X, BrushCleaning } from "lucide-react";
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
-import type { TicketDetailsResponse } from "@/tickets/interfaces/ticket-details.response";
-import { TicketSchema, type TicketFormInput, type TicketFormOutput } from "@/tickets/schemas/ticket.schema";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { IssueType } from "@/IssueTypes/interfaces/issue-type";
+import { CustomOptionalInput } from "@/components/custom/CustomOptionalInput";
+import { InfiniteScrollComboboxEquipments } from "@/Equipments/components/InfiniteScrollComboboxEquipments";
+import type { FaultValidity } from "@/common/fault-validities/interfaces/fault-validity.interface";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { EditTechnicalReportSchema, type EditTechnicalReportFormInput, type EditTechnicalReportFormOutput } from "@/technical-reports/schemas/edit-technical-report.schema";
+import type { TechnicalReportDetails } from "@/technical-reports/interfaces/technical-report-details.interface";
 
 interface Props {
-    ticket?: TicketDetailsResponse,
-    isPending: boolean,
-    titleButton: string,
-    issueTypes: IssueType[]
-
-    onSubmit: (ticket: TicketFormOutput, idempotencyKey: string) => void,
-    onCancel: () => void,
-
+    isPending: boolean;
+    faultValidities: FaultValidity[];
+    technicalReport: TechnicalReportDetails
+    onSubmit: (data: EditTechnicalReportFormOutput) => void;
+    onCancel: () => void;
 }
 
-export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onCancel, issueTypes }: Props) => {
+export const EditTechnicalReportForm = ({ onSubmit, isPending, onCancel, faultValidities, technicalReport }: Props) => {
     const { t } = useTranslation();
+    const schema = useMemo(() => EditTechnicalReportSchema(t), [t]);
 
-    const [idempotencyKey] = useState(() => crypto.randomUUID());
-
-    const schema = useMemo(() => TicketSchema(t), [t]);
-
-    const defaultFormValues = {
-        description: ticket?.description ?? "",
-        affected_name: ticket?.affected_name ?? "",
-        evidence_url: ticket?.evidence_url ?? "",
-        contact_email: ticket?.contact_email ?? "",
-        available_hours: ticket?.available_hours ?? "",
-        equipment_location: ticket?.equipment_location ?? "",
-        issue_type: ticket?.issue_type?.id ? String(ticket.issue_type.id) : "",
-    };
-
-    const form = useForm<TicketFormInput, unknown, TicketFormOutput>({
+    const form = useForm<EditTechnicalReportFormInput, unknown, EditTechnicalReportFormOutput>({
         resolver: zodResolver(schema),
-        defaultValues: defaultFormValues,
-        values: defaultFormValues
+        defaultValues: {
+            diagnosis: technicalReport.diagnosis || "",
+            work_performed: technicalReport.work_performed || "",
+            materials_used: technicalReport.materials_used || "",
+            equipment_ids: technicalReport.equipments,
+            fault_validity_id: technicalReport.fault_validity.id,
+        },
     });
-
-    const isBusy = isPending || form.formState.isSubmitting;
-
-    const handleSafeSubmit = (data: TicketFormOutput) => {
-        onSubmit(data, idempotencyKey);
-    };
 
     const handleCancel = () => {
         if (form.formState.isDirty) {
@@ -71,30 +55,34 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
         onCancel();
     };
 
+    const isBusy = isPending || form.formState.isSubmitting;
+
     return (
         <Card>
             <CardHeader className="gap-0">
                 <CustomHeaderCard
-                    title={t('tickets.form.header.title')}
-                    description={t('tickets.form.header.description')}
-                    icon={User}
+                    title={t('tickets.form.intervene.header.title')}
+                    description={t('tickets.form.intervene.header.description')}
+                    icon={ClipboardSignature}
                 />
             </CardHeader>
             <Separator />
-            <CardContent>
+            <CardContent >
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleSafeSubmit)} noValidate id="form-ticket">
-                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 items-start">
+                    <form onSubmit={form.handleSubmit(onSubmit)} id="form-intervene-ticket">
+                        <div className="space-y-6">
+
                             <FormField
                                 control={form.control}
-                                name="affected_name"
+                                name="diagnosis"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('tickets.form.fields.affected_name.label')}</FormLabel>
+                                        <FormLabel>{t('tickets.form.intervene.fields.diagnosis.label')}</FormLabel>
                                         <FormControl>
-                                            <Input
+                                            <Textarea
                                                 autoFocus
-                                                placeholder={t('tickets.form.fields.affected_name.placeholder')}
+                                                placeholder={t('tickets.form.intervene.fields.diagnosis.placeholder')}
+                                                className="resize-none min-h-24"
                                                 disabled={isBusy}
                                                 {...field}
                                             />
@@ -106,33 +94,14 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
 
                             <FormField
                                 control={form.control}
-                                name="contact_email"
+                                name="work_performed"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('tickets.form.fields.contact_email.label')}</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="email"
-                                                placeholder={t('tickets.form.fields.contact_email.placeholder')}
-                                                disabled={isBusy}
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="equipment_location"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t('tickets.form.fields.equipment_location.label')}</FormLabel>
+                                        <FormLabel>{t('tickets.form.intervene.fields.work_performed.label')}</FormLabel>
                                         <FormControl>
                                             <Textarea
-                                                placeholder={t('tickets.form.fields.equipment_location.placeholder')}
-                                                className="resize-none min-h-15"
+                                                placeholder={t('tickets.form.intervene.fields.work_performed.placeholder')}
+                                                className="resize-none min-h-24"
                                                 disabled={isBusy}
                                                 {...field}
                                             />
@@ -144,14 +113,15 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
 
                             <FormField
                                 control={form.control}
-                                name="available_hours"
+                                name="materials_used"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('tickets.form.fields.available_hours.label')}</FormLabel>
+                                        <FormLabel>{t('tickets.form.intervene.fields.required_materials.label')}<CustomOptionalInput /></FormLabel>
+                                        <FormDescription>{t('tickets.form.intervene.fields.required_materials.description')}</FormDescription>
                                         <FormControl>
                                             <Textarea
-                                                placeholder={t('tickets.form.fields.available_hours.placeholder')}
-                                                className="resize-none min-h-15"
+                                                placeholder={t('tickets.form.intervene.fields.required_materials.placeholder')}
+                                                className="resize-none min-h-24"
                                                 disabled={isBusy}
                                                 {...field}
                                             />
@@ -163,27 +133,47 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
 
                             <FormField
                                 control={form.control}
-                                name="issue_type"
+                                name="equipment_ids"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('tickets.form.fields.issue_type.label')}</FormLabel>
+                                        <FormLabel>{t('tickets.form.intervene.fields.equipment_ids.label')}<CustomOptionalInput /></FormLabel>
+                                        <FormDescription>{t('tickets.form.intervene.fields.equipment_ids.description')}</FormDescription>
+                                        <FormControl>
+                                            <InfiniteScrollComboboxEquipments
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                disabled={isBusy}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="fault_validity_id"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('tickets.form.intervene.fields.fault_validity.label')}</FormLabel>
+                                        <FormDescription>{t('tickets.form.intervene.fields.fault_validity.description')}</FormDescription>
                                         <Select
-                                            name={field.name}
                                             disabled={isBusy}
+                                            name={field.name}
+                                            value={field.value}
                                             onValueChange={field.onChange}
-                                            value={field.value as string}
                                         >
                                             <FormControl>
                                                 <SelectTrigger className="w-full">
-                                                    <SelectValue placeholder={t('tickets.form.fields.issue_type.placeholder')} />
+                                                    <SelectValue placeholder={t('tickets.form.intervene.fields.fault_validity.placeholder')} />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                {issueTypes.map((type) => (
-                                                    <SelectItem key={type.id} value={String(type.id)}>
-                                                        {type.name}
-                                                    </SelectItem>
-                                                ))}
+                                                <SelectGroup>
+                                                    {faultValidities.map((fault) => (
+                                                        <SelectItem key={fault.id} value={fault.id.toString()}>{fault.name}</SelectItem>
+                                                    ))}
+                                                </SelectGroup>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />
@@ -191,27 +181,10 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                 )}
                             />
 
-                            <FormField
-                                control={form.control}
-                                name="description"
-                                render={({ field }) => (
-                                    <FormItem className="md:col-span-2">
-                                        <FormLabel>{t('tickets.form.fields.description.label')}</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                placeholder={t('tickets.form.fields.description.placeholder')}
-                                                className="resize-none min-h-30"
-                                                disabled={isBusy}
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
                         </div>
                     </form>
                 </Form>
+
             </CardContent>
             <Separator />
             <CardFooter className="flex flex-wrap-reverse sm:flex-row justify-end gap-3">
@@ -239,8 +212,8 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
 
                 <Button
                     type="submit"
-                    form="form-ticket"
-                    disabled={isBusy || (!form.formState.isDirty && !!ticket)}
+                    form="form-intervene-ticket"
+                    disabled={isBusy || !form.formState.isDirty}
                     className="w-full sm:w-auto"
                 >
                     {isBusy ? (
@@ -248,10 +221,9 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                     ) : (
                         <Save className="mr-1.5 h-4 w-4" />
                     )}
-                    {titleButton}
+                    {t('tickets.form.intervene.buttons.submit')}
                 </Button>
             </CardFooter>
-
-        </Card>
+        </Card >
     );
 };

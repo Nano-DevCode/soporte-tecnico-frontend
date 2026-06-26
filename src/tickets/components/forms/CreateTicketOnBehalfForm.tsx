@@ -6,6 +6,7 @@ import { BrushCleaning, Loader2, Save, User, X } from "lucide-react";
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -13,55 +14,52 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
 import type { TicketDetailsResponse } from "@/tickets/interfaces/ticket-details.response";
-import { TicketSchema, type TicketFormInput, type TicketFormOutput } from "@/tickets/schemas/ticket.schema";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { IssueType } from "@/IssueTypes/interfaces/issue-type";
+import { TicketOnBehalfSchema, type TicketOnBehalfFormInput, type TicketOnBehalfFormOutput } from "@/tickets/schemas/ticket-on-behalf.schema";
+import type { DepartmentManager } from "@/common/department-managers/interfaces/department-manager.interface";
+import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "@/components/ui/combobox";
+import { getFullName } from "@/lib/helpers/toFullName";
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 
 interface Props {
     ticket?: TicketDetailsResponse,
     isPending: boolean,
     titleButton: string,
     issueTypes: IssueType[]
+    departmentManagers: DepartmentManager[]
 
-    onSubmit: (ticket: TicketFormOutput, idempotencyKey: string) => void,
+    onSubmit: (ticket: TicketOnBehalfFormOutput) => void,
     onCancel: () => void,
 
 }
 
-export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onCancel, issueTypes }: Props) => {
+export const CreateTicketOnBehalfForm = ({ onSubmit, isPending, titleButton, onCancel, issueTypes, departmentManagers }: Props) => {
     const { t } = useTranslation();
 
-    const [idempotencyKey] = useState(() => crypto.randomUUID());
+    const schema = useMemo(() => TicketOnBehalfSchema(t), [t]);
 
-    const schema = useMemo(() => TicketSchema(t), [t]);
-
-    const defaultFormValues = {
-        description: ticket?.description ?? "",
-        affected_name: ticket?.affected_name ?? "",
-        evidence_url: ticket?.evidence_url ?? "",
-        contact_email: ticket?.contact_email ?? "",
-        available_hours: ticket?.available_hours ?? "",
-        equipment_location: ticket?.equipment_location ?? "",
-        issue_type: ticket?.issue_type?.id ? String(ticket.issue_type.id) : "",
-    };
-
-    const form = useForm<TicketFormInput, unknown, TicketFormOutput>({
+    const form = useForm<TicketOnBehalfFormInput, unknown, TicketOnBehalfFormOutput>({
         resolver: zodResolver(schema),
-        defaultValues: defaultFormValues,
-        values: defaultFormValues
+        defaultValues: {
+            user_id: "",
+            description: "",
+            affected_name: "",
+            evidence_url: "",
+            contact_email: "",
+            available_hours: "",
+            equipment_location: "",
+            issue_type: "",
+        }
     });
 
     const isBusy = isPending || form.formState.isSubmitting;
-
-    const handleSafeSubmit = (data: TicketFormOutput) => {
-        onSubmit(data, idempotencyKey);
-    };
 
     const handleCancel = () => {
         if (form.formState.isDirty) {
@@ -83,8 +81,64 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
             <Separator />
             <CardContent>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleSafeSubmit)} noValidate id="form-ticket">
+                    <form onSubmit={form.handleSubmit(onSubmit)} noValidate id="form-ticket">
+
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 items-start">
+                            <FormField
+                                control={form.control}
+                                name="user_id"
+                                render={({ field }) => (
+                                    <FormItem className="md:col-span-2">
+                                        <FormLabel>{t('tickets.form.create_on_behalf.fields.department_manager.label')}</FormLabel>
+                                        <FormDescription>{t('tickets.form.create_on_behalf.fields.department_manager.description')}</FormDescription>
+                                        <FormControl>
+                                            <Combobox
+                                                items={departmentManagers}
+                                                itemToStringLabel={(item: DepartmentManager) =>
+                                                    getFullName(item.name, item.paternalSurname, item.maternalSurname)
+                                                }
+                                                value={departmentManagers.find(manager => manager.user.id === field.value) || null}
+                                                onValueChange={(value) => field.onChange(value?.user.id)}
+                                                filter={(jefe, query) => {
+                                                    const textoBuscado = query.toLowerCase();
+                                                    const nombreCompleto = `${jefe.name} ${jefe.paternalSurname} ${jefe.maternalSurname}`.toLowerCase();
+                                                    const nombreDepartamento = jefe.department?.name?.toLowerCase() || "";
+                                                    const acronimo = jefe.department?.acronym?.toLowerCase() || "";
+
+                                                    return (
+                                                        nombreCompleto.includes(textoBuscado) ||
+                                                        nombreDepartamento.includes(textoBuscado) ||
+                                                        acronimo.includes(textoBuscado)
+                                                    );
+                                                }}
+                                                autoHighlight
+                                            >
+                                                <ComboboxInput autoFocus disabled={isBusy} placeholder={t('tickets.form.create_on_behalf.fields.department_manager.placeholder')} />
+                                                <ComboboxContent>
+                                                    <ComboboxEmpty>{t('tickets.form.create_on_behalf.fields.department_manager.empty')}</ComboboxEmpty>
+                                                    <ComboboxList>
+                                                        {(item: DepartmentManager) => (
+                                                            <ComboboxItem key={item.user.id} value={item}>
+                                                                <Item className="p-0">
+                                                                    <ItemContent>
+                                                                        <ItemTitle className="whitespace-nowrap">
+                                                                            {getFullName(item.name, item.paternalSurname, item.maternalSurname)}
+                                                                        </ItemTitle>
+                                                                        <ItemDescription>
+                                                                            {item.department.name} - {item.department.acronym}
+                                                                        </ItemDescription>
+                                                                    </ItemContent>
+                                                                </Item>
+                                                            </ComboboxItem>
+                                                        )}
+                                                    </ComboboxList>
+                                                </ComboboxContent>
+                                            </Combobox>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <FormField
                                 control={form.control}
                                 name="affected_name"
@@ -93,7 +147,6 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                                         <FormLabel>{t('tickets.form.fields.affected_name.label')}</FormLabel>
                                         <FormControl>
                                             <Input
-                                                autoFocus
                                                 placeholder={t('tickets.form.fields.affected_name.placeholder')}
                                                 disabled={isBusy}
                                                 {...field}
@@ -240,7 +293,7 @@ export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onC
                 <Button
                     type="submit"
                     form="form-ticket"
-                    disabled={isBusy || (!form.formState.isDirty && !!ticket)}
+                    disabled={isBusy || !form.formState.isDirty}
                     className="w-full sm:w-auto"
                 >
                     {isBusy ? (
