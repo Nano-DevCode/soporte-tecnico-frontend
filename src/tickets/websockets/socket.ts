@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-export const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000/realtime', {
+export const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000/realtime', {
   withCredentials: true,
   autoConnect: false,
   reconnection: true,
