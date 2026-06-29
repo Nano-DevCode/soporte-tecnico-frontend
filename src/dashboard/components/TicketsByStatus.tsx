@@ -34,19 +34,19 @@ export const TicketsByStatusCards = ({ data, isLoading }: Props) => {
     }
 
     return (
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
             {data.data.map((item) => (
-                <Card key={item.status} className="flex-1">
-                    <CardHeader className="flex flex-row items-center justify-between">
+                <Card key={item.status} className="flex-1 py-4 gap-0 justify-between">
+                    <CardHeader className="px-4 flex flex-row items-center justify-between">
                         <CardTitle
-                            className="text-sm font-medium truncate capitalize"
+                            className="text-sm font-medium capitalize"
                             title={item.status}
                         >
                             {item.status}
                         </CardTitle>
-                        <Ticket className="h-4 w-4 text-muted-foreground opacity-70" />
+                        <Ticket className="h-4 w-4 text-muted-foreground shrink-0" />
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="px-4">
                         <div className="text-2xl font-bold">
                             {item.count}
                         </div>

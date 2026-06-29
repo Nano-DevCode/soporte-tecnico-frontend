@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { FilterX } from "lucide-react";
+import { Filter, FilterX } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useDepartments } from "@/users/hooks/useDepartment";
 import { useSchoolPeriods } from "@/school-periods/hooks/useSchoolPeriods";
@@ -9,6 +9,7 @@ import { CustomFilterDate } from "@/components/custom/CustomFilterDate";
 import { InfiniteScrollComboboxTags } from "@/common/tags/components/InfiniteScrollComboboxTags";
 import { TicketPriorityLevel } from "@/tickets/interfaces/ticket-priority-level.type";
 import { useDashboardFilters } from "../hooks/useDashboardFilter";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export const FilterDashboard = () => {
     const { t } = useTranslation();
@@ -24,81 +25,98 @@ export const FilterDashboard = () => {
     }));
 
     return (
-        <div className="flex flex-col gap-2 p-4 rounded-xl border border-border bg-card/50 shadow-sm">
+        <Accordion type="single" collapsible className="rounded-lg border shadow-sm">
+            <AccordionItem value="filters" className="border-b px-2 last:border-b-0">
+                <AccordionTrigger className=" py-2 text-muted-foreground">
+                    <span className="flex items-center gap-2">
+                        <Filter className="h-3 w-3 " />
+                        {t('common.filters.label')}
+                    </span>
+                </AccordionTrigger>
+                <AccordionContent className="pb-2">
+                    <div className="grid grid-cols-8 gap-2">
+                        <div className="col-span-8 md:col-span-5 lg:col-span-4">
+                            <CustomFilterSelect
+                                label={t("tickets.list_page.table.headers.department")}
+                                defaultValue={filters.department}
+                                isLoading={loadingDepartments}
+                                onChange={(v) => updateFilter("department", v)}
+                                options={departments?.map(d => ({ value: d.id, label: d.name }))}
+                            />
+                        </div>
+                        <div className="col-span-8 md:col-span-3 lg:col-span-4">
+                            <CustomFilterSelect
+                                label={t("tickets.list_page.table.headers.issue_type")}
+                                defaultValue={filters.issue_type}
+                                isLoading={loadingIssues}
+                                onChange={(v) => updateFilter("issue_type", v)}
+                                options={issueTypes?.map(i => ({ value: i.id.toString(), label: i.name }))}
+                            />
+                        </div>
 
-            <div className="flex flex-col md:flex-row flex-wrap items-center gap-2">
-                <div className="flex-1 w-full md:min-w-1/2">
-                    <CustomFilterSelect
-                        label={t("tickets.list_page.table.headers.department")}
-                        defaultValue={filters.department}
-                        isLoading={loadingDepartments}
-                        onChange={(v) => updateFilter("department", v)}
-                        options={departments?.map(d => ({ value: d.id, label: d.name }))}
-                    />
-                </div>
-                <div className="flex-1 w-full md:min-w-1/2">
-                    <CustomFilterSelect
-                        label={t("tickets.list_page.table.headers.issue_type")}
-                        defaultValue={filters.issue_type}
-                        isLoading={loadingIssues}
-                        onChange={(v) => updateFilter("issue_type", v)}
-                        options={issueTypes?.map(i => ({ value: i.id.toString(), label: i.name }))}
-                    />
-                </div>
+                        <div className="col-span-4 sm:col-span-4 md:col-span-2">
+                            <CustomFilterSelect
+                                label={t("tickets.list_page.table.headers.priority")}
+                                defaultValue={filters.priority}
+                                onChange={(v) => updateFilter("priority", v)}
+                                options={priorityOptions}
+                            />
+                        </div>
 
-                <CustomFilterSelect
-                    label={t("tickets.list_page.table.headers.priority")}
-                    defaultValue={filters.priority}
-                    onChange={(v) => updateFilter("priority", v)}
-                    options={priorityOptions}
-                />
-
-                <CustomFilterSelect
-                    label={t("tickets.list_page.table.headers.school_period")}
-                    defaultValue={filters.school_period}
-                    isLoading={loadingPeriods}
-                    onChange={(v) => updateFilter("school_period", v)}
-                    options={schoolPeriods?.data.map(p => ({ value: p.id, label: p.name }))}
-                />
+                        <div className="col-span-4 sm:col-span-4 md:col-span-2">
+                            <CustomFilterSelect
+                                label={t("tickets.list_page.table.headers.school_period")}
+                                defaultValue={filters.school_period}
+                                isLoading={loadingPeriods}
+                                onChange={(v) => updateFilter("school_period", v)}
+                                options={schoolPeriods?.data.map(p => ({ value: p.id, label: p.name }))}
+                            />
+                        </div>
 
 
-                <div className="flex-1 flex flex-row flex-wrap md:flex-nowrap gap-2 w-full">
-                    <CustomFilterDate
-                        label={t('tickets.filters.date.from')}
-                        value={filters.start_date}
-                        onChange={(val) => updateMultipleFilters({ start_date: val })}
-                        maxDate={filters.end_date ? new Date(`${filters.end_date}T00:00:00`) : undefined}
-                    />
+                        <div className="col-span-4 md:col-span-2">
+                            <CustomFilterDate
+                                label={t('tickets.filters.date.from')}
+                                value={filters.start_date}
+                                onChange={(val) => updateMultipleFilters({ start_date: val })}
+                                maxDate={filters.end_date ? new Date(`${filters.end_date}T00:00:00`) : undefined}
+                            />
+                        </div>
 
-                    <CustomFilterDate
-                        label={t('tickets.filters.date.to')}
-                        value={filters.end_date}
-                        onChange={(val) => updateMultipleFilters({ end_date: val })}
-                        minDate={filters.start_date ? new Date(`${filters.start_date}T00:00:00`) : undefined}
-                    />
-                </div>
-                <div className="w-full shrink-0">
-                    <InfiniteScrollComboboxTags
-                        value={filters.tags}
-                        onChange={(newTagsArray) => updateFilter("tags", newTagsArray)}
-                        creatable={false}
-                    />
-                </div>
+                        <div className="col-span-4 md:col-span-2">
+                            <CustomFilterDate
+                                label={t('tickets.filters.date.to')}
+                                value={filters.end_date}
+                                onChange={(val) => updateMultipleFilters({ end_date: val })}
+                                minDate={filters.start_date ? new Date(`${filters.start_date}T00:00:00`) : undefined}
+                            />
+                        </div>
 
-            </div>
+                        <div className="col-span-8">
+                            <InfiniteScrollComboboxTags
+                                value={filters.tags}
+                                onChange={(newTagsArray) => updateFilter("tags", newTagsArray)}
+                                creatable={false}
+                            />
+                        </div>
 
-            {hasActiveFilters && (
-                <Button
-                    variant="outline"
-                    onClick={resetFilters}
-                    type="button"
-                    className="md:self-end text-muted-foreground border hover:text-destructive hover:bg-destructive/10"
-                >
-                    <FilterX className="h-4 w-4" />
-                    <span>{t("common.filters.clean")}</span>
-                </Button>
-            )}
+                        {hasActiveFilters && (
+                            <div className="col-span-8 flex justify-end">
+                                <Button
+                                    variant="outline"
+                                    onClick={resetFilters}
+                                    type="button"
+                                    className="text-muted-foreground border hover:text-destructive hover:bg-destructive/10"
+                                >
+                                    <FilterX className="h-4 w-4" />
+                                    <span>{t("common.filters.clean")}</span>
+                                </Button>
+                            </div>
+                        )}
 
-        </div>
+                    </div>
+                </AccordionContent>
+            </AccordionItem>
+        </Accordion>
     );
 };

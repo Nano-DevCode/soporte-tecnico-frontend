@@ -367,6 +367,7 @@
       "discard_changes": "Tienes cambios sin guardar. ¿Seguro que deseas salir?"
     },
     "filters": {
+      "label": "Filtros",
       "clean": "Limpiar",
       "status": {
         "name": "Estado",
@@ -537,6 +538,9 @@
     }
   },
   "tickets": {
+    "menu_options": {
+      "current": "Solicitudes Actules"
+    },
     "data": {
       "affected_name": "Responsable directo del equipo",
       "sender_name": "Nombre del remitente",
@@ -1489,6 +1493,7 @@
     "title": "Panel de Control",
     "metrics": {
       "error": "Error al cargar la métrica",
+      "no_data": "No se encontraron datos",
       "mttr": {
         "title": "Tiempo Promedio de Recuperación",
         "meta_text": "Meta: ≤ {{meta}} horas",

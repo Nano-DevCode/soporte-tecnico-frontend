@@ -4,6 +4,7 @@ import { CanRoute } from "@/common/permission/CanRoute";
 import { CreateTicketOnBehalfPage } from "./pages/CreateTicketOnBehalfPage";
 import { ViewResponsePage } from "./pages/ViewResponsePage";
 import { EditResponsePage } from "./pages/EditResponsePage";
+import { ListCurrentTicketPage } from "./pages/ListCurrentTicketsPage";
 
 const ListTicketPage = lazy(() => import("./pages/admin/ListTicketsPage").then(module => ({ default: module.ListTicketPage })));
 const AssignTicketPage = lazy(() => import("./pages/AssignTicketPage").then(module => ({ default: module.AssignTicketPage })));
@@ -22,6 +23,15 @@ export const TicketsRoutes = [
             <SuspenseWrapper>
                 <CanRoute permission="WATCH_TICKET_LIST">
                     <ListTicketPage />
+                </CanRoute>
+            </SuspenseWrapper>
+    },
+    {
+        path: 'currents',
+        element:
+            <SuspenseWrapper>
+                <CanRoute permission="WATCH_CURRENT_TICKET_LIST">
+                    <ListCurrentTicketPage />
                 </CanRoute>
             </SuspenseWrapper>
     },

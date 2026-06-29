@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { enUS, es } from "date-fns/locale";
 import { toFormatLocalDateString } from "@/lib/helpers/to-format-local-date-string";
 // 1. Asegúrate de importar useState y useEffect
-import { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react";
 
 interface Props {
   label: string;
@@ -26,7 +26,7 @@ export const CustomFilterDate = ({ label, value, onChange, maxDate, minDate }: P
   const currentLocale = i18n.language === 'en' ? enUS : es;
 
   const [today, setToday] = useState<Date | null>(null);
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setToday(new Date());
@@ -42,11 +42,13 @@ export const CustomFilterDate = ({ label, value, onChange, maxDate, minDate }: P
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="flex-1 justify-between px-3 font-normal">
+        <Button variant="outline" className="flex-1 w-full justify-between px-3 font-normal">
           <span>
-            <span className="text-muted-foreground ms-2">{label}:</span>
+            <span className="text-muted-foreground">{label}:</span>
             {dateValue ? (
-              toFormatLocalDateString(dateValue, i18n.language, 'PP')
+              <span className="ms-2">
+                {toFormatLocalDateString(dateValue, i18n.language, 'PP')}
+              </span>
             ) : (
               <span className="ms-2">
                 {t('tickets.filters.date.wathever')}
@@ -67,7 +69,7 @@ export const CustomFilterDate = ({ label, value, onChange, maxDate, minDate }: P
           defaultMonth={dateValue}
           disabled={(date) => {
             // 4. Si 'today' aún no se carga (estamos en el servidor), no bloqueamos nada para evitar errores
-            if (!today) return false; 
+            if (!today) return false;
 
             // 5. Usamos nuestras variables estables
             let isOut = date > today || date < MIN_DEFAULT_DATE;

@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from "react";
-import { Link, useLocation } from "react-router"; 
+import { Link, useLocation } from "react-router";
 import { useTranslation } from 'react-i18next';
 import { useUserRoles } from "@/auth/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
@@ -118,6 +118,12 @@ export const CustomSidebarNavContent = memo(() => {
       show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
     },
     {
+      title: t("tickets.menu_options.current"),
+      icon: Ticket,
+      path: "/tickets/currents",
+      show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
+    },
+    {
       title: t("technical_reports.menu_item.title"),
       icon: ClipboardList,
       path: "/technical-reports",
@@ -169,7 +175,7 @@ export const CustomSidebarNavContent = memo(() => {
         { title: t("notifications"), path: "/settings/notifications", show: true },
       ]
     }
-  ], [t, isSuperAdmin, isBossCC, isCoordinator, isBoss, isPlaning, isSecretaryCC, isTechnician]);
+  ], [t, isSuperAdmin, isCoordinator, isBossCC, isInventory, isTechnician, isBoss, isPlaning, isSecretaryCC]);
 
   return (
     <ScrollArea className="flex-1 min-h-0 px-3 py-4">
@@ -181,7 +187,6 @@ export const CustomSidebarNavContent = memo(() => {
             const isActiveGroup = item.subItems.some(sub => pathname === sub.path);
 
             acc.push(
-              // Aquí item.title está bien porque los collapsibles tienen títulos únicos
               <Collapsible key={item.title} className="group/collapsible" defaultOpen={isActiveGroup}>
                 <CollapsibleTrigger asChild>
                   <button type="button" className={getTriggerClass(isActiveGroup)}>
@@ -196,7 +201,6 @@ export const CustomSidebarNavContent = memo(() => {
                     {item.subItems.reduce((subAcc: React.ReactNode[], sub) => {
                       if (!sub.show) return subAcc;
                       subAcc.push(
-                        // Aquí ya usabas sub.path, ¡lo cual es correcto!
                         <Link key={sub.path} to={sub.path} className={getSubItemClass(pathname === sub.path)}>
                           {sub.icon ? <sub.icon className="h-4 w-4" /> : <List className="h-4 w-4" />}
                           {sub.title}
@@ -210,7 +214,6 @@ export const CustomSidebarNavContent = memo(() => {
             );
           } else {
             acc.push(
-              // 🔥 EL ARREGLO ESTÁ AQUÍ: Cambiamos item.title por item.path! 🔥
               <Link key={item.path!} to={item.path!} className={getItemClass(pathname === item.path)}>
                 <item.icon className="h-5 w-5 shrink-0" />
                 <span className="flex-1">{item.title}</span>

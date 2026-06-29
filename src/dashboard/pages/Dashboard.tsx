@@ -17,7 +17,7 @@ import { MaintenanceCard } from '../components/PreventiveMaintainence';
 import { useGetCostPerIncident } from '../hooks/useGetCostPerIncident';
 import { CostPerIncidentCard } from '../components/CostPerIncidentCard';
 import { useGetTicketsByStatus } from '../hooks/useGetTicketsByStatus';
-import { TicketsByStatusCards } from '../components/usetTicketsByStatus';
+import { TicketsByStatusCards } from '../components/TicketsByStatus';
 
 export const Dashboard = () => {
     const { t } = useTranslation();
@@ -86,7 +86,7 @@ export const Dashboard = () => {
 
             <FilterDashboard />
 
-            <div className="mx-auto space-y-2 mt-4">
+            <div className="mx-auto space-y-2 mt-3">
 
                 <TicketsByStatusCards data={statusData} isLoading={isStatusLoading} />
 
@@ -170,7 +170,7 @@ export const Dashboard = () => {
                     )}
                 </div>
 
-                <div className="flex flex-row flex-wrap gap-2 items-stretch mt-4">
+                <div className="flex flex-row flex-wrap gap-2 items-stretch mt-3">
                     <div className="flex-1 flex">
                         {isInterruptionsError ? (
                             <div className="flex flex-1 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
