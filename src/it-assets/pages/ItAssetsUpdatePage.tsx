@@ -9,7 +9,6 @@ import { Save, Loader2 } from "lucide-react";
 import { isAxiosError } from "axios";
 import { sileo } from "sileo";
 import { useTranslation } from "react-i18next";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,12 +18,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-
 import { useItAssets } from "../hooks/useItAssets";
 import useItAssetsStatus from "../hooks/useItAssetsStatus";
-
 import type { BackendError } from "@/interfaces/backendError.interfaces";
-
 import { ItAssetsForm } from "../components/ItAssetsFormPage";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 import { logError } from "@/utils/logger";
@@ -45,7 +41,6 @@ const ItAssetsUpdatePage = () => {
     itAssetsStatus,
     isLoading: isLoadingStatus,
   } = useItAssetsStatus();
-
 
   const updateAssetSchema = useMemo(
     () =>
@@ -113,7 +108,6 @@ const ItAssetsUpdatePage = () => {
     }
   });
 
-
   useEffect(() => {
     if (!itAsset) return;
 
@@ -131,7 +125,6 @@ const ItAssetsUpdatePage = () => {
 
   }, [itAsset, form]);
 
-
   useEffect(() => {
     if (
       !itAsset?.itAssetStatus?.id ||
@@ -140,7 +133,6 @@ const ItAssetsUpdatePage = () => {
     ) {
       return;
     }
-
     form.setValue(
       "statusId",
       itAsset.itAssetStatus.id,
@@ -157,9 +149,7 @@ const ItAssetsUpdatePage = () => {
     form,
   ]);
 
-
   const isUpdating = updateAssetMutation.isPending;
-
 
   const onSubmit = async (data: UpdateAssetFormValues) => {
     const formData = new FormData();
@@ -169,23 +159,18 @@ const ItAssetsUpdatePage = () => {
     formData.append("statusId", data.statusId);
     formData.append("typeId", data.typeId);
 
-
     if (data.imageFile instanceof File) {
       formData.append("file", data.imageFile);
     }
-
     if (data.idInventary) {
       formData.append("idInventary", data.idInventary);
     }
-
     if (data.invoiceId) {
       formData.append("invoiceId", data.invoiceId);
     }
-
     if (data.description) {
       formData.append("description", data.description);
     }
-
 
     try {
       await sileo.promise(
@@ -197,7 +182,6 @@ const ItAssetsUpdatePage = () => {
           loading: {
             title: t("itAssets.updatePage.sileo.loading.title"),
           },
-
           success: {
             title: t("itAssets.updatePage.sileo.success.title"),
             description: t(
@@ -205,12 +189,10 @@ const ItAssetsUpdatePage = () => {
             ),
             duration: 4000,
           },
-
           error: (err) => {
             let backendMessage = t(
               "itAssets.updatePage.sileo.error.defaultMessage"
             );
-
             if (
               isAxiosError<BackendError>(err) &&
               err.response?.data?.message
@@ -221,7 +203,6 @@ const ItAssetsUpdatePage = () => {
                 ? rawMessage[0]
                 : rawMessage;
             }
-
             return {
               title: t("itAssets.updatePage.sileo.error.title"),
               description: backendMessage,
@@ -238,7 +219,6 @@ const ItAssetsUpdatePage = () => {
     }
   };
 
-
   if (isLoadingAsset) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
@@ -251,39 +231,28 @@ const ItAssetsUpdatePage = () => {
     );
   }
 
-
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-10">
-
       <CustomTitlePageWithBack
         backLink="/it-assets"
         title={t("itAssets.updatePage.header.title")}
         description={t("itAssets.updatePage.header.description")}
       />
-
-
       <Card>
-
         <CardHeader>
           <CardTitle>
             {t("itAssets.updatePage.card.title")}
           </CardTitle>
-
           <CardDescription>
             {t("itAssets.updatePage.card.description")}
           </CardDescription>
         </CardHeader>
-
-
         <CardContent>
-
           <Form {...form}>
-
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-6"
             >
-
               <ItAssetsForm
                 isSaving={isUpdating}
                 itAssetsStatus={itAssetsStatus}
@@ -291,10 +260,7 @@ const ItAssetsUpdatePage = () => {
                 showObservations={false}
                 itAssetInitialData={itAsset}
               />
-
-
               <div className="flex justify-end gap-4 pt-4 border-t">
-
                 <Button
                   type="button"
                   variant="outline"
@@ -303,8 +269,6 @@ const ItAssetsUpdatePage = () => {
                 >
                   {t("itAssets.updatePage.buttons.cancel")}
                 </Button>
-
-
                 <Button type="submit" disabled={isUpdating}>
                   {isUpdating ? (
                     <>
@@ -318,20 +282,13 @@ const ItAssetsUpdatePage = () => {
                     </>
                   )}
                 </Button>
-
               </div>
-
             </form>
-
           </Form>
-
         </CardContent>
-
       </Card>
-
     </div>
   );
 };
-
 
 export default ItAssetsUpdatePage;
