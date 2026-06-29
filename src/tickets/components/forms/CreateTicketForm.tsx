@@ -22,6 +22,7 @@ import { TicketSchema, type TicketFormInput, type TicketFormOutput } from "@/tic
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { IssueType } from "@/IssueTypes/interfaces/issue-type";
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
     ticket?: TicketDetailsResponse,
@@ -37,7 +38,7 @@ interface Props {
 export const CreateTicketForm = ({ ticket, onSubmit, isPending, titleButton, onCancel, issueTypes }: Props) => {
     const { t } = useTranslation();
 
-    const [idempotencyKey] = useState(() => crypto.randomUUID());
+    const [idempotencyKey] = useState(() => uuidv4());
 
     const schema = useMemo(() => TicketSchema(t), [t]);
 

@@ -27,28 +27,10 @@ export const TicketDocuments = ({ documents }: Props) => {
 
     const handleOpenDocument = (filename: string, documentType: TYPE_DOCUMENT_NAME) => {
         if (documentType === TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM) {
-            openRequestPdf(filename
-                // ,{
-                // onError: (error) => {
-                //     sileo.error({
-                //         title: t('tickets.documents.errors.title'),
-                //         description: getAxiosErrorMessage(error) || t('tickets.documents.errors.loading_request'),
-                //     });
-                // }
-                // }
-            );
+            openRequestPdf(filename);
         }
         else if (documentType === TYPE_DOCUMENT_NAME.WORK_ORDER_FORM) {
-            openResponsePdf(filename
-                //     , {
-                //     onError: (error) => {
-                //         sileo.error({
-                //             title: t('tickets.documents.errors.title'),
-                //             description: getAxiosErrorMessage(error) || t('tickets.documents.errors.loading_response'),
-                //         });
-                //     }
-                // }
-            );
+            openResponsePdf(filename);
         }
     };
 

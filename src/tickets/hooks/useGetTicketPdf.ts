@@ -1,7 +1,11 @@
+import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
 import { getTicketPdfAction } from "../actions/get-ticket-pdf.action";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { sileo } from "sileo";
 
 export const useGetTicketPdf = () => {
+    const { t } = useTranslation();
     const [isPending, setIsPending] = useState(false);
 
     const mutate = async (...args: Parameters<typeof getTicketPdfAction>) => {
@@ -25,6 +29,11 @@ export const useGetTicketPdf = () => {
             setTimeout(() => window.URL.revokeObjectURL(fileUrl), 1000);
         } catch (error) {
             console.error("Error al obtener el PDF", error);
+            sileo.error({
+                title: t('tickets.documents.errors.title'),
+                description: getAxiosErrorMessage(error as Error) || t('tickets.documents.errors.loading_request'),
+            });
+
         } finally {
             setIsPending(false);
         }
