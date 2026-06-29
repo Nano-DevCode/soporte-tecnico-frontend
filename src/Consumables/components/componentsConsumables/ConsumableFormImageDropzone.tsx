@@ -59,7 +59,8 @@ export const ConsumableImageDropzone: React.FC<ImageDropzoneProps> = ({
                 <Input
                     id="image-upload"
                     type="file"
-                    accept="image/*"
+                    // accept="image/*"
+                    accept="image/jpeg, image/png, image/webp"
                     disabled={disabled}
                     className="hidden"
                     {...register("consumable.imageUrl", {

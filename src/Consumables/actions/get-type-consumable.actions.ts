@@ -10,7 +10,6 @@ export interface TypeConsumable {
 }
 
 export interface TypeConsumableResponse {
-    // Debe coincidir exactamente con la clave que tu backend use en el JSON paginado
     typeConsumables: TypeConsumable[];
     meta: {
         total: number;

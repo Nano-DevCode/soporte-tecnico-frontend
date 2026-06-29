@@ -98,16 +98,16 @@ export const CustomSidebarNavContent = memo(() => {
     {
       title: t("custom_nav_content_subitem_list_consumables"),
       icon: Blocks,
-      show: isSuperAdmin || isInventory || isBossCC || isCoordinator,
+      show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC,
       subItems: [
-        { title: t("custom_nav_content_catalog_consumables"), path: "/consumables", show: isSuperAdmin || isInventory || isBossCC || isCoordinator, },
-        { title: t("custom_nav_content_movements_history"), path: "/consumable-movements", show: isSuperAdmin || isInventory || isBossCC || isCoordinator, },
+        { title: t("custom_nav_content_catalog_consumables"), path: "/consumables", show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC, },
+        { title: t("custom_nav_content_movements_history"), path: "/consumable-movements", show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC, },
       ]
     },
     {
       title: t("custom_nav_content_list_equipments"),
       icon: Archive,
-      show: isSuperAdmin || isTechnician || isCoordinator || isBossCC,
+      show: isSuperAdmin || isTechnician || isCoordinator || isBossCC || isSecretaryCC,
       path: "/equipments",
       // show: true,
     },

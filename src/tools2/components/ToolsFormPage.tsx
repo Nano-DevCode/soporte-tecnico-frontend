@@ -1,12 +1,10 @@
 import { useFormContext } from "react-hook-form";
-import { Info } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 // UI Components
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TypeSelectField } from "./TypeSelectField";
 import { BrandSelectField } from "./BrandSelectField";
 import { ModelSelectField } from "./ModelSelectField";
@@ -14,6 +12,8 @@ import { InvoiceSelectField } from "./InvoiceSelectField";
 import { ImageUploadField } from "./ImageUploadField";
 import type { ToolsStatus } from "../interfaces/toolsStatusResponse.interface";
 import type { Tool } from "../interfaces/toolsResponse.interface";
+import { CustomCombobox } from "@/components/custom/CustomCombobox";
+import { Info } from "lucide-react";
 
 interface ToolsFormProps {
   isSaving: boolean;
@@ -80,7 +80,7 @@ export const ToolsForm = ({
           initialData={toolInitialData?.invoice ? { id: toolInitialData.invoice.id, name: toolInitialData.invoice.idInternal || "Factura" } : null} 
         />
 
-        {/* ESTADO DEL ACTIVO */}
+        {/* ESTADO DEL ACTIVO - COMPONENTE REUTILIZABLE */}
         <FormField
           control={form.control}
           name="statusId"
@@ -92,29 +92,26 @@ export const ToolsForm = ({
                   : t("tools.components.form.status.labelCreate")} <span className="text-red-500">*</span>
               </FormLabel>
               
-              <Select 
-                // 1. Pasamos el valor directamente a react-hook-form (es un string UUID)
-                onValueChange={field.onChange} 
-                
-                // 2. Usamos el valor directamente, con un fallback a string vacío si es null/undefined
-                value={field.value || ""} 
-                
-                disabled={isLoadingStatus || isSaving}
-              >
-                <FormControl>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t("tools.components.form.status.placeholder")} />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {toolsStatus.map((status) => (
-                    // 3. Pasamos el UUID directamente al value
-                    <SelectItem key={status.id} value={status.id}>
-                      {status.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <CustomCombobox
+                  // Mapeamos los datos de la API (id, name) al estándar del componente (value, label)
+                  options={toolsStatus.map((status) => ({
+                    value: String(status.id),
+                    label: status.name,
+                  }))}
+                  
+                  // Pasamos las propiedades de react-hook-form
+                  value={field.value ? String(field.value) : undefined}
+                  onChange={(val) => {
+                    field.onChange(val); // Actualiza el estado del form
+                  }}
+                  
+                  // Configuración extra
+                  disabled={isLoadingStatus || isSaving}
+                  placeholder={t("tools.components.form.status.placeholder")}
+                  emptyText="No se encontraron estados."
+                />
+              </FormControl>
               
               <FormMessage />
             </FormItem>

@@ -7,7 +7,11 @@ const soporteTecnicoApi = axios.create({
 
 soporteTecnicoApi.interceptors.request.use((config) => {
   const currentLang = localStorage.getItem('i18nextLng') || 'es';
-  config.headers['Accept-Language'] = currentLang;
+  
+  // 2. Extraemos el idioma principal (convierte 'es-sl' -> 'es', 'en-US' -> 'en')
+  const baseLang = currentLang.split('-')[0];
+
+  config.headers['Accept-Language'] = baseLang;
 
   return config;
 });

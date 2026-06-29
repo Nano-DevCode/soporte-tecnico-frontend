@@ -189,5 +189,7 @@ export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> 
         PERMISSIONS.WATCH_RESPONSE_REPORT
     ],
     [AppRoles.Visitante]: [],
-    [AppRoles.Inventario]: []
+    [AppRoles.Inventario]: [
+        PERMISSIONS.WATCH_TICKET_LIST,
+    ]
 };

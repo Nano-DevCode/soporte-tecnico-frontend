@@ -84,7 +84,7 @@ export const CustomEquipmentFilters = memo(() => {
       if (inputValue !== searchTerm) {
         updateFilters("search", inputValue);
       }
-    }, 400);
+    }, 800);
 
     return () => clearTimeout(delayDebounceFn);
   }, [inputValue, searchTerm]);

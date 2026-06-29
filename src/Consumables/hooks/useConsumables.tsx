@@ -56,18 +56,15 @@ export const useConsumables = () => {
         refetch: consumablesQuery.refetch,
     };
 };
-// --- HOOK: DETALLES DE LA BOLSA (SELECCIONADOS) ---
 export const useConsumablesBagData = (ids: string[]) => {
     const {data,isLoading} = useQuery({
         queryKey: ['consumables-bag-details'],
         queryFn: async () => {
             if (ids.length === 0) return [];
 
-            // 1. Hacemos la primera llamada para saber cuántas páginas hay
             const firstPage = await getConsumablesAction({ limit: 100, offset: 0 });
             const totalPages = Math.ceil(firstPage.meta.total / 100);
 
-            // 2. Si hay más páginas, traemos el resto en paralelo
             const allConsumables = [...firstPage.consumables];
             
             if (totalPages > 1) {
@@ -81,7 +78,6 @@ export const useConsumablesBagData = (ids: string[]) => {
                 });
             }
 
-            // 3. Normalizamos y retornamos
             return allConsumables.map((item) => ({
                 ...item,
                 imageUrl: item.imageUrl ?? null,
@@ -93,8 +89,6 @@ export const useConsumablesBagData = (ids: string[]) => {
     });
 
     return {
-        // bagConsumables: bagQuery.data ?? [],
-        // isBagLoading: bagQuery.isLoading,
         bagConsumables: (data ?? []).filter(item => ids.includes(String(item.id))),
         isBagLoading: isLoading,
     };

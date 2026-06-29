@@ -52,7 +52,6 @@ export const CatalogSelector = ({
         singleData
     } = hook;
 
-    // --- Sincronización para edición, hidratación y asincronía ---
     useEffect(() => {
         if (value?.id) {
             setSelectedId(value.id);
@@ -60,18 +59,11 @@ export const CatalogSelector = ({
             setSelectedId(null);
         }
     }, [value?.id, setSelectedId]);
-
-    // --- Mapeador inteligente de nombres según las llaves del objeto ---
-    // --- Mapeador inteligente de nombres según las llaves del objeto ---
     const formattedOptions = useMemo<UISelectOption[]>(() => {
-        // Si por alguna razón 'options' no es un arreglo válido, evitamos que rompa el componente
         const safeOptions = Array.isArray(options) ? options : [];
 
-        // 1. Mapeamos las opciones de la lista paginada
         const listOptions = safeOptions.map((opt: any) => {
             if (!opt) return { id: "", name: "Elemento inválido" };
-
-            // CASO 1: Es un Ticket (Tiene folio)
             if (opt.folio) {
                 const ticketDesc = opt.description ? ` - ${opt.description}` : '';
                 return {
@@ -80,7 +72,6 @@ export const CatalogSelector = ({
                 };
             }
 
-            // CASO 2: Tiene marca y modelo (Es un equipo/consumible)
             if (opt.brand || opt.model) {
                 return {
                     id: String(opt.id),
@@ -88,7 +79,6 @@ export const CatalogSelector = ({
                 };
             }
 
-            // CASO 3: Catálogo genérico (Tiene name)
             if (opt.name) {
                 return {
                     id: String(opt.id),
@@ -96,14 +86,12 @@ export const CatalogSelector = ({
                 };
             }
 
-            // CASO 4: ULTRA-FALLBACK (Si no tiene nada, muestra el ID o un texto de emergencia)
             return {
                 id: String(opt.id || ''),
                 name: opt.id ? `ID: ${opt.id}` : "Sin nombre o folio asignado"
             };
         });
 
-        // 2. Hidratación: Para cuando se carga un registro existente (singleData)
         if (singleData && !listOptions.some(opt => opt.id === String(singleData.id))) {
             let singleName;
 
@@ -127,8 +115,6 @@ export const CatalogSelector = ({
     const handleCreate = async (name: string) => {
         const trimmedName = name.trim();
         if (!trimmedName) return;
-
-        // Si en ConsumableFields pasaste handleCreateType, handleCreateBrand, etc., se ejecuta aquí
         if (customOnCreate) {
             await customOnCreate(trimmedName);
             return;

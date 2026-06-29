@@ -1,21 +1,15 @@
 import { useFormContext } from "react-hook-form";
 import { Info } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
-// UI Components
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-// Wrappers Custom
+import { CustomCombobox } from "@/components/custom/CustomCombobox"; 
 import { TypeSelectField } from "./TypeSelectField";
 import { BrandSelectField } from "./BrandSelectField";
 import { ModelSelectField } from "./ModelSelectField";
 import { InvoiceSelectField } from "./InvoiceSelectField";
 import { ImageUploadField } from "./ImageUploadField";
-
-// Tipados
 import type { ItAssetsStatus } from "../interfaces/itAssetsStatusResponse.interface";
 import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
 
@@ -37,16 +31,13 @@ export const ItAssetsForm = ({
   const { t } = useTranslation();
   const form = useFormContext();
 
-  // Escuchamos el estado seleccionado para mostrar su descripción
   const currentStatusId = form.watch("statusId");
-  const selectedStatusDetail = itAssetsStatus.find(status => status.id === currentStatusId);
+  const selectedStatusDetail = itAssetsStatus.find(status => String(status.id) === String(currentStatusId));
 
   return (
     <div className="space-y-6">
-      {/* === GRID DE 2 COLUMNAS PARA CAMPOS CORTOS === */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-        
-        {/* NUMERO DE SERIE */}
+
         <FormField
           control={form.control}
           name="serialNumber"
@@ -97,7 +88,7 @@ export const ItAssetsForm = ({
           initialData={itAssetInitialData?.invoice ? { id: itAssetInitialData.invoice.id, name: itAssetInitialData.invoice.idInternal || "Factura" } : null} 
         />
 
-        {/* ESTADO DEL ACTIVO */}
+        {/* ESTADO DEL ACTIVO - ACTUALIZADO CON CustomCombobox */}
         <FormField
           control={form.control}
           name="statusId"
@@ -108,25 +99,22 @@ export const ItAssetsForm = ({
                   ? t("itAssets.components.form.status.labelEdit") 
                   : t("itAssets.components.form.status.labelCreate")} <span className="text-red-500">*</span>
               </FormLabel>
-              <Select 
-                // IDÉNTICO A TOOLS:
-                onValueChange={field.onChange} 
-                value={field.value || ""} 
-                disabled={isLoadingStatus || isSaving}
-              >
-                <FormControl>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t("itAssets.components.form.status.placeholder")} />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {itAssetsStatus.map((status) => (
-                    <SelectItem key={status.id} value={status.id}>
-                      {status.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              
+              <FormControl>
+                <CustomCombobox
+                  // Mapeamos los datos al formato genérico del combobox
+                  options={itAssetsStatus.map((status) => ({
+                    value: String(status.id),
+                    label: status.name,
+                  }))}
+                  value={field.value ? String(field.value) : undefined}
+                  onChange={(val) => field.onChange(val)}
+                  disabled={isLoadingStatus || isSaving}
+                  placeholder={t("itAssets.components.form.status.placeholder")}
+                  emptyText="No se encontraron estados."
+                />
+              </FormControl>
+              
               <FormMessage />
             </FormItem>
           )}

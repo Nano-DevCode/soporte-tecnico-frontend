@@ -85,8 +85,13 @@ export const InfiniteScrollSelect = React.memo(function InfiniteScrollSelect({
     <Combobox
       items={options}
       itemToStringValue={(option) => option?.name ?? ""}
-      value={value}
+      value={value ?? { id: "", name: "" }}
       onValueChange={(val) => {
+        if (!val || val.id === "") {
+          onChange(null);
+          return;
+        }
+
         if (val?.id === "CREATE_NEW_ITEM") {
           onCreate?.(val.name);
         } else {

@@ -99,7 +99,7 @@ export const CustomConsumableFilters = memo(() => {
     };
 
     return (
-        <div className="p-3 rounded-lg border border-border bg-card shadow-sm space-y-2.5">
+        <div className="p-3 rounded-lg border border-border bg-card shadow-sm space-y-3">
 
             {/* 1. BUSCADOR PRINCIPAL (Nivel Superior) */}
             <div className="relative w-full">

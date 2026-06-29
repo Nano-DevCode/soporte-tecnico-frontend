@@ -41,37 +41,38 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/50">
-            <TableHead className="text-center font-bold min-w-27.5 max-w-30">{t("ui_th_inventory_no")}</TableHead>
-            <TableHead className="min-w-27.5 max-w-50">{t("ui_th_type")}</TableHead>
-            <TableHead className="min-w-27.5 max-w-50">{t("ui_th_brand_model")}</TableHead>
-            <TableHead className="min-w-27.5 max-w-30">{t("ui_th_department")}</TableHead>
-            <TableHead className="min-w-27.5 max-w-30">{t("ui_th_responsible")}</TableHead>
-            <TableHead className="min-w-27.5 max-w-50">{t("ui_th_status")}</TableHead>
+            {/* Ajuste de tamaños proporcionales en cabeceras en lugar de clases estáticas truncadas */}
+            <TableHead className="w-[12%] text-center font-bold">{t("ui_th_inventory_no")}</TableHead>
+            <TableHead className="w-[15%] text-center">{t("ui_th_type")}</TableHead>
+            <TableHead className="w-[15%] text-left">{t("ui_th_brand_model")}</TableHead>
+            <TableHead className="w-[15%] text-left">{t("ui_th_department")}</TableHead>
+            <TableHead className="w-[15%] text-left">{t("ui_th_responsible")}</TableHead>
+            <TableHead className="w-[13%] text-center">{t("ui_th_status")}</TableHead>
 
-            {isDiferent && <TableHead className="">{t("ui_th_description")}</TableHead>}
+            {isDiferent && <TableHead className="w-[20%] text-left">{t("ui_th_description")}</TableHead>}
 
             {isComputer && (
               <>
-                <TableHead className="min-w-27.5 max-w-30">{t("ui_th_processor")}</TableHead>
-                <TableHead className="min-w-27.5 max-w-10">{t("ui_th_ram")}</TableHead>
-                <TableHead className="min-w-27.5 max-w-30">{t("ui_th_os")}</TableHead>
+                <TableHead className="w-[12%] text-left">{t("ui_th_processor")}</TableHead>
+                <TableHead className="w-[8%] text-left">{t("ui_th_ram")}</TableHead>
+                <TableHead className="w-[12%] text-left">{t("ui_th_os")}</TableHead>
               </>
             )}
 
             {isPrinter && (
               <>
-                <TableHead className="min-w-27.5 max-w-30">{t("ui_th_functionality")}</TableHead>
-                <TableHead className="min-w-27.5 max-w-30">{t("ui_th_print_type")}</TableHead>
+                <TableHead className="w-[15%] text-left">{t("ui_th_functionality")}</TableHead>
+                <TableHead className="w-[15%] text-left">{t("ui_th_print_type")}</TableHead>
               </>
             )}
 
             {isNetwork && (
               <>
-                <TableHead className="min-w-27.5 max-w-30">{t("ui_th_network_type")}</TableHead>
-                <TableHead className="min-w-27.5 max-w-30">{t("ui_th_ports")}</TableHead>
+                <TableHead className="w-[15%] text-left">{t("ui_th_network_type")}</TableHead>
+                <TableHead className="w-[10%] text-left">{t("ui_th_ports")}</TableHead>
               </>
             )}
-            <TableHead className="text-center">{t("ui_th_actions")}</TableHead>
+            <TableHead className="w-[8%] text-center">{t("ui_th_actions")}</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -79,9 +80,9 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
           {equipments.length > 0 ? (
             equipments.map((eq) => (
               <TableRow key={eq.id} className="group transition-colors hover:bg-muted/30">
-                <TableCell className="text-center">{eq.folio}</TableCell>
+                <TableCell className="text-left whitespace-nowrap">{eq.folio}</TableCell>
 
-                <TableCell className="max-w-50 text-center">
+                <TableCell className="text-center">
                   {(() => {
                     const config: Record<string, { bg: string, text: string, icon: LucideIcon, label: string }> = {
                       computadora: { bg: "bg-blue-100", text: "text-blue-800", icon: Monitor, label: t("ui_category_computer") },
@@ -113,13 +114,15 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
                   })()}
                 </TableCell>
 
-                <TableCell className="">{eq.model}</TableCell>
-                <TableCell className="font-bold text-[12px]" style={{ maxWidth: '90px' }}>
+                <TableCell className="break-all">{eq.model}</TableCell>
+                
+                <TableCell className="font-bold text-[12px]" style={{ maxWidth: '140px' }}>
                   {formatLongText(eq.departamento || '')}
                 </TableCell>
-                <TableCell className="">{eq.responsableName}</TableCell>
+                
+                <TableCell className="break-words">{eq.responsableName}</TableCell>
 
-                <TableCell>
+                <TableCell className="text-center whitespace-nowrap">
                   <span className={`px-3 py-1 rounded-full text-[10px] font-extrabold border ${getStatusStyles(eq.status).color}`}>
                     {getStatusStyles(eq.status).label}
                   </span>
@@ -133,23 +136,24 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
 
                 {isComputer && (
                   <>
-                    <TableCell>{eq.processor || '-'}</TableCell>
-                    <TableCell>{eq.ram || '-'}</TableCell>
-                    <TableCell>{eq.operatingSystem || '-'}</TableCell>
+                    <TableCell className="break-words">{eq.processor || '-'}</TableCell>
+                    <TableCell className="whitespace-nowrap">{eq.ram || '-'}</TableCell>
+                    <TableCell className="break-words">{eq.operatingSystem || '-'}</TableCell>
                   </>
                 )}
 
                 {isPrinter && (
                   <>
-                    <TableCell>{eq.typefunction || '-'}</TableCell>
-                    <TableCell>{eq.typeprinting || '-'}</TableCell>
+                    <TableCell className="break-words">{eq.typefunction || '-'}</TableCell>
+                    <TableCell className="break-words">{eq.typeprinting || '-'}</TableCell>
                   </>
                 )}
 
                 {isNetwork && (
                   <>
-                    <TableCell >{eq.typeEquipmentNetwork || '-'}</TableCell>
-                    <TableCell >{t("ui_table_ports_count", { count: +(eq.numberPorts || 0) })}
+                    <TableCell className="break-words">{eq.typeEquipmentNetwork || '-'}</TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      {t("ui_table_ports_count", { count: +(eq.numberPorts || 0) })}
                     </TableCell>
                   </>
                 )}

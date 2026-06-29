@@ -2,17 +2,14 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, useMemo } from "react";
 
-// Estructura de metadata que devuelve tu Backend unificado
 interface BackendMeta {
     page: number;
     lastPage: number;
     total?: number;
 }
-
-// Interfaz para obligar a que la respuesta tenga la estructura de paginación correcta
 interface BackendResponse {
     meta: BackendMeta;
-    [key: string]: any; // Permite el dataKey dinámico (ej: page.brands, page.processors)
+    [key: string]: any;
 }
 
 interface FetchArgs {
@@ -58,7 +55,7 @@ export const useCatalogFactory = ({
             return lastPage.meta.page * 10;
         },
         enabled: enabled,
-        staleTime: 1000 * 60 * 5, // Sincronizado a tu base funcional
+        staleTime: 0, // Sincronizado a tu base funcional
     });
 
     const singleQuery = useQuery({

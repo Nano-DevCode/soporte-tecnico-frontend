@@ -1,18 +1,15 @@
 import { useState } from "react";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useQuery, keepPreviousData, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router";
 import { registerConsumableOutput } from "../actions/post-consumable-movements.actions";
 import { getMovementConsumablesAction } from "../actions/get-movement-consumables.actions";
 import type { 
     CreateConsumableMovementDto,
 } from "../interfaces/consumable-movement.interfaces";
-
-// Estructura exacta que configuramos en el b
-
-// --- HOOK: EJECUTAR MOVIMIENTO DE SALIDA ---
 export const useConsumableMovements = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const queryClient = useQueryClient();
 
     const executeOutputMovement = async (
         payload: CreateConsumableMovementDto,
@@ -22,6 +19,10 @@ export const useConsumableMovements = () => {
         setError(null);
         try {
             const response = await registerConsumableOutput(payload);
+            queryClient.invalidateQueries({
+                queryKey: ["consumable-movements"]
+            });
+
             if (onSuccessCallback) {
                 onSuccessCallback();
             }
@@ -56,8 +57,7 @@ export const useConsumableMovementsList = () => {
     const id_departament_consumable = searchParams.get("id_departament_consumable") || "";
     const startDate = searchParams.get("startDate") || "";
     const endDate = searchParams.get("endDate") || "";
-
-    const movementsQuery = useQuery({
+    const { data, isLoading, isFetching, error, refetch } = useQuery({
         queryKey: [
             "consumable-movements", 
             { page, limit, search, id_movement_type, id_movement_aplication, id_departament_consumable, startDate, endDate }
@@ -74,17 +74,17 @@ export const useConsumableMovementsList = () => {
                 endDate
             });
         },
-        staleTime: 30000,
-        refetchOnWindowFocus: false,
+        staleTime: 0,
+        refetchOnWindowFocus: true,
         placeholderData: keepPreviousData, 
     });
 
     return {
-        movements: movementsQuery.data?.data ?? [], 
-        meta: movementsQuery.data?.meta ?? { total: 0, page: 1, lastPage: 1 },
-        isLoading: movementsQuery.isLoading,
-        isFetching: movementsQuery.isFetching,
-        error: movementsQuery.error,
-        refetch: movementsQuery.refetch,
+        movements: data?.data ?? [], 
+        meta: data?.meta ?? { total: 0, page: 1, lastPage: 1 },
+        isLoading,
+        isFetching,
+        error,
+        refetch,
     };
 };
