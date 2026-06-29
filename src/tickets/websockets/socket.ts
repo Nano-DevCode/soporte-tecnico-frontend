@@ -1,7 +1,9 @@
 import { io } from 'socket.io-client';
 
-export const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000/realtime', {
+export const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://10.168.0.108:8081/realtime', {
   withCredentials: true,
+  transports: ['websocket'], 
+  
   autoConnect: false,
   reconnection: true,
   reconnectionAttempts: Infinity,
