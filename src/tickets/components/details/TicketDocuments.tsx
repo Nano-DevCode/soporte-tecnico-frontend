@@ -8,8 +8,6 @@ import { useGetTicketPdf } from "@/tickets/hooks/useGetTicketPdf";
 import { TYPE_DOCUMENT_NAME, type Document } from "@/tickets/interfaces/ticket-details.response";
 import { useGetTicketResponsePdf } from "@/tickets/hooks/useGetTicketResponsePdf";
 import { useCan } from "@/common/permission/useCan";
-import { sileo } from "sileo";
-import { getAxiosErrorMessage } from "@/lib/helpers/getAxiosErrorMessage";
 
 interface Props {
     documents: Document[];
@@ -29,24 +27,28 @@ export const TicketDocuments = ({ documents }: Props) => {
 
     const handleOpenDocument = (filename: string, documentType: TYPE_DOCUMENT_NAME) => {
         if (documentType === TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM) {
-            openRequestPdf(filename, {
-                onError: (error) => {
-                    sileo.error({
-                        title: t('tickets.documents.errors.title'),
-                        description: getAxiosErrorMessage(error) || t('tickets.documents.errors.loading_request'),
-                    });
-                }
-            });
+            openRequestPdf(filename
+                // ,{
+                // onError: (error) => {
+                //     sileo.error({
+                //         title: t('tickets.documents.errors.title'),
+                //         description: getAxiosErrorMessage(error) || t('tickets.documents.errors.loading_request'),
+                //     });
+                // }
+                // }
+            );
         }
         else if (documentType === TYPE_DOCUMENT_NAME.WORK_ORDER_FORM) {
-            openResponsePdf(filename, {
-                onError: (error) => {
-                    sileo.error({
-                        title: t('tickets.documents.errors.title'),
-                        description: getAxiosErrorMessage(error) || t('tickets.documents.errors.loading_response'),
-                    });
-                }
-            });
+            openResponsePdf(filename
+                //     , {
+                //     onError: (error) => {
+                //         sileo.error({
+                //             title: t('tickets.documents.errors.title'),
+                //             description: getAxiosErrorMessage(error) || t('tickets.documents.errors.loading_response'),
+                //         });
+                //     }
+                // }
+            );
         }
     };
 

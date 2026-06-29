@@ -28,7 +28,7 @@ export const ViewTechnicalReportPage = () => {
         if (isError || !technicalReports) {
             sileo.error({
                 title: t('technical_reports.not_found.title'),
-                description: t('technical_reports.not_found.message'),
+                description: t('technical_reports.not_found.description'),
                 duration: 6000,
             });
             navigateFallback();

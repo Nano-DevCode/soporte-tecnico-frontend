@@ -1201,7 +1201,7 @@
         "false": "No solucionado"
       }
     },
-    "not_fund": {
+    "not_found": {
       "title": "No se encontro la bitácora.",
       "description": "Por favor intente de nuevo"
     },
@@ -1261,9 +1261,9 @@
       "maintenance_type": "Tipo de mantenimiento",
       "service_type": "Tipo de servicio"
     },
-    "not_fund": {
+    "not_found": {
       "title": "No se encontro la orden de trabajo.",
-      "description": "Por favor intente de nuevo"
+      "message": "Por favor intente de nuevo"
     },
     "view_page": {
       "title": "Detalles de la Orden de trabajo",
