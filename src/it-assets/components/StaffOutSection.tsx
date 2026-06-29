@@ -90,7 +90,8 @@ export const StaffOutSection = ({ isDisabled }: Props) => {
                   <UserRound className="h-6 w-6" />
                 </div>
                 <div className="flex flex-col overflow-hidden w-full">
-                  <span className="truncate text-base font-bold text-foreground">
+                  
+                  <span className="text-base font-bold text-foreground wrap-break-word">
                     {selectedStaff.fullName || t("itAssets.components.staffOutSection.selectedEmployee")}
                   </span>
                   
@@ -113,7 +114,7 @@ export const StaffOutSection = ({ isDisabled }: Props) => {
 
                   <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs text-muted-foreground">
                     {selectedStaff.user?.email && (
-                      <span className="truncate" title={selectedStaff.user.email}>
+                      <span className="break-all" title={selectedStaff.user.email}>
                         📧 {selectedStaff.user.email}
                       </span>
                     )}
@@ -135,7 +136,7 @@ export const StaffOutSection = ({ isDisabled }: Props) => {
         )}
       />
 
-      {/* CAMPO: DESCRIPCIÓN (Ahora obligatorio) */}
+      {/* CAMPO: DESCRIPCIÓN */}
       <FormField
         control={control}
         name="description"

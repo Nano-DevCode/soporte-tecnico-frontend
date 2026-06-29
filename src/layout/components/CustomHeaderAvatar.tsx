@@ -1,15 +1,34 @@
 import { useAuthStore } from "@/auth/store/auth.store";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem, DropdownMenu } from "@/components/ui/dropdown-menu"
-import { Link } from "react-router";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { 
+  DropdownMenuTrigger, 
+  DropdownMenuContent, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuItem, 
+  DropdownMenu 
+} from "@/components/ui/dropdown-menu";
+import { Link, useNavigate } from "react-router"; // <-- Importamos useNavigate
 import { useTranslation } from 'react-i18next';
 import { CustomModeToggle } from "@/components/custom/CustomModeToggle";
-
+import { useQueryClient } from "@tanstack/react-query"; // <-- Importamos useQueryClient
 
 export const CustomHeaderAvatar = () => {
   const { user, logout } = useAuthStore();
   const { t } = useTranslation();
+  
+  // Inicializamos los hooks
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  // Función manejadora del logout
+  const handleLogout = async () => {
+     queryClient.clear();
+    await logout();
+    navigate("/auth/login");
+  };
+
   return (
     <div className="flex items-center gap-2 sm:gap-4">
       <CustomModeToggle/>
@@ -40,24 +59,25 @@ export const CustomHeaderAvatar = () => {
           <DropdownMenuSeparator />
 
           <Link to="/account/profile">
-            <DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
               {t("profile")}
             </DropdownMenuItem>
           </Link>
           <Link to="/account/configuration">
-            <DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
               {t("settings")}
             </DropdownMenuItem>
           </Link>
+          
           <DropdownMenuSeparator />
-          <Link to="/auth/login">
-            <DropdownMenuItem onClick={logout} className="text-destructive">
-              {t("logout")}
-            </DropdownMenuItem>
-          </Link>
+          
+          {/* Usamos el manejador en lugar del Link para tener control asíncrono */}
+          <DropdownMenuItem onClick={handleLogout} className="text-destructive cursor-pointer">
+            {t("logout")}
+          </DropdownMenuItem>
           
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  )
-}
+  );
+};
