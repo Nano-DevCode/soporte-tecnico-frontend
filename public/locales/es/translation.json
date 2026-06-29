@@ -2311,6 +2311,7 @@
   "consumablePage.totalConsumables_one": "Total de consumibles conforme a filtros: 1 operación",
   "consumablePage.totalConsumables_other": "Total de consumibles conforme a filtros: {{count}} consumibles",
   "movementsPage.totalOperations": "Total operaciones conforme a filtros",
+  "tickets.status.label_status":"Estatus:",
   "itAssets": {
     "mainPage": {
       "titleCard": {

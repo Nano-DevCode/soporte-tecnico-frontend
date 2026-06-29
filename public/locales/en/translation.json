@@ -1014,15 +1014,16 @@
   "movementsPage.btnSelectConsumables": "Select consumables",
   "movementsPage.totalOperations_one": "Total operations: 1 operation",
   "movementsPage.totalOperations_other": "Total operations: {{count}} operations",
-"custom_nav_content_subitem_list_consumables": "Consumables",
+  "custom_nav_content_subitem_list_consumables": "Consumables",
   "custom_nav_content_catalog_consumables": "Consumables catalog",
   "custom_nav_content_movements_history": "Movement history",
-  "custom_nav_content_list_equipments":"Equipments list",
-  "movements.removeConsumable":"Remove Consumible",
+  "custom_nav_content_list_equipments": "Equipments list",
+  "movements.removeConsumable": "Remove Consumible",
   "consumablePage.totalConsumables": "Total filter-base consumables",
   "consumablePage.totalConsumables_one": "Total filter-base consumable: 1 consumable",
   "consumablePage.totalConsumables_other": "Total filter-base consumable: {{count}} consumables",
   "movementsPage.totalOperations": "Total filter-based operations",
+  "tickets.status.label_status": "Status:",
   "itAssets": {
     "mainPage": {
       "titleCard": {
