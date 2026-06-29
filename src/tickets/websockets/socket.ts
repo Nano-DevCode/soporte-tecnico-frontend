@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 
 export const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://10.168.0.108:8081/realtime', {
   withCredentials: true,
-  transports: ['websocket'], 
+  transports: ['polling','websocket'], 
   
   autoConnect: false,
   reconnection: true,
