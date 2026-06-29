@@ -42,8 +42,6 @@ export const createBatchesProductAction = async (
     const response = await soporteTecnicoApi.post<CreateBatchProductResponse>(url, normalizedPayload);
     return response.data;
   } catch (error) {
-    // ¡CRÍTICO! Relanzamos el error para que el 'catch' de tu 'CreateBatchPage' 
-    // pueda atraparlo y pasárselo a la función 'handleBackendError'.
     throw error;
   }
 };

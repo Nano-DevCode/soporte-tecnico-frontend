@@ -85,12 +85,9 @@ export const getMovementConsumablesAction = async (options: GetMovementConsumabl
     };
   }
 };
-
-// --- ACCIÓN 2: OBTENER UN SOLO LOTE POR SU ID ---
 // --- ACCIÓN 2: OBTENER EL DESGLOSE DE UN MOVIMIENTO AGRUPADO POR SU FOLIO/CÓDIGO ---
 export const getMovementConsumableByIdAction = async (code: string) => {
   try {
-    // Apuntamos al backend pasándole el código de aplicación (folio único)
     const url = `/consumable-movements/summary/${encodeURIComponent(code)}`;
     const response = await soporteTecnicoApi.get<GroupedMovement>(url);
 

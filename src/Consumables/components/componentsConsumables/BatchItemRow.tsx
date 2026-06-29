@@ -54,7 +54,7 @@ export const BatchItemRow: React.FC<BatchItemRowProps> = ({
                         <ImageIcon className="h-5 w-5 text-muted-foreground/40" />
                     )}
                 </div>
-                <div className="space-y-1 min-w-0 flex-1" title={consumableInfo?.description}>
+                <div className="space-y-1 min-w-0 flex-1 cursor-help" title={consumableInfo?.description}>
                     <p className="font-semibold text-sm text-foreground line-clamp-2">
                         {consumableInfo?.name || t("createBatchForm.table.loading")}
                     </p>

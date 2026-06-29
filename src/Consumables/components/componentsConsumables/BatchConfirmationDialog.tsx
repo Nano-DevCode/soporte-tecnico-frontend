@@ -31,7 +31,7 @@ export const BatchConfirmationDialog: React.FC<BatchConfirmationDialogProps> = (
 
     return (
         <AlertDialog open={isOpen} onOpenChange={isLoading ? undefined : onOpenChange}>
-            <AlertDialogContent className="max-w-[95vw] sm:max-w-xl rounded-2xl p-6 border border-border shadow-lg bg-card">
+            <AlertDialogContent className="max-w-[95vw] sm:max-w-xl rounded-2xl p-6 border border-border bg-card">
                 <AlertDialogHeader className="space-y-3">
                     <div className="mx-auto sm:mx-0 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0">
                         <AlertTriangle className="h-6 w-6" />
@@ -40,7 +40,7 @@ export const BatchConfirmationDialog: React.FC<BatchConfirmationDialogProps> = (
                         <AlertDialogTitle className="text-lg font-bold tracking-tight text-foreground">
                             {t("createBatchForm.dialog.title")}
                         </AlertDialogTitle>
-                        <AlertDialogDescription className="text-sm text-muted-foreground leading-relaxed">
+                        <AlertDialogDescription className="text-xs text-foreground leading-relaxed">
                             {t("createBatchForm.dialog.descriptionBefore")}{" "}
                             <strong className="text-foreground font-semibold">
                                 {t("createBatchForm.dialog.descriptionBold")}
@@ -52,15 +52,15 @@ export const BatchConfirmationDialog: React.FC<BatchConfirmationDialogProps> = (
 
                 {/* Mini Tabla interna */}
                 <div className="my-4 overflow-hidden rounded-xl border border-border bg-muted/30">
-                    <div className="text-xs p-2 text-muted-foreground">
+                    <div className="text-xs p-2">
                         {t("createBatchForm.dialog.selectedCount")}: {fieldsLength}
                     </div>
-                    <div className="grid grid-cols-12 bg-muted/80 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground border-b border-border">
+                    <div className="grid grid-cols-12 bg-muted/80 px-4 py-2 text-[11px] font-bold uppercase tracking-wider border-b border-border">
                         <div className="col-span-6">{t("createBatchForm.dialog.thConsumable")}</div>
                         <div className="col-span-3 text-center">{t("createBatchForm.dialog.thAmount")}</div>
                         <div className="col-span-3 text-right">{t("createBatchForm.dialog.thTotal")}</div>
                     </div>
-                    <div className="max-h-[160px] overflow-y-auto divide-y divide-border/60 bg-background">
+                    <div className="max-h-[160px] overflow-y-auto divide-y divide-border/60 bg-muted/10">
                         {pendingData?.items.map((item) => {
                             const matchedConsumable = bagConsumables.find(c => c.id === item.id_consumable);
                             return (
@@ -71,7 +71,7 @@ export const BatchConfirmationDialog: React.FC<BatchConfirmationDialogProps> = (
                                     <div className="col-span-3 text-center font-bold text-zinc-600 dark:text-zinc-400">
                                         {item.arrival_amount}
                                     </div>
-                                    <div className="col-span-3 text-right font-mono font-bold text-blue-600 dark:text-blue-400">
+                                    <div className="col-span-3 text-right text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
                                         ${formatCurrency(item.cost_batch)}
                                     </div>
                                 </div>
@@ -79,10 +79,10 @@ export const BatchConfirmationDialog: React.FC<BatchConfirmationDialogProps> = (
                         })}
                     </div>
                     <div className="bg-muted/40 px-4 py-2 border-t border-border flex justify-between items-center text-xs">
-                        <span className="text-muted-foreground font-medium">
+                        <span className="font-medium">
                             {t("createBatchForm.dialog.footerReq")}: <strong className="text-foreground font-semibold">{pendingData?.num_requirement}</strong>
                         </span>
-                        <span className="font-bold text-foreground">
+                        <span className="font-bold">
                             {t("createBatchForm.dialog.footerTotal")}: <span className="text-emerald-600 dark:text-emerald-400">${formatCurrency(totalCost)}</span>
                         </span>
                     </div>

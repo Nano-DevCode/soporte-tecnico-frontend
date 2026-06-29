@@ -22,6 +22,7 @@ type AuthState = {
   isTechnician: () => boolean,
   isPlaning: () => boolean,
   isSecretaryCC: () => boolean,
+  isInventory: () => boolean,
 
   login: (email: string, password: string) => Promise<boolean>,
   logout: () => Promise<void>,
@@ -43,6 +44,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   isTechnician:  () => getRole(get) === AppRoles.Tecnico,
   isPlaning:     () => getRole(get) === AppRoles.Planeacion,
   isSecretaryCC: () => getRole(get) === AppRoles.SecretariaCC,
+  isInventory:   () => getRole(get) === AppRoles.Inventario,
 
   login: async (email, password) => {
     try {

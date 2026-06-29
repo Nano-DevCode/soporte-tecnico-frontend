@@ -11,7 +11,6 @@ export interface MovementAplication {
 }
 
 export interface MovementAplicationResponse {
-    // Debe coincidir exactamente con la clave que tu backend use en el JSON paginado
     movementAplications: MovementAplication[];
     meta: {
         total: number;
@@ -63,7 +62,6 @@ export const getMovementApplicationByIdAction = async (
         const { data } = await soporteTecnicoApi.get<MovementAplication>(`/movement-applications/${id}`);
         return data;
     } catch  {
-        // console.error(`${t("api_movement_application_by_id_error")} ${id}:`, error);
-        return null; // Retorno seguro para evitar excepciones no controladas en el Front
+        return null;
     }
 };

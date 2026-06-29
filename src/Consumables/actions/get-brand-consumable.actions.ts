@@ -10,7 +10,6 @@ export interface BrandConsumable {
 }
 
 export interface BrandConsumableResponse {
-    // Debe coincidir exactamente con la clave que tu backend use en el JSON paginado
     brandConsumables: BrandConsumable[];
     meta: {
         total: number;
@@ -64,6 +63,6 @@ export const getBrandConsumableByIdAction = async (
         return data;
     } catch  {
         //console.error(`${t("api_brand_consumable_by_id_error")} ${id}:`, error);
-        return null; // Retorno seguro para evitar excepciones no controladas en el Front
+        return null;
     }
 };

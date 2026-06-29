@@ -52,7 +52,14 @@ export const CustomMovementsMobileCard = ({ movements }: Props) => {
                                         <Calendar className="h-3 w-3" /> {t("movementCard.lblDate")}
                                     </p>
                                     <p className="font-medium">
-                                        {new Date(group.created_at).toLocaleDateString()}
+                                        {/* {new Date(group.created_at).toLocaleDateString()} */}
+                                        {(() => {
+                                            const dateStr = group.created_at.endsWith("Z") ? group.created_at : `${group.created_at}Z`;
+
+                                            return new Date(dateStr).toLocaleString('es-MX', {
+                                                timeZone: 'America/Mexico_City',
+                                            });
+                                        })()}
                                     </p>
                                 </div>
                                 <div className=" text-right space-y-1">

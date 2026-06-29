@@ -2,8 +2,6 @@ import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 // import { t } from "i18next";
 import type { ConsumablesResponse } from '../interfaces/consumable.interfaces';
 
-// --- INTERFAZ DE OPCIONES PARA LA PETICIÓN ---
-// Alineado con el FilterConsumableDto del backend de NestJS
 interface GetConsumablesOptions {
   query?: string;
   limit?: number | string;
@@ -13,9 +11,6 @@ interface GetConsumablesOptions {
   id_ubication_consumable?: string;
 }
 
-/**
- * Petición HTTP optimizada para obtener el catálogo de consumibles paginado.
- */
 export const getConsumablesAction = async (
   options: GetConsumablesOptions
 ): Promise<ConsumablesResponse> => {
@@ -40,12 +35,10 @@ export const getConsumablesAction = async (
       },
     });
 
-    // --- NORMALIZACIÓN SEGURA ---
     const responseData = data?.consumables || [];
     const responseMeta = data?.meta || { total: 0, page: 1, lastPage: 1 };
     const BASE_URL = import.meta.env.VITE_API_URL || '';
 
-    // Mapeamos las imágenes concatenando la URL del servidor si el path existe
     const consumablesWithImages = responseData.map((consumable) => ({
       ...consumable,
       imageUrl: consumable.imageUrl ? `${BASE_URL}${consumable.imageUrl}` : null,
@@ -62,8 +55,6 @@ export const getConsumablesAction = async (
 
   } catch  {
     //console.error(t("api_consumables_fetch_error"), error);
-
-    // Recuperación elástica para que la UI no se quede colgada ni parpadee en blanco
     return {
       consumables: [],
       meta: { 

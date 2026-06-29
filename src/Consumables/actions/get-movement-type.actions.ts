@@ -10,7 +10,6 @@ export interface MovementType {
 }
 
 export interface MovementTypeResponse {
-    // Debe coincidir exactamente con la clave que tu backend use en el JSON paginado
     movementTypes: MovementType[];
     meta: {
         total: number;
@@ -54,7 +53,6 @@ export const getMovementTypesAction = async (options: Options = {}): Promise<Mov
 export const getMovementTypeByIdAction = async (
     idOrObject: string | { id: string }
 ): Promise<MovementType | null> => {
-    // Extracción segura del ID en base al tipo de argumento recibido
     const id = typeof idOrObject === 'object' ? idOrObject?.id : idOrObject;
 
     if (!id) return null;
@@ -64,6 +62,6 @@ export const getMovementTypeByIdAction = async (
         return data;
     } catch {
         // console.error(`${t("api_movement_type_by_id_error")} ${id}:`, error);
-        return null; // Retorno seguro para evitar excepciones no controladas en el Front
+        return null;
     }
 };

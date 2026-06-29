@@ -52,14 +52,14 @@ export const getBatchesProductsAction = async (options: GetBatchesOptions) => {
   }
 };
 
-export const getBatchProductByIdAction = async (id: string) => {
-  try {
-    const url = `/batches-products/${id}`;
-    const response = await soporteTecnicoApi.get<BatchProductItem>(url);
+// export const getBatchProductByIdAction = async (id: string) => {
+//   try {
+//     const url = `/batches-products/${id}`;
+//     const response = await soporteTecnicoApi.get<BatchProductItem>(url);
     
-    return response.data;
-  } catch  {
-    //console.error(t("api_batch_fetch_by_id_error"), error);
-    return null; // Retorno seguro para evitar excepciones no controladas en el Front
-  }
-};
+//     return response.data;
+//   } catch  {
+//     //console.error(t("api_batch_fetch_by_id_error"), error);
+//     return null; // Retorno seguro para evitar excepciones no controladas en el Front
+//   }
+// };

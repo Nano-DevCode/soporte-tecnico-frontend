@@ -39,7 +39,7 @@ export const MovementConfirmDialog: React.FC<MovementConfirmDialogProps> = ({
                     <DialogTitle className="text-base font-bold text-foreground">
                         {t("consumableForm.dialog.title")}
                     </DialogTitle>
-                    <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
+                    <DialogDescription className="text-xs text-foreground leading-relaxed">
                         {t("consumableForm.dialog.description")}
                     </DialogDescription>
                 </DialogHeader>
@@ -56,7 +56,7 @@ export const MovementConfirmDialog: React.FC<MovementConfirmDialogProps> = ({
                         </span>
                     </div>
 
-                    <div className="grid grid-cols-12 gap-2 px-4 py-1.5 bg-muted/20 border-b border-border/40 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80">
+                    <div className="grid grid-cols-12 gap-2 px-4 py-1.5 bg-muted/20 border-b border-border/40 text-[10px] font-bold uppercase tracking-wider ">
                         <div className="col-span-8 sm:col-span-9">{t("consumableForm.dialog.tableHeaderConsumable")}</div>
                         <div className="col-span-4 sm:col-span-3 text-right">{t("consumableForm.dialog.tableHeaderQuantity")}</div>
                     </div>

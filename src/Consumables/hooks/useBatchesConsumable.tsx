@@ -35,7 +35,6 @@ export const useBatchesConsumables = () => {
     }
   };
 
-  // Mapeamos los datos inyectando la fecha formateada localmente
   const processedBatches = (data?.data || []).map((batch) => ({
     ...batch,
     formatted_created_at: formatDateToMexico(batch.created_at),

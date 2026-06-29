@@ -46,7 +46,7 @@ export const RedirectPerRole = () => {
     isSuperAdmin,
     isTechnician,
     isVisitor,
-    isInventory
+    isInventory,
   } = useUserRoles();
 
   if (isSuperAdmin)  return <Navigate to='/' />;
