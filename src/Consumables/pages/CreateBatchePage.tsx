@@ -17,7 +17,6 @@ export default function CreateBatchPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Extraemos las utilidades de tu store
     const { bagIds, removeItem, clearBag } = useConsumableBagStore();
     const { bagConsumables, isBagLoading } = useConsumablesBagData(bagIds);
 
@@ -31,7 +30,7 @@ export default function CreateBatchPage() {
                     loading: { title: t("createBatch.loadingTitle") },
                     success: (response) => {
                         clearBag();
-                        localStorage.removeItem("form_draft");
+                        sessionStorage.removeItem("form_draft");
 
                         return {
                             title: t("createBatch.successTitle"),
@@ -107,7 +106,7 @@ export default function CreateBatchPage() {
                             {t("createBatch.title")}
                         </h1>
                     </div>
-                    <p className="text-sm text-muted-foreground pl-1">
+                    <p className="text-[16px] text-muted-foreground pl-1">
                         {t("createBatch.subtitle")}
                     </p>
                 </div>

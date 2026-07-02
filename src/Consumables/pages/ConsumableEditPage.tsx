@@ -92,7 +92,6 @@ export const ConsumableEditPage = () => {
             });
             navigate("/consumables");
         } catch (e) {
-            // console.error("Error en el flujo de actualización:", e); 
             void e;
         }
     };

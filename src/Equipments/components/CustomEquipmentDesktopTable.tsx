@@ -19,13 +19,14 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
   const isNetwork = currentCat === 'network' || currentCat === 'red';
   const isDiferent = currentCat !== 'all' && !isComputer && !isPrinter && !isNetwork;
 
+  // Respetados tus colores y clases personalizadas originales
   const getStatusStyles = (status: boolean) => {
     return status
       ? { color: "bg-gray-950/100 rounded-4lx p-3 py-1.5 border-white bd-2 text-white uppercase", label: t("ui_status_active") }
       : { color: "bg-red-700/100 rounded-4lx p-3 py-1 border-white bd-2 text-white uppercase", label: t("ui_status_inactive") };
   };
 
-  const formatLongText = (text: string, wordsPerLine = 5, maxWords = 18) => {
+  const formatLongText = (text: string, wordsPerLine = 6, maxWords = 18) => {
     if (!text) return t("ui_table_no_description");
     const words = text.split(' ');
     const limitedWords = words.slice(0, maxWords);
@@ -37,42 +38,42 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
   };
 
   return (
-    <div className="hidden md:block rounded-xl border border-border shadow-sm overflow-hidden">
-      <Table>
+    <div className="hidden md:block rounded-xl border border-border shadow-sm overflow-x-auto">
+      <Table className="w-full table-auto border-collapse">
         <TableHeader>
           <TableRow className="bg-muted/50">
-            {/* Ajuste de tamaños proporcionales en cabeceras en lugar de clases estáticas truncadas */}
-            <TableHead className="w-[12%] text-center font-bold">{t("ui_th_inventory_no")}</TableHead>
-            <TableHead className="w-[15%] text-center">{t("ui_th_type")}</TableHead>
-            <TableHead className="w-[15%] text-left">{t("ui_th_brand_model")}</TableHead>
-            <TableHead className="w-[15%] text-left">{t("ui_th_department")}</TableHead>
-            <TableHead className="w-[15%] text-left">{t("ui_th_responsible")}</TableHead>
-            <TableHead className="w-[13%] text-center">{t("ui_th_status")}</TableHead>
+            {/* Los anchos mínimos aseguran espacio proporcional sin romper tus alineaciones */}
+            <TableHead className="min-w-[130px] text-center font-bold">{t("ui_th_inventory_no")}</TableHead>
+            <TableHead className="min-w-[140px] text-center">{t("ui_th_type")}</TableHead>
+            <TableHead className="min-w-[160px] text-left">{t("ui_th_brand_model")}</TableHead>
+            <TableHead className="min-w-[160px] text-left">{t("ui_th_department")}</TableHead>
+            <TableHead className="min-w-[160px] text-left">{t("ui_th_responsible")}</TableHead>
+            <TableHead className="min-w-[120px] text-center">{t("ui_th_status")}</TableHead>
 
-            {isDiferent && <TableHead className="w-[20%] text-left">{t("ui_th_description")}</TableHead>}
+            {isDiferent && <TableHead className="min-w-[250px] text-left">{t("ui_th_description")}</TableHead>}
 
             {isComputer && (
               <>
-                <TableHead className="w-[12%] text-left">{t("ui_th_processor")}</TableHead>
-                <TableHead className="w-[8%] text-left">{t("ui_th_ram")}</TableHead>
-                <TableHead className="w-[12%] text-left">{t("ui_th_os")}</TableHead>
+                <TableHead className="min-w-[140px] text-left">{t("ui_th_processor")}</TableHead>
+                <TableHead className="min-w-[100px] text-left">{t("ui_th_ram")}</TableHead>
+                <TableHead className="min-w-[140px] text-left">{t("ui_th_os")}</TableHead>
               </>
             )}
 
             {isPrinter && (
               <>
-                <TableHead className="w-[15%] text-left">{t("ui_th_functionality")}</TableHead>
-                <TableHead className="w-[15%] text-left">{t("ui_th_print_type")}</TableHead>
+                <TableHead className="min-w-[150px] text-left">{t("ui_th_functionality")}</TableHead>
+                <TableHead className="min-w-[150px] text-left">{t("ui_th_print_type")}</TableHead>
               </>
             )}
 
             {isNetwork && (
               <>
-                <TableHead className="w-[15%] text-left">{t("ui_th_network_type")}</TableHead>
-                <TableHead className="w-[10%] text-left">{t("ui_th_ports")}</TableHead>
+                <TableHead className="min-w-[160px] text-left">{t("ui_th_network_type")}</TableHead>
+                <TableHead className="min-w-[100px] text-left">{t("ui_th_ports")}</TableHead>
               </>
             )}
-            <TableHead className="w-[8%] text-center">{t("ui_th_actions")}</TableHead>
+            <TableHead className="min-w-[90px] text-center">{t("ui_th_actions")}</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -80,9 +81,13 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
           {equipments.length > 0 ? (
             equipments.map((eq) => (
               <TableRow key={eq.id} className="group transition-colors hover:bg-muted/30">
-                <TableCell className="text-left whitespace-nowrap">{eq.folio}</TableCell>
+                
+                {/* Respetada tu alineación a la izquierda original */}
+                <TableCell className="text-left whitespace-nowrap px-4 py-3">
+                  {eq.folio}
+                </TableCell>
 
-                <TableCell className="text-center">
+                <TableCell className="text-center px-4 py-3">
                   {(() => {
                     const config: Record<string, { bg: string, text: string, icon: LucideIcon, label: string }> = {
                       computadora: { bg: "bg-blue-100", text: "text-blue-800", icon: Monitor, label: t("ui_category_computer") },
@@ -102,11 +107,11 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
                         <div className={`
                           flex items-center justify-center 
                           py-1 px-3 gap-2 
-                          rounded-full w-fit
+                          rounded-full w-fit whitespace-nowrap
                           text-[11px] font-bold uppercase tracking-wider
                           ${item.bg} ${item.text}
                         `}>
-                          <Icon className="h-3.5 w-3.5" />
+                          <Icon className="h-3.5 w-3.5 flex-shrink-0" />
                           <span className="leading-none">{item.label}</span>
                         </div>
                       </div>
@@ -114,58 +119,64 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
                   })()}
                 </TableCell>
 
-                <TableCell className="break-all">{eq.model}</TableCell>
+                <TableCell className="break-all px-4 py-3">
+                  {eq.model}
+                </TableCell>
                 
-                <TableCell className="font-bold text-[12px]" style={{ maxWidth: '140px' }}>
+                {/* Respetado el tamaño exacto text-[12px] de tu departamento */}
+                <TableCell className="font-bold text-[12px] px-4 py-3" style={{ maxWidth: '140px' }}>
                   {formatLongText(eq.departamento || '')}
                 </TableCell>
                 
-                <TableCell className="break-words">{eq.responsableName}</TableCell>
+                <TableCell className="break-words px-4 py-3">
+                  {eq.responsableName}
+                </TableCell>
 
-                <TableCell className="text-center whitespace-nowrap">
+                <TableCell className="text-center whitespace-nowrap px-4 py-3">
+                  {/* Respetado tu diseño exacto con text-[10px] y font-extrabold */}
                   <span className={`px-3 py-1 rounded-full text-[10px] font-extrabold border ${getStatusStyles(eq.status).color}`}>
                     {getStatusStyles(eq.status).label}
                   </span>
                 </TableCell>
 
                 {isDiferent && (
-                  <TableCell className="text-justify whitespace-pre-line leading-relaxed text-[12px] py-4" style={{ maxWidth: '250px' }}>
+                  <TableCell className="text-justify whitespace-pre-line leading-relaxed text-[12px] px-4 py-3" style={{ maxWidth: '250px' }}>
                     {formatLongText(eq.description || '')}
                   </TableCell>
                 )}
 
                 {isComputer && (
                   <>
-                    <TableCell className="break-words">{eq.processor || '-'}</TableCell>
-                    <TableCell className="whitespace-nowrap">{eq.ram || '-'}</TableCell>
-                    <TableCell className="break-words">{eq.operatingSystem || '-'}</TableCell>
+                    <TableCell className="break-words px-4 py-3">{eq.processor || '-'}</TableCell>
+                    <TableCell className="whitespace-nowrap px-4 py-3">{eq.ram || '-'}</TableCell>
+                    <TableCell className="break-words px-4 py-3">{eq.operatingSystem || '-'}</TableCell>
                   </>
                 )}
 
                 {isPrinter && (
                   <>
-                    <TableCell className="break-words">{eq.typefunction || '-'}</TableCell>
-                    <TableCell className="break-words">{eq.typeprinting || '-'}</TableCell>
+                    <TableCell className="break-words px-4 py-3">{eq.typefunction || '-'}</TableCell>
+                    <TableCell className="break-words px-4 py-3">{eq.typeprinting || '-'}</TableCell>
                   </>
                 )}
 
                 {isNetwork && (
                   <>
-                    <TableCell className="break-words">{eq.typeEquipmentNetwork || '-'}</TableCell>
-                    <TableCell className="whitespace-nowrap">
+                    <TableCell className="break-words px-4 py-3">{eq.typeEquipmentNetwork || '-'}</TableCell>
+                    <TableCell className="whitespace-nowrap px-4 py-3">
                       {t("ui_table_ports_count", { count: +(eq.numberPorts || 0) })}
                     </TableCell>
                   </>
                 )}
 
-                <TableCell className="text-center">
+                <TableCell className="text-center px-4 py-3">
                   <CustomEquipmentActionsMenu equipment={eq} />
                 </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={12} className="text-center py-20 text-muted-foreground">
+              <TableCell colSpan={15} className="text-center py-20 text-muted-foreground">
                 <Box className="h-10 w-10 mx-auto mb-2 opacity-20" />
                 {t("ui_table_no_data")}
               </TableCell>
@@ -176,3 +187,4 @@ export const CustomEquipmentDesktopTable = memo(({ equipments = [], category }: 
     </div>
   );
 });
+CustomEquipmentDesktopTable.displayName = "CustomEquipmentDesktopTable";

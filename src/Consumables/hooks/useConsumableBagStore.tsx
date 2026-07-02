@@ -32,11 +32,11 @@ export const useConsumableBagStore = () => {
     saveConsumableBagIds([]);
   };
   const saveFormDraft = (data: Consumable) => {
-    localStorage.setItem("form_draft", JSON.stringify(data));
+    sessionStorage.setItem("form_draft", JSON.stringify(data));
   };
 
   const getFormDraft = (): Consumable | null => {
-    const draft = localStorage.getItem("form_draft");
+    const draft = sessionStorage.getItem("form_draft");
     return draft ? (JSON.parse(draft) as Consumable) : null;
   };
 

@@ -42,8 +42,6 @@ export const MovementDetailPage = () => {
             </div>
         );
     }
-
-    // Retorna la vista inyectándole la data exacta recuperada del backend
     return (
         <div className="w-full space-y-4">
             <CustomBackToList onBack={() => navigate("/consumable-movements")} backLabel={t("movementDetail.backLabel")} />

@@ -10,10 +10,7 @@ export default function ConsumableDetailsPage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
-    // Consumimos el hook enviándole el id recuperado de la URL
     const { data: consumable, isLoading, isError, error } = useConsumableDetails(id || "");
-
-    // 1. Estado de carga de datos
     if (isLoading) {
         return (
             <div className="h-[60vh] w-full flex flex-col items-center justify-center gap-3">

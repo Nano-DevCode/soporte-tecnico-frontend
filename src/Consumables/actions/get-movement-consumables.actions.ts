@@ -18,10 +18,8 @@ export interface MovementsConsumableItem {
   movement_cost: string | number; 
   created_at: string; 
   updated_at: string;
-  batch?: BatchProductItem;       // En lugar de id_batches_product
-  consumable?: Consumable;        // En lugar de id_consumable
-
-  // Mantenerlos opcionales por si el tipado de GroupedMovement los requiere heredar
+  batch?: BatchProductItem;
+  consumable?: Consumable;
   id_batches_product?: BatchProductItem; 
   id_consumable?: Consumable; 
 }
