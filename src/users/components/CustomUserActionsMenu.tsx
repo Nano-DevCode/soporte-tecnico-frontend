@@ -9,10 +9,10 @@ import { useTranslation } from 'react-i18next';
 interface Props {
   user: User;
   handleStatusClick: (user: User) => void;
-  disabled?: boolean;
+  disable?: boolean;
 }
 
-export const CustomUserActionsMenu = ({ user, handleStatusClick, disabled }: Props) => {
+export const CustomUserActionsMenu = ({ user, handleStatusClick, disable = false }: Props) => {
   const { t } = useTranslation();
 
   return (
@@ -22,7 +22,7 @@ export const CustomUserActionsMenu = ({ user, handleStatusClick, disabled }: Pro
           variant="ghost"
           size="icon"
           className="h-8 w-8 text-muted-foreground hover:text-foreground"
-          disabled={disabled}
+          disabled={disable}
         >
           <MoreHorizontal className="h-4 w-4" />
         </Button>

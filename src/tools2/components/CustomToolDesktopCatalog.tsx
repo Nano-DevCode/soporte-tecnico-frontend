@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { CustomToolActionsMenu } from "./CustomToolActionsMenu";
 import type { Tool } from "../interfaces/toolsResponse.interface";
 import CustomNotFoundCatalog from "@/components/custom/CustomNotFoundCatalog";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 interface Props {
   tools: Tool[];
@@ -17,6 +18,7 @@ interface Props {
 
 export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props) => {
   const { t } = useTranslation();
+  const isVisitor = useAuthStore((state) => state.isVisitor);
 
   if (tools.length === 0) {
     return (
@@ -127,12 +129,13 @@ export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props)
               </CardContent>
             </Link>
 
-            <CardFooter className="p-4 bg-muted/10 border-t border-border/40 flex justify-between items-center gap-3 relative z-30">
-              <div className="flex-1">
-                {tool.inUse ? (
-                  <Link 
-                    to={`/tools/in/${tool.id}`} 
-                    className={cn("block w-full", !tool.status && "pointer-events-none")}
+            {isVisitor() || (
+              <CardFooter className="p-4 bg-muted/10 border-t border-border/40 flex justify-between items-center gap-3 relative z-30">
+                <div className="flex-1">
+                  {tool.inUse ? (
+                    <Link 
+                      to={`/tools/in/${tool.id}`} 
+                      className={cn("block w-full", !tool.status && "pointer-events-none")}
                     onClick={(e) => !tool.status && e.preventDefault()}
                   >
                     <Button variant="secondary" size="sm" className="w-full gap-2 text-amber-600 hover:text-amber-700 hover:bg-amber-100/80 dark:hover:bg-amber-900/50" disabled={!tool.status}>
@@ -153,8 +156,8 @@ export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props)
                   </Link>
                 )}
               </div>
-              <CustomToolActionsMenu tool={tool} handleDownClick={handleDownClick} />
-            </CardFooter>
+              <CustomToolActionsMenu tool={tool} handleDownClick={handleDownClick} disable={isVisitor()} />
+            </CardFooter>)}
           </Card>
         );
       })}

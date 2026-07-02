@@ -16,6 +16,7 @@ import { logError } from "@/utils/logger";
 import type { Tool } from "../interfaces/toolsResponse.interface";
 import { CustomItAssetDesktopCatalogSkeleton } from "@/components/custom/CustomItAssetDesktopCatalogSkeleton";
 import { CustomToolFilters } from "../components/CustomToolFilters";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 const ToolsPage = () => {
   const { t } = useTranslation();
@@ -23,6 +24,7 @@ const ToolsPage = () => {
 
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [toolSelect, setToolSelect] = useState<Tool | null>(null);
+  const isVisitor = useAuthStore((state) => state.isVisitor);
 
   const handleDownClick = useCallback((tool: Tool) => {
     setToolSelect(tool);
@@ -109,14 +111,14 @@ const ToolsPage = () => {
           icon={ToolCase}
         />
 
-        <div className="flex items-center gap-3">
+        {!isVisitor() &&(<div className="flex items-center gap-3">
           <Link to="/tools/new">
             <Button>
               <Plus className="mr-2 h-4 w-4" />
               {t("tools.mainPage.buttonCreate.label")}
             </Button>
           </Link>
-        </div>
+        </div>)}
 
       </div>
 

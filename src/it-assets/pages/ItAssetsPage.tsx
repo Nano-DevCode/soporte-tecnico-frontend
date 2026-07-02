@@ -16,10 +16,12 @@ import { logError } from "@/utils/logger";
 import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
 import { CustomItAssetDesktopCatalogSkeleton } from "@/components/custom/CustomItAssetDesktopCatalogSkeleton";
 import { CustomItAssetFilters } from "../components/CustomItAssetFilters";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 const ItAssetsPage = () => {
   const { t } = useTranslation();
   const { isLoading, itAssets, changeStatusAsync, isChangingStatus, meta } = useItAssets();
+  const isVisitor = useAuthStore((state) => state.isVisitor);
 
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [assetSelect, setAssetSelect] = useState<ItAsset | null>(null);
@@ -109,14 +111,15 @@ const ItAssetsPage = () => {
           icon={ToolCase}
         />
 
-        <div className="flex items-center gap-3">
-          <Link to="/it-assets/new">
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              {t("itAssets.mainPage.buttonCreate.label")}
-            </Button>
+        {!isVisitor() && (
+          <div className="flex items-center gap-3">
+            <Link to="/it-assets/new">
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                {t("itAssets.mainPage.buttonCreate.label")}
+              </Button>
           </Link>
-        </div>
+        </div>)}
 
       </div>
 

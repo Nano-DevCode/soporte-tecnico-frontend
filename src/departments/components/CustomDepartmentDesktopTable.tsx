@@ -6,6 +6,7 @@ import type { Department } from "../interfaces/department.interface";
 import { useTranslation } from "react-i18next";
 import { CustomDepartmentActionsMenu } from "./CustomDepartmentActionsMenu";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 interface Props {
   departments: Department[];
@@ -14,8 +15,8 @@ interface Props {
 
 export const CustomDepartmentDesktopTable = memo(({ departments, handleDownClick }: Props) => {
   const { t } = useTranslation();
+  const isVisitor = useAuthStore((state) => state.isVisitor);
 
-  // Mapeamos los números de prioridad a sus textos y colores correspondientes
   const getPriorityBadge = (priority?: number) => {
     switch (priority) {
       case 1:
@@ -123,6 +124,7 @@ export const CustomDepartmentDesktopTable = memo(({ departments, handleDownClick
                     <CustomDepartmentActionsMenu 
                       department={dept} 
                       handleDownClick={handleDownClick} 
+                      disable={isVisitor()}
                     />
                   </div>
                 </TableCell>

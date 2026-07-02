@@ -9,10 +9,11 @@ import type { Tool } from "../interfaces/toolsResponse.interface";
 interface Props {
   tool: Tool;
   handleDownClick: (tool: Tool) => void;
+  disable?: boolean;
 }
 
 export const CustomToolActionsMenu = ({
-  tool, handleDownClick
+  tool, handleDownClick, disable = false
 }: Props ) => {
   const { t } = useTranslation();
   const isActive = tool.status;
@@ -25,6 +26,7 @@ export const CustomToolActionsMenu = ({
             variant="ghost"
             size="icon"
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            disabled={disable}
           >
             <MoreHorizontal className="h-4 w-4" />
           </Button>

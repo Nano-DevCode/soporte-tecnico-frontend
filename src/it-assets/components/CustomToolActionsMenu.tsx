@@ -9,10 +9,11 @@ import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
 interface Props {
   asset: ItAsset;
   handleDownClick: (asset: ItAsset) => void;
+  disable?: boolean;
 }
 
 export const CustomItAssetActionsMenu = ({
-  asset, handleDownClick
+  asset, handleDownClick, disable = false
 }: Props ) => {
   const { t } = useTranslation();
   const isActive = asset.status;
@@ -25,6 +26,7 @@ export const CustomItAssetActionsMenu = ({
             variant="ghost"
             size="icon"
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            disabled={disable}
           >
             <MoreHorizontal className="h-4 w-4" />
           </Button>

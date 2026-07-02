@@ -6,15 +6,16 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { User } from "../interfaces/users.response";
 import { useTranslation } from "react-i18next";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 interface Props {
   users: User[];
-  // Reemplazamos los dos métodos anteriores por el único necesario para el status
   handleStatusClick: (user: User) => void;
 }
 
 export const CustomUserMobilCard = ({users, handleStatusClick}: Props) => {
   const { t } = useTranslation();
+  const isVisitor = useAuthStore((state) => state.isVisitor);
 
   return (
     <div className="md:hidden space-y-3">
@@ -82,8 +83,8 @@ export const CustomUserMobilCard = ({users, handleStatusClick}: Props) => {
           <div className="shrink-0">
             <CustomUserActionsMenu 
               user={user} 
-              // Pasamos únicamente el handler para cambiar el estado
               handleStatusClick={handleStatusClick} 
+              disable={isVisitor()}
             />
           </div>
         </div>

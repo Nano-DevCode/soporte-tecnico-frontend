@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { CustomItAssetActionsMenu } from "./CustomToolActionsMenu";
 import type { ItAsset } from "../interfaces/itAssetsResponse.interface";
 import CustomNotFoundCatalog from "@/components/custom/CustomNotFoundCatalog";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 interface Props {
   itAssets: ItAsset[];
@@ -17,6 +18,7 @@ interface Props {
 
 export const CustomItAssetDesktopCatalog = memo(({ itAssets, handleDownClick }: Props) => {
   const { t } = useTranslation();
+  const isVisitor = useAuthStore((state) => state.isVisitor);
 
   if (itAssets.length === 0) {
     return (
@@ -146,7 +148,7 @@ export const CustomItAssetDesktopCatalog = memo(({ itAssets, handleDownClick }: 
             </Link>
 
             {/* === FOOTER CON BOTONES DE ACCIÓN === */}
-            <CardFooter className="p-4 bg-muted/10 border-t border-border/40 flex justify-between items-center gap-3 relative z-30">
+            {!isVisitor() && (<CardFooter className="p-4 bg-muted/10 border-t border-border/40 flex justify-between items-center gap-3 relative z-30">
               
               <div className="flex-1">
                 {asset.inUse ? (
@@ -175,8 +177,8 @@ export const CustomItAssetDesktopCatalog = memo(({ itAssets, handleDownClick }: 
               </div>
 
               {/* Menú de acciones extra en la derecha */}
-              <CustomItAssetActionsMenu asset={asset} handleDownClick={handleDownClick} />
-            </CardFooter>
+              <CustomItAssetActionsMenu asset={asset} handleDownClick={handleDownClick} disable={isVisitor()} />
+            </CardFooter>)}
 
           </Card>
         );

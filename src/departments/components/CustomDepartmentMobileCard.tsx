@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { Department } from "../interfaces/department.interface";
 import { useTranslation } from "react-i18next";
+import { useAuthStore } from "@/auth/store/auth.store";
+
 
 interface Props {
   departments: Department[];
@@ -14,8 +16,7 @@ interface Props {
 
 export const CustomDepartmentMobileCard = memo(({ departments, handleDownClick }: Props) => {
   const { t } = useTranslation();
-  
-  // Lógica corregida: 1=Crítica, 2=Alta, 3=Media, 4=Baja
+  const isVisitor = useAuthStore((state) => state.isVisitor);
   const getPriorityBadge = (priority?: number) => {
     switch (priority) {
       case 1:
@@ -108,6 +109,7 @@ export const CustomDepartmentMobileCard = memo(({ departments, handleDownClick }
               <CustomDepartmentActionsMenu 
                 department={department} 
                 handleDownClick={handleDownClick} 
+                disable={isVisitor()}
               />
             </div>
           </div>

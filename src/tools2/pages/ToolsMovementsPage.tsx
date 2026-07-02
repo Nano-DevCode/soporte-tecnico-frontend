@@ -9,21 +9,24 @@ import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { CustomToolsMovementDesktopTable } from "../components/CustomToolsMovementDesktopTable";
 import { CustomToolsMovementMobileCard } from "../components/CustomToolsMovementMobileCard";
 import { CustomToolsMovementsFilters } from "../components/CustomToolsMovementsFilters";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 const ToolsMovementsPage = () => {
   const { t } = useTranslation();
   const { toolsMovements, meta, isLoadingMovements } = useToolsMovements();
+  const isVisitor = useAuthStore((state) => state.isVisitor);
   
   return (
     <div className="space-y-6">
       {/* Page header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <CustomTitleCard 
-          icon={ArrowRightLeft} 
-          title={t("tools.movementsPage.header.title")} 
-          description={t("tools.movementsPage.header.description")}
-        />
-      </div>
+      {isVisitor() && (
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <CustomTitleCard 
+            icon={ArrowRightLeft} 
+            title={t("tools.movementsPage.header.title")} 
+            description={t("tools.movementsPage.header.description")}
+          />
+      </div>)}
       
       <CustomToolsMovementsFilters />
 

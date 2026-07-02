@@ -25,7 +25,7 @@ export const ToolsRoutes = () => {
             index: true,
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
                         <ToolsPage />
                     </RoleRoute>
                 </SuspenseWrapper>
@@ -65,7 +65,7 @@ export const ToolsRoutes = () => {
             path: 'in/:id',
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
                         <ToolsMovementIn />
                     </RoleRoute>
                 </SuspenseWrapper>
@@ -75,7 +75,7 @@ export const ToolsRoutes = () => {
             path: 'movements',
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
                         <ToolsMovementsPage />
                     </RoleRoute>
                 </SuspenseWrapper>
@@ -85,7 +85,7 @@ export const ToolsRoutes = () => {
             path: 'movements/:id',
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
                         <ToolsMovementViewPage />
                     </RoleRoute>
                 </SuspenseWrapper>

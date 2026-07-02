@@ -17,10 +17,12 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { logError } from "@/utils/logger";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 const UserPage = () => {
   const { t } = useTranslation();
   const { users = [], meta, isLoading: skelettonLoading, isUpdating, changeStatus } = useUsers();
+  const isVisitor = useAuthStore((state) => state.isVisitor);
 
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [userSeleccionado, setUserSeleccionado] = useState<User | null>(null);
@@ -105,12 +107,14 @@ const UserPage = () => {
         />
 
         {/* Botón */}
-        <Link to="/users/new">
-          <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
-            <Plus className="mr-2 h-4 w-4" />
-            {t("users.pages.userPage.createUser")}
-          </Button>
-        </Link>
+        {(!isVisitor() && (
+          <Link to="/users/new">
+            <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
+              <Plus className="mr-2 h-4 w-4" />
+              {t("users.pages.userPage.createUser")}
+            </Button>
+          </Link>
+        ))}
         
       </div>
 

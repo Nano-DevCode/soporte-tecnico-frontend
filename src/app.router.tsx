@@ -21,6 +21,7 @@ import { AuthRoutes } from "./auth/auth.router";
 import { AccountRoutes } from './account/account.router';
 import { ToolsRoutes } from "./tools2/tools.router";
 import { DepartmentRoutes } from "./departments/departments.routes";
+import { QuestionnaireRoutes } from "./questionnaire/questionnaire.router";
 
 // const PanelLayout = lazy(() => import("./layout/PanelLayout"))
 const PanelLayoutV2 = lazy(() => import("./layout/PanelLayoutV2"))
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <InicioPage />
+            },
+            {
+                path: 'temporal/*',
+                element: <QuestionnaireRoutes />
             },
             {
                 path: 'users/*',

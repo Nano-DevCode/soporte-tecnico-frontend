@@ -47,7 +47,7 @@ const getTriggerClass = (isActiveGroup: boolean) => cn(
 export const CustomSidebarNavContent = memo(() => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const { isSuperAdmin, isBossCC, isCoordinator, isBoss, isPlaning, isSecretaryCC, isTechnician, isInventory } = useUserRoles();
+  const { isSuperAdmin, isBossCC, isCoordinator, isBoss, isPlaning, isSecretaryCC, isTechnician, isInventory, isVisitor } = useUserRoles();
 
   const navItems: NavItem[] = useMemo(() => [
     {
@@ -65,7 +65,7 @@ export const CustomSidebarNavContent = memo(() => {
     {
       title: "User",
       icon: Users,
-      show: isSuperAdmin || isCoordinator || isBossCC,
+      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
       subItems: [
         { title: t("custom_nav_content_users"), path: "/users", show: true },
         { title: t("custom_nav_content_depatment"), path: "/departments", show: true },
@@ -74,7 +74,7 @@ export const CustomSidebarNavContent = memo(() => {
     {
       title: "Activos TI",
       icon: MonitorCog,
-      show: isSuperAdmin || isCoordinator || isBossCC,
+      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
       subItems: [
         { title: "Inventario", path: "/it-assets", show: true },
         { title: "Bicatora", path: "/it-assets/movements", show: true },
@@ -83,7 +83,7 @@ export const CustomSidebarNavContent = memo(() => {
     {
       title: "Herramientas",
       icon: MonitorCog,
-      show: isSuperAdmin || isCoordinator || isBossCC,
+      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
       subItems: [
         { title: "Inventario", path: "/tools", show: true },
         { title: "Bicatora", path: "/tools/movements", show: true },
@@ -175,7 +175,7 @@ export const CustomSidebarNavContent = memo(() => {
         { title: t("notifications"), path: "/settings/notifications", show: true },
       ]
     }
-  ], [t, isSuperAdmin, isCoordinator, isBossCC, isInventory, isTechnician, isBoss, isPlaning, isSecretaryCC]);
+  ], [t, isSuperAdmin, isCoordinator, isBossCC, isVisitor, isInventory, isSecretaryCC, isTechnician, isBoss, isPlaning]);
 
   return (
     <ScrollArea className="flex-1 min-h-0 px-3 py-4">

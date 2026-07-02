@@ -1,7 +1,7 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import type { Department } from "../interfaces/department.interface";
 import { Button } from "@/components/ui/button";
-import { Eye, MoreHorizontal, Pencil, PowerOff, CheckCircle } from "lucide-react"; // Íconos actualizados
+import { Eye, MoreHorizontal, Pencil, PowerOff, CheckCircle } from "lucide-react";
 import { Link } from "react-router";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
@@ -9,10 +9,13 @@ import { useTranslation } from "react-i18next";
 interface Props {
   department: Department;
   handleDownClick: (department: Department) => void;
+  disable?: boolean;
 }
 
 export const CustomDepartmentActionsMenu = ({
-  department, handleDownClick
+  department, 
+  handleDownClick,
+  disable = false
 }: Props ) => {
   const { t } = useTranslation();
   const isActive = department.status;
@@ -25,6 +28,7 @@ export const CustomDepartmentActionsMenu = ({
             variant="ghost"
             size="icon"
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            disabled={disable}
           >
             <MoreHorizontal className="h-4 w-4" />
           </Button>

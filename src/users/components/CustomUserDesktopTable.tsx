@@ -7,6 +7,7 @@ import { CustomUserActionsMenu } from "./CustomUserActionsMenu";
 import { Badge } from "@/components/ui/badge";
 import type { User } from "../interfaces/users.response";
 import { useTranslation } from 'react-i18next';
+import { useAuthStore } from "@/auth/store/auth.store";
 
 interface Props {
   users: User[];
@@ -15,11 +16,11 @@ interface Props {
 
 export const CustomUserDesktopTable = memo(({ users, handleStatusClick }: Props) => {
   const { t } = useTranslation();
+  const isVisitor = useAuthStore((state) => state.isVisitor);
 
   return (
     <div className="hidden md:block rounded-xl border border-border shadow-sm overflow-hidden">
       <Table>
-        {/* Cabecera con el fondo tintado que pediste, pero limpia de íconos extra */}
         <TableHeader>
           <TableRow>
             <TableHead className="w-20 items-center justify-center text-center">
@@ -106,6 +107,7 @@ export const CustomUserDesktopTable = memo(({ users, handleStatusClick }: Props)
                   <CustomUserActionsMenu 
                     user={user} 
                     handleStatusClick={handleStatusClick} 
+                    disable={isVisitor()}
                   />
                 </div>
               </TableCell>

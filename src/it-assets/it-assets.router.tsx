@@ -75,7 +75,7 @@ export const ItAssetsRoutes = () => {
             path: 'movements',
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
                         <ItAssetsMovementsPage />
                     </RoleRoute>
                 </SuspenseWrapper>
@@ -85,7 +85,7 @@ export const ItAssetsRoutes = () => {
             path: 'movements/:id',
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
                         <ItAssetsMovementViewPage />
                     </RoleRoute>
                 </SuspenseWrapper>
@@ -95,7 +95,7 @@ export const ItAssetsRoutes = () => {
             path: ':id',
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
                         <ItAssetsDetailsPage />
                     </RoleRoute>
                 </SuspenseWrapper>

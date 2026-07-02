@@ -16,10 +16,12 @@ import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { logError } from "@/utils/logger";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 export const DepartmentPage = () => {
   const { t } = useTranslation();
   const { departments, meta, isLoading: skelettonLoading, isUpdating, changeStatus } = useDepartments();
+  const isVisitor = useAuthStore((state) => state.isVisitor);
   
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [departmentSelect, setDepartmentSeleccionado] = useState<Department | null>(null);
@@ -90,12 +92,14 @@ export const DepartmentPage = () => {
         />
         
         {/* Botón */}
-        <Link to="/departments/create">
-          <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
-            <Plus className="mr-2 h-4 w-4" />
-            {t("departments.pages.departmentPage.createDepartment")}
-          </Button>
-        </Link>
+        {(!isVisitor() && (
+          <Link to="/departments/create">
+            <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
+              <Plus className="mr-2 h-4 w-4" />
+              {t("departments.pages.departmentPage.createDepartment")}
+            </Button>
+          </Link>
+        ))}
 
       </div>
       

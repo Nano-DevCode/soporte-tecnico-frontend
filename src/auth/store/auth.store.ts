@@ -23,6 +23,7 @@ type AuthState = {
   isPlaning: () => boolean,
   isSecretaryCC: () => boolean,
   isInventory: () => boolean,
+  isVisitor: () => boolean,
 
   login: (email: string, password: string) => Promise<boolean>,
   logout: () => Promise<void>,
