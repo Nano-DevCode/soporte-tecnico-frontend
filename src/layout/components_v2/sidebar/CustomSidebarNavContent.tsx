@@ -88,32 +88,6 @@ export const CustomSidebarNavContent = memo(() => {
       ]
     },
     {
-      title: t("tickets.menu_options.label"),
-      icon: Headset,
-      show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
-      subItems: [
-        {
-          title: t("tickets.menu_options.current"),
-          icon: Ticket,
-          path: "/tickets/currents",
-          show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
-        },
-        {
-          title: t("tickets.menu_options.history"),
-          icon: TicketCheck,
-          path: "/tickets",
-          show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
-        },
-        {
-          title: t("technical_reports.menu_item.title"),
-          icon: ClipboardList,
-          path: "/technical-reports",
-          show: isSuperAdmin || isBossCC || isCoordinator || isSecretaryCC || isTechnician,
-        },
-      ]
-    },
-
-    {
       title: "User",
       icon: Users,
       show: isSuperAdmin || isCoordinator || isBossCC,
