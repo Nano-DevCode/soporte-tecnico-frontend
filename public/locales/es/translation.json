@@ -2149,7 +2149,7 @@
   "consumableForm.errors.ticketRequired": "El ticket es requerido para generar la salida",
   "consumableForm.errors.justificationRequired": "La justificación es obligatoria",
   "consumableForm.dialog.title": "¿Confirmar Despacho de Inventario?",
-  "consumableForm.dialog.description": "Esta acción afectará los niveles de stock en tiempo real mediante el cálculo de capas PEPS y no se puede deshacer. ¿Deseas continuar?",
+  "consumableForm.dialog.description": "Esta acción afectará los niveles de stock de los consumibles seleccionados, RECUERDA no se permitirán modificaciones una vez registrado el movimiento, por ello revisa los elementos de tu consumo. ¿Deseas continuar?",
   "consumableForm.dialog.summaryTitle": "Resumen de Despacho",
   "consumableForm.dialog.itemCount_one": "item",
   "consumableForm.dialog.itemCount_other": "items",
@@ -2267,7 +2267,7 @@
   "consumableEdit.backLabel": "Lista de Consumibles",
   "consumableOutput.backLabel": "Listar Consumibles",
   "consumableOutput.title": "Generar Salida de Consumibles",
-  "consumableOutput.subtitle": "Revisa los artículos seleccionados en tu bolsa de despacho y completa el formulario con los detalles del movimiento de inventario.",
+  "consumableOutput.subtitle": "Revisa los artículos seleccionados para el despacho y completa el formulario con los detalles del movimiento para completar la salida de consumibles.",
   "consumableOutput.syncErrorTitle": "Error de Sincronización",
   "consumableOutput.syncErrorDesc": "Los consumibles seleccionados ya no se encuentran disponibles en el catálogo o fueron modificados. Por favor, limpia tu bolsa e intenta de nuevo.",
   "consumableOutput.btnCleanBag": "Limpiar Bolsa y Volver",
@@ -2280,7 +2280,7 @@
   "consumablePage.totalOperations_other": "Total de operaciones: {{count}} resultados",
   "consumablePage.emptyCatalog": "No se encontraron consumibles registrados",
   "consumable_page_custom_title_card": "Catálogo de consumibles",
-  "consumable_page_custom_description_card": "Catálogo de consumibles los puedes añadir a la lista y poder realizar registros de remesa asi como consumos de los mismos. ",
+  "consumable_page_custom_description_card": "Catálogo de consumibles, mostramos una lista de consumibles que puede seleccionar y realizar movimientos como registro de remesa o arribo , así como el consumo de los mismos. Puede ir agregando más consumibles para completar tu movimiento. ",
   "consumable_page_create_consumable": "Crear consumible",
   "createBatch.loadingTitle": "Guardando lote...",
   "createBatch.successTitle": "Lote registrado correctamente",
@@ -2312,6 +2312,10 @@
   "consumablePage.totalConsumables_other": "Total de consumibles conforme a filtros: {{count}} consumibles",
   "movementsPage.totalOperations": "Total operaciones conforme a filtros",
   "tickets.status.label_status":"Estatus:",
+  "consumable_hook_creating":"Creando el consumible",
+  "consumable_hook_updating":"Actualizando el consumible",
+  "consumable_hook_create_error":"Error al crear el consumible",
+  "consumable_hook_update_error":"Error al editar el consumible",
   "itAssets": {
     "mainPage": {
       "titleCard": {

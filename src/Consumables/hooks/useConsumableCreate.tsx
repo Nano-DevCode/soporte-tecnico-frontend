@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { t } from "i18next";
-import { toast } from "sonner";
+// import { t } from "i18next";
 
 import { 
     createConsumableAction, 
@@ -17,10 +16,9 @@ export const useConsumablesCreateUpdate = () => {
     const createConsumableMutation = useMutation<Consumable, Error, FormData>({
         mutationFn: (payload: FormData) => createConsumableAction(payload),
         onSuccess: () => {
+            // Invalidamos las queries para refrescar la tabla al regresar
             queryClient.invalidateQueries({ queryKey: ["consumables"] });
-            toast.success(t("consumable_hook_create_success") || "Consumible creado con éxito");
         },
-        // Nota: Quitamos el onError global para que el catch del formulario maneje el setError
     });
 
     // --- Mutación para Actualizar Consumible ---
@@ -34,11 +32,11 @@ export const useConsumablesCreateUpdate = () => {
             } else {
                 queryClient.invalidateQueries({ queryKey: ["consumable"] });
             }
-            toast.success(t("consumable_hook_update_success") || "Consumible actualizado con éxito");
         },
     });
 
     return {
+        // Exponemos mutateAsync para poder encadenar sileo.promise en tus componentes/páginas
         createConsumableAsync: createConsumableMutation.mutateAsync,
         updateConsumableAsync: updateConsumableMutation.mutateAsync,
         isCreating: createConsumableMutation.isPending,

@@ -3,7 +3,7 @@ const STORAGE_KEY = "custom_consumable_bag";
 
 export const getConsumableBagIds = (): string[] => {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "[]");
   } catch {
     return [];
   }
@@ -11,7 +11,7 @@ export const getConsumableBagIds = (): string[] => {
 
 export const saveConsumableBagIds = (ids: string[]) => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
     // Notificamos a cualquier componente o custom hook que escuche
     window.dispatchEvent(new Event(CONSUMABLE_BAG_EVENT));
   } catch (error) {

@@ -56,6 +56,6 @@ export const getDepartmentByIdAction = async (id: string): Promise<Department | 
         return data;
     } catch  {
         //console.error(`${t("api_departments_by_id_error")} ${id}:`, error);
-        return null; // Retorno seguro para evitar excepciones no controladas en el Front
+        return null;
     }
 };

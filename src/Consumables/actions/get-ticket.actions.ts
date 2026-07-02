@@ -53,7 +53,7 @@ export const getTicketsAction = async (options: Options = {}): Promise<TicketsRe
         });
         const mappedData = data.data.map((ticket: Tickets) => ({
             ...ticket,
-            name: `${ticket.folio || ''} / ${t('tickets.status.label_status')} ${ticket.status_code || ''}`.trim()
+            name: `${ticket.folio || ''} - ${t('tickets.status.label_status')} ${ticket.status_code || ''}`.trim()
         }));
         return {
             ...data,

@@ -60,7 +60,7 @@ export const ConsumableCreatePage = () => {
                     error: (err) => {
                         let dynamicDescription = t("consumableCreate.dynamicErrorDesc");
 
-                        // 1. Usamos handleBackendErrors para mapear errores directo a los inputs de React Hook Form
+                        // Usamos handleBackendErrors para mapear errores directo a los inputs de React Hook Form
                         handleBackendErrors(
                             err,
                             setError,
@@ -79,7 +79,7 @@ export const ConsumableCreatePage = () => {
                             }
                         );
 
-                        // 2. Retornamos la configuración del Toast a Sileo con el mensaje exacto
+                        //Retornamos la configuración del Toast a Sileo con el mensaje exacto
                         return {
                             title: t("consumableCreate.errorTitle"),
                             description: dynamicDescription,

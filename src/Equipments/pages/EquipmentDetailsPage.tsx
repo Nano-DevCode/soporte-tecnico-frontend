@@ -80,8 +80,6 @@ export const EquipmentDetailsPage = () => {
                 <h1 className="text-2xl font-bold leading-none tracking-tight">
                   # {equipment?.num_inventario ?? 'S/N'}
                 </h1>
-                {equipment?.created_at ?? 'S/N'}
-
                 <p className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
                   <Info className="h-3.5 w-3.5" />
                   {equipment?.id_model?.id_brand?.name ?? t("eq_details_no_brand")} - {equipment?.id_model?.name ?? t("eq_details_no_model")}

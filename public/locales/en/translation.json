@@ -992,7 +992,7 @@
   "consumablePage.totalOperations_other": "Total operations: {{count}} results",
   "consumablePage.emptyCatalog": "No registered consumables found",
   "consumable_page_custom_title_card": "Catalog of the consumables",
-  "consumable_page_custom_description_card": "You can add consumable items to the list and record both arrivals and consumption. ",
+  "consumable_page_custom_description_card": "Consumables catalog: We offer a list of consumables from which you can make selections and record shipments, receipts, and consumption. You can continue adding consumables to complete your transaction. ",
   "consumable_page_create_consumable": "Create consumable",
   "createBatch.loadingTitle": "Saving batch...",
   "createBatch.successTitle": "Batch registered correctly",
@@ -1024,6 +1024,10 @@
   "consumablePage.totalConsumables_other": "Total filter-base consumable: {{count}} consumables",
   "movementsPage.totalOperations": "Total filter-based operations",
   "tickets.status.label_status": "Status:",
+  "consumable_hook_creating": "Creating consumable",
+  "consumable_hook_updating": "Updating consumable",
+  "consumable_hook_create_error": "Error creating consumable",
+  "consumable_hook_update_error": "Error editing consumable",
   "itAssets": {
     "mainPage": {
       "titleCard": {
