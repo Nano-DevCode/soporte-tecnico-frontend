@@ -5,12 +5,15 @@ import { Link } from "react-router";
 import { t } from "i18next";
 import { Button } from "@/components/ui/button";
 import type { GroupedMovement } from "../interfaces/consumable-movement.interfaces";
+import { useCan } from "../permissions/useCan";
 
 interface Props {
     movements: GroupedMovement[];
 }
 
 export const CustomMovementsMobileCard = ({ movements }: Props) => {
+    const { can } = useCan();
+    const canViewMovementDetails = can("VIEW_MOVEMENT_DETAILS");
     if (movements.length === 0) {
         return (
             <div className="block md:hidden text-center p-6 border border-dashed rounded-lg bg-card text-muted-foreground text-sm">
@@ -88,17 +91,19 @@ export const CustomMovementsMobileCard = ({ movements }: Props) => {
                             </div>
 
                             {/* Botón de Acción Directa a Detalles */}
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="w-full justify-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground border-zinc-200 dark:border-zinc-800"
-                                asChild
-                            >
-                                <Link to={`/consumable-movements/details/${encodeURIComponent(group.code_movement_aplication)}`}>
-                                    <Eye className="h-3.5 w-3.5" />
-                                    {t("movementCard.btnDetails")}
-                                </Link>
-                            </Button>
+
+                            {canViewMovementDetails && (
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="w-full justify-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground border-zinc-200 dark:border-zinc-800"
+                                    asChild>
+                                    <Link to={`/consumable-movements/details/${encodeURIComponent(group.code_movement_aplication)}`}>
+                                        <Eye className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                                        {t("movementCard.btnDetails")}
+                                    </Link>
+                                </Button>
+                            )}
 
                         </CardContent>
                     </Card>
