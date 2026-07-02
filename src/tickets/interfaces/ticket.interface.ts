@@ -1,4 +1,5 @@
 import type { Tag } from "@/common/tags/interfaces/tag.interface";
+import type { Document } from "./ticket-details.response";
 
 export interface Ticket {
     id:            string;
@@ -11,6 +12,7 @@ export interface Ticket {
     jefe_depto:    JefeDepto;
     issue_type:    IssueType;
     school_period: SchoolPeriod;
+    documents:     Document[];
     created_at:    Date;
 }
 

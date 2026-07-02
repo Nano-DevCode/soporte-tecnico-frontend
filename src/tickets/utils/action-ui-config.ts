@@ -47,7 +47,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketActionsType, ActionUIConfig>
     [TicketActions.CORREGIR]: {
         label: 'tickets.actions.edit.label',
         icon: Edit3,
-        variant: 'outline',
+        variant: 'secondary',
         permission: 'EDIT_TICKET',
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/edit`
@@ -96,7 +96,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketActionsType, ActionUIConfig>
     [TicketActions.CERRAR]: {
         label: 'tickets.actions.close.label',
         icon: Lock,
-        variant: 'outline',
+        variant: 'default',
         permission: 'CLOSE_TICKET',
         behavior: 'confirm',
         confirmTitle: 'tickets.actions.close.confirm_title',
@@ -105,7 +105,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketActionsType, ActionUIConfig>
     [TicketActions.ARCHIVAR]: {
         label: 'tickets.actions.archive.label',
         icon: Archive,
-        variant: 'secondary',
+        variant: 'default',
         permission: 'ARCHIVE_TICKET',
         behavior: 'confirm',
         confirmTitle: 'tickets.actions.archive.confirm_title',
@@ -122,7 +122,7 @@ export const ACTION_UI_CONFIG: Partial<Record<TicketActionsType, ActionUIConfig>
     [TicketActions.WATCH_RESPONSE_REPORT]: {
         label: 'tickets.actions.watch_response.label',
         icon: MessageSquareReply,
-        variant: 'default',
+        variant: 'outline',
         permission: 'WATCH_RESPONSE_REPORT',
         behavior: 'navigate',
         route: (id) => `/tickets/${id}/response`

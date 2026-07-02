@@ -12,6 +12,7 @@ import { Card } from "@/components/ui/card";
 import { SkeletonMobileCardTickets } from "../Skeletons/SkeletonMobileCardTickets";
 import { Separator } from "@/components/ui/separator";
 import { TicketTagsBadge } from "../TicketTagsBadge";
+import { Can } from "@/common/permission/Can";
 
 interface Props {
     tickets: Ticket[];
@@ -40,12 +41,14 @@ export const CustomMobileCardsTickets = ({ tickets, handleCardClick, isLoading }
                             </div>
 
                             <div className="flex flex-col">
-                                <span className="text-sm font-semibold leading-none text-foreground truncate">
-                                    {ticket.jefe_depto?.department?.name || t('tickets.data_default.department')}
-                                </span>
-                                <span className="text-xs font-mono text-muted-foreground mt-1">
+                                <span className="text-sm font-mono font-semibold leading-none text-foreground">
                                     #{ticket.folio}
                                 </span>
+                                <Can permission='WATCH_TICKET_DEPARTMENT'>
+                                    <span className="text-xs text-muted-foreground mt-1">
+                                        {ticket.jefe_depto?.department?.name || t('tickets.data_default.department')}
+                                    </span>
+                                </Can>
                             </div>
                         </div>
 
@@ -53,16 +56,20 @@ export const CustomMobileCardsTickets = ({ tickets, handleCardClick, isLoading }
                             <span className="text-xs text-muted-foreground">
                                 {toFormatLocalDateString(ticket.created_at, i18n.language, "MMM d")}
                             </span>
-                            <div onClick={(e) => e.stopPropagation()} className="-mr-2">
-                                <CustomActionsMenuTicket ticket={ticket} />
-                            </div>
+                            <Can permission='WATCH_TICKET_ACTIONS'>
+                                <div onClick={(e) => e.stopPropagation()} className="-mr-2">
+                                    <CustomActionsMenuTicket ticket={ticket} />
+                                </div>
+                            </Can>
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-1 pl-10">
-                        <h3 className="text-sm font-bold text-foreground line-clamp-1">
-                            {ticket.issue_type?.name || t('tickets.data_default.issue_type')}
-                        </h3>
+                        <Can permission='WATCH_TICKET_ISSUE'>
+                            <h3 className="text-sm font-bold text-foreground line-clamp-1">
+                                {ticket.issue_type?.name || t('tickets.data_default.issue_type')}
+                            </h3>
+                        </Can>
                         <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
                             {ticket.description}
                         </p>
@@ -72,11 +79,17 @@ export const CustomMobileCardsTickets = ({ tickets, handleCardClick, isLoading }
 
                     <div className="flex items-center gap-2 pl-10 flex-wrap">
                         <TicketStatusBadge statusCode={ticket.status_code} />
-                        <TicketPriorityBadge priority={ticket.priority} />
-                        <Badge variant="outline" className="text-muted-foreground">
-                            {ticket.school_period?.name || t('tickets.data_default.school_period')}
-                        </Badge>
-                        <TicketTagsBadge tags={ticket.tags} />
+                        <Can permission='WATCH_TICKET_PRIORITY'>
+                            <TicketPriorityBadge priority={ticket.priority} />
+                        </Can>
+                        <Can permission='WATCH_TICKET_PERIOD'>
+                            <Badge variant="outline" className="text-muted-foreground">
+                                {ticket.school_period?.name || t('tickets.data_default.school_period')}
+                            </Badge>
+                        </Can>
+                        <Can permission='WATCH_TICKET_TAGS'>
+                            <TicketTagsBadge tags={ticket.tags} />
+                        </Can>
                     </div>
                 </Card>
             ))}

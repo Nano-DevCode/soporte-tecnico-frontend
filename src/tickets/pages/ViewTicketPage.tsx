@@ -158,21 +158,30 @@ export const ViewTicketPage = () => {
 
             <DetailHeaderTicket ticket={ticket} />
 
-            <TicketActionsComponent
-                currentState={ticket.currentStatusCode}
-                ticketId={ticket.id}
-                onDirectAction={handleDirectAction}
-                pendingEvent={currentPendingEvent}
-            />
+            <Can permission='WATCH_TICKET_ACTIONS'>
+                <TicketActionsComponent
+                    currentState={ticket.currentStatusCode}
+                    ticketId={ticket.id}
+                    onDirectAction={handleDirectAction}
+                    pendingEvent={currentPendingEvent}
+                    documents={ticket.documents}
+                />
+            </Can>
 
-            <div className="hidden lg:block">
-                <TicketStepper currentState={ticket.currentStatusCode} />
-            </div>
+            <Can permission='WATCH_TICKET_STEPPER'>
+                <div className="hidden lg:block">
+                    <TicketStepper currentState={ticket.currentStatusCode} />
+                </div>
+            </Can>
 
             <div className="grid gap-4 lg:grid-cols-3">
                 <div className="lg:col-span-1 order-2 lg:order-1 space-y-4">
-                    <TicketActorsCard ticket={ticket} />
-                    <TicketTimeLine ticket_histories={ticket.ticket_histories} />
+                    <Can permission='WATCH_TICKET_ACTORS'>
+                        <TicketActorsCard ticket={ticket} />
+                    </Can>
+                    <Can permission='WATCH_TICKET_TIMELINE'>
+                        <TicketTimeLine ticket_histories={ticket.ticket_histories} />
+                    </Can>
                 </div>
 
                 <div className="lg:col-span-2 order-1 lg:order-2 space-y-4">
@@ -182,7 +191,9 @@ export const ViewTicketPage = () => {
                         {canWatchTechnicalReports && <TechnicalReportsOfTicketItems ticketId={ticket.id} />}
                     </Can>
 
-                    <TicketDocuments documents={ticket.documents} />
+                    <Can permission='WATCH_TICKET_DOCUMENTS'>
+                        <TicketDocuments documents={ticket.documents} />
+                    </Can>
                 </div>
             </div>
         </div>

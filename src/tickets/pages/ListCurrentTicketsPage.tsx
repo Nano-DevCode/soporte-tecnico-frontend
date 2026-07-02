@@ -13,8 +13,8 @@ export function ListCurrentTicketPage() {
   return (
     <>
       <CustomTitleCard icon={ShieldUser}
-        title={t("tickets.list_page.title")}
-        description={t("tickets.list_page.description")} />
+        title={t("tickets.list_current_page.title")}
+        description={t("tickets.list_current_page.description")} />
       <div className="space-y-3 md:space-y-6">
 
 

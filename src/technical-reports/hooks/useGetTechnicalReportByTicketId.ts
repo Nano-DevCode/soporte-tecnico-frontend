@@ -4,7 +4,14 @@ import { technicalReportsQueryKeys } from "../keys/technical-reports-query.keys"
 import { getTechnicalReportsByTicketIdAction } from "../actions/get-technical-reports-by-ticket-id.action";
 
 export const useGetTechnicalReportsByTicketId = (id?: string) => {
-    const query = useQuery({
+    const {
+        data,
+        isLoading,
+        isError,
+        error,
+        isFetching,
+        refetch
+    } = useQuery({
         queryKey: id ? technicalReportsQueryKeys.byTicket(id) : technicalReportsQueryKeys.all,
         queryFn: () => getTechnicalReportsByTicketIdAction(id!),
         retry: false,
@@ -13,6 +20,11 @@ export const useGetTechnicalReportsByTicketId = (id?: string) => {
     });
 
     return {
-        ...query,
+        data,
+        isLoading,
+        isError,
+        error,
+        isFetching,
+        refetch
     };
 };

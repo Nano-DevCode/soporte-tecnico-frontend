@@ -4,7 +4,14 @@ import { ticketsQueryKeys } from "../keys/tickets-query.keys";
 import { getTicketByIdAction } from "../actions/get-ticket-by-id.action";
 
 export const useGetTicketById = (id?: string) => {
-    const query = useQuery({
+    const {
+        data,
+        isLoading,
+        isError,
+        error,
+        isFetching,
+        refetch
+    } = useQuery({
         queryKey: id ? ticketsQueryKeys.detail(id) : ticketsQueryKeys.details(),
         queryFn: () => getTicketByIdAction(id!),
         retry: false,
@@ -13,6 +20,11 @@ export const useGetTicketById = (id?: string) => {
     });
 
     return {
-        ...query,
+        data,
+        isLoading,
+        isError,
+        error,
+        isFetching,
+        refetch
     };
 };

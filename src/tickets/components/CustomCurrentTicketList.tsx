@@ -14,12 +14,14 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/
 import { CustomEmptyListState } from '@/components/custom/CustomEmptyListState';
 import { TICKET_COLUMN_IDS } from '../interfaces/ticket-column-ids.types';
 import { useCurrentForUser } from '../hooks/useGetCurrentForUser';
+import { useCan } from '@/common/permission/useCan';
 
 export const CustomCurrentTicketList = () => {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
     const { data, isLoading: skeletonLoading, isError, refetch, isFetching } = useCurrentForUser();
+    const { can } = useCan();
 
     const sortBy = searchParams.get('sortBy') || 'created_at';
     const sortOrder = useMemo(() => {
@@ -55,8 +57,8 @@ export const CustomCurrentTicketList = () => {
     }, [navigate]);
 
     const columns = useMemo(
-        () => getTicketColumns(t, i18n),
-        [t, i18n]
+        () => getTicketColumns(t, i18n, can),
+        [t, i18n, can]
     );
 
     const ticketsList = data?.data ?? [];
@@ -69,6 +71,8 @@ export const CustomCurrentTicketList = () => {
         onSortingChange: handleSortingChange,
         initialColumnVisibility: {
             [TICKET_COLUMN_IDS.TAGS]: false,
+            [TICKET_COLUMN_IDS.REQUEST_DOCUMENT]: false,
+            [TICKET_COLUMN_IDS.RESPONSE_DOCUMENT]: false,
         }
     });
 

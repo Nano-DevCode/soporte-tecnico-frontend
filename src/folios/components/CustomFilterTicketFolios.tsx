@@ -47,19 +47,21 @@ export const CustomFilterTicketFolios = ({ table, totalData, isLoadingData }: Pr
                         <DropdownMenuContent align="end">
                             {table
                                 .getAllColumns()
-                                .filter((column) => column.getCanHide())
-                                .map((column) => {
-                                    return (
-                                        <DropdownMenuCheckboxItem
-                                            key={column.id}
-                                            className="capitalize"
-                                            checked={column.getIsVisible()}
-                                            onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                                        >
-                                            {t(`folios.list_page.table.headers.${column.id}` as ColumnsNameTranslationKey)}
-                                        </DropdownMenuCheckboxItem>
-                                    )
-                                })}
+                                .reduce<React.ReactNode[]>((acumulador, column) => {
+                                    if (column.getCanHide()) {
+                                        acumulador.push(
+                                            <DropdownMenuCheckboxItem
+                                                key={column.id}
+                                                className="capitalize"
+                                                checked={column.getIsVisible()}
+                                                onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                                            >
+                                                {t(`folios.list_page.table.headers.${column.id}` as ColumnsNameTranslationKey)}
+                                            </DropdownMenuCheckboxItem>
+                                        );
+                                    }
+                                    return acumulador;
+                                }, [])}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

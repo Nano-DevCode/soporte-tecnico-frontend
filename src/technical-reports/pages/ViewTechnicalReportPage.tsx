@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { DetailsTechnicalReport } from '../components/DetailsTechnicalReport';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { CustomHeaderCard } from '@/components/custom/CustomHeaderCard';
-import { ClipboardSignature } from 'lucide-react';
+import { ClipboardSignature, PencilLineIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { DetailsTechnicalReportSkeleton } from '../components/skeletons/DetailsTechnicalReportSkeleton';
@@ -85,6 +85,7 @@ export const ViewTechnicalReportPage = () => {
                     <Button className='ml-auto' onClick={() => {
                         navigate(`/technical-reports/${id}/edit`)
                     }}>
+                        <PencilLineIcon />
                         {t('common.buttons.edit')}
                     </Button>
                 </CardFooter>

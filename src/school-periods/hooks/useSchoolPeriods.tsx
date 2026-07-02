@@ -4,7 +4,6 @@ import { getSchoolPeriodsAction } from "../actions/get-school-periods.action";
 import { schoolPeriodQueryKeys } from "../keys/school-period-query.keys";
 import { STALE_TIME_5_MIN } from "@/config/query-constants";
 
-// TODO: Posible mejora al sacar useSearchParam de aqui, de forma que reciba el searchParam para reutilizar el componente.
 export const useSchoolPeriods = () => {
 
   const [searchParams] = useSearchParams();
@@ -19,7 +18,7 @@ export const useSchoolPeriods = () => {
       ? false
       : undefined;
 
-  return useQuery({
+  const { data, isLoading, isError, isFetching, refetch, isPlaceholderData } = useQuery({
     queryKey: schoolPeriodQueryKeys.list({ limit, page, query, status: statusValue }),
     queryFn: async () => getSchoolPeriodsAction({
       limit,
@@ -30,4 +29,6 @@ export const useSchoolPeriods = () => {
     placeholderData: keepPreviousData,
     staleTime: STALE_TIME_5_MIN,
   })
+
+  return { data, isLoading, isError, isFetching, refetch, isPlaceholderData };
 }

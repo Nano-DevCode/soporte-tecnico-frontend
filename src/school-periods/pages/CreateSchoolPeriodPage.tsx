@@ -1,41 +1,39 @@
 import { useTranslation } from "react-i18next";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
-import { useNavigate } from "react-router";
-import { toast } from "sonner";
 import { SchoolPeriodForm } from "../components/SchoolPeriodForm";
-import type { SchoolPeriodFormValues } from "../schemas/create-school-period.schema";
+import type { SchoolPeriodFormOutput } from "../schemas/create-school-period.schema";
 import { useMutateSchoolPeriod } from "../hooks/useMutateSchoolPeriod";
 import { getAxiosErrorMessage } from "../../lib/helpers/getAxiosErrorMessage";
-// IMPORTANTE: Aquí usas el hook que separamos exclusivamente para mutaciones
+import { useSmartNavigation } from "@/components/hooks/useSmartNavigation";
+import { sileo } from "sileo";
 
 export const CreateSchoolPeriodPage = () => {
-    const navigate = useNavigate();
     const { t } = useTranslation();
     const { mutateAsync, isPending } = useMutateSchoolPeriod();
+    const { navigateSmartBack } = useSmartNavigation('/school_period');
 
-    const handleSubmit = async (values: SchoolPeriodFormValues) => {
-        await mutateAsync(values, {
-            onSuccess: (responseData) => {
-                toast.success(t('success_create_school_period_message'), {
-                    duration: 15000,
-                    closeButton: true,
-                    position: 'top-right',
+    const handleSubmit = async (values: SchoolPeriodFormOutput) => {
+        await mutateAsync({ schoolPeriodLike: values, periodId: 'new' }, {
+            onSuccess: () => {
+                sileo.success({
+                    title: t('school_periods.edit_page.success.title'),
+                    description: t('school_periods.edit_page.success.message'),
+                    duration: 5000,
                 });
-                navigate(`/school-period/${responseData.id}`);
+                navigateSmartBack();
             },
             onError: (error) => {
-                console.error("Error en la mutación:", error);
-
-                const errorMessage = getAxiosErrorMessage(error);
-
-                toast.error('Error al guardar el Periodo Escolar', {
-                    description: errorMessage,
-                    duration: 10000,
-                    closeButton: true,
-                    position: 'top-right',
+                sileo.error({
+                    title: t('school_periods.edit_page.error.title'),
+                    description: getAxiosErrorMessage(error),
+                    duration: 7000,
                 });
             },
         });
+    };
+
+    const handleCancel = () => {
+        navigateSmartBack(`/school_period`);
     };
 
     return (
@@ -49,6 +47,7 @@ export const CreateSchoolPeriodPage = () => {
                 <SchoolPeriodForm
                     onSubmit={handleSubmit}
                     isPending={isPending}
+                    onCancel={handleCancel}
                     titleButton={t('school_period_form_button_create')}
                 />
             </div>

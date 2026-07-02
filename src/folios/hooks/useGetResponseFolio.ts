@@ -4,7 +4,13 @@ import { responseFoliosQueryKeys } from "../keys/folios-query.keys";
 import { getResponseFolioAction } from "../actions/get-response-folio.action";
 
 export const useGetResponseFolio = () => {
-    const query = useQuery({
+    const {
+        data,
+        isLoading,
+        isError,
+        isFetching,
+        refetch
+    } = useQuery({
         queryKey: responseFoliosQueryKeys.details(),
         queryFn: () => getResponseFolioAction(),
         retry: false,
@@ -12,6 +18,10 @@ export const useGetResponseFolio = () => {
     });
 
     return {
-        ...query,
+        data,
+        isLoading,
+        isError,
+        isFetching,
+        refetch
     };
 };

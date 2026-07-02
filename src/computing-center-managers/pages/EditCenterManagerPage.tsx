@@ -32,13 +32,13 @@ export const EditCenterManagerPage = () => {
 
     const handleSubmit = (values: CenterManagerFormValues) => {
         mutate({ id: id!, payload: values }, {
-            onSuccess: () => {
+            onSuccess: (data) => {
                 sileo.success({
                     title: t('center_managers.update_page.success.title'),
                     description: t('center_managers.update_page.success.message'),
                     duration: 4000,
                 });
-                navigate(`/center-managers`);
+                navigate(`/center-managers/${data.id}`, { replace: true });
             },
             onError: (error) => {
                 console.error("Error en la mutación:", error);

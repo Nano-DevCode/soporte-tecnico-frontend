@@ -2,6 +2,9 @@ import { useTranslation } from "react-i18next";
 import { Ticket } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { TicketsByStatusResponse } from "../interfaces/tickets--by-status";
+import { cn } from "@/lib/utils";
+import { TicketStatusColors } from "@/tickets/utils/ticket-status-colors";
+import type { TicketStatusType } from "@/tickets/utils/ticket-state-machine";
 
 interface Props {
     data: TicketsByStatusResponse | undefined;
@@ -36,7 +39,7 @@ export const TicketsByStatusCards = ({ data, isLoading }: Props) => {
     return (
         <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
             {data.data.map((item) => (
-                <Card key={item.status} className="flex-1 py-4 gap-0 justify-between">
+                <Card key={item.status} className={cn("flex-1 py-4 gap-0 justify-between", TicketStatusColors[item.code as TicketStatusType])}>
                     <CardHeader className="px-4 flex flex-row items-center justify-between">
                         <CardTitle
                             className="text-sm font-medium capitalize"

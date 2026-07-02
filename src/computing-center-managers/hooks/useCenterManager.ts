@@ -4,7 +4,14 @@ import { centerManagerQueryKeys } from "../keys/center-manager-query.keys";
 import { getCenterManagerByIdAction } from "../actions/get-center-manager-by-id.action";
 
 export const useCenterManager = (id?: string) => {
-    const query = useQuery({
+    const {
+        data,
+        isLoading,
+        isError,
+        error,
+        isFetching,
+        refetch
+    } = useQuery({
         queryKey: id ? centerManagerQueryKeys.detail(id) : centerManagerQueryKeys.details(),
         queryFn: () => getCenterManagerByIdAction(id!),
         retry: false,
@@ -13,6 +20,11 @@ export const useCenterManager = (id?: string) => {
     });
 
     return {
-        ...query,
+        data,
+        isLoading,
+        isError,
+        error,
+        isFetching,
+        refetch
     };
 };

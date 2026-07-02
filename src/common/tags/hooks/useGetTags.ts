@@ -10,17 +10,37 @@ interface UseGetTagsProps {
 }
 
 export const useGetTags = ({ search, limit = 15, page = 1 }: UseGetTagsProps = {}) => {
-    const query = useQuery({
+    const {
+        data,
+        isLoading,
+        isError,
+        isFetching,
+        refetch
+    } = useQuery({
         queryKey: tagsQueryKeys.list({ search, limit, page }),
         queryFn: async () => getTagsAction({ search, page, limit }),
         staleTime: STALE_TIME_5_MIN,
     });
 
-    return query;
+    return {
+        data,
+        isLoading,
+        isError,
+        isFetching,
+        refetch
+    };
 }
 
 export const useInfiniteGetTags = ({ search, limit = 15 }: Omit<UseGetTagsProps, 'page'> = {}) => {
-    const infiniteQuery = useInfiniteQuery({
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isLoading,
+        isError,
+        isFetching
+    } = useInfiniteQuery({
         queryKey: tagsInfinitQueryKeys.list({ search, limit }),
         queryFn: async ({ pageParam }) => getTagsAction({
             search,
@@ -38,5 +58,13 @@ export const useInfiniteGetTags = ({ search, limit = 15 }: Omit<UseGetTagsProps,
         placeholderData: keepPreviousData,
     });
 
-    return infiniteQuery;
+    return {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isLoading,
+        isError,
+        isFetching
+    };
 }

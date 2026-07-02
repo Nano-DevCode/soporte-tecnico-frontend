@@ -14,12 +14,16 @@ import { Button } from '@/components/ui/button';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { CustomEmptyListState } from '@/components/custom/CustomEmptyListState';
 import { TICKET_COLUMN_IDS } from '../interfaces/ticket-column-ids.types';
+import { useCan } from '@/common/permission/useCan';
+import { useUserRoles } from '@/auth/hooks/useUserRoles';
 
 export const CustomListTickets = () => {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
+    const { can } = useCan();
     const [searchParams, setSearchParams] = useSearchParams();
     const { data, isLoading: skeletonLoading, isError, refetch, isFetching } = useAllTickets();
+    const { isPlaning } = useUserRoles()
 
     const sortBy = searchParams.get('sortBy') || 'created_at';
     const sortOrder = useMemo(() => {
@@ -55,13 +59,12 @@ export const CustomListTickets = () => {
     }, [navigate]);
 
     const columns = useMemo(
-        () => getTicketColumns(t, i18n),
-        [t, i18n]
+        () => getTicketColumns(t, i18n, can),
+        [t, i18n, can]
     );
 
     const ticketsList = data?.data ?? [];
     const totalData = data?.meta.total || 0;
-
     const table = useCustomTable({
         data: ticketsList,
         columns,
@@ -69,6 +72,8 @@ export const CustomListTickets = () => {
         onSortingChange: handleSortingChange,
         initialColumnVisibility: {
             [TICKET_COLUMN_IDS.TAGS]: false,
+            [TICKET_COLUMN_IDS.REQUEST_DOCUMENT]: isPlaning,
+            [TICKET_COLUMN_IDS.RESPONSE_DOCUMENT]: isPlaning,
         }
     });
 

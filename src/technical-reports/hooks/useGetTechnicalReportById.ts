@@ -4,7 +4,14 @@ import { technicalReportsQueryKeys } from "../keys/technical-reports-query.keys"
 import { getTechnicalReportByIdAction } from "../actions/get-technical-report-by-id.action";
 
 export const useGetTechnicalReportById = (id?: string) => {
-    const query = useQuery({
+    const {
+        data,
+        isLoading,
+        isError,
+        error,
+        isFetching,
+        refetch
+    } = useQuery({
         queryKey: id ? technicalReportsQueryKeys.detail(id) : technicalReportsQueryKeys.details(),
         queryFn: () => getTechnicalReportByIdAction(id!),
         retry: false,
@@ -13,6 +20,11 @@ export const useGetTechnicalReportById = (id?: string) => {
     });
 
     return {
-        ...query,
+        data,
+        isLoading,
+        isError,
+        error,
+        isFetching,
+        refetch
     };
 };

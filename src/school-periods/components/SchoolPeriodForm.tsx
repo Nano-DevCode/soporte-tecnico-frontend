@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { PeriodType, type SchoolPeriod } from "@/school-periods/interfaces/school-period.interface";
-import { schoolPeriodSchema, type SchoolPeriodFormValues } from "@/school-periods/schemas/create-school-period.schema";
+import { schoolPeriodSchema, type SchoolPeriodFormInput, type SchoolPeriodFormOutput } from "@/school-periods/schemas/create-school-period.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { enUS, es } from "date-fns/locale";
@@ -15,21 +15,20 @@ import { CalendarIcon, CalendarRange, Loader2, Save, X } from "lucide-react";
 import { useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
 
 interface Props {
     schoolPeriod?: SchoolPeriod,
     isPending: boolean,
     titleButton: string,
 
-    onSubmit: (scholPeriodLike: SchoolPeriodFormValues) => Promise<void>,
+    onSubmit: (scholPeriodLike: SchoolPeriodFormOutput) => Promise<void>,
+    onCancel: () => void
 }
-export const SchoolPeriodForm = ({ schoolPeriod, onSubmit, isPending, titleButton }: Props) => {
+export const SchoolPeriodForm = ({ schoolPeriod, onSubmit, isPending, titleButton, onCancel }: Props) => {
     const { t, i18n } = useTranslation();
-    const navigate = useNavigate();
     const localizedSchema = useMemo(() => schoolPeriodSchema(t), [t]);
 
-    const form = useForm<SchoolPeriodFormValues>({
+    const form = useForm<SchoolPeriodFormInput, unknown, SchoolPeriodFormOutput>({
         resolver: zodResolver(localizedSchema),
         defaultValues: schoolPeriod || {
             period_type: undefined,
@@ -188,7 +187,7 @@ export const SchoolPeriodForm = ({ schoolPeriod, onSubmit, isPending, titleButto
                         variant="outline"
                         type="button"
                         disabled={isPending}
-                        onClick={() => navigate('/school-period')} // 👈 Hook en lugar de <Link>
+                        onClick={onCancel}
                         className="w-full sm:w-auto flex items-center gap-2 rounded-xl"
                     >
                         <X className="mr-1.5 w-4 h-4" />
