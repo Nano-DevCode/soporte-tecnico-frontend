@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { AlertCircle } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { type ChartConfig } from "@/components/ui/chart";
 import type { CriticalInterruptionsResponse } from "../interfaces/critical-interruptions";
+import { lazy, Suspense } from "react";
+const ChartContent = lazy(() => import("./CriticalInterruptionsChartContent").then(m => ({ default: m.CriticalInterruptionsChartContent })));
 
 interface Props {
     response: CriticalInterruptionsResponse;
@@ -16,11 +17,10 @@ export const CriticalInterruptionsChart = ({ response, isLoading }: Props) => {
     const chartConfig = {
         count: {
             label: t('dashboards.metrics.critical_interruptions.bar_label'),
-            color: "hsl(var(--destructive))",
+            color: "var(--priority-1)"
         },
     } satisfies ChartConfig;
 
-    // 2. Estado de Carga (Skeleton)
     if (isLoading) {
         return (
             <Card className="w-full">
@@ -40,7 +40,6 @@ export const CriticalInterruptionsChart = ({ response, isLoading }: Props) => {
 
     const data = response?.data || [];
 
-    // 3. Formateador de Fecha para el Eje X (Transforma "2026-06" en "Jun 2026" localizadamente)
     const formatXAxis = (monthStr: string): string => {
         try {
             const [year, month] = monthStr.split('-');
@@ -70,46 +69,13 @@ export const CriticalInterruptionsChart = ({ response, isLoading }: Props) => {
                         </p>
                     </div>
                 ) : (
-                    // 1. ChartContainer requiere altura (h-[300px] o min-h-[...]) que ya tenías ✅
-                    <ChartContainer config={chartConfig} className="h-75 w-full">
-                        {/* 2. Quitamos ResponsiveContainer e inyectamos accessibilityLayer directo al BarChart */}
-                        <BarChart
-                            accessibilityLayer
+                    <Suspense fallback={<div className="h-75 w-full animate-pulse bg-muted rounded-lg" />}>
+                        <ChartContent
                             data={data}
-                            margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                        >
-                            <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-muted" />
-                            <XAxis
-                                dataKey="month"
-                                tickLine={false}
-                                axisLine={false}
-                                tickMargin={10}
-                                className="text-xs fill-muted-foreground font-medium"
-                                tickFormatter={formatXAxis}
-                            />
-                            <YAxis
-                                tickLine={false}
-                                axisLine={false}
-                                tickMargin={10}
-                                className="text-xs fill-muted-foreground font-medium"
-                                allowDecimals={false}
-                            />
-                            <ChartTooltip
-                                cursor={{ fill: "var(--background)", opacity: 0.2 }}
-                                content={
-                                    <ChartTooltipContent
-                                        labelFormatter={(value) => formatXAxis(String(value))}
-                                    />
-                                }
-                            />
-                            <Bar
-                                dataKey="count"
-                                fill="var(--color-count)"
-                                radius={[4, 4, 0, 0]}
-                                maxBarSize={50}
-                            />
-                        </BarChart>
-                    </ChartContainer>
+                            chartConfig={chartConfig}
+                            formatXAxis={formatXAxis}
+                        />
+                    </Suspense>
                 )}
             </CardContent>
         </Card>

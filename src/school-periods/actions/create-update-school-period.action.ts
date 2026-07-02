@@ -1,22 +1,21 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
 import type { SchoolPeriod } from "../interfaces/school-period.interface";
-// import { sleep } from "@/lib/sleep"
+import type { SchoolPeriodFormOutput } from "../schemas/create-school-period.schema";
 
-
+interface Props {
+  schoolPeriodLike: SchoolPeriodFormOutput,
+  periodId?: string
+}
 export const createUpdateSchoolPeriodAction = async (
-  schoolPeriodLike: Partial<SchoolPeriod>
+  { periodId, schoolPeriodLike }: Props
 ): Promise<SchoolPeriod> => {
-  // await sleep(1500);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id, created_at, updated_at, is_active, ...rest } = schoolPeriodLike;
-
-  const isCreating = !id || id === 'new';
+  const isCreating = !periodId || periodId === 'new';
 
   const { data } = await soporteTecnicoApi<SchoolPeriod>({
-    url: isCreating ? '/school-periods' : `/school-periods/${id}`,
+    url: isCreating ? '/school-periods' : `/school-periods/${periodId}`,
     method: isCreating ? 'POST' : 'PATCH',
-    data: rest,
+    data: schoolPeriodLike,
   }
   );
   return {

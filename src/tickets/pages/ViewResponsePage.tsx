@@ -6,13 +6,15 @@ import { CustomTitlePageWithBack } from '@/components/custom/CustomTitlePageWith
 import { useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { CustomHeaderCard } from '@/components/custom/CustomHeaderCard';
-import { MessageSquareReply } from 'lucide-react';
+import { MessageSquareReply, PencilLineIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { useGetResponseByTicketId } from '@/responses/hooks/useGetResponseByTicketId';
 import { DetailsTechnicalReportSkeleton } from '@/technical-reports/components/skeletons/DetailsTechnicalReportSkeleton';
 import { DetailsResponse } from '@/responses/components/DetailsResponse';
 import { Can } from '@/common/permission/Can';
+import { TicketDocumentButton } from '../components/details/TicketDocumentButton';
+import { TYPE_DOCUMENT_NAME } from '../interfaces/ticket-details.response';
 
 export const ViewResponsePage = () => {
 
@@ -22,6 +24,7 @@ export const ViewResponsePage = () => {
     const { navigateFallback } = useSmartNavigation('/tickets');
 
     const { isLoading, isError, data: response } = useGetResponseByTicketId(id);
+
 
     useEffect(() => {
         if (isLoading) return;
@@ -61,6 +64,11 @@ export const ViewResponsePage = () => {
             </div>
         );
     }
+
+    const filename = response.ticket.documents?.find(
+        (doc) => doc.type_document.name === TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM
+    )?.name
+
     return (
         <div className="space-y-4">
             <CustomTitlePageWithBack
@@ -82,11 +90,19 @@ export const ViewResponsePage = () => {
                     <DetailsResponse response={response} />
                 </CardContent>
                 <Separator />
-                <CardFooter>
+                <CardFooter className='justify-end gap-2'>
+                    {filename && (
+                        <TicketDocumentButton
+                            documentType={TYPE_DOCUMENT_NAME.WORK_ORDER_FORM}
+                            filename={filename}
+                        />
+                    )
+                    }
                     <Can permission='EDIT_RESPONSE_REPORT'>
-                        <Button className='ml-auto' onClick={() => {
+                        <Button onClick={() => {
                             navigate(`/tickets/${id}/response/edit`)
                         }}>
+                            <PencilLineIcon />
                             {t('common.buttons.edit')}
                         </Button>
                     </Can>

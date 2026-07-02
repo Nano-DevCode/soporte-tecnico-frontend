@@ -4,10 +4,11 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PenTool } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { v4 as uuidv4 } from "uuid";
 
 export const TechnicalReportsAccordionSkeleton = () => {
     const { t } = useTranslation();
-    const skeletonItems = Array.from({ length: 2 });
+    const skeletonItems = Array.from({ length: 2 }, () => uuidv4());
 
     return (
         <Card>
@@ -23,9 +24,9 @@ export const TechnicalReportsAccordionSkeleton = () => {
 
             <CardContent >
                 <div className="w-full space-y-3">
-                    {skeletonItems.map((_, index) => (
+                    {skeletonItems.map((id) => (
                         <div
-                            key={index}
+                            key={id}
                             className="flex flex-wrap items-center justify-between w-full gap-2 border rounded-lg px-4 py-4"
                         >
                             <div className="flex items-center gap-2">

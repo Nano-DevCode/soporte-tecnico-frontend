@@ -22,14 +22,15 @@ interface Props {
 
 }
 
+const defaultFormValues = {
+    requestedNextFolio: ""
+};
+
 export const TicketFolioForm = ({ itemFolio, onSubmit, isPending, titleButton, onCancel }: Props) => {
     const { t } = useTranslation();
 
     const schema = useMemo(() => TicketFolioSchema(t, itemFolio?.next_value ?? 0), [itemFolio?.next_value, t]);
 
-    const defaultFormValues = {
-        requestedNextFolio: ""
-    };
 
     const form = useForm<TicketFolioFormInput, unknown, TicketFolioFormOutput>({
         resolver: zodResolver(schema),

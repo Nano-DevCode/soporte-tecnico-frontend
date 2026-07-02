@@ -1,13 +1,10 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { FileText, Loader2, FileDown } from "lucide-react";
+import { FileDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
 import { Separator } from "@/components/ui/separator";
-import { useGetTicketPdf } from "@/tickets/hooks/useGetTicketPdf";
 import { TYPE_DOCUMENT_NAME, type Document } from "@/tickets/interfaces/ticket-details.response";
-import { useGetTicketResponsePdf } from "@/tickets/hooks/useGetTicketResponsePdf";
-import { useCan } from "@/common/permission/useCan";
+import { TicketDocumentButton } from "./TicketDocumentButton";
 
 interface Props {
     documents: Document[];
@@ -15,26 +12,11 @@ interface Props {
 
 export const TicketDocuments = ({ documents }: Props) => {
     const { t } = useTranslation();
-    const { can } = useCan();
-    const { mutate: openRequestPdf, isPending: isPendingRequest } = useGetTicketPdf();
-    const { mutate: openResponsePdf, isPending: isPendingResponse } = useGetTicketResponsePdf();
 
     const requestDocument = documents?.find((doc) => doc.type_document.name === TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM);
     const responseDocument = documents?.find((doc) => doc.type_document.name === TYPE_DOCUMENT_NAME.WORK_ORDER_FORM);
 
-    const showRequest = requestDocument && can('WATCH_TICKET');
-    const showResponse = responseDocument && can('WATCH_RESPONSE_REPORT');
-
-    const handleOpenDocument = (filename: string, documentType: TYPE_DOCUMENT_NAME) => {
-        if (documentType === TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM) {
-            openRequestPdf(filename);
-        }
-        else if (documentType === TYPE_DOCUMENT_NAME.WORK_ORDER_FORM) {
-            openResponsePdf(filename);
-        }
-    };
-
-    if (!showRequest && !showResponse) return null;
+    if (!requestDocument && !responseDocument) return null;
 
     return (
         <Card>
@@ -47,32 +29,20 @@ export const TicketDocuments = ({ documents }: Props) => {
             </CardHeader>
             <Separator />
             <CardContent className="space-y-3">
-                {showRequest && (
-                    <Button
-                        variant="outline"
+                {requestDocument && (
+                    <TicketDocumentButton
+                        documentType={TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM}
+                        filename={requestDocument.name}
                         className="w-full justify-start"
-                        onClick={() => handleOpenDocument(requestDocument!.name, TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM)}
-                        disabled={isPendingRequest}
-                    >
-                        {isPendingRequest
-                            ? <Loader2 className="animate-spin text-muted-foreground" />
-                            : <FileText className="text-amber-700" />}
-                        {t('tickets.documents.request_pdf')}
-                    </Button>
+                    />
                 )}
 
-                {showResponse && (
-                    <Button
-                        variant="outline"
+                {responseDocument && (
+                    <TicketDocumentButton
+                        documentType={TYPE_DOCUMENT_NAME.WORK_ORDER_FORM}
+                        filename={responseDocument.name}
                         className="w-full justify-start"
-                        onClick={() => handleOpenDocument(responseDocument!.name, TYPE_DOCUMENT_NAME.WORK_ORDER_FORM)}
-                        disabled={isPendingResponse}
-                    >
-                        {isPendingResponse
-                            ? <Loader2 className="animate-spin text-muted-foreground" />
-                            : <FileText className="text-amber-700" />}
-                        {t('tickets.documents.work_order_pdf')}
-                    </Button>
+                    />
                 )}
             </CardContent>
         </Card>

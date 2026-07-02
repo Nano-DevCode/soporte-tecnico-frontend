@@ -1,56 +1,62 @@
 import { useTranslation } from "react-i18next";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
-import { Navigate, useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { useSchoolPeriod } from "../hooks/useSchoolPeriod"; // Solo lee
 import { useMutateSchoolPeriod } from "../hooks/useMutateSchoolPeriod"; // Solo escribe
-import { toast } from "sonner";
 import { CustomFullScreenLoading } from "@/components/custom/CustomFullScreenLoading";
 import { SchoolPeriodForm } from "../components/SchoolPeriodForm";
-import type { SchoolPeriodFormValues } from "../schemas/create-school-period.schema";
+import type { SchoolPeriodFormOutput } from "../schemas/create-school-period.schema";
 import { getAxiosErrorMessage } from "../../lib/helpers/getAxiosErrorMessage";
 import { useEffect } from "react";
+import { sileo } from "sileo";
+import { useSmartNavigation } from "@/components/hooks/useSmartNavigation";
 
 export const EditSchoolPeriodPage = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const { t } = useTranslation();
+    const { navigateSmartBack, navigateFallback } = useSmartNavigation('/school_period');
 
     const { isLoading, isError, data: schoolPeriod } = useSchoolPeriod(id);
     const { mutateAsync, isPending } = useMutateSchoolPeriod();
 
     useEffect(() => {
         if (isError || (!isLoading && !schoolPeriod && id)) {
-            toast.error('Error al obtener el Periodo Escolar', {
-                description: 'El periodo no existe o hubo un error de conexión',
-                duration: 5000,
-                position: 'top-right',
+            sileo.error({
+                title: t('school_periods.not_found.title'),
+                description: t('school_periods.not_found.message'),
+                duration: 6000,
             });
+            navigateFallback('/');
+            return;
         }
-    }, [isError, isLoading, schoolPeriod, id]);
+    }, [isError, isLoading, schoolPeriod, id, t, navigateFallback]);
 
-    const handleSubmit = async (values: SchoolPeriodFormValues) => {
-        await mutateAsync({ ...values, id }, {
-            onSuccess: (responseData) => {
-                toast.success(t('success_update_school_period_message'));
-                navigate(`/school-period/${responseData.id}`);
+    const handleSubmit = async (values: SchoolPeriodFormOutput) => {
+        await mutateAsync({ schoolPeriodLike: values, periodId: id }, {
+            onSuccess: () => {
+                sileo.success({
+                    title: t('school_periods.edit_page.success.title'),
+                    description: t('school_periods.edit_page.success.message'),
+                    duration: 5000,
+                });
+                navigateSmartBack();
             },
             onError: (error) => {
-                console.error("Error en la mutación:", error);
-
-                const errorMessage = getAxiosErrorMessage(error);
-
-                toast.error('Error al guardar el Periodo Escolar', {
-                    description: errorMessage,
-                    duration: 10000,
-                    closeButton: true,
-                    position: 'top-right',
+                sileo.error({
+                    title: t('school_periods.edit_page.error.title'),
+                    description: getAxiosErrorMessage(error),
+                    duration: 7000,
                 });
             },
         });
     };
 
+    const handleCancel = () => {
+        navigateSmartBack(`/school_period/${id}`);
+    };
+
     if (!id || isError || (!isLoading && !schoolPeriod)) {
-        return <Navigate to="/school-period" replace />;
+        navigateFallback('/');
     }
 
     if (isLoading) return <CustomFullScreenLoading />;
@@ -67,6 +73,7 @@ export const EditSchoolPeriodPage = () => {
                     schoolPeriod={schoolPeriod}
                     onSubmit={handleSubmit}
                     isPending={isPending}
+                    onCancel={handleCancel}
                     titleButton={t('school_period_form_button_update')}
                 />
             </div>

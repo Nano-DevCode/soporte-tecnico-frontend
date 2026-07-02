@@ -22,6 +22,7 @@ import { AccountRoutes } from './account/account.router';
 import { ToolsRoutes } from "./tools2/tools.router";
 import { DepartmentRoutes } from "./departments/departments.routes";
 import { QuestionnaireRoutes } from "./questionnaire/questionnaire.router";
+import { ReportsRoutes } from "./reports/reports";
 
 // const PanelLayout = lazy(() => import("./layout/PanelLayout"))
 const PanelLayoutV2 = lazy(() => import("./layout/PanelLayoutV2"))
@@ -50,16 +51,16 @@ const router = createBrowserRouter([
                 element: <UsersRoutes />
             },
             {
-                path: 'tickets',
-                children: TicketsRoutes
+                path: 'tickets/*',
+                element: <TicketsRoutes />
             },
             {
-                path: 'school-period',
-                children: SchoolPeriodsRoutes
+                path: 'school-period/*',
+                element: <SchoolPeriodsRoutes />
             },
             {
-                path: 'center-managers',
-                children: CenterManagersRoutes
+                path: 'center-managers/*',
+                element: <CenterManagersRoutes />
             },
             {
                 path: 'account/*',
@@ -90,8 +91,8 @@ const router = createBrowserRouter([
                 element: <ItAssetsRoutes />
             },
             {
-                path: 'folios',
-                children: FoliosRoutes,
+                path: 'folios/*',
+                element: <FoliosRoutes />
             },
             {
                 path: 'dashboard',
@@ -104,6 +105,10 @@ const router = createBrowserRouter([
             {
                 path: 'consumable-movements/*',
                 element: <MovementConsumableRoutes />,
+            },
+            {
+                path: 'reports',
+                children: ReportsRoutes,
             },
         ],
     },

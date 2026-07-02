@@ -5,10 +5,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { History } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { v4 as uuidv4 } from "uuid";
 
 export const TicketTimeLineSkeleton = () => {
     const { t } = useTranslation();
-    const skeletonItems = Array.from({ length: 3 });
+    const skeletonItems = Array.from({ length: 3 }, () => uuidv4());
 
     return (
         <Card>
@@ -23,11 +24,11 @@ export const TicketTimeLineSkeleton = () => {
             <Separator />
 
             <CardContent >
-                {skeletonItems.map((_, idx) => {
+                {skeletonItems.map((stepId, idx) => {
                     const isLastItem = idx === skeletonItems.length - 1;
 
                     return (
-                        <div key={idx} className="relative flex gap-4">
+                        <div key={stepId} className="relative flex gap-4">
 
                             {!isLastItem && (
                                 <div className="absolute left-4.5 sm:left-5 top-9 bottom-0 w-px bg-muted -ml-px" />

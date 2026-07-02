@@ -77,6 +77,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --priority-1: #b91c1c;
+  --priority-2: #c2410c;
+  --priority-3: #1d4ed8;
+  --priority-4: #334155;
 }
 
 .dark {
@@ -111,12 +115,17 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --priority-1: #f87171;
+  --priority-2: #fb923c;
+  --priority-3: #60a5fa;
+  --priority-4: #94a3b8;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -130,8 +139,11 @@
   content-visibility: visible;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
-  overflow: hidden; /* Esto asesina cualquier intento del navegador de hacer scroll global */
+  overflow: hidden;
+  /* Esto asesina cualquier intento del navegador de hacer scroll global */
 }

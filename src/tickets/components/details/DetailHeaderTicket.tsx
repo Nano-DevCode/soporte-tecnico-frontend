@@ -4,6 +4,7 @@ import type { TicketDetailsResponse } from "@/tickets/interfaces/ticket-details.
 import { TicketPriorityBadge } from "../TicketPriorityBadge";
 import { TicketTagsBadge } from "../TicketTagsBadge";
 import { Hash } from "lucide-react";
+import { Can } from "@/common/permission/Can";
 
 export interface Props {
     ticket: TicketDetailsResponse;
@@ -26,15 +27,19 @@ export const DetailHeaderTicket = ({ ticket }: Props) => {
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
                         <TicketStatusBadge statusCode={ticket.currentStatusCode} />
-                        <TicketPriorityBadge priority={ticket.priority} />
+                        <Can permission='WATCH_TICKET_PRIORITY'>
+                            <TicketPriorityBadge priority={ticket.priority} />
+                        </Can>
                     </div>
                 </div>
 
-                {ticket.tags && ticket.tags.length > 0 && (
-                    <div className="flex flex-wrap justify-end gap-2">
-                        <TicketTagsBadge tags={ticket.tags} />
-                    </div>
-                )}
+                <Can permission='WATCH_TICKET_TAGS'>
+                    {ticket.tags && ticket.tags.length > 0 && (
+                        <div className="flex flex-wrap justify-end gap-2">
+                            <TicketTagsBadge tags={ticket.tags} />
+                        </div>
+                    )}
+                </Can>
 
             </CardContent>
         </Card>

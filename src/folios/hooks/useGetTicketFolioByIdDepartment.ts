@@ -4,7 +4,13 @@ import { foliosQueryKeys } from "../keys/folios-query.keys";
 import { getTicketFolioDepartmentByIdAction } from "../actions/get-ticket-folio-by-id-department.action";
 
 export const useGetTicketFolioByIdDepartment = (id?: string) => {
-    const query = useQuery({
+    const {
+        data,
+        isLoading,
+        isError,
+        isFetching,
+        refetch
+    } = useQuery({
         queryKey: id ? foliosQueryKeys.detail(id) : foliosQueryKeys.details(),
         queryFn: () => getTicketFolioDepartmentByIdAction(id!),
         retry: false,
@@ -13,6 +19,10 @@ export const useGetTicketFolioByIdDepartment = (id?: string) => {
     });
 
     return {
-        ...query,
+        data,
+        isLoading,
+        isError,
+        isFetching,
+        refetch
     };
 };

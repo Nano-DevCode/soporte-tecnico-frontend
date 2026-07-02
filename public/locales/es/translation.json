@@ -55,8 +55,8 @@
   "custom_nav_content_school_periods": "Periodos Escolares",
   "custom_nav_content_center_managers": " Jefes de Centro de Cómputo",
   "custom_nav_content_subitem_list_tickets": "Historial de Solicitudes",
-  "custom_nav_content_subitem_list_school_periods": "Lista de Periodos Escolares",
-  "custom_nav_content_subitem_list_center_managers": "Lista de Jefes de Centro de Cómputo",
+  "custom_nav_content_subitem_list_school_periods": "Periodos Escolares",
+  "custom_nav_content_subitem_list_center_managers": "Jefes de Centro de Cómputo",
   "custom_benefits_card_main_caracteristics": "Características Principales",
   "custom_benefits_card_ez_fast": "Soporte fácil y rápido de Solicitar",
   "custom_benefist_card_create_solicitud": "Crea solicitudes y recibe asistencia de forma rapida y fácil.",
@@ -71,7 +71,6 @@
   "custom_information_new_solicitud": "Nueva Solicitud",
   "custom_information_profesional_support": "Soporte Técnico Profesional",
   "custom_information_info_departament": "Departamento de Centro de Cómputo - ITO",
-
   "custom_password_configuration_title": "Seguridad de la Cuenta",
   "custom_password_configuration_description": "Actualiza tu contraseña para mantener tu cuenta protegida.",
   "custom_password_configuration_new_password": "Nueva Contraseña",
@@ -111,11 +110,9 @@
   "custom_mode_toggle_light": "Claro",
   "custom_mode_toggle_dark": "Oscuro",
   "custom_mode_toggle_system": "Sistema",
-
   "custom_dialog_confirm_loading": "Procesando...",
   "custom_full_screen_loading_loading": "Procesando...",
   "custom_full_screen_loading_loading_description": "Espere un momento porfavor",
-
   "custom_desktop_table_head_actions": "Acciones",
   "custom_desktop_table_school_period_head_name": "Nombre",
   "custom_desktop_table_school_period_head_period": "Periodo",
@@ -196,7 +193,10 @@
       "refresh": "Recargar",
       "retry": "Reintentar",
       "clean": "Limpiar",
-      "continue": "Si, Continuar"
+      "continue": "Si, Continuar",
+      "download_excel": "Descargar Excel",
+      "download_pdf": "Descargar PDF",
+      "downloading": "Descargando..."
     },
     "date": {
       "no_date": "Sin fecha"
@@ -226,7 +226,8 @@
       "search": "Buscar...",
       "columns": "Columnas",
       "more_filters": "Ver mas filtros",
-      "less_filters": "Ocultar filtros"
+      "less_filters": "Ocultar filtros",
+      "all": "Todos"
     },
     "state": {
       "active": "Activo",
@@ -385,8 +386,11 @@
   },
   "tickets": {
     "menu_options": {
-      "current": "Solicitudes Actules"
+      "label": "Mesa de ayuda",
+      "current": "Solicitudes Actuales",
+      "history": "Historial de Solicitudes"
     },
+    "document_not_found": "Pendiente",
     "data": {
       "affected_name": "Responsable directo del equipo",
       "sender_name": "Nombre del remitente",
@@ -643,7 +647,9 @@
           "priority": "Prioridad",
           "school_period": "Periodo",
           "actions": "Acciones",
-          "tags": "Etiquetas"
+          "tags": "Etiquetas",
+          "request_document": "Formato de solicitud",
+          "response_document": "Formato de respuesta"
         }
       },
       "empty": {
@@ -654,6 +660,10 @@
         "title": "No se pudieron cargar los tickets",
         "description": "Hubo un problema de conexión con el servidor. Por favor, intenta de nuevo."
       }
+    },
+    "list_current_page": {
+      "title": "Lista de Solicitudes Actuales",
+      "description": "Visualiza y gestiona las solicitudes de soporte técnico actuales."
     },
     "create_page": {
       "title": "Nueva Solicitud de Soporte Técnico",
@@ -1111,6 +1121,7 @@
       "title": "No se encontro la orden de trabajo.",
       "message": "Por favor intente de nuevo"
     },
+    "document_not_found": "Pendiente",
     "view_page": {
       "title": "Detalles de la Orden de trabajo",
       "description": "Visualiza los detalles de la orden de trabajo",
@@ -1398,7 +1409,41 @@
       }
     }
   },
-
+  "reports": {
+    "menu": {
+      "label": "Reportes"
+    },
+    "page_title": "Reportes",
+    "page_description": "Genera y descarga reportes estadísticos y operativos del sistema.",
+    "coming_soon": "Módulo en construcción. Disponible próximamente.",
+    "tickets_summary": {
+      "title": "Resumen de Tickets",
+      "description": "Estadísticas generales de solicitudes de soporte técnico.",
+      "select_period": "Selecciona un periodo"
+    },
+    "performance": {
+      "title": "Rendimiento de Técnicos",
+      "description": "Métricas de tiempos de resolución y carga de trabajo por técnico."
+    },
+    "errors": {
+      "period_requiered": "El periodo escolar es requerido"
+    }
+  },
+  "school_periods": {
+    "not_found": {
+      "title": "!Ha ocurrido un error!",
+      "message": "Hubo un error al obtener el periodo seleccionado, por favor vuelve a intentarlo."
+    },
+    "edit_page": {
+      "success": {
+        "title": "Exito",
+        "message": "El periodo ha sido actualizado exitosamente"
+      },
+      "error": {
+        "title": "!Ha ocurrido un error!"
+      }
+    }
+  },
   "equipment_form_new": "Nuevo Registro de Equipo",
   "equipment_form_description": "Complete la información técnica y administrativa del activo",
   "equipment_form_type": "Tipo de Equipo",
@@ -2158,11 +2203,11 @@
   "consumablePage.totalConsumables_one": "Total de consumibles conforme a filtros: 1 operación",
   "consumablePage.totalConsumables_other": "Total de consumibles conforme a filtros: {{count}} consumibles",
   "movementsPage.totalOperations": "Total operaciones conforme a filtros",
-  "tickets.status.label_status":"Estatus:",
-  "consumable_hook_creating":"Creando el consumible",
-  "consumable_hook_updating":"Actualizando el consumible",
-  "consumable_hook_create_error":"Error al crear el consumible",
-  "consumable_hook_update_error":"Error al editar el consumible",
+  "tickets.status.label_status": "Estatus:",
+  "consumable_hook_creating": "Creando el consumible",
+  "consumable_hook_updating": "Actualizando el consumible",
+  "consumable_hook_create_error": "Error al crear el consumible",
+  "consumable_hook_update_error": "Error al editar el consumible",
   "itAssets": {
     "mainPage": {
       "titleCard": {
@@ -2270,7 +2315,7 @@
         "statusDescriptionLabel": "Descripción del estado:",
         "observationsLabel": "Observaciones (Opcional)",
         "observationsPlaceholder": "Ej. El equipo regresó con polvo, pantalla sucia, cable doblado...",
-        "name" : {
+        "name": {
           "label": "Nombre del activo",
           "placeholder": "Ej. Laptop Dell XPS 13"
         }
@@ -3422,7 +3467,7 @@
         "cancel": "Cancelar",
         "updating": "Actualizando...",
         "creating": "Creando...",
-        "priorityEmpty" : "La prioridad es necesaria",
+        "priorityEmpty": "La prioridad es necesaria",
         "acronymHint": "Generado automáticamente basado en el nombre. Puedes modificarlo.",
         "acronymWarning": "Verifica bien el acrónimo, no podrá ser modificado después.",
         "acronymLocked": "El acrónimo no puede ser modificado una vez creado."

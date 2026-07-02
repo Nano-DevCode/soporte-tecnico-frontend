@@ -4,7 +4,14 @@ import { getRejectReportAction } from "../actions/get-rejection-report.action";
 import { rejectionReportQueryKeys } from "../keys/rejection-report.query.keys";
 
 export const useGetRejectionReport = (id?: string) => {
-    const query = useQuery({
+    const {
+        data,
+        isLoading,
+        isError,
+        error,
+        isFetching,
+        refetch
+    } = useQuery({
         queryKey: id ? rejectionReportQueryKeys.detail(id) : rejectionReportQueryKeys.details(),
         queryFn: () => getRejectReportAction(id!),
         retry: false,
@@ -13,6 +20,11 @@ export const useGetRejectionReport = (id?: string) => {
     });
 
     return {
-        ...query,
+        data,
+        isLoading,
+        isError,
+        error,
+        isFetching,
+        refetch
     };
 };

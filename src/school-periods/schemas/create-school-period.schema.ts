@@ -17,4 +17,5 @@ export const schoolPeriodSchema = (t: TFunction) => z.object({
   path: ["date_end"],
 });
 
-export type SchoolPeriodFormValues = z.infer<ReturnType<typeof schoolPeriodSchema>>;
+export type SchoolPeriodFormInput = z.input<ReturnType<typeof schoolPeriodSchema>>;
+export type SchoolPeriodFormOutput = z.output<ReturnType<typeof schoolPeriodSchema>>;

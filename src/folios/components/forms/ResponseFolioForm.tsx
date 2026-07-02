@@ -24,14 +24,15 @@ interface Props {
 
 const ACRONYM_CC = "CC";
 
+const defaultFormValues = {
+    requestedNextFolio: ""
+};
+
 export const ResponseFolioForm = ({ responseFolio, onSubmit, isPending, titleButton, onCancel }: Props) => {
     const { t } = useTranslation();
 
     const schema = useMemo(() => ResponseFolioSchema(t, responseFolio?.next_value ?? 0), [responseFolio?.next_value, t]);
 
-    const defaultFormValues = {
-        requestedNextFolio: ""
-    };
 
     const form = useForm<ResponseFolioFormInput, unknown, ResponseFolioFormOutput>({
         resolver: zodResolver(schema),

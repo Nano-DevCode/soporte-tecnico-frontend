@@ -25,18 +25,22 @@ export const CustomMobilCardScholPeriods = (
       {schoolPeriods.map((schoolPeriod) => (
         <div
           key={schoolPeriod.id}
-          className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 shadow-sm transition-colors hover:bg-muted/50"
-          onClick={() => handleCardClick(schoolPeriod.id)}
+          className="relative flex items-start gap-3 rounded-xl border border-border bg-card p-4 shadow-sm transition-colors hover:bg-muted/50"
         >
+
+          <button
+            type="button"
+            className="absolute inset-0 w-full h-full rounded-xl z-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            onClick={() => handleCardClick(schoolPeriod.id)}
+            aria-label={`Ver detalles del periodo ${schoolPeriod.name}`}
+          />
 
           <div className="min-w-0 flex-1 space-y-2">
 
-            {/* Nombre */}
-            <p className="text-sm font-bold text-foreground leading-snug whitespace-normal break-words">
+            <p className="text-sm font-bold text-foreground leading-snug whitespace-normal wrap-break-word">
               {schoolPeriod.name}
             </p>
 
-            {/* 2. NUEVO: Tipo de Periodo */}
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Tag className="h-3.5 w-3.5 shrink-0" />
               <span className="font-medium text-foreground/80">
@@ -44,7 +48,6 @@ export const CustomMobilCardScholPeriods = (
               </span>
             </div>
 
-            {/* Periodo */}
             <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
               <CalendarRange className="h-3.5 w-3.5 shrink-0 mt-0.5" />
               <span className="whitespace-normal break-all leading-relaxed">
@@ -54,7 +57,6 @@ export const CustomMobilCardScholPeriods = (
               </span>
             </div>
 
-            {/* Status */}
             <div className="pt-1">
               <Badge
                 className={cn(
@@ -71,7 +73,7 @@ export const CustomMobilCardScholPeriods = (
             </div>
           </div>
 
-          <div className="shrink-0">
+          <div className="shrink-0 relative z-20">
             <div onClick={(e) => e.stopPropagation()}>
               <CustomActionsMenuSchoolPeriod
                 schoolPeriod={schoolPeriod}

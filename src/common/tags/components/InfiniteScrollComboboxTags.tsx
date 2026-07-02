@@ -14,7 +14,10 @@ interface Props {
     id?: string;
     creatable?: boolean;
 }
-export const InfiniteScrollComboboxTags = ({ value = [], onChange, disabled, id, creatable = true }: Props) => {
+
+const EMPTY_ARRAY: string[] = [];
+
+export const InfiniteScrollComboboxTags = ({ value = EMPTY_ARRAY, onChange, disabled, id, creatable = true }: Props) => {
 
     const { t } = useTranslation();
     const anchor = useComboboxAnchor();

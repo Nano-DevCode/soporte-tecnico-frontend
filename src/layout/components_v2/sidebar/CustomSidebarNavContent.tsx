@@ -5,7 +5,7 @@ import { useUserRoles } from "@/auth/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Hammer, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks } from "lucide-react";
+import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks, TicketCheck, Headset, FileSpreadsheet } from "lucide-react";
 
 // Types para la configuración
 type NavSubItem = {
@@ -63,6 +63,31 @@ export const CustomSidebarNavContent = memo(() => {
       show: true,
     },
     {
+      title: t("tickets.menu_options.label"),
+      icon: Headset,
+      show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
+      subItems: [
+        {
+          title: t("tickets.menu_options.current"),
+          icon: Ticket,
+          path: "/tickets/currents",
+          show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
+        },
+        {
+          title: t("tickets.menu_options.history"),
+          icon: TicketCheck,
+          path: "/tickets",
+          show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
+        },
+        {
+          title: t("technical_reports.menu_item.title"),
+          icon: ClipboardList,
+          path: "/technical-reports",
+          show: isSuperAdmin || isBossCC || isCoordinator || isSecretaryCC || isTechnician,
+        },
+      ]
+    },
+    {
       title: "User",
       icon: Users,
       show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
@@ -89,45 +114,27 @@ export const CustomSidebarNavContent = memo(() => {
         { title: "Bicatora", path: "/tools/movements", show: true },
       ]
     },
-    {
-      title: t("custom_nav_content_subitem_list_tickets"),
-      icon: Hammer,
-      path: "/tools",
-      show: isSuperAdmin || isCoordinator || isBossCC,
-    },
+    // {
+    //   title: t("custom_nav_content_subitem_list_tickets"),
+    //   icon: Hammer,
+    //   path: "/tools",
+    //   show: isSuperAdmin || isCoordinator || isBossCC,
+    // },
     {
       title: t("custom_nav_content_subitem_list_consumables"),
       icon: Blocks,
-      show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC,
+      show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC || isVisitor,
       subItems: [
-        { title: t("custom_nav_content_catalog_consumables"), path: "/consumables", show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC, },
-        { title: t("custom_nav_content_movements_history"), path: "/consumable-movements", show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC, },
+        { title: t("custom_nav_content_catalog_consumables"), path: "/consumables", show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC || isVisitor, },
+        { title: t("custom_nav_content_movements_history"), path: "/consumable-movements", show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC || isVisitor, },
       ]
     },
     {
+
       title: t("custom_nav_content_list_equipments"),
       icon: Archive,
-      show: isSuperAdmin || isTechnician || isCoordinator || isBossCC || isSecretaryCC,
+      show: isSuperAdmin || isTechnician || isCoordinator || isBossCC || isSecretaryCC || isVisitor,
       path: "/equipments",
-      // show: true,
-    },
-    {
-      title: t("custom_nav_content_subitem_list_tickets"),
-      icon: Ticket,
-      path: "/tickets",
-      show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
-    },
-    {
-      title: t("tickets.menu_options.current"),
-      icon: Ticket,
-      path: "/tickets/currents",
-      show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
-    },
-    {
-      title: t("technical_reports.menu_item.title"),
-      icon: ClipboardList,
-      path: "/technical-reports",
-      show: isSuperAdmin || isBossCC || isCoordinator || isSecretaryCC || isTechnician,
     },
     {
       title: t("custom_nav_content_subitem_list_school_periods"),
@@ -165,6 +172,12 @@ export const CustomSidebarNavContent = memo(() => {
           show: isSuperAdmin || isBoss
         },
       ]
+    },
+    {
+      title: t("reports.menu.label"),
+      icon: FileSpreadsheet,
+      path: "/reports",
+      show: isSuperAdmin || isBossCC || isCoordinator || isSecretaryCC || isTechnician,
     },
     {
       title: t("settings"),

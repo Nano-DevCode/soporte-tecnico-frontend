@@ -17,6 +17,7 @@ import { useTicketFilters } from "../hooks/useTicketFilters";
 import { CustomFilterSelect } from "@/components/custom/CustomFilterSelect";
 import { CustomFilterDate } from "@/components/custom/CustomFilterDate";
 import { InfiniteScrollComboboxTags } from "@/common/tags/components/InfiniteScrollComboboxTags";
+import { Can } from "@/common/permission/Can";
 
 interface Props {
   table: Table<Ticket>;
@@ -54,6 +55,7 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
           isLoadingData={isLoadingData}
         />
 
+
         <CustomFilterSelect
           label={t("tickets.list_page.table.headers.status")}
           defaultValue={filters.status}
@@ -62,12 +64,14 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
           options={statuses?.map(s => ({ value: s.code, label: t(`tickets.status.${s.code}.name` as StatusNameTranslationKey) }))}
         />
 
-        <CustomFilterSelect
-          label={t("tickets.list_page.table.headers.priority")}
-          defaultValue={filters.priority}
-          onChange={(v) => updateFilter("priority", v)}
-          options={priorityOptions}
-        />
+        <Can permission='WATCH_TICKET_PRIORITY'>
+          <CustomFilterSelect
+            label={t("tickets.list_page.table.headers.priority")}
+            defaultValue={filters.priority}
+            onChange={(v) => updateFilter("priority", v)}
+            options={priorityOptions}
+          />
+        </Can>
 
         <div className="hidden md:block ml-auto">
           <DropdownMenu >
@@ -79,19 +83,21 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
             <DropdownMenuContent align="end">
               {table
                 .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                    >
-                      {t(`tickets.list_page.table.headers.${column.id}` as ColumnsNameTranslationKey)}
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
+                .reduce<React.ReactNode[]>((acumulador, column) => {
+                  if (column.getCanHide()) {
+                    acumulador.push(
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                      >
+                        {t(`tickets.list_page.table.headers.${column.id}` as ColumnsNameTranslationKey)}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  }
+                  return acumulador;
+                }, [])}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -113,29 +119,36 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
           <AccordionContent className="pb-0" >
             <div className="flex flex-col md:flex-row flex-wrap items-center gap-2 py-0 pt-2">
 
-              <CustomFilterSelect
-                label={t("tickets.list_page.table.headers.department")}
-                defaultValue={filters.department}
-                isLoading={loadingDepartments}
-                onChange={(v) => updateFilter("department", v)}
-                options={departments?.map(d => ({ value: d.id, label: d.name }))}
-              />
+              <Can permission='WATCH_TICKET_DEPARTMENT'>
+                <CustomFilterSelect
+                  label={t("tickets.list_page.table.headers.department")}
+                  defaultValue={filters.department}
+                  isLoading={loadingDepartments}
+                  onChange={(v) => updateFilter("department", v)}
+                  options={departments?.map(d => ({ value: d.id, label: d.name }))}
+                />
+              </Can>
 
-              <CustomFilterSelect
-                label={t("tickets.list_page.table.headers.school_period")}
-                defaultValue={filters.school_period}
-                isLoading={loadingPeriods}
-                onChange={(v) => updateFilter("school_period", v)}
-                options={schoolPeriods?.data.map(p => ({ value: p.id, label: p.name }))}
-              />
+              <Can permission='WATCH_TICKET_PERIOD'>
+                <CustomFilterSelect
+                  label={t("tickets.list_page.table.headers.school_period")}
+                  defaultValue={filters.school_period}
+                  isLoading={loadingPeriods}
+                  onChange={(v) => updateFilter("school_period", v)}
+                  options={schoolPeriods?.data.map(p => ({ value: p.id, label: p.name }))}
+                />
+              </Can>
 
-              <CustomFilterSelect
-                label={t("tickets.list_page.table.headers.issue_type")}
-                defaultValue={filters.issue_type}
-                isLoading={loadingIssues}
-                onChange={(v) => updateFilter("issue_type", v)}
-                options={issueTypes?.map(i => ({ value: i.id.toString(), label: i.name }))}
-              />
+              <Can permission='WATCH_TICKET_ISSUE'>
+                <CustomFilterSelect
+                  label={t("tickets.list_page.table.headers.issue_type")}
+                  defaultValue={filters.issue_type}
+                  isLoading={loadingIssues}
+                  onChange={(v) => updateFilter("issue_type", v)}
+                  options={issueTypes?.map(i => ({ value: i.id.toString(), label: i.name }))}
+                />
+              </Can>
+
               <div className="flex-1 flex flex-row gap-2 w-full">
                 <CustomFilterDate
                   label={t('tickets.filters.date.from')}
@@ -151,31 +164,35 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
                   minDate={filters.start_date ? new Date(`${filters.start_date}T00:00:00`) : undefined}
                 />
               </div>
-              <div className="w-full shrink-0">
-                <InfiniteScrollComboboxTags
-                  value={filters.tags}
-                  onChange={(newTagsArray) => updateFilter("tags", newTagsArray)}
-                  creatable={false}
-                />
-              </div>
+              <Can permission='WATCH_TICKET_TAGS'>
+                <div className="w-full shrink-0">
+                  <InfiniteScrollComboboxTags
+                    value={filters.tags}
+                    onChange={(newTagsArray) => updateFilter("tags", newTagsArray)}
+                    creatable={false}
+                  />
+                </div>
+              </Can>
 
             </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
 
-      {hasActiveFilters && (
-        <Button
-          variant="outline"
-          onClick={resetFilters}
-          type="button"
-          className="md:self-end text-muted-foreground border hover:text-destructive hover:bg-destructive/10"
-        >
-          <FilterX className="h-4 w-4" />
-          <span>{t("common.filters.clean")}</span>
-        </Button>
-      )}
+      {
+        hasActiveFilters && (
+          <Button
+            variant="outline"
+            onClick={resetFilters}
+            type="button"
+            className="md:self-end text-muted-foreground border hover:text-destructive hover:bg-destructive/10"
+          >
+            <FilterX className="h-4 w-4" />
+            <span>{t("common.filters.clean")}</span>
+          </Button>
+        )
+      }
 
-    </div>
+    </div >
   );
 };

@@ -51,7 +51,7 @@ export const allowedActionsByStatus: Record<TicketStatusType, TicketActionsType[
         TicketActions.WATCH_RESPONSE_REPORT
     ],
     [TicketStatus.CERRADA]: [
-        TicketActions.CERRAR,
+        TicketActions.ARCHIVAR,
         TicketActions.WATCH_TECHNICAL_REPORT,
         TicketActions.WATCH_RESPONSE_REPORT
     ],
