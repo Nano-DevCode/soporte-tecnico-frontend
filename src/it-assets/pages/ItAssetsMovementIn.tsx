@@ -25,8 +25,6 @@ const ItAssetsMovementIn = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
-
-  // Estados para la gestión del estado del activo
   const [isEditingStatus, setIsEditingStatus] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
@@ -34,7 +32,6 @@ const ItAssetsMovementIn = () => {
   const { itAssetsStatus, isLoading: isLoadingStatus } = useItAssetsStatus();
   const { createInMovementAsync, isCreatingIn } = useItAssetsMovements();
 
-  // Esquema de validación memorizado para que reaccione a cambios de idioma
   const movementInSchema = useMemo(() => z.object({
     itAssetsStatusId: z.string().min(1, t("itAssets.movementIn.validation.statusRequired")),
     observations: z.string().optional(),

@@ -1,19 +1,22 @@
 import { useNavigate, useParams } from "react-router";
+import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDepartments } from "../hooks/useDepartment";
 import { useRoles } from "../hooks/userRoles";
 import { useUser } from "../hooks/useUser"; 
 import { useCoordinations } from "../hooks/useCoordinations";
 import { useUserUpdate } from "../hooks/useUserUpdate";
-import { CustomUserForm } from "../components/CustomUserForm"; // Asegura la ruta correcta
+import { CustomUserForm } from "../components/CustomUserForm";
 import { sileo } from "sileo";
 import type { UserFormData } from "../schema/user-form.schema";
 import type { AxiosError } from "axios";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 import { logError } from "@/utils/logger";
+import { useTranslation } from "react-i18next";
 
 const UserEditPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   
@@ -26,10 +29,16 @@ const UserEditPage = () => {
 
   const isLoading = isLoadingUser || isLoadingDepartments || isLoadingRoles || isLoadingCoordinations || !user || !roles || !departments || !coordinations;
 
-  if (isErrorUser) {
-    sileo.error({ title: "No se encontro ese usuario", description:"Verifique si los datos son correctos" });
-    navigate('/users');
-  }
+  // Manejamos la redirección de error dentro de un useEffect para evitar problemas de renderizado en React
+  useEffect(() => {
+    if (isErrorUser) {
+      sileo.error({ 
+        title: t("users.pages.userEditPage.sileo.notFoundTitle"), 
+        description: t("users.pages.userEditPage.sileo.notFoundDescription") 
+      });
+      navigate('/users', { replace: true });
+    }
+  }, [isErrorUser, navigate, t]);
 
   const handleUpdate = async (data: UserFormData) => {
     const payload: Partial<UserFormData> = {
@@ -51,15 +60,25 @@ const UserEditPage = () => {
 
     try {
       await sileo.promise(updateUser({ id: id!, data: payload }), {
-        loading: { title: "Actualizando usuario..." },
-        success: { title: "¡Actualizado!", description: "Los cambios se guardaron correctamente.", duration: 4000 },
+        loading: { title: t("users.pages.userEditPage.sileo.loading") },
+        success: { 
+          title: t("users.pages.userEditPage.sileo.successTitle"), 
+          description: t("users.pages.userEditPage.sileo.successDescription"), 
+          duration: 4000 
+        },
         error: (err: unknown) => { 
           const axiosErr = err as AxiosError<BackendError>;
-          let backendMessage = "Revisa los datos e intenta de nuevo.";
+          let backendMessage = t("users.pages.userEditPage.sileo.errorDefault");
+          
           if (axiosErr.response?.data?.message) {
-            backendMessage = Array.isArray(axiosErr.response.data.message) ? axiosErr.response.data.message[0] : axiosErr.response.data.message;
+            backendMessage = Array.isArray(axiosErr.response.data.message) 
+              ? axiosErr.response.data.message[0] 
+              : axiosErr.response.data.message;
           }
-          return { title: "Error al actualizar", description: backendMessage };
+          return { 
+            title: t("users.pages.userEditPage.sileo.errorTitle"), 
+            description: backendMessage 
+          };
         }
       });
       navigate("/users");
@@ -72,8 +91,8 @@ const UserEditPage = () => {
     <div className="mx-auto w-full max-w-4xl space-y-4">
       <CustomTitlePageWithBack
         backLink="/users"
-        title="Editar Usuario"
-        description="Modifica la información del usuario seleccionado."
+        title={t("users.pages.userEditPage.title")}
+        description={t("users.pages.userEditPage.description")}
       />
 
       {isLoading ? (

@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import { useDepartment } from "../hooks/useDepartment";
@@ -10,7 +11,8 @@ import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 import { logError } from "@/utils/logger";
 
-export const DepartmentEditPage = () => {
+const DepartmentEditPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams(); 
   
@@ -20,29 +22,29 @@ export const DepartmentEditPage = () => {
   const handleUpdate = async (data: Department) => {
     if (!id) return;
 
+    // Se removió el 'folio' del payload
     const payload = {
       name: data.name.trim(),
       acronym: data.acronym.trim().toUpperCase(),
-      priority: Number(data.priority),
-      folio: Number(data.folio),
+      priority: data.priority,
     };
 
     try {
       await sileo.promise(updateDepartment({ id, data: payload }), {
-        loading: { title: "Actualizando..." },
+        loading: { title: t("departments.pages.departmentEditPage.sileo.loading") },
         success: { 
-          title: "¡Actualizado!", 
-          description: "Los cambios se guardaron correctamente.",
+          title: t("departments.pages.departmentEditPage.sileo.successTitle"), 
+          description: t("departments.pages.departmentEditPage.sileo.successDescription"),
           duration: 4000 
         },
         error: (err) => { 
-          let backendMessage = "Revisa los datos e intenta de nuevo.";
+          let backendMessage = t("departments.pages.departmentEditPage.sileo.errorDefault");
           if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
             const rawMessage = err.response.data.message;
             backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
           }
           return {
-            title: "Error al actualizar", 
+            title: t("departments.pages.departmentEditPage.sileo.errorTitle"), 
             description: backendMessage,
             duration: 5000,
           };
@@ -62,8 +64,8 @@ export const DepartmentEditPage = () => {
     <div className="mx-auto w-full max-w-3xl space-y-4">
       <CustomTitlePageWithBack
         backLink="/departments"
-        title="Editar Departamento"
-        description="Modifica la información del departamento seleccionado."
+        title={t("departments.pages.departmentEditPage.title")}
+        description={t("departments.pages.departmentEditPage.description")}
       />
 
       <CustomDepartmentForm 
@@ -75,3 +77,5 @@ export const DepartmentEditPage = () => {
     </div>
   );
 };
+
+export default DepartmentEditPage;

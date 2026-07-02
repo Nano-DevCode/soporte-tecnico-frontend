@@ -15,7 +15,7 @@ export const UsersRoutes = () => {
             index: true,
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
                         <UserPage /> 
                     </RoleRoute>
                 </SuspenseWrapper>

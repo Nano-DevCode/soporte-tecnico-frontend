@@ -14,7 +14,8 @@ import {
   FileText, 
   Calendar, 
   Clock, 
-  AlignLeft
+  AlignLeft,
+  Type
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -79,6 +80,7 @@ const ItAssetsDetailsPage = () => {
               
               <DetailItem icon={Barcode} label={t("itAssets.detailsPage.fields.serialNumber")} value={itAsset.serialNumber || "N/A"} />
               <DetailItem icon={Hash} label={t("itAssets.detailsPage.fields.idInventary")} value={itAsset.idInventary || "N/A"} />
+              <DetailItem icon={Type} label={t("itAssets.detailsPage.fields.name")} value={itAsset.name || "N/A"} />
               <DetailItem icon={Monitor} label={t("itAssets.detailsPage.fields.type")} value={itAsset.itAssetsType?.name || "N/A"} />
               <DetailItem icon={Building2} label={t("itAssets.detailsPage.fields.brand")} value={itAsset.model?.brand?.name || "N/A"} />
               <DetailItem icon={Tag} label={t("itAssets.detailsPage.fields.model")} value={itAsset.model?.name || "N/A"} />

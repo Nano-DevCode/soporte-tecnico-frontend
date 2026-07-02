@@ -7,13 +7,9 @@ import { Save, Loader2 } from "lucide-react";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import { useTranslation } from "react-i18next";
-
-// UI Components
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-
-// Hooks y Servicios
 import { useTools } from "../hooks/useTools";
 import { useToolsStatus } from "../hooks/useToolsStatus";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
@@ -29,9 +25,9 @@ const ToolsUpdatePage = () => {
   const { updateToolsMutation, tool, isLoading: isLoadingTool } = useTools();
   const { toolsStatus, isLoading: isLoadingStatus } = useToolsStatus();
 
-  // 1. Esquema sin serialNumber
   const updateToolSchema = useMemo(() => z.object({
     idInventary: z.string().trim().optional(),
+    name: z.string().trim().optional(),
     typeId: z.string().min(1, t("tools.updatePage.validation.typeId")),
     brandId: z.string().min(1, t("tools.updatePage.validation.brandId")),
     modelId: z.string().min(1, t("tools.updatePage.validation.modelId")),
@@ -47,6 +43,7 @@ const ToolsUpdatePage = () => {
     resolver: zodResolver(updateToolSchema),
     defaultValues: {
       idInventary: "",
+      name: "",
       typeId: "",
       brandId: "", 
       modelId: "",
@@ -57,11 +54,11 @@ const ToolsUpdatePage = () => {
     },
   });
 
-  // 2. Hidratación sin serialNumber
   useEffect(() => {
     if (tool) {
       form.reset({
         idInventary: tool.idInventary || "",
+        name: tool.name || "",
         typeId: tool.toolType?.id || "",
         brandId: tool.model?.brand?.id || "", 
         modelId: tool.model?.id || "",
@@ -77,7 +74,6 @@ const ToolsUpdatePage = () => {
 
   const onSubmit = async (data: UpdateToolFormValues) => {
     const formData = new FormData();
-    // 3. FormData sin serialNumber
     formData.append("modelId", data.modelId);
     formData.append("statusId", data.statusId);
     formData.append("typeId", data.typeId);
@@ -87,6 +83,7 @@ const ToolsUpdatePage = () => {
     }
 
     if (data.idInventary) formData.append("idInventary", data.idInventary);
+    if (data.name) formData.append("name", data.name);
     if (data.invoiceId) formData.append("invoiceId", data.invoiceId);
     if (data.description) formData.append("description", data.description);
 

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { sileo } from "sileo";
 import { isAxiosError } from "axios";
 import { useCreateDepartment } from "../hooks/useCreateDepartment";
@@ -9,6 +10,7 @@ import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWith
 import { logError } from "@/utils/logger";
 
 export const DepartmentCreatePage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { createDepartment, isCreating } = useCreateDepartment();
 
@@ -21,20 +23,22 @@ export const DepartmentCreatePage = () => {
 
     try {
       await sileo.promise(createDepartment(payload), {
-        loading: { title: "Creando departamento..." },
+        loading: { title: t("departments.pages.departmentCreatePage.sileo.loading") },
         success: { 
-          title: "¡Departamento creado!", 
-          description: `${payload.name} se guardó correctamente.`,
+          title: t("departments.pages.departmentCreatePage.sileo.successTitle"), 
+          description: t("departments.pages.departmentCreatePage.sileo.successDescription", { name: payload.name }),
           duration: 4000 
         },
         error: (err) => { 
-          let backendMessage = "Revisa los datos e intenta de nuevo.";
+          let backendMessage = t("departments.pages.departmentCreatePage.sileo.errorDefault");
+          
           if (isAxiosError<BackendError>(err) && err.response?.data?.message) {
             const rawMessage = err.response.data.message;
             backendMessage = Array.isArray(rawMessage) ? rawMessage[0] : rawMessage;
           }
+          
           return {
-            title: "Error al crear", 
+            title: t("departments.pages.departmentCreatePage.sileo.errorTitle"), 
             description: backendMessage,
             duration: 5000,
             fill: "#18181b",
@@ -55,8 +59,8 @@ export const DepartmentCreatePage = () => {
     <div className="mx-auto w-full max-w-3xl space-y-4">
       <CustomTitlePageWithBack 
         backLink="/departments"
-        title="Crear Departamento"
-        description="Completa los datos del nuevo departamento"
+        title={t("departments.pages.departmentCreatePage.title")}
+        description={t("departments.pages.departmentCreatePage.description")}
       />
 
       <CustomDepartmentForm 
@@ -67,3 +71,5 @@ export const DepartmentCreatePage = () => {
     </div>
   );
 };
+
+export default DepartmentCreatePage;

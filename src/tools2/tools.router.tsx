@@ -65,7 +65,7 @@ export const ToolsRoutes = () => {
             path: 'in/:id',
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
                         <ToolsMovementIn />
                     </RoleRoute>
                 </SuspenseWrapper>

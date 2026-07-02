@@ -9,7 +9,6 @@ export interface Department {
   name: string;
   priority: number;
   status?: boolean;
-  folio: string;
   acronym: string;
   createdAt?: Date;
   updatedAt?: Date;

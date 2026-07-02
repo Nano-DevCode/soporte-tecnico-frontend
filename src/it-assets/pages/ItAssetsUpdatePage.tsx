@@ -25,7 +25,6 @@ import { ItAssetsForm } from "../components/ItAssetsFormPage";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 import { logError } from "@/utils/logger";
 
-
 const ItAssetsUpdatePage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -51,6 +50,8 @@ const ItAssetsUpdatePage = () => {
           .trim(),
 
         idInventary: z.string().trim().optional(),
+        
+        name: z.string().trim().optional(), // <--- 1. AGREGADO AL ESQUEMA
 
         typeId: z
           .string()
@@ -77,9 +78,7 @@ const ItAssetsUpdatePage = () => {
     [t]
   );
 
-
   type UpdateAssetFormValues = z.infer<typeof updateAssetSchema>;
-
 
   const form = useForm<UpdateAssetFormValues>({
     resolver: zodResolver(updateAssetSchema),
@@ -87,6 +86,7 @@ const ItAssetsUpdatePage = () => {
     defaultValues: {
       serialNumber: "",
       idInventary: "",
+      name: "", // <--- 2. AGREGADO A VALORES POR DEFECTO
       typeId: "",
       brandId: "",
       modelId: "",
@@ -98,6 +98,7 @@ const ItAssetsUpdatePage = () => {
     values: {
       serialNumber: itAsset?.serialNumber || "",
       idInventary: itAsset?.idInventary || "",
+      name: itAsset?.name || "", // <--- 2. AGREGADO A VALUES DE CARGA INICIAL
       typeId: itAsset?.itAssetsType?.id || "",
       brandId: itAsset?.model?.brand?.id || "",
       modelId: itAsset?.model?.id || "",
@@ -114,6 +115,7 @@ const ItAssetsUpdatePage = () => {
     form.reset({
       serialNumber: itAsset.serialNumber,
       idInventary: itAsset.idInventary || "",
+      name: itAsset.name || "", // <--- 3. AGREGADO AL RESET
       typeId: itAsset.itAssetsType?.id || "",
       brandId: itAsset.model?.brand?.id || "",
       modelId: itAsset.model?.id || "",
@@ -164,6 +166,9 @@ const ItAssetsUpdatePage = () => {
     }
     if (data.idInventary) {
       formData.append("idInventary", data.idInventary);
+    }
+    if (data.name) {
+      formData.append("name", data.name); // <--- 4. AGREGADO AL FORMDATA
     }
     if (data.invoiceId) {
       formData.append("invoiceId", data.invoiceId);

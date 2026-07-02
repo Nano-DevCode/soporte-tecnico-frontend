@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { Users, AlertTriangle, ArrowUpCircle, Plus } from "lucide-react";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import { CustomDepartmentDesktopTable } from "../components/CustomDepartmentDesktopTable";
 import { CustomDepartmentMobileCard } from "../components/CustomDepartmentMobileCard";
@@ -14,10 +15,10 @@ import { CustomSkeletonTableCard } from "@/components/custom/CustomSkeletonTable
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { t } from "i18next";
 import { logError } from "@/utils/logger";
 
 export const DepartmentPage = () => {
+  const { t } = useTranslation();
   const { departments, meta, isLoading: skelettonLoading, isUpdating, changeStatus } = useDepartments();
   
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
@@ -57,24 +58,24 @@ export const DepartmentPage = () => {
             "font-bold text-lg",
             departmentSelect.status ? "text-red-700 dark:text-red-400" : "text-blue-700 dark:text-blue-400"
           )}>
-            {departmentSelect.name ?? t("department_page_name_un_available")}
+            {departmentSelect.name ?? t("departments.pages.departmentPage.nameUnavailable")}
           </p>
           <p className={cn(
             "text-[10px] font-mono mt-1",
             departmentSelect.status ? "text-red-600/70 dark:text-red-400/50" : "text-blue-600/70 dark:text-blue-400/50"
           )}>
-            {t("department_page_id")} {departmentSelect.id}
+            {t("departments.pages.departmentPage.id")} {departmentSelect.id}
           </p>
         </div>
 
         <p className="text-sm italic pt-1 text-muted-foreground">
           {departmentSelect.status 
-            ? t("department_page_down_department")
-            : t("department_page_up_department")}
+            ? t("departments.pages.departmentPage.dialog.downDescription")
+            : t("departments.pages.departmentPage.dialog.upDescription")}
         </p>
       </div>
     );
-  }, [departmentSelect]);
+  }, [departmentSelect, t]);
 
   return (
     <div className="space-y-6">
@@ -82,15 +83,17 @@ export const DepartmentPage = () => {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         
         {/* Lado izquierdo */}
-        <CustomTitleCard icon={Users} 
-          title={t("department_page_custom_title_card")} 
-          description={t("department_page_custom_title_card")}/>
+        <CustomTitleCard 
+          icon={Users} 
+          title={t("departments.pages.departmentPage.title")} 
+          description={t("departments.pages.departmentPage.description")}
+        />
         
         {/* Botón */}
         <Link to="/departments/create">
           <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
             <Plus className="mr-2 h-4 w-4" />
-            {t("department_page_create_department")}
+            {t("departments.pages.departmentPage.createDepartment")}
           </Button>
         </Link>
 
@@ -100,13 +103,13 @@ export const DepartmentPage = () => {
         open={statusDialogOpen}
         isLoading={isUpdating}
         variant={departmentSelect?.status ? "danger" : "primary"}
-        title={departmentSelect?.status ? t("department_page_confirm_down"): t("department_page_confirm_up")}
+        title={departmentSelect?.status ? t("departments.pages.departmentPage.dialog.confirmDown") : t("departments.pages.departmentPage.dialog.confirmUp")}
         description={dialogDescription}
         icon={departmentSelect?.status ? AlertTriangle : ArrowUpCircle} 
         onConfirm={handleDownConfirm}
         onOpenChange={setStatusDialogOpen}
-        confirmText={departmentSelect?.status ? "Sí, dar de baja" : "Sí, dar de alta"}
-        cancelText= {t("department_page_cancel")}
+        confirmText={departmentSelect?.status ? t("departments.pages.departmentPage.dialog.confirmDownButton") : t("departments.pages.departmentPage.dialog.confirmUpButton")}
+        cancelText={t("departments.pages.departmentPage.dialog.cancel")}
       />
 
       <CustomDepartmentFilters/>
@@ -128,4 +131,4 @@ export const DepartmentPage = () => {
       )}
     </div>
   );
-}
+};

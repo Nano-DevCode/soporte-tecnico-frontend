@@ -1584,13 +1584,5 @@
         }
       }
     }
-  },
-  "staff": {
-    "components": {
-      "staffDetailsCard": {
-        "title": "Assigned Staff",
-        "noData": "Staff data not available."
-      }
-    }
   }
 }

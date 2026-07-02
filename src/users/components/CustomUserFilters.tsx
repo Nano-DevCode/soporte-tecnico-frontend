@@ -4,18 +4,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { FilterX, Search } from "lucide-react";
 import { useSearchParams } from "react-router";
 import { useDepartments } from "../hooks/useDepartment";
-import { useRef } from "react";
-import { t } from "i18next";
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export const CustomUserFilters = () => {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: departments } = useDepartments();
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const searchTerm = searchParams.get("search") || "";
   const deptFilter = searchParams.get("dept") || "all";
   const statusFilter = searchParams.get("status") || "all";
+
+  const [localSearch, setLocalSearch] = useState(searchTerm);
 
   const updateFilters = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -27,18 +28,27 @@ export const CustomUserFilters = () => {
     }
 
     newParams.set("page", "1");
-
     setSearchParams(newParams);
   };
 
   const resetFilters = () => {
     setSearchParams({});
+    // Solución: Actualizamos el estado local directamente en el evento,
+    // eliminando la necesidad de usar un useEffect para sincronizarlo.
+    setLocalSearch(""); 
   };
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key !== "Enter") return;
-    updateFilters("search", inputRef.current?.value || "");
-  }
+  // Debounce nativo: Espera 500ms después de que el usuario deja de escribir
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (localSearch !== (searchParams.get("search") || "")) {
+        updateFilters("search", localSearch);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localSearch]); 
 
   return (
     <div className="flex flex-col gap-3 p-4 rounded-xl border border-border bg-card/50 shadow-sm md:flex-row md:items-center">
@@ -48,23 +58,22 @@ export const CustomUserFilters = () => {
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />
         <Input
           name="searchName"
-          placeholder={t("custom_user_filters_placeholder_searchs")}
+          placeholder={t("users.components.customUserFilters.placeholderSearch")}
           className="pl-9 h-10 bg-background/60"
-          defaultValue={searchTerm}
-          ref={inputRef}
-          onKeyDown={ handleSearch }
+          value={localSearch}
+          onChange={(e) => setLocalSearch(e.target.value)}
         />
       </div>
 
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
         {/* Filtro Depto */}
         <Select value={deptFilter} onValueChange={(v) => updateFilters("dept", v)}>
-          <SelectTrigger className="w-full sm:w-[160px] h-10 bg-background/60">
-            <SelectValue placeholder="Departamento" />
+          <SelectTrigger className="w-full sm:w-40 h-10 bg-background/60">
+            <SelectValue placeholder={t("users.components.customUserFilters.departmentPlaceholder")} />
           </SelectTrigger>
           
           <SelectContent>
-            <SelectItem value="all">{t("custom_user_filters_all_departments")}</SelectItem>
+            <SelectItem value="all">{t("users.components.customUserFilters.allDepartments")}</SelectItem>
 
             {
               departments?.map(department => (
@@ -76,13 +85,13 @@ export const CustomUserFilters = () => {
 
         {/* Filtro Estado */}
         <Select value={statusFilter} onValueChange={(v) => updateFilters("status", v)}>
-          <SelectTrigger className="w-full sm:w-[130px] h-10 bg-background/60">
-            <SelectValue placeholder={t("custom_user_filters_placeholder_status")} />
+          <SelectTrigger className="w-full sm:w-32.5 h-10 bg-background/60">
+            <SelectValue placeholder={t("users.components.customUserFilters.placeholderStatus")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("custom_user_filters_all_status")}</SelectItem>
-            <SelectItem value="1">{t("custom_user_filters_active_status")}</SelectItem>
-            <SelectItem value="0">{t( "custom_user_filters_inactive_status")}</SelectItem>
+            <SelectItem value="all">{t("users.components.customUserFilters.allStatus")}</SelectItem>
+            <SelectItem value="1">{t("users.components.customUserFilters.activeStatus")}</SelectItem>
+            <SelectItem value="0">{t("users.components.customUserFilters.inactiveStatus")}</SelectItem>
           </SelectContent>
         </Select>
 
@@ -94,7 +103,7 @@ export const CustomUserFilters = () => {
             className="h-10 px-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all"
           >
             <FilterX className="h-4 w-4 mr-2" />
-            <span className="sm:hidden lg:inline">{t("clear")}</span>
+            <span className="sm:hidden lg:inline">{t("users.components.customUserFilters.clear")}</span>
           </Button>
         )}
       </div>

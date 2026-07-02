@@ -67,7 +67,7 @@ export const CustomNavContent = memo(() => {
               <button type="button" className={triggerClass}>
                 <Users className="h-5 w-5 shrink-0" />
                 <span className="flex-1 text-left">
-                  {t("users")}
+                  User
                 </span>
                 <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
               </button>

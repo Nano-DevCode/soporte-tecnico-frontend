@@ -128,13 +128,13 @@ export const CustomToolFilters = memo(() => {
 
         {/* Filtro Estado (Status) */}
         <Select value={statusFilter} onValueChange={(v) => updateFilters("status", v)}>
-          <SelectTrigger className="w-full sm:w-[200px] h-10 bg-background/60">
+          <SelectTrigger className="w-full sm:w-50 h-10 bg-background/60">
             <SelectValue placeholder="Estado" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("custom_department_filters_all_status") || "Todos"}</SelectItem>
-            <SelectItem value="true">{t("custom_department_filters_active_status") || "Activos"}</SelectItem>
-            <SelectItem value="false">{t("custom_department_filters_inactive_status") || "Inactivos"}</SelectItem>
+            <SelectItem value="all">{t("tools.components.filters.status.all")}</SelectItem>
+            <SelectItem value="true">{t("tools.components.filters.status.active") }</SelectItem>
+            <SelectItem value="false">{t("tools.components.filters.status.inactive") }</SelectItem>
           </SelectContent>
         </Select>
       </div>

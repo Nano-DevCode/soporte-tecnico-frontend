@@ -57,6 +57,21 @@ export const ToolsForm = ({
           )}
         />
 
+        {/* NOMBRE DE LA HERRAMIENTA (OPCIONAL) */}
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>{t("tools.components.form.name.label")}</FormLabel>
+              <FormControl>
+                <Input placeholder={t("tools.components.form.name.placeholder")} value={field.value || ''} onChange={field.onChange} disabled={isSaving} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* SELECTORES INFINITOS (Usando el tipado de toolInitialData) */}
         <TypeSelectField 
           disabled={isSaving} 

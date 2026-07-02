@@ -25,7 +25,7 @@ export const ItAssetsRoutes = () => {
             index: true,
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
                         <ItAssetsPage />
                     </RoleRoute>
                 </SuspenseWrapper>

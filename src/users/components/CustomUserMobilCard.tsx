@@ -5,7 +5,7 @@ import { CustomUserActionsMenu } from "./CustomUserActionsMenu";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { User } from "../interfaces/users.response";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   users: User[];
@@ -14,6 +14,8 @@ interface Props {
 }
 
 export const CustomUserMobilCard = ({users, handleStatusClick}: Props) => {
+  const { t } = useTranslation();
+
   return (
     <div className="md:hidden space-y-3">
       {users.map((user) => (
@@ -39,7 +41,7 @@ export const CustomUserMobilCard = ({users, handleStatusClick}: Props) => {
             </div>
 
             {/* Nombre Completo */}
-            <p className="text-sm font-bold text-foreground leading-snug whitespace-normal break-words">
+            <p className="text-sm font-bold text-foreground leading-snug whitespace-normal wrap-break-word">
               {getFullName(user.staff.name, user.staff.paternalSurname, user.staff.maternalSurname)}
             </p>
 
@@ -54,7 +56,7 @@ export const CustomUserMobilCard = ({users, handleStatusClick}: Props) => {
             {/* Departamento */}
             <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
               <Building2 className="h-3.5 w-3.5 shrink-0 mt-0.5" />
-              <span className="whitespace-normal break-words leading-relaxed">
+              <span className="whitespace-normal wrap-break-word leading-relaxed">
                 {user.staff.department.name}
               </span>
             </div>
@@ -70,7 +72,9 @@ export const CustomUserMobilCard = ({users, handleStatusClick}: Props) => {
                     : "bg-red-100 text-red-600 dark:bg-red-950/50 dark:text-red-400"
                 )}
               >
-                {user.status === true ? t("active") : t("inactive")}
+                {user.status === true 
+                  ? t("users.components.customUserMobilCard.active") 
+                  : t("users.components.customUserMobilCard.inactive")}
               </Badge>
             </div>
           </div>
@@ -90,10 +94,10 @@ export const CustomUserMobilCard = ({users, handleStatusClick}: Props) => {
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card py-16">
           <Users className="h-10 w-10 text-muted-foreground/40" />
           <p className="mt-3 text-sm font-medium text-muted-foreground">
-            No se encontraron usuarios
+            {t("users.components.customUserMobilCard.notFound")}
           </p>
-          <p className="mt-1 text-xs text-muted-foreground/70">
-            Intenta ajustar los filtros de búsqueda
+          <p className="mt-1 text-xs text-muted-foreground/70 text-center px-4">
+            {t("users.components.customUserMobilCard.settingFilters")}
           </p>
         </div>
       )}

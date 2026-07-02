@@ -18,17 +18,20 @@ import { Badge } from "@/components/ui/badge";
 import { CustomUserSkeleton } from "../components/CustomUserSkeleton";
 import { sileo } from "sileo";
 import { formatDate } from "../util/formatDate";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 
 const FormattedDateDisplay = ({ dateString }: { dateString?: string | Date }) => {
+  const { t } = useTranslation();
+  
   if (!dateString) {
-    return <span className="text-muted-foreground italic">{t("user_details_page_non")}</span>;
+    return <span className="text-muted-foreground italic">{t("users.pages.userDetailsPage.notAvailable")}</span>;
   }
   return <>{formatDate(dateString)}</>;
 };
 
 const UserDetailsPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, isLoading, isError } = useUser();
 
@@ -38,8 +41,8 @@ const UserDetailsPage = () => {
 
   if (isError || !user) {
     sileo.error({
-      title: t("user_details_page_sileo_error_title"),
-      description: t("user_details_page_sileo_error_description"),
+      title: t("users.pages.userDetailsPage.sileo.errorTitle"),
+      description: t("users.pages.userDetailsPage.sileo.errorDescription"),
       duration: 9500,
     });
     navigate('/users');
@@ -49,7 +52,11 @@ const UserDetailsPage = () => {
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
       
-      <CustomTitlePageWithBack backLink="/users" title="Detalles del Usuario" description="Consulta la información detallada del usuario seleccionado." />
+      <CustomTitlePageWithBack 
+        backLink="/users" 
+        title={t("users.pages.userDetailsPage.title")} 
+        description={t("users.pages.userDetailsPage.description")} 
+      />
 
       <Card>
 
@@ -79,7 +86,7 @@ const UserDetailsPage = () => {
               variant={user.status ? "default" : "destructive"} 
               className={user.status ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100/80 dark:bg-emerald-900/30 dark:text-emerald-400" : ""}
             >
-              {user.status ? t("user_details_page_account_up") : t("user_details_page_account_down")}
+              {user.status ? t("users.pages.userDetailsPage.accountUp") : t("users.pages.userDetailsPage.accountDown")}
             </Badge>
 
             <Badge 
@@ -87,7 +94,7 @@ const UserDetailsPage = () => {
               className="gap-1 bg-blue-100 text-blue-700 hover:bg-blue-100/80 dark:bg-blue-900/30 dark:text-blue-400"
             >
               <ShieldCheck className="h-3 w-3" />
-              {user.role?.name || t("user_details_page_non")}
+              {user.role?.name || t("users.pages.userDetailsPage.notAvailable")}
             </Badge>
           </div>
         </CardHeader>
@@ -98,37 +105,37 @@ const UserDetailsPage = () => {
             <div>
               <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
                 <Briefcase className="h-4 w-4 text-muted-foreground" />
-                {t("user_details_page_information_laboral")}
+                {t("users.pages.userDetailsPage.laboralInformation")}
               </h4>
               <dl className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 text-sm">
                 
                 <div className="space-y-1">
-                  <dt className="font-medium text-muted-foreground">{t("user_details_page_n_control")}</dt>
+                  <dt className="font-medium text-muted-foreground">{t("users.pages.userDetailsPage.controlNumber")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <Hash className="h-3.5 w-3.5 text-muted-foreground" />
-                    {user.staff?.num_control || t("user_details_page_non")}
+                    {user.staff?.num_control || t("users.pages.userDetailsPage.notAvailable")}
                   </dd>
                 </div>
                 
                 <div className="space-y-1">
-                  <dt className="font-medium text-muted-foreground">RFC</dt>
+                  <dt className="font-medium text-muted-foreground">{t("users.pages.userDetailsPage.rfc")}</dt>
                   <dd className="font-semibold uppercase">
-                    {user.staff?.rfc || t("user_details_page_non")}
+                    {user.staff?.rfc || t("users.pages.userDetailsPage.notAvailable")}
                   </dd>
                 </div>
 
                 {user.staff?.coordination?.name !== 'Sin Coordinación' && (
                   <div className="space-y-1">
-                    <dt className="font-medium text-muted-foreground">ID {t("user_details_page_telegram")}</dt>
+                    <dt className="font-medium text-muted-foreground">ID {t("users.pages.userDetailsPage.telegram")}</dt>
                     <dd className="font-semibold flex items-center gap-1.5">
                       <Send className="h-3.5 w-3.5 text-muted-foreground" />
-                      {user.staff?.idTelegram || t("user_details_page_non")}
+                      {user.staff?.idTelegram || t("users.pages.userDetailsPage.notAvailable")}
                     </dd>
                   </div>
                 )}
 
                 <div className="space-y-1">
-                  <dt className="font-medium text-muted-foreground">{t("user_details_page_date_register")}</dt>
+                  <dt className="font-medium text-muted-foreground">{t("users.pages.userDetailsPage.registerDate")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
                     <FormattedDateDisplay dateString={user.createdAt} />
@@ -136,7 +143,7 @@ const UserDetailsPage = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <dt className="font-medium text-muted-foreground">{t("user_details_page_update_credentials")}</dt>
+                  <dt className="font-medium text-muted-foreground">{t("users.pages.userDetailsPage.credentialsUpdateDate")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
                     <FormattedDateDisplay dateString={user.updatedAt} />
@@ -144,7 +151,7 @@ const UserDetailsPage = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <dt className="font-medium text-muted-foreground">{t("user_details_page_update_info")}</dt>
+                  <dt className="font-medium text-muted-foreground">{t("users.pages.userDetailsPage.infoUpdateDate")}</dt>
                   <dd className="font-semibold flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-muted-foreground" />
                     <FormattedDateDisplay dateString={user.staff?.updatedAt} />
@@ -159,20 +166,20 @@ const UserDetailsPage = () => {
             <div>
               <h4 className="text-sm font-semibold mb-4 border-l-2 border-primary pl-2 flex items-center gap-2">
                 <Building2 className="h-4 w-4 text-muted-foreground" />
-                {t("user_details_page_department")}
+                {t("users.pages.userDetailsPage.department")}
               </h4>
               <dl className="grid grid-cols-1 gap-y-5 text-sm">
                 
                 <div className="rounded-lg bg-muted/30 p-3 border border-border/50">
-                  <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider"> {t("user_details_page_department")} </dt>
+                  <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider"> {t("users.pages.userDetailsPage.department")} </dt>
                   <dd className="font-bold text-base">
-                    {user.staff?.department?.name || t("user_details_page_non")}
+                    {user.staff?.department?.name || t("users.pages.userDetailsPage.notAvailable")}
                   </dd>
                 </div>
 
                 {user.staff?.coordination?.name !== 'Sin Coordinación' && (
                   <div className="rounded-lg bg-muted/30 p-3 border border-border/50">
-                    <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">{t("user_details_page_coordination")}</dt>
+                    <dt className="font-medium text-muted-foreground mb-1 text-xs uppercase tracking-wider">{t("users.pages.userDetailsPage.coordination")}</dt>
                     <dd className="font-bold text-base">
                       {user.staff.coordination.name}
                     </dd>

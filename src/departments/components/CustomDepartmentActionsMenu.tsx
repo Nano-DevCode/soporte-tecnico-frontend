@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, MoreHorizontal, Pencil, PowerOff, CheckCircle } from "lucide-react"; // Íconos actualizados
 import { Link } from "react-router";
 import { cn } from "@/lib/utils";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   department: Department;
@@ -14,7 +14,7 @@ interface Props {
 export const CustomDepartmentActionsMenu = ({
   department, handleDownClick
 }: Props ) => {
-  
+  const { t } = useTranslation();
   const isActive = department.status;
 
   return (
@@ -34,14 +34,14 @@ export const CustomDepartmentActionsMenu = ({
           <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
             <Link to={`/departments/${department.id}`}>
               <Eye className="h-4 w-4 text-muted-foreground" />
-              {t("custom_department_actions_menu_view_details")}
+              {t("departments.components.customDepartmentActionsMenu.viewDetails")}
             </Link>
           </DropdownMenuItem>
           
           <Link to={`/departments/edit/${department.id}`}>
             <DropdownMenuItem className="gap-2 cursor-pointer">
               <Pencil className="h-4 w-4 text-muted-foreground" />
-              {t("custom_department_actions_menu_edit")}
+              {t("departments.components.customDepartmentActionsMenu.edit")}
             </DropdownMenuItem>
           </Link>
           
@@ -59,12 +59,12 @@ export const CustomDepartmentActionsMenu = ({
             {isActive ? (
               <>
                 <PowerOff className="h-4 w-4" />
-                {t("custom_department_actions_menu_down")}
+                {t("departments.components.customDepartmentActionsMenu.down")}
               </>
             ) : (
               <>
                 <CheckCircle className="h-4 w-4" />
-                {t("custom_department_actions_menu_up")}
+                {t("departments.components.customDepartmentActionsMenu.up")}
               </>
             )}
           </DropdownMenuItem>

@@ -11,8 +11,10 @@ import type { AxiosError } from "axios";
 import type { BackendError } from "@/interfaces/backendError.interfaces";
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 import { logError } from "@/utils/logger";
+import { useTranslation } from "react-i18next";
 
 const UserCreatePage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   
   const { data: departments, isLoading: isLoadingDepartments } = useDepartments();
@@ -40,15 +42,25 @@ const UserCreatePage = () => {
 
     try {
       await sileo.promise(createUser(payload), {
-        loading: { title: "Creando usuario..." },
-        success: { title: "¡Usuario creado!", description: `${payload.name} se guardó correctamente.`, duration: 4000 },
+        loading: { title: t("users.pages.userCreatePage.sileo.loading") },
+        success: { 
+          title: t("users.pages.userCreatePage.sileo.successTitle"), 
+          description: t("users.pages.userCreatePage.sileo.successDescription", { name: payload.name }), 
+          duration: 4000 
+        },
         error: (err: unknown) => { 
           const axiosErr = err as AxiosError<BackendError>;
-          let backendMessage = "Revisa los datos e intenta de nuevo.";
+          let backendMessage = t("users.pages.userCreatePage.sileo.errorDefault");
+          
           if (axiosErr.response?.data?.message) {
-            backendMessage = Array.isArray(axiosErr.response.data.message) ? axiosErr.response.data.message[0] : axiosErr.response.data.message;
+            backendMessage = Array.isArray(axiosErr.response.data.message) 
+              ? axiosErr.response.data.message[0] 
+              : axiosErr.response.data.message;
           }
-          return { title: "Error al crear", description: backendMessage };
+          return { 
+            title: t("users.pages.userCreatePage.sileo.errorTitle"), 
+            description: backendMessage 
+          };
         }
       });
       navigate("/users");
@@ -59,7 +71,11 @@ const UserCreatePage = () => {
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
-      <CustomTitlePageWithBack backLink="/users" title="Crear Usuario" description="Completa el formulario para crear un nuevo usuario." />
+      <CustomTitlePageWithBack 
+        backLink="/users" 
+        title={t("users.pages.userCreatePage.title")} 
+        description={t("users.pages.userCreatePage.description")} 
+      />
 
       {isLoading ? (
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-8">

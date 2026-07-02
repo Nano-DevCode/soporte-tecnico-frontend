@@ -13,7 +13,8 @@ import {
   FileText, 
   Calendar, 
   Clock, 
-  AlignLeft
+  AlignLeft,
+  Type
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -77,6 +78,7 @@ const ToolsDetailsPage = () => {
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
               <DetailItem icon={Hash} label={t("tools.detailsPage.fields.idInventary")} value={tool.idInventary || "N/A"} />
+              <DetailItem icon={Type} label={t("tools.detailsPage.fields.name")} value={tool.name || "N/A"} />
               <DetailItem icon={Monitor} label={t("tools.detailsPage.fields.type")} value={tool.toolType?.name || "N/A"} />
               <DetailItem icon={Building2} label={t("tools.detailsPage.fields.brand")} value={tool.model?.brand?.name || "N/A"} />
               <DetailItem icon={Tag} label={t("tools.detailsPage.fields.model")} value={tool.model?.name || "N/A"} />
@@ -153,7 +155,7 @@ const ToolsDetailsPage = () => {
                 <div className="relative w-full aspect-square overflow-hidden rounded-md border shadow-sm">
                   <img 
                     src={tool.imageUrl} 
-                    alt={tool.idInventary || "Tool Image"} 
+                    alt={tool.name || tool.idInventary || "Tool Image"} 
                     className="object-cover w-full h-full"
                   />
                 </div>

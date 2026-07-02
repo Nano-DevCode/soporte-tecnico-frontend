@@ -15,10 +15,11 @@ import { CustomSkeletonTableCard } from "@/components/custom/CustomSkeletonTable
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { logError } from "@/utils/logger";
 
 const UserPage = () => {
+  const { t } = useTranslation();
   const { users = [], meta, isLoading: skelettonLoading, isUpdating, changeStatus } = useUsers();
 
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
@@ -71,7 +72,7 @@ const UserPage = () => {
               "text-[10px] font-mono",
               userSeleccionado.status ? "text-red-600/70 dark:text-red-400/50" : "text-blue-600/70 dark:text-blue-400/50"
             )}>
-              {t("users_page_n_control")} {userSeleccionado.staff.num_control}
+              {t("users.pages.userPage.nControl")} {userSeleccionado.staff.num_control}
             </span>
             <span className={cn(
               "text-[11px] font-medium",
@@ -84,12 +85,12 @@ const UserPage = () => {
 
         <p className="text-sm italic pt-1 text-muted-foreground">
           {userSeleccionado.status 
-            ? t("users_page_down_user")
-            : t("users_page_up_user")}
+            ? t("users.pages.userPage.downUser")
+            : t("users.pages.userPage.upUser")}
         </p>
       </div>
     );
-  }, [userSeleccionado]);
+  }, [userSeleccionado, t]);
 
   return (
     <div className="space-y-6">
@@ -97,13 +98,17 @@ const UserPage = () => {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         
         {/* Lado izquierdo */}
-        <CustomTitleCard icon={Users} title={t("users_page_custom_title_card")} description={t("users_page_custom_description_card")}/>
+        <CustomTitleCard 
+          icon={Users} 
+          title={t("users.pages.userPage.title")} 
+          description={t("users.pages.userPage.description")}
+        />
 
         {/* Botón */}
         <Link to="/users/new">
           <Button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800">
             <Plus className="mr-2 h-4 w-4" />
-            {t("users_page_create_user")}
+            {t("users.pages.userPage.createUser")}
           </Button>
         </Link>
         
@@ -114,13 +119,13 @@ const UserPage = () => {
         open={statusDialogOpen}
         isLoading={isUpdating}
         variant={userSeleccionado?.status ? "danger" : "primary"}
-        title={userSeleccionado?.status ? "Confirmar baja del usuario" : "Confirmar alta del usuario"}
+        title={userSeleccionado?.status ? t("users.pages.userPage.dialogDownTitle") : t("users.pages.userPage.dialogUpTitle")}
         description={dialogDescription}
         icon={userSeleccionado?.status ? AlertTriangle : ArrowUpCircle}
         onConfirm={handleStatusConfirm}
         onOpenChange={setStatusDialogOpen}
-        confirmText={userSeleccionado?.status ? "Sí, dar de baja" : "Sí, dar de alta"}
-        cancelText="Cancelar"
+        confirmText={userSeleccionado?.status ? t("users.pages.userPage.dialogDownConfirm") : t("users.pages.userPage.dialogUpConfirm")}
+        cancelText={t("users.pages.userPage.dialogCancel")}
       />
 
       <CustomUserFilters/>
@@ -131,7 +136,7 @@ const UserPage = () => {
         <>
           <CustomUserDesktopTable
             users={users}
-            handleStatusClick={handleStatusClick} 
+            handleStatusClick={handleStatusClick}
           />
           <CustomUserMobilCard
             users={users}

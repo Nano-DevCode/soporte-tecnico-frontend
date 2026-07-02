@@ -15,6 +15,7 @@ export interface ItAsset {
     status:        boolean;
     inUse:         boolean;
     description:   string;
+    name:          string;
     imageUrl:      string | null;
     createdAt:     Date;
     updatedAt:     Date;

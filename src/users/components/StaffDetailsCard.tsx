@@ -44,7 +44,7 @@ export const StaffDetailsCard = ({ staffId }: StaffDetailsCardProps) => {
 
             <div className="flex-1 space-y-1">
                 <h4 className="text-xs font-bold text-amber-800/80 dark:text-amber-300/80 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
-                    {t("staff.components.staffDetailsCard.title")}
+                    {t("users.components.staffDetailsCard.title")}
                 </h4>
                 
                 {isLoadingStaff ? (
@@ -58,13 +58,13 @@ export const StaffDetailsCard = ({ staffId }: StaffDetailsCardProps) => {
                             {`${fullStaff.name} ${fullStaff.paternalSurname} ${fullStaff.maternalSurname || ""}`.trim()}
                         </p>
                         
-                        {/* Badges para los identificadores (Mucho más limpio) */}
+                        {/* Badges para los identificadores */}
                         <div className="flex flex-wrap gap-1.5 pt-1.5 pb-2">
                             <Badge variant="secondary" className="bg-amber-100/80 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 text-[10px] px-1.5 py-0 hover:bg-amber-200/50">
-                                NC: {fullStaff.num_control}
+                                {t("users.components.staffDetailsCard.nc")}: {fullStaff.num_control}
                             </Badge>
                             <Badge variant="secondary" className="bg-amber-100/80 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 text-[10px] px-1.5 py-0 hover:bg-amber-200/50">
-                                RFC: {fullStaff.rfc}
+                                {t("users.components.staffDetailsCard.rfc")}: {fullStaff.rfc}
                             </Badge>
                         </div>
 
@@ -86,7 +86,7 @@ export const StaffDetailsCard = ({ staffId }: StaffDetailsCardProps) => {
                     </>
                 ) : (
                     <p className="text-sm text-muted-foreground">
-                        {t("staff.components.staffDetailsCard.noData")}
+                        {t("users.components.staffDetailsCard.noData")}
                     </p>
                 )}
             </div>

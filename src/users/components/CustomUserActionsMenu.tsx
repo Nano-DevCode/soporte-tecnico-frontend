@@ -4,14 +4,17 @@ import { Eye, MoreHorizontal, Pencil, UserCheck, UserMinus } from 'lucide-react'
 import { Link } from 'react-router'
 import type { User } from '../interfaces/users.response';
 import { cn } from '@/lib/utils';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   user: User;
   handleStatusClick: (user: User) => void;
+  disabled?: boolean;
 }
 
-export const CustomUserActionsMenu = ({ user, handleStatusClick }: Props) => {
+export const CustomUserActionsMenu = ({ user, handleStatusClick, disabled }: Props) => {
+  const { t } = useTranslation();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -19,6 +22,7 @@ export const CustomUserActionsMenu = ({ user, handleStatusClick }: Props) => {
           variant="ghost"
           size="icon"
           className="h-8 w-8 text-muted-foreground hover:text-foreground"
+          disabled={disabled}
         >
           <MoreHorizontal className="h-4 w-4" />
         </Button>
@@ -27,14 +31,14 @@ export const CustomUserActionsMenu = ({ user, handleStatusClick }: Props) => {
         <DropdownMenuItem className="gap-2" asChild>
           <Link to={`/users/${user.id}`}>
             <Eye className="h-4 w-4" />
-            {t("custom_user_actions_menu_view_details")}
+            {t("users.components.customUserActionsMenu.viewDetails")}
           </Link>
         </DropdownMenuItem>
         
         <DropdownMenuItem className="gap-2" asChild>
           <Link to={`/users/edit/${user.id}`}>
             <Pencil className="h-4 w-4" />
-            {t("custom_user_actions_menu_edit")}
+            {t("users.components.customUserActionsMenu.edit")}
           </Link>
         </DropdownMenuItem>
         
@@ -53,12 +57,12 @@ export const CustomUserActionsMenu = ({ user, handleStatusClick }: Props) => {
           {user.status ? (
             <>
               <UserMinus className="h-4 w-4" />
-              {t("custom_user_actions_menu_down")}
+              {t("users.components.customUserActionsMenu.down")}
             </>
           ) : (
             <>
               <UserCheck className="h-4 w-4" />
-              {t("custom_user_actions_menu_up")}
+              {t("users.components.customUserActionsMenu.up")}
             </>
           )}
         </DropdownMenuItem>

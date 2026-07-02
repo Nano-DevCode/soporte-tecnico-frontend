@@ -1,12 +1,19 @@
-import { RoleRoute } from "@/auth/routes/ProtectedRoutes";
+import { RoleRoute, type UserRole } from "@/auth/routes/ProtectedRoutes";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { lazy } from "react";
 import { useRoutes } from "react-router";
 
 const DepartmentPage = lazy(() => import('./pages/DepartmentPage').then(m => ({ default: m.DepartmentPage })));
-const DepartmentCreatePage = lazy(() => import('./pages/DepartmentCreatePage').then(m => ({ default: m.DepartmentCreatePage })));
-const DepartmentDetailsPage = lazy(() => import('./pages/DepartmentDetailsPage').then(m => ({ default: m.DepartmentDetailsPage })));
-const DepartmentEditPage = lazy(() => import('./pages/DepartmentEditPage').then(m => ({ default: m.DepartmentEditPage })));
+const DepartmentCreatePage = lazy(() => import('./pages/DepartmentCreatePage'));
+const DepartmentDetailsPage = lazy(() => import('./pages/DepartmentDetailsPage'));
+const DepartmentEditPage = lazy(() => import('./pages/DepartmentEditPage'));
+
+const ALLOWED_ROLES: UserRole[] = [
+  "isCoordinator", 
+  "isBossCC", 
+  "isSuperAdmin", 
+  "isTechnician"
+];
 
 export const DepartmentRoutes = () => {
   return useRoutes([
@@ -14,7 +21,7 @@ export const DepartmentRoutes = () => {
       index: true,
       element: (
         <SuspenseWrapper>
-          <RoleRoute allowedRoles={["isCoordinator", "isBossCC", "isSuperAdmin"]}>
+          <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
             <DepartmentPage />
           </RoleRoute>
         </SuspenseWrapper> 
@@ -24,7 +31,7 @@ export const DepartmentRoutes = () => {
       path: 'create',
       element: (
         <SuspenseWrapper>
-          <RoleRoute allowedRoles={["isCoordinator", "isBossCC", "isSuperAdmin"]}>
+          <RoleRoute allowedRoles={ALLOWED_ROLES}>
             <DepartmentCreatePage />
           </RoleRoute>
         </SuspenseWrapper>
@@ -34,7 +41,7 @@ export const DepartmentRoutes = () => {
       path: 'edit/:id',
       element: (
         <SuspenseWrapper>
-          <RoleRoute allowedRoles={["isCoordinator", "isBossCC", "isSuperAdmin"]}>
+          <RoleRoute allowedRoles={ALLOWED_ROLES}>
             <DepartmentEditPage />
           </RoleRoute>
         </SuspenseWrapper>
@@ -44,7 +51,7 @@ export const DepartmentRoutes = () => {
       path: ':id',
       element: (
         <SuspenseWrapper>
-          <RoleRoute allowedRoles={["isCoordinator", "isBossCC", "isSuperAdmin"]}>
+          <RoleRoute allowedRoles={ALLOWED_ROLES}>
             <DepartmentDetailsPage />
           </RoleRoute>
         </SuspenseWrapper>

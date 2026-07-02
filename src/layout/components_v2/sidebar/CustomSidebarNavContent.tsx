@@ -63,7 +63,7 @@ export const CustomSidebarNavContent = memo(() => {
       show: true,
     },
     {
-      title: t("users"),
+      title: "User",
       icon: Users,
       show: isSuperAdmin || isCoordinator || isBossCC,
       subItems: [

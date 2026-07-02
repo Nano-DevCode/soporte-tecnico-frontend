@@ -17,6 +17,7 @@ interface CustomComboboxProps {
   placeholder?: string;
   emptyText?: string;
   disabled?: boolean;
+  error?: boolean;
   ref?: React.Ref<HTMLButtonElement>; 
 }
 
@@ -27,6 +28,7 @@ export const CustomCombobox = ({
   placeholder = "Seleccionar...",
   emptyText = "No hay resultados",
   disabled = false,
+  error = false, // <-- Por defecto es false para que no esté rojo siempre
   ref 
 }: CustomComboboxProps) => {
 
@@ -49,8 +51,9 @@ export const CustomCombobox = ({
           aria-controls={listId} 
           disabled={disabled}
           className={cn(
-            "w-full justify-between font-normal",
-            !value && "text-muted-foreground"
+            "w-full justify-between font-normal bg-muted/10", // bg-muted/10 para igualar tus inputs
+            !value && "text-muted-foreground",
+            error && "border-red-500 focus-visible:ring-red-500" // <-- AQUÍ SE APLICA EL ROJO
           )}
         >
           {selectedLabel || placeholder}

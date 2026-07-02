@@ -67,6 +67,21 @@ export const ItAssetsForm = ({
           )}
         />
 
+        {/* NOMBRE DEL ACTIVO (OPCIONAL) */}
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>{t("itAssets.components.form.name.label")}</FormLabel>
+              <FormControl>
+                <Input placeholder={t("itAssets.components.form.name.placeholder")} value={field.value || ''} onChange={field.onChange} disabled={isSaving} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* SELECTORES INFINITOS */}
         <TypeSelectField 
           disabled={isSaving} 

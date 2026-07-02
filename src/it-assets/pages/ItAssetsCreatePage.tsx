@@ -22,12 +22,10 @@ const ItAssetsCreatePage = () => {
   const navigate = useNavigate();
   const { createAssetMutation, isCreatingAsset } = useItAssets();
   const { itAssetsStatus, isLoading: isLoadingStatus } = useItAssetsStatus();
-
-  // Metemos el esquema dentro del componente, pero lo memorizamos 
-  // para que solo se vuelva a crear si el idioma cambia.
   const createAssetSchema = useMemo(() => z.object({
     serialNumber: z.string().min(1, t("itAssets.createPage.validation.serialNumber")).trim(),
     idInventary: z.string().trim().optional(),
+    name: z.string().trim().optional(), // <--- 1. AGREGADO EN EL ESQUEMA
     typeId: z.string().min(1, t("itAssets.createPage.validation.typeId")),
     brandId: z.string().min(1, t("itAssets.createPage.validation.brandId")),
     modelId: z.string().min(1, t("itAssets.createPage.validation.modelId")),
@@ -45,6 +43,7 @@ const ItAssetsCreatePage = () => {
     defaultValues: {
       serialNumber: "",
       idInventary: "",
+      name: "", // <--- 2. AGREGADO EN LOS VALORES POR DEFECTO
       typeId: "",
       brandId: "", 
       modelId: "",
@@ -65,6 +64,7 @@ const ItAssetsCreatePage = () => {
     
     if (data.imageFile) formData.append("file", data.imageFile); 
     if (data.idInventary) formData.append("idInventary", data.idInventary);
+    if (data.name) formData.append("name", data.name); // <--- 3. AGREGADO AL FORMDATA
     if (data.invoiceId) formData.append("invoiceId", data.invoiceId);
     if (data.description) formData.append("description", data.description);
     if (data.observations) formData.append("observations", data.observations);

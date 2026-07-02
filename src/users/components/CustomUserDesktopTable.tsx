@@ -22,23 +22,23 @@ export const CustomUserDesktopTable = memo(({ users, handleStatusClick }: Props)
         {/* Cabecera con el fondo tintado que pediste, pero limpia de íconos extra */}
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px] items-center justify-center text-center">
-              {t("custom_desktop_table_users_head_control")}
+            <TableHead className="w-20 items-center justify-center text-center">
+              {t("users.components.customUserDesktopTable.headControl")}
             </TableHead>
-            <TableHead className="w-[300px] text-left">
-              {t("custom_desktop_table_users_head_user")}
+            <TableHead className="w-75 text-left">
+              {t("users.components.customUserDesktopTable.headUser")}
             </TableHead>
-            <TableHead className="w-[250px] text-left">
-              {t("custom_desktop_table_users_head_departament")}
+            <TableHead className="w-62.5 text-left">
+              {t("users.components.customUserDesktopTable.headDepartment")}
             </TableHead>
-            <TableHead className="w-[120px] text-center">
-              {t("custom_desktop_table_users_head_rol")}
+            <TableHead className="w-30 text-center">
+              {t("users.components.customUserDesktopTable.headRole")}
             </TableHead>
-            <TableHead className="w-[100px] text-center">
-              {t("custom_desktop_table_users_head_status")}
+            <TableHead className="w-25 text-center">
+              {t("users.components.customUserDesktopTable.headStatus")}
             </TableHead>
-            <TableHead className="w-[80px] text-center">
-              {t("custom_desktop_table_users_head_actions")}
+            <TableHead className="w-20 text-center">
+              {t("users.components.customUserDesktopTable.headActions")}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -61,10 +61,10 @@ export const CustomUserDesktopTable = memo(({ users, handleStatusClick }: Props)
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col gap-0.5 min-w-0">
-                    <span className="text-sm font-bold text-foreground truncate max-w-[240px]">
+                    <span className="text-sm font-bold text-foreground truncate max-w-60">
                       {getFullName(user.staff.name, user.staff.paternalSurname, user.staff.maternalSurname)}
                     </span>
-                    <span className="text-xs text-muted-foreground truncate max-w-[240px]">
+                    <span className="text-xs text-muted-foreground truncate max-w-60">
                       {user.email}
                     </span>
                   </div>
@@ -74,7 +74,7 @@ export const CustomUserDesktopTable = memo(({ users, handleStatusClick }: Props)
               {/* DEPARTAMENTO */}
               <TableCell className="align-middle py-4">
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium text-muted-foreground max-w-[250px] line-clamp-2">
+                  <span className="text-sm font-medium text-muted-foreground max-w-62.5 line-clamp-2">
                     {user.staff.department.name}
                   </span>
                 </div>
@@ -96,7 +96,7 @@ export const CustomUserDesktopTable = memo(({ users, handleStatusClick }: Props)
                   variant={user.status ? "default" : "destructive"}
                   className="font-semibold px-2.5 py-0.5 rounded-full shadow-sm"
                 >
-                  {user.status ? t("active") : t("inactive")}
+                  {user.status ? t("users.components.customUserDesktopTable.active") : t("users.components.customUserDesktopTable.inactive")}
                 </Badge>
               </TableCell>
               
@@ -117,7 +117,7 @@ export const CustomUserDesktopTable = memo(({ users, handleStatusClick }: Props)
             <TableRow>
               <TableCell 
                 colSpan={6} 
-                className="h-[300px] text-center text-muted-foreground"
+                className="h-75 text-center text-muted-foreground"
               >
                 <div className="flex flex-col items-center gap-3">
                   <div className="h-14 w-14 rounded-full bg-muted flex items-center justify-center border border-border">
@@ -125,10 +125,10 @@ export const CustomUserDesktopTable = memo(({ users, handleStatusClick }: Props)
                   </div>
                   <div className="space-y-1">
                     <p className="text-base font-semibold text-foreground">
-                      {t("custom_desktop_table_users_not_found")}
+                      {t("users.components.customUserDesktopTable.notFound")}
                     </p>
                     <p className="text-sm">
-                      {t("custom_desktop_table_users_setting_filters")}
+                      {t("users.components.customUserDesktopTable.settingFilters")}
                     </p>
                   </div>
                 </div>

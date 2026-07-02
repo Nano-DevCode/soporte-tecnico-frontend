@@ -35,7 +35,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   user: null,
   authStatus: 'checking',
   lastCheck: null,
-  sessionStart: null, // <-- INICIALIZAR
+  sessionStart: null,
 
   isSuperAdmin:  () => getRole(get) === AppRoles.SuperAdmin,
   isBossCC:      () => getRole(get) === AppRoles.JefeCC,
@@ -45,11 +45,11 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   isPlaning:     () => getRole(get) === AppRoles.Planeacion,
   isSecretaryCC: () => getRole(get) === AppRoles.SecretariaCC,
   isInventory:   () => getRole(get) === AppRoles.Inventario,
+  isVisitor:    () => getRole(get) === AppRoles.Visitor,
 
   login: async (email, password) => {
     try {
       const data = await loginAction(email, password);
-      // Establecemos AMBAS variables al momento del login
       set({ 
         user: data, 
         authStatus: 'authenticated', 
@@ -69,7 +69,6 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     } catch (error) {
       logError(error, "AuthStore", "Error al cerrar sesión");
     } finally {
-      // Limpiamos todo al salir
       set({ user: null, authStatus: 'not-authenticated', lastCheck: null, sessionStart: null });
     }
   },
@@ -87,7 +86,6 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
         user: data, 
         authStatus: 'authenticated', 
         lastCheck: Date.now(),
-        // Si la página se recargó y se perdió el store, tomamos Date.now(), de lo contrario mantenemos el original
         sessionStart: sessionStart || Date.now() 
       });
       return true;
