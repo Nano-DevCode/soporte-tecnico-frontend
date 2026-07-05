@@ -18,19 +18,19 @@ interface Props {
 export const ToolStatusSelect = ({ tool, isDisabled }: Props) => {
   const { t } = useTranslation();
   const { control, watch } = useFormContext();
-  const { toolsStatus, isLoading: isLoadingStatus } = useToolsStatus();
-  
+  const { toolStatus, isLoading: isLoadingStatus } = useToolsStatus();
+
   const [isEditingStatus, setIsEditingStatus] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
-  const currentStatusId = watch("toolsStatusId");
-  const selectedStatusDetail = toolsStatus.find(status => status.id === currentStatusId);
+  const currentStatusId = watch("toolStatusId");
+  const selectedStatusDetail = toolStatus.find(status => status.id === currentStatusId);
 
   return (
     <>
       <FormField
         control={control}
-        name="toolsStatusId"
+        name="toolStatusId"
         render={({ field }) => (
           <FormItem>
             <FormLabel>
@@ -48,10 +48,10 @@ export const ToolStatusSelect = ({ tool, isDisabled }: Props) => {
                     </span>
                   )}
                 </div>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
                   className="h-8 text-xs shrink-0 self-start sm:self-auto"
                   onClick={() => setShowConfirmDialog(true)}
                   disabled={isDisabled}
@@ -68,14 +68,14 @@ export const ToolStatusSelect = ({ tool, isDisabled }: Props) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {toolsStatus.map((status) => (
+                    {toolStatus.map((status) => (
                       <SelectItem key={status.id} value={status.id}>
                         {status.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                
+
                 {selectedStatusDetail?.description && (
                   <div className="flex gap-2 items-start bg-blue-50/50 dark:bg-blue-950/20 p-2.5 rounded-md border border-blue-100 dark:border-blue-900/50">
                     <Info className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
@@ -94,8 +94,8 @@ export const ToolStatusSelect = ({ tool, isDisabled }: Props) => {
         )}
       />
 
-      <CustomConfirmChangeStatusTool 
-        open={showConfirmDialog} 
+      <CustomConfirmChangeStatusTool
+        open={showConfirmDialog}
         onOpenChange={setShowConfirmDialog}
         currentStatusName={tool.toolStatus?.name}
         onConfirm={() => {

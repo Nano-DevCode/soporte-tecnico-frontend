@@ -73,28 +73,29 @@ export const ToolsForm = ({
         />
 
         {/* SELECTORES INFINITOS (Usando el tipado de toolInitialData) */}
-        <TypeSelectField 
-          disabled={isSaving} 
+        <TypeSelectField
+          disabled={isSaving}
           initialData={toolInitialData?.toolType ? { id: toolInitialData.toolType.id, name: toolInitialData.toolType.name } : null}
         />
-        
-        <BrandSelectField 
-          disabled={isSaving} 
+
+        <BrandSelectField
+          disabled={isSaving}
           // (Asumiendo que dentro de Model existe la propiedad Brand con id y name)
-          initialData={toolInitialData?.model?.brand ? { id: toolInitialData.model.brand.id, name: toolInitialData.model.brand.name } : null} 
-        />
-        
-        <ModelSelectField 
-          disabled={isSaving} 
-          initialData={toolInitialData?.model ? { id: toolInitialData.model.id, name: toolInitialData.model.name } : null} 
-        />
-        
-        <InvoiceSelectField 
-          disabled={isSaving} 
-          // Forzamos el tipado a any en idInternal si Invoice no lo exporta explícitamente en su interfaz base
-          initialData={toolInitialData?.invoice ? { id: toolInitialData.invoice.id, name: toolInitialData.invoice.idInternal || "Factura" } : null} 
+          initialData={toolInitialData?.model?.brand ? { id: toolInitialData.model.brand.id, name: toolInitialData.model.brand.name } : null}
         />
 
+        <ModelSelectField
+          disabled={isSaving}
+          initialData={toolInitialData?.model ? { id: toolInitialData.model.id, name: toolInitialData.model.name } : null}
+        />
+
+        <InvoiceSelectField
+          disabled={isSaving}
+          // Forzamos el tipado a any en idInternal si Invoice no lo exporta explícitamente en su interfaz base
+          initialData={toolInitialData?.invoice ? { id: toolInitialData.invoice.id, name: toolInitialData.invoice.idInternal || "Factura" } : null}
+        />
+
+        {/* ESTADO DEL ACTIVO - COMPONENTE REUTILIZABLE */}
         {/* ESTADO DEL ACTIVO - COMPONENTE REUTILIZABLE */}
         <FormField
           control={form.control}
@@ -102,37 +103,35 @@ export const ToolsForm = ({
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>
-                {!showObservations 
-                  ? t("tools.components.form.status.labelEdit") 
+                {!showObservations
+                  ? t("tools.components.form.status.labelEdit")
                   : t("tools.components.form.status.labelCreate")} <span className="text-red-500">*</span>
               </FormLabel>
-              
+
               <FormControl>
                 <CustomCombobox
-                  // Mapeamos los datos de la API (id, name) al estándar del componente (value, label)
+                  // Regresamos a status.id porque es el listado general de la entidad original
                   options={toolsStatus.map((status) => ({
                     value: String(status.id),
                     label: status.name,
                   }))}
-                  
-                  // Pasamos las propiedades de react-hook-form
+
                   value={field.value ? String(field.value) : undefined}
                   onChange={(val) => {
-                    field.onChange(val); // Actualiza el estado del form
+                    field.onChange(val);
                   }}
-                  
-                  // Configuración extra
+
                   disabled={isLoadingStatus || isSaving}
                   placeholder={t("tools.components.form.status.placeholder")}
                   emptyText="No se encontraron estados."
                 />
               </FormControl>
-              
+
               <FormMessage />
             </FormItem>
           )}
         />
-      </div> 
+      </div>
       {/* === FIN DEL GRID === */}
 
       {/* PREVIEW DINÁMICO DE LA DESCRIPCIÓN DEL ESTADO */}
@@ -147,9 +146,9 @@ export const ToolsForm = ({
       )}
 
       {/* FIELD DE LA FOTOGRAFÍA */}
-      <ImageUploadField 
-        disabled={isSaving} 
-        currentImageUrl={toolInitialData?.imageUrl || null} 
+      <ImageUploadField
+        disabled={isSaving}
+        currentImageUrl={toolInitialData?.imageUrl || null}
       />
 
       {/* DESCRIPCIÓN */}
@@ -160,11 +159,11 @@ export const ToolsForm = ({
           <FormItem>
             <FormLabel>{t("tools.components.form.description.label")}</FormLabel>
             <FormControl>
-              <Textarea 
-                placeholder={t("tools.components.form.description.placeholder")} 
-                className="resize-none" 
-                {...field} 
-                disabled={isSaving} 
+              <Textarea
+                placeholder={t("tools.components.form.description.placeholder")}
+                className="resize-none"
+                {...field}
+                disabled={isSaving}
               />
             </FormControl>
             <FormMessage />
@@ -181,11 +180,11 @@ export const ToolsForm = ({
             <FormItem>
               <FormLabel>{t("tools.components.form.observations.label")}</FormLabel>
               <FormControl>
-                <Textarea 
-                  placeholder={t("tools.components.form.observations.placeholder")} 
-                  className="resize-none" 
-                  {...field} 
-                  disabled={isSaving} 
+                <Textarea
+                  placeholder={t("tools.components.form.observations.placeholder")}
+                  className="resize-none"
+                  {...field}
+                  disabled={isSaving}
                 />
               </FormControl>
               <FormMessage />

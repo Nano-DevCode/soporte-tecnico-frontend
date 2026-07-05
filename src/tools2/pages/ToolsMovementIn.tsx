@@ -31,12 +31,12 @@ const ToolsMovementIn = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const { tool, isLoading } = useTools();
-  const { toolsStatus, isLoading: isLoadingStatus } = useToolsStatus();
+  const { toolStatus, isLoading: isLoadingStatus } = useToolsStatus();
   const { createInMovementAsync, isCreatingIn } = useToolsMovements();
 
   // Esquema de validación memorizado para que reaccione a cambios de idioma
   const movementInSchema = useMemo(() => z.object({
-    toolsStatusId: z.string().min(1, t("tools.movementIn.validation.statusRequired")),
+    toolStatusId: z.string().min(1, t("tools.movementIn.validation.statusRequired")),
     observations: z.string().optional(),
   }), [t]);
 
@@ -46,7 +46,7 @@ const ToolsMovementIn = () => {
   const form = useForm<MovementInFormValues>({
     resolver: zodResolver(movementInSchema),
     defaultValues: {
-      toolsStatusId: "",
+      toolStatusId: "",
       observations: "",
     },
   });
@@ -54,14 +54,14 @@ const ToolsMovementIn = () => {
   // Observador para mostrar la descripción del estado seleccionado
   const currentStatusId = useWatch({
     control: form.control,
-    name: "toolsStatusId",
+    name: "toolStatusId",
   });
-  const selectedStatusDetail = toolsStatus.find(status => status.id === currentStatusId);
+  const selectedStatusDetail = toolStatus.find(status => status.id === currentStatusId);
 
   // Pre-cargar el estado actual del equipo al abrir el formulario
   useEffect(() => {
     if (tool?.toolStatus?.id) {
-      form.setValue("toolsStatusId", tool.toolStatus.id);
+      form.setValue("toolStatusId", tool.toolStatus.id);
     }
   }, [tool, form]);
 
@@ -72,7 +72,7 @@ const ToolsMovementIn = () => {
     // Objeto de envío limpio (aplicando short-circuit para opcionales)
     const payload = {
       toolId: id,
-      toolsStatusId: data.toolsStatusId,
+      toolsStatusId: data.toolStatusId,
       ...(data.observations && { observations: data.observations })
     };
 
@@ -162,7 +162,7 @@ const ToolsMovementIn = () => {
                   {/* CAMPO: ESTADO DEL ACTIVO */}
                   <FormField
                     control={form.control}
-                    name="toolsStatusId"
+                    name="toolStatusId"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
@@ -200,7 +200,7 @@ const ToolsMovementIn = () => {
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {toolsStatus.map((status) => (
+                                {toolStatus.map((status) => (
                                   <SelectItem key={status.id} value={status.id}>
                                     {status.name}
                                   </SelectItem>
