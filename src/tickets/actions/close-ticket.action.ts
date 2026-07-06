@@ -1,15 +1,18 @@
 import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 import type { TicketDetailsResponse } from "../interfaces/ticket-details.response";
+import type { SubmitSurveyPayload } from "../schemas/createSurveySchema";
 
 export interface Props {
-    ticketId: string
+    ticketId: string,
+    answers?: SubmitSurveyPayload["answers"];
 }
 
 export const closeTicketAction = async (
-    { ticketId }: Props
+    { ticketId, ...payload }: Props
 ): Promise<TicketDetailsResponse> => {
     const { data } = await soporteTecnicoApi.post<TicketDetailsResponse>(
-        `/tickets/${ticketId}/close`
+        `/tickets/${ticketId}/close`,
+        payload
     );
 
     return {

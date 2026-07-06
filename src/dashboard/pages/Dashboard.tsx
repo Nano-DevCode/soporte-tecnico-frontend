@@ -18,6 +18,12 @@ import { useGetCostPerIncident } from '../hooks/useGetCostPerIncident';
 import { CostPerIncidentCard } from '../components/CostPerIncidentCard';
 import { useGetTicketsByStatus } from '../hooks/useGetTicketsByStatus';
 import { TicketsByStatusCards } from '../components/TicketsByStatus';
+import { useGetUserSatisfaction } from '../hooks/useUserSatisfaction';
+import { UserSatisfactionCard } from '../components/UserSatisfactionCard';
+import { useGetTicketsByDepartment } from '../hooks/useGetTicketsByDepartment';
+import { useGetTicketsByIssueType } from '../hooks/useGetTicketsByIssueType';
+import { TicketsByDepartmentChart } from '../components/TicketsByDepartmentChart';
+import { TicketsByIssueTypeChart } from '../components/TicketsByIssueTypeChart';
 
 export const Dashboard = () => {
     const { t } = useTranslation();
@@ -74,6 +80,24 @@ export const Dashboard = () => {
         data: statusData,
         isLoading: isStatusLoading,
     } = useGetTicketsByStatus();
+
+    const {
+        data: satisfactionData,
+        isLoading: isSatisfactionLoading,
+        isError: isSatisfactionError
+    } = useGetUserSatisfaction();
+
+    const {
+        data: deptData,
+        isLoading: isDeptLoading,
+        isError: isDeptError
+    } = useGetTicketsByDepartment();
+
+    const {
+        data: issueData,
+        isLoading: isIssueLoading,
+        isError: isIssueError
+    } = useGetTicketsByIssueType();
 
     return (
         <>
@@ -171,7 +195,19 @@ export const Dashboard = () => {
                 </div>
 
                 <div className="flex flex-row flex-wrap gap-2 items-stretch mt-3">
-                    <div className="flex-1 flex">
+                    {isSatisfactionError ? (
+                        <div className="flex h-30 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
+                            <p className="text-sm font-medium text-destructive">
+                                {t('dashboards.metrics.error')}
+                            </p>
+                        </div>
+                    ) : (
+                        <UserSatisfactionCard
+                            data={satisfactionData!}
+                            isLoading={isSatisfactionLoading}
+                        />
+                    )}
+                    <div className="flex-1 flex w-full">
                         {isInterruptionsError ? (
                             <div className="flex flex-1 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
                                 <p className="text-sm font-medium text-destructive">
@@ -186,7 +222,37 @@ export const Dashboard = () => {
                         )}
                     </div>
 
-                    <div className="flex flex-1">
+                    <div className="flex-1 flex w-full">
+                        {isDeptError ? (
+                            <div className="flex flex-1 h-87.5 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
+                                <p className="text-sm font-medium text-destructive">
+                                    {t('dashboards.metrics.error')}
+                                </p>
+                            </div>
+                        ) : (
+                            <TicketsByDepartmentChart
+                                data={deptData}
+                                isLoading={isDeptLoading}
+                            />
+                        )}
+                    </div>
+
+                    <div className="flex-1 flex w-full">
+                        {isIssueError ? (
+                            <div className="flex flex-1 h-87.5 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
+                                <p className="text-sm font-medium text-destructive">
+                                    {t('dashboards.metrics.error')}
+                                </p>
+                            </div>
+                        ) : (
+                            <TicketsByIssueTypeChart
+                                data={issueData}
+                                isLoading={isIssueLoading}
+                            />
+                        )}
+                    </div>
+
+                    <div className="flex flex-1 w-full">
                         {isResolutionError ? (
                             <div className="flex flex-1 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
                                 <p className="text-sm font-medium text-destructive">

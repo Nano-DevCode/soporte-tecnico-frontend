@@ -64,7 +64,7 @@ export const CustomFilterSchoolPeriods = () => {
 
         {/* Filtro Estado */}
         <Select value={statusFilter} onValueChange={(v) => updateFilters("status", v)}>
-          <SelectTrigger className="w-full sm:w-[130px] h-10 bg-background/60">
+          <SelectTrigger className="w-full sm:w-32.5 h-10 bg-background/60">
             <SelectValue placeholder={t("custom_filters_school_period_search_status_name")} />
           </SelectTrigger>
           <SelectContent>

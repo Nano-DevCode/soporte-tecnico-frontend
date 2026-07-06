@@ -5,7 +5,7 @@ import { useUserRoles } from "@/auth/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks, TicketCheck, Headset, FileSpreadsheet } from "lucide-react";
+import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks, TicketCheck, Headset, FileSpreadsheet, HelpCircle } from "lucide-react";
 
 // Types para la configuración
 type NavSubItem = {
@@ -60,7 +60,7 @@ export const CustomSidebarNavContent = memo(() => {
       title: t("dashboard"),
       icon: LayoutDashboard,
       path: "/dashboard",
-      show: true,
+      show: isSuperAdmin || isBossCC || isCoordinator,
     },
     {
       title: t("tickets.menu_options.label"),
@@ -169,7 +169,7 @@ export const CustomSidebarNavContent = memo(() => {
           title: t("common.nav_content.settings.folios.subitems.responses"),
           icon: MessageSquareReply,
           path: "/folios/responses",
-          show: isSuperAdmin || isBoss
+          show: isSuperAdmin || isBossCC
         },
       ]
     },
@@ -185,7 +185,13 @@ export const CustomSidebarNavContent = memo(() => {
       show: true,
       subItems: [
         { title: t("general"), path: "/settings/general", show: true },
-        { title: t("notifications"), path: "/settings/notifications", show: true },
+        // { title: t("notifications"), path: "/settings/notifications", show: true },
+        {
+          icon: HelpCircle,
+          title: t("surveys.menu.questions"),
+          path: "/survey/questions",
+          show: isSuperAdmin
+        },
       ]
     }
   ], [t, isSuperAdmin, isCoordinator, isBossCC, isVisitor, isInventory, isSecretaryCC, isTechnician, isBoss, isPlaning]);

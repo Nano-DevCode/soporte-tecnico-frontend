@@ -26,7 +26,7 @@ export const FilterDashboard = () => {
 
     return (
         <Accordion type="single" collapsible className="rounded-lg border shadow-sm">
-            <AccordionItem value="filters" className="border-b px-2 last:border-b-0">
+            <AccordionItem value="filters" className="bg-card border-b px-2 last:border-b-0">
                 <AccordionTrigger className=" py-2 text-muted-foreground">
                     <span className="flex items-center gap-2">
                         <Filter className="h-3 w-3 " />

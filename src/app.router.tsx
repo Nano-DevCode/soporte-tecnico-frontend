@@ -110,6 +110,10 @@ const router = createBrowserRouter([
                 path: 'reports',
                 children: ReportsRoutes,
             },
+            {
+                path: 'survey/*',
+                element: <QuestionnaireRoutes />,
+            },
         ],
     },
     {

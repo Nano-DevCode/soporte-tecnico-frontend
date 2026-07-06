@@ -1,19 +1,40 @@
-import { RoleRoute, type UserRole } from "@/auth/routes/ProtectedRoutes";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { useRoutes } from "react-router";
-import App from "./pages/App";
-
-const ALLOWED_ROLES: UserRole[] = ["isCoordinator","isBossCC","isSuperAdmin"];
+import { ListQuestionsPage } from "./pages/ListQuestionsPage";
+import { CreateQuestionPage } from "./pages/CreateQuestionPage";
+import { CanRoute } from "@/common/permission/CanRoute";
+import { EditQuestionPage } from "./pages/EditQuestionPage";
 
 export const QuestionnaireRoutes = () => {
     return useRoutes([
         {
             index: true,
+            path: 'questions',
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
-                        <App /> 
-                    </RoleRoute>
+                    <CanRoute permission={'WATCH_QUESTIONS_LIST'}>
+                        <ListQuestionsPage />
+                    </CanRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'questions/new',
+            element: (
+                <SuspenseWrapper>
+                    <CanRoute permission={'CREATE_QUESTION'}>
+                        <CreateQuestionPage />
+                    </CanRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'questions/:id/edit',
+            element: (
+                <SuspenseWrapper>
+                    <CanRoute permission={'EDIT_QUESTION'}>
+                        <EditQuestionPage />
+                    </CanRoute>
                 </SuspenseWrapper>
             )
         },

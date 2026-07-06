@@ -196,7 +196,8 @@
       "continue": "Si, Continuar",
       "download_excel": "Descargar Excel",
       "download_pdf": "Descargar PDF",
-      "downloading": "Descargando..."
+      "downloading": "Descargando...",
+      "confirm": "Confirmar"
     },
     "date": {
       "no_date": "Sin fecha"
@@ -1406,6 +1407,37 @@
         "over_budget": "por encima del límite",
         "meta_text": "Límite establecido: {{meta}}",
         "details_text": "Gasto total: {{cost}} en {{total}} tickets"
+      },
+      "satisfaction": {
+        "title": "Satisfacción del Usuario",
+        "description": "Porcentaje de usuarios que calificaron la atención con 4 o 5 estrellas.",
+        "goal": "Meta",
+        "meta_achieved": "Meta alcanzada",
+        "meta_below": "Debajo de meta",
+        "avg_score_label": "Nota Promedio",
+        "surveys_label": "Encuestas",
+        "surveys_count": "{{count}} contestadas",
+        "breakdown_title": "Desglose por aspecto evaluado",
+        "empty": {
+          "title": "Sin información disponible",
+          "description": "No se pudieron cargar las métricas de satisfacción con los filtros actuales."
+        }
+      }
+    },
+    "common": {
+      "noDataAvailable": "No hay datos disponibles para el periodo seleccionado."
+    },
+    "charts": {
+      "common": {
+        "totalTickets": "Total de Tickets"
+      },
+      "department": {
+        "title": "Tickets por Departamento",
+        "description": "Distribución de incidentes atendidos por cada área"
+      },
+      "issueType": {
+        "title": "Tickets por Tipo de Problema",
+        "description": "Clasificación de incidentes según su naturaleza técnica"
       }
     }
   },
@@ -1444,6 +1476,109 @@
       }
     }
   },
+
+  "surveys": {
+    "menu": {
+      "questions": "Preguntas de satisfacción"
+    },
+    "questions": {
+      "data": {
+        "question": "Pregunta",
+        "type": "Tipo de pregunta",
+        "type_options": {
+          "RATING": "De Puntuación",
+          "TEXT": "Texto Abierto"
+        },
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "actions": {
+        "activate": "Activar",
+        "deactivate": "Desactivar"
+      },
+      "dialogs": {
+        "activate_title": "¿Activar esta pregunta?",
+        "activate_desc": "La pregunta \"{{question}}\" volverá a estar disponible y se presentará a los usuarios al cerrar nuevos tickets de soporte.",
+        "deactivate_title": "¿Desactivar esta pregunta?",
+        "deactivate_desc": "La pregunta \"{{question}}\" se ocultará de los formularios futuros. Esto no alterará las respuestas históricas ya recopiladas."
+      },
+      "notifications": {
+        "activated_success": "La pregunta fue activada exitosamente.",
+        "deactivated_success": "La pregunta fue desactivada exitosamente.",
+        "status_error": "Ocurrió un error al intentar cambiar el estado de la pregunta."
+      },
+      "list_page": {
+        "title": "Gestión de Preguntas",
+        "description": "Administra el catálogo de preguntas activas e inactivas para el formulario de satisfacción.",
+        "actions": {
+          "new": "Nueva Pregunta"
+        },
+        "error": {
+          "title": "Error al cargar las preguntas",
+          "description": "Ocurrió un problema técnico al obtener el catálogo de preguntas. Por favor, intenta de nuevo."
+        },
+        "empty": {
+          "title": "No hay preguntas registradas",
+          "description": "No se encontraron preguntas de satisfacción que coincidan con los filtros actuales o el catálogo está vacío."
+        }
+      },
+      "create_page": {
+        "title": "Nueva Pregunta",
+        "description": "Agrega una nueva pregunta al formulario de satisfacción de soporte técnico.",
+        "success": {
+          "title": "Pregunta creada",
+          "message": "La pregunta se ha guardado exitosamentel, activale para que este disponible en el catálogo."
+        },
+        "error": {
+          "title": "Error al crear la pregunta"
+        }
+      },
+      "edit_page": {
+        "title": "Editar Pregunta",
+        "description": "Modifica el texto o el tipo de respuesta de la pregunta de satisfacción seleccionada.",
+        "success": {
+          "title": "Pregunta actualizada",
+          "message": "Los cambios se han guardado exitosamente."
+        },
+        "error": {
+          "title": "Error al actualizar",
+          "not_found": "No se encontró la pregunta solicitada o ya no está disponible."
+        }
+      },
+      "form": {
+        "header": {
+          "title": "Formulario para pregunta de satisfacción",
+          "description": "Configura el texto y tipo de respuesta para las encuestas de satisfacción de soporte técnico."
+        },
+        "fields": {
+          "text": {
+            "label": "Pregunta de satisfacción",
+            "placeholder": "Ej: ¿Cómo calificarías la atención recibida por el técnico?"
+          },
+          "type": {
+            "label": "Tipo de respuesta",
+            "placeholder": "Selecciona el formato de respuesta..."
+          },
+          "is_active": {
+            "label": "Pregunta activa visible para los usuarios al cerrar tickets"
+          }
+        },
+        "validation": {
+          "text_required": "El texto de la pregunta es obligatorio.",
+          "text_string": "Debe ser una cadena de texto válida.",
+          "text_min": "La pregunta es muy corta (mínimo {{min}} caracteres).",
+          "text_max": "La pregunta no puede exceder los {{max}} caracteres.",
+          "type_required": "Selecciona un tipo de pregunta.",
+          "type_invalid": "El tipo de pregunta seleccionado no es válido."
+        }
+      },
+      "types": {
+        "rating": "Puntuación de 1 a 5 Estrellas",
+        "text": "Comentario abierto (Texto libre)"
+      }
+    }
+  },
+
   "equipment_form_new": "Nuevo Registro de Equipo",
   "equipment_form_description": "Complete la información técnica y administrativa del activo",
   "equipment_form_type": "Tipo de Equipo",

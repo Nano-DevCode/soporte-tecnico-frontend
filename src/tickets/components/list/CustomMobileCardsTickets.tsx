@@ -13,14 +13,16 @@ import { SkeletonMobileCardTickets } from "../Skeletons/SkeletonMobileCardTicket
 import { Separator } from "@/components/ui/separator";
 import { TicketTagsBadge } from "../TicketTagsBadge";
 import { Can } from "@/common/permission/Can";
+import type { TicketActionsType } from "@/tickets/utils/ticket-state-machine";
 
 interface Props {
     tickets: Ticket[];
     handleCardClick: (id: string) => void;
-    isLoading: boolean
+    isLoading: boolean,
+    onDirectAction: (event: TicketActionsType, ticketId: string) => void
 }
 
-export const CustomMobileCardsTickets = ({ tickets, handleCardClick, isLoading }: Props) => {
+export const CustomMobileCardsTickets = ({ tickets, handleCardClick, isLoading, onDirectAction }: Props) => {
     const { t, i18n } = useTranslation();
 
     if (isLoading) return <SkeletonMobileCardTickets />
@@ -58,7 +60,7 @@ export const CustomMobileCardsTickets = ({ tickets, handleCardClick, isLoading }
                             </span>
                             <Can permission='WATCH_TICKET_ACTIONS'>
                                 <div onClick={(e) => e.stopPropagation()} className="-mr-2">
-                                    <CustomActionsMenuTicket ticket={ticket} />
+                                    <CustomActionsMenuTicket ticket={ticket} onDirectAction={onDirectAction} />
                                 </div>
                             </Can>
                         </div>

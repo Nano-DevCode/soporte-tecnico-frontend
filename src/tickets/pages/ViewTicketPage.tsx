@@ -26,6 +26,7 @@ import { TicketDocumentsSkeleton } from '../components/Skeletons/TicketDocuments
 import { TechnicalReportsAccordionSkeleton } from '../../technical-reports/components/skeletons/TechnicalReportsAccordionSkeleton';
 import { TicketActionsComponent } from '../components/details/TicketActions';
 import { TechnicalReportsOfTicketItems } from '@/technical-reports/components/TechnicalReportsItemsOfTicket';
+import type { SubmitSurveyPayload } from '../schemas/createSurveySchema';
 
 export const ViewTicketPage = () => {
     const { id } = useParams();
@@ -50,7 +51,7 @@ export const ViewTicketPage = () => {
         }
     }, [isError, isLoading, ticket, t, navigateFallback]);
 
-    const handleDirectAction = (event: TicketActionsType) => {
+    const handleDirectAction = (event: TicketActionsType, payload?: SubmitSurveyPayload) => {
         if (!ticket) return;
 
         if (event === TicketActions.ATENDER) {
@@ -70,7 +71,7 @@ export const ViewTicketPage = () => {
             });
         }
         else if (event === TicketActions.CERRAR) {
-            closeTicket({ ticketId: ticket.id }, {
+            closeTicket({ ticketId: ticket.id, ...payload }, {
                 onSuccess: () => {
                     sileo.success({
                         title: t('tickets.actions.close.success.title'),

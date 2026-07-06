@@ -1,6 +1,8 @@
 import { AppRoles, type AppRoleType } from "@/auth/interfaces/authResponse.interface";
 
 export const PERMISSIONS = {
+    WATCH_DASHBOARD: 'WATCH_DASHBOARD',
+
     WATCH_PERIOD: 'WATCH_PERIOD',
     WATCH_PERIOD_LIST: 'WATCH_PERIOD_LIST',
     CREATE_PERIOD: 'CREATE_PERIOD',
@@ -57,12 +59,18 @@ export const PERMISSIONS = {
     EDIT_RESPONSE_FOLIO: 'EDIT_RESPONSE_FOLIO',
 
     WATCH_REPORTS: 'WATCH_REPORTS',
+
+    CREATE_QUESTION: 'CREATE_QUESTION',
+    WATCH_QUESTIONS_LIST: 'WATCH_QUESTIONS_LIST',
+    EDIT_QUESTION: 'EDIT_QUESTION',
 } as const;
 
 export type PermissionsTypes = typeof PERMISSIONS[keyof typeof PERMISSIONS];
 
 export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> = {
     [AppRoles.Coordinador]: [
+        PERMISSIONS.WATCH_DASHBOARD,
+
         PERMISSIONS.WATCH_TICKET_LIST,
         PERMISSIONS.WATCH_CURRENT_TICKET_LIST,
         PERMISSIONS.WATCH_TICKET,
@@ -89,6 +97,8 @@ export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> 
         PERMISSIONS.WATCH_REPORTS,
     ],
     [AppRoles.JefeCC]: [
+        PERMISSIONS.WATCH_DASHBOARD,
+
         PERMISSIONS.WATCH_MANAGER,
         PERMISSIONS.WATCH_MANAGER_LIST,
         PERMISSIONS.WATCH_PERIOD_LIST,
@@ -171,6 +181,8 @@ export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> 
         PERMISSIONS.WATCH_RESPONSE_REPORT,
     ],
     [AppRoles.SecretariaCC]: [
+        PERMISSIONS.WATCH_DASHBOARD,
+
         PERMISSIONS.WATCH_TICKET_LIST,
         PERMISSIONS.WATCH_CURRENT_TICKET_LIST,
         PERMISSIONS.WATCH_TICKET,
@@ -193,6 +205,8 @@ export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> 
         PERMISSIONS.WATCH_REPORTS,
     ],
     [AppRoles.SuperAdmin]: [
+        PERMISSIONS.WATCH_DASHBOARD,
+
         PERMISSIONS.WATCH_MANAGER,
         PERMISSIONS.WATCH_MANAGER_LIST,
         PERMISSIONS.WATCH_PERIOD_LIST,
@@ -247,6 +261,10 @@ export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> 
         PERMISSIONS.CREATE_TICKET_ON_BEHALF,
 
         PERMISSIONS.WATCH_REPORTS,
+
+        PERMISSIONS.CREATE_QUESTION,
+        PERMISSIONS.WATCH_QUESTIONS_LIST,
+        PERMISSIONS.EDIT_QUESTION,
     ],
     [AppRoles.Tecnico]: [
         PERMISSIONS.WATCH_TICKET_LIST,

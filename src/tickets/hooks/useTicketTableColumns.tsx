@@ -16,6 +16,7 @@ import type { RowData } from '@tanstack/react-table'
 import type { PermissionsTypes } from "@/common/permission/permissions"
 import { TicketDocumentButton } from "../components/details/TicketDocumentButton"
 import { TYPE_DOCUMENT_NAME } from "../interfaces/ticket-details.response"
+import type { TicketActionsType } from "../utils/ticket-state-machine"
 
 declare module '@tanstack/react-table' {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -24,7 +25,12 @@ declare module '@tanstack/react-table' {
 	}
 }
 
-export const getTicketColumns = (t: TFunction, i18n: i18n, can: (permission: PermissionsTypes) => boolean): ColumnDef<Ticket>[] => {
+export const getTicketColumns = (
+	t: TFunction,
+	i18n: i18n,
+	can: (permission: PermissionsTypes) => boolean,
+	onDirectAction: (event: TicketActionsType, ticketId: string) => void
+): ColumnDef<Ticket>[] => {
 	const allColumns: ColumnDef<Ticket>[] = [
 		{
 			accessorKey: "folio",
@@ -165,7 +171,7 @@ export const getTicketColumns = (t: TFunction, i18n: i18n, can: (permission: Per
 			header: () => <div className="text-center">{t("tickets.list_page.table.headers.actions")}</div>,
 			cell: ({ row }) => (
 				<div className="text-center" onClick={(e) => e.stopPropagation()}>
-					<CustomActionsMenuTicket ticket={row.original} />
+					<CustomActionsMenuTicket ticket={row.original} onDirectAction={onDirectAction} />
 				</div>
 			),
 		},

@@ -7,7 +7,7 @@ export const DashboardRoutes = [
         index: true,
         element:
             <SuspenseWrapper>
-                <CanRoute permission="WATCH_TICKET_LIST">
+                <CanRoute permission="WATCH_DASHBOARD">
                     <Dashboard />
                 </CanRoute>
             </SuspenseWrapper>
