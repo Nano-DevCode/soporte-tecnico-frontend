@@ -3,7 +3,7 @@ import type { ToolsMovementOut } from "../interfaces/toolsMovementOutResponse";
 
 interface Options {
   toolId: string;
-  toolsStatusId: string;
+  toolStatusId: string;
   observations?: string;
   description?: string;
   voucher?: string;
@@ -14,7 +14,7 @@ interface Options {
 export const createToolsMovementOutAction = async(options: Options): Promise<ToolsMovementOut> => {
   const { 
     toolId,
-    toolsStatusId ,
+    toolStatusId ,
     observations, 
     description, 
     voucher, 
@@ -26,7 +26,7 @@ export const createToolsMovementOutAction = async(options: Options): Promise<Too
     '/tools-movements-out',
     {
       toolId: toolId,
-      toolsStatusId:  toolsStatusId,
+      toolStatusId:  toolStatusId,
       ...(observations && { observations }),
       ...(description && { description }),
       ...(voucher && { voucher }),

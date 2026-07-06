@@ -39,10 +39,10 @@ const ToolMovementOutDetails = ({ toolMovement }: Props) => {
                         {t("tools.components.movementOutDetails.statusLabel")}
                         </h4>
                         <p className="text-base font-black text-foreground leading-tight">
-                            {toolMovement.movementOut?.toolsStatus?.name || t("tools.components.movementOutDetails.na")}
+                            {toolMovement.movementOut?.toolStatus?.name || t("tools.components.movementOutDetails.na")}
                         </p>
-                        <p className="text-xs text-muted-foreground leading-relaxed" title={toolMovement.movementOut?.toolsStatus?.description}>
-                            {toolMovement.movementOut?.toolsStatus?.description}
+                        <p className="text-xs text-muted-foreground leading-relaxed" title={toolMovement.movementOut?.toolStatus?.description}>
+                            {toolMovement.movementOut?.toolStatus?.description}
                         </p>
                     </div>
                 </div>

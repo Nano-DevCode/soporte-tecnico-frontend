@@ -1,6 +1,6 @@
 import type { Ticket } from "@/tickets/interfaces/ticket.interface";
 import type { Tool } from "./toolsResponse.interface";
-import type { ToolsStatus } from "./toolsStatusResponse.interface";
+import type { ToolStatus } from "./toolsStatusResponse.interface";
 import type { Staff } from "./staffsWithSpecificsRolesResponse.interface";
 
 export interface ToolsMovementOut {
@@ -13,7 +13,7 @@ export interface ToolsMovementOut {
 
 export interface MovementOut {
     id:             string;
-    toolsStatus: ToolsStatus;
+    toolStatus: ToolStatus;
     observations:   string;
     description:    string;
     voucher:        string;

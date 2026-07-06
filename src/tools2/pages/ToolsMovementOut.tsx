@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import CustomItAssetPreview from "../components/CustomToolPreview";
 import { StaffOutSection } from "../components/StaffOutSection";
 import { TicketOutSection } from "../components/TicketOutSection";
-import { ToolStatusSelect } from "../components/ToolStatusSelect"; // <-- NUEVO COMPONENTE
+import { ToolStatusSelect } from "../components/ToolStatusSelectUpd"; // <-- NUEVO COMPONENTE
 import { CustomTitlePageWithBack } from "@/components/custom/CustomTitlePageWithBack";
 import { logError } from "@/utils/logger";
 
@@ -44,7 +44,7 @@ const ToolsMovementOut = () => {
   // Esquema de validación memorizado para usar traducciones
   const movementOutSchema = useMemo(() => z.object({
     movementMode: z.enum(["sin_ticket", "con_ticket"]),
-    toolsStatusId: z.string().min(1, t("tools.movementOut.validation.statusRequired")),
+    toolStatusId: z.string().min(1, t("tools.movementOut.validation.statusRequired")),
     staffId: z.string().optional(),
     tikedId: z.string().optional(),
     observations: z.string().trim().optional(), 
@@ -71,7 +71,7 @@ const ToolsMovementOut = () => {
     resolver: zodResolver(movementOutSchema),
     defaultValues: {
       movementMode: "sin_ticket",
-      toolsStatusId: "",
+      toolStatusId: "",
       staffId: "",
       tikedId: "",
       observations: "",
@@ -96,7 +96,7 @@ const ToolsMovementOut = () => {
   // Cargar estado inicial del equipo
   useEffect(() => {
     if (tool?.toolStatus?.id) {
-      form.setValue("toolsStatusId", tool.toolStatus.id);
+      form.setValue("toolStatusId", tool.toolStatus.id);
     }
   }, [tool, form]);
 
@@ -105,7 +105,7 @@ const ToolsMovementOut = () => {
 
     const finalPayload = {
       toolId: id,
-      toolsStatusId: data.toolsStatusId,
+      toolStatusId: data.toolStatusId,
       observations: data.observations || undefined,
       voucher: data.voucher || undefined,
       staffId: movementMode === "sin_ticket" && data.staffId ? data.staffId : undefined,
