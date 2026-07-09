@@ -15,6 +15,13 @@ import { CustomEmptyListState } from '@/components/custom/CustomEmptyListState';
 import { TICKET_COLUMN_IDS } from '../interfaces/ticket-column-ids.types';
 import { useCurrentForUser } from '../hooks/useGetCurrentForUser';
 import { useCan } from '@/common/permission/useCan';
+import { TicketActions, type TicketActionsType } from '../utils/ticket-state-machine';
+import { useStartTicket } from '../hooks/useStartTicket';
+import { useCloseTicket } from '../hooks/useCloseTicket';
+import { useArchiveTicket } from '../hooks/useArchiveTicket';
+import type { SubmitSurveyPayload } from '../schemas/createSurveySchema';
+import { sileo } from 'sileo';
+import { getAxiosErrorMessage } from '@/lib/helpers/getAxiosErrorMessage';
 
 export const CustomCurrentTicketList = () => {
     const navigate = useNavigate();
@@ -22,6 +29,9 @@ export const CustomCurrentTicketList = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { data, isLoading: skeletonLoading, isError, refetch, isFetching } = useCurrentForUser();
     const { can } = useCan();
+    const { mutate: startTicket } = useStartTicket();
+    const { mutate: closeTicket } = useCloseTicket();
+    const { mutate: archiveTicket } = useArchiveTicket();
 
     const sortBy = searchParams.get('sortBy') || 'created_at';
     const sortOrder = useMemo(() => {
@@ -56,9 +66,75 @@ export const CustomCurrentTicketList = () => {
         navigate(`/tickets/${id}`);
     }, [navigate]);
 
+    const handleDirectAction = useCallback((
+        event: TicketActionsType,
+        ticketId: string,
+        payload?: SubmitSurveyPayload
+    ) => {
+        if (!ticketId) return;
+
+        if (event === TicketActions.ATENDER) {
+            startTicket({ ticketId }, {
+                onSuccess: () => {
+                    sileo.success({
+                        title: t('tickets.actions.attend.success.title'),
+                        description: t('tickets.actions.attend.success.description'),
+                    });
+                },
+                onError: (error) => {
+                    sileo.error({
+                        title: t('common.errors.title'),
+                        description: getAxiosErrorMessage(error) || t('tickets.actions.attend.error.description'),
+                    });
+                }
+            });
+        }
+        else if (event === TicketActions.CERRAR) {
+            if (!payload) {
+                sileo.error({
+                    title: t('common.errors.title'),
+                    description: t('tickets.actions.close.error.description'),
+                });
+                return null
+            }
+            closeTicket({ ticketId, answers: payload.answers }, {
+                onSuccess: () => {
+                    sileo.success({
+                        title: t('tickets.actions.close.success.title'),
+                        description: t('tickets.actions.close.success.description'),
+                    });
+                },
+                onError: (error) => {
+                    sileo.error({
+                        title: t('common.errors.title'),
+                        description: getAxiosErrorMessage(error) || t('tickets.actions.close.error.description'),
+                    });
+                }
+            });
+        }
+        else if (event === TicketActions.ARCHIVAR) {
+            archiveTicket({ ticketId }, {
+                onSuccess: () => {
+                    sileo.success({
+                        title: t('tickets.actions.archive.success.title'),
+                        description: t('tickets.actions.archive.success.description'),
+                    });
+                },
+                onError: (error) => {
+                    sileo.error({
+                        title: t('common.errors.title'),
+                        description: getAxiosErrorMessage(error) || t('tickets.actions.archive.error.description'),
+                    });
+                }
+            });
+        } else {
+            console.warn(t('tickets.actions.unhandled_event', { event }));
+        }
+    }, [startTicket, closeTicket, archiveTicket, t]);
+
     const columns = useMemo(
-        () => getTicketColumns(t, i18n, can),
-        [t, i18n, can]
+        () => getTicketColumns(t, i18n, can, handleDirectAction),
+        [t, i18n, can, handleDirectAction]
     );
 
     const ticketsList = data?.data ?? [];
@@ -75,6 +151,7 @@ export const CustomCurrentTicketList = () => {
             [TICKET_COLUMN_IDS.RESPONSE_DOCUMENT]: false,
         }
     });
+
 
     return (
         <>
@@ -122,6 +199,7 @@ export const CustomCurrentTicketList = () => {
                             tickets={ticketsList}
                             handleCardClick={handleCardClick}
                             isLoading={skeletonLoading}
+                            onDirectAction={handleDirectAction}
                         />
                     </div>
 

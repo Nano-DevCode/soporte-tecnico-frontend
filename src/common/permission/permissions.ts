@@ -145,6 +145,7 @@ export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> 
         PERMISSIONS.EDIT_RESPONSE_FOLIO,
 
         PERMISSIONS.WATCH_REPORTS,
+        PERMISSIONS.CREATE_TICKET_ON_BEHALF,
     ],
 
     [AppRoles.JefeDepartamento]: [
@@ -268,6 +269,7 @@ export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> 
     ],
     [AppRoles.Tecnico]: [
         PERMISSIONS.WATCH_TICKET_LIST,
+        PERMISSIONS.WATCH_CURRENT_TICKET_LIST,
         PERMISSIONS.WATCH_TICKET,
         PERMISSIONS.ATTEND_TICKET,
         PERMISSIONS.INTERVENE_TICKET,
@@ -285,7 +287,6 @@ export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> 
         PERMISSIONS.WATCH_TECHNICAL_REPORT,
         PERMISSIONS.EDIT_TECHNICAL_REPORT,
 
-        PERMISSIONS.WATCH_REJECTION_REPORT,
         PERMISSIONS.WATCH_RESPONSE_REPORT,
     ],
     [AppRoles.Visitante]: [
@@ -296,8 +297,10 @@ export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> 
         PERMISSIONS.WATCH_TICKET_PERIOD,
         PERMISSIONS.WATCH_TICKET_DEPARTMENT,
         PERMISSIONS.WATCH_TICKET_ISSUE,
+        PERMISSIONS.WATCH_TECHNICAL_REPORT,
+
+        PERMISSIONS.WATCH_RESPONSE_REPORT,
     ],
     [AppRoles.Inventario]: [
-        PERMISSIONS.WATCH_TICKET_LIST,
     ]
 };

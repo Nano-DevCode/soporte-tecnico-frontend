@@ -61,8 +61,8 @@ export const EditResponsePage = () => {
         mutate({ ticketId: id, updateData: values }, {
             onSuccess: () => {
                 sileo.success({
-                    title: t('tickets.finish_page.success.title'),
-                    description: t('tickets.finish_page.success.message'),
+                    title: t('responses.edit_page.success.title'),
+                    description: t('responses.edit_page.success.message'),
                     duration: 5000,
                 });
                 navigateSmartBack(`/tickets/${id}`);

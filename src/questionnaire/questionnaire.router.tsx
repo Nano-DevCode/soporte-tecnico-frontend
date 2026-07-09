@@ -1,9 +1,11 @@
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { useRoutes } from "react-router";
-import { ListQuestionsPage } from "./pages/ListQuestionsPage";
-import { CreateQuestionPage } from "./pages/CreateQuestionPage";
 import { CanRoute } from "@/common/permission/CanRoute";
-import { EditQuestionPage } from "./pages/EditQuestionPage";
+import { lazy } from "react";
+
+const ListQuestionsPage = lazy(() => import("./pages/ListQuestionsPage").then(module => ({ default: module.ListQuestionsPage })));
+const CreateQuestionPage = lazy(() => import("./pages/CreateQuestionPage").then(module => ({ default: module.CreateQuestionPage })));
+const EditQuestionPage = lazy(() => import("./pages/EditQuestionPage").then(module => ({ default: module.EditQuestionPage })));
 
 export const QuestionnaireRoutes = () => {
     return useRoutes([

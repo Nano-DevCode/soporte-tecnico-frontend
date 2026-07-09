@@ -239,7 +239,7 @@
     },
     "fetch_error": {
       "title": "Información no disponible",
-      "description": "Hubo un problema al conectar con el servidor. Te hemos redirigido a la lista principal por seguridad."
+      "description": "Hubo un problema al conectar con el servidor. Por favor intenta de nuevo y si el problema persiste, comunicate con el Centro de Cómputo."
     },
     "inputs": {
       "optional": "(Opcional)",
@@ -1141,6 +1141,14 @@
           "title": "Información de la orden de trabajo",
           "description": "Información sobre la respuesta emitida al solicitante."
         }
+      },
+       "success": {
+        "title": "Respuesta Actualizada",
+        "message": "Se actualizarón los datos de las respuesta"
+      },
+      "error": {
+        "title": "!Ha ocurrido un error!",
+        "message": "Se actualizarón los datos de las respuesta"
       }
     }
   },
@@ -1371,14 +1379,18 @@
         "title": "Interrupciones Críticas por Mes",
         "description": "Solicitudes con prioridad crítica reportadas",
         "empty": "No se registraron solicitudes críticas en este periodo.",
-        "bar_label": "Fallas críticas"
+        "bar_label": "Fallas críticas",
+        "xlabel": "Mes",
+        "ylabel": "Cantidad"
       },
       "resolution_time": {
         "title": "Tiempo Promedio de Resolución (Horas)",
         "priority_1": "Crítica",
         "priority_2": "Alta",
         "priority_3": "Media",
-        "priority_4": "Baja"
+        "priority_4": "Baja",
+        "xlabel": "Prioridad",
+        "ylabel": "Horas"
       },
       "first_level_resolution": {
         "title": "Resolución en 1er Nivel (FCR)",
@@ -1433,11 +1445,15 @@
       },
       "department": {
         "title": "Tickets por Departamento",
-        "description": "Distribución de incidentes atendidos por cada área"
+        "description": "Distribución de incidentes atendidos por cada área",
+        "xlabel": "Cantidad",
+        "ylabel": "Departamento"
       },
       "issueType": {
         "title": "Tickets por Tipo de Problema",
-        "description": "Clasificación de incidentes según su naturaleza técnica"
+        "description": "Clasificación de incidentes según su naturaleza técnica",
+        "xlabel": "Tipos de problemas",
+        "ylabel": "Cantidad"
       }
     }
   },
@@ -1476,7 +1492,6 @@
       }
     }
   },
-
   "surveys": {
     "menu": {
       "questions": "Preguntas de satisfacción"
@@ -1578,7 +1593,6 @@
       }
     }
   },
-
   "equipment_form_new": "Nuevo Registro de Equipo",
   "equipment_form_description": "Complete la información técnica y administrativa del activo",
   "equipment_form_type": "Tipo de Equipo",

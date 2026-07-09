@@ -4,8 +4,6 @@ import { CriticalAvailabilityCard } from '../components/CriticalAvailability';
 import { useGetMttr } from '../hooks/useGetMttrMetric';
 import { MttrMetricCard } from '../components/MttrMetricCard';
 import { useGetCriticalInterruptions } from '../hooks/useGetCriticalInterruptions';
-import { CriticalInterruptionsChart } from '../components/CriticalInterruptionsChart';
-import { ResolutionTimeChart } from '../components/ResolutionTimeChart';
 import { useGetResolutionTime } from '../hooks/useGetResolutionTime';
 import { FilterDashboard } from '../components/FilterDashboard';
 import { useFirstLevelResolution } from '../hooks/useFirstLevelResolution';
@@ -22,8 +20,23 @@ import { useGetUserSatisfaction } from '../hooks/useUserSatisfaction';
 import { UserSatisfactionCard } from '../components/UserSatisfactionCard';
 import { useGetTicketsByDepartment } from '../hooks/useGetTicketsByDepartment';
 import { useGetTicketsByIssueType } from '../hooks/useGetTicketsByIssueType';
-import { TicketsByDepartmentChart } from '../components/TicketsByDepartmentChart';
-import { TicketsByIssueTypeChart } from '../components/TicketsByIssueTypeChart';
+import { lazy, Suspense } from 'react';
+import { Loader2 } from 'lucide-react';
+
+const CriticalInterruptionsChart = lazy(() => import('../components/CriticalInterruptionsChart').then(module => ({ default: module.CriticalInterruptionsChart })));
+const ResolutionTimeChart = lazy(() => import('../components/ResolutionTimeChart').then(module => ({ default: module.ResolutionTimeChart })));
+const TicketsByDepartmentChart = lazy(() => import('../components/TicketsByDepartmentChart').then(module => ({ default: module.TicketsByDepartmentChart })));
+const TicketsByIssueTypeChart = lazy(() => import('../components/TicketsByIssueTypeChart').then(module => ({ default: module.TicketsByIssueTypeChart })));
+
+const ChartFallback = () => {
+    return (
+        <div className="flex h-70 w-full items-center justify-center rounded-xl border bg-muted/20">
+            <div className="flex h-70 w-full items-center justify-center rounded-xl border bg-muted/20">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+        </div>
+    );
+};
 
 export const Dashboard = () => {
     const { t } = useTranslation();
@@ -194,7 +207,7 @@ export const Dashboard = () => {
                     )}
                 </div>
 
-                <div className="flex flex-row flex-wrap gap-2 items-stretch mt-3">
+                <div className="flex flex-row flex-wrap gap-2 mt-3">
                     {isSatisfactionError ? (
                         <div className="flex h-30 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
                             <p className="text-sm font-medium text-destructive">
@@ -207,7 +220,9 @@ export const Dashboard = () => {
                             isLoading={isSatisfactionLoading}
                         />
                     )}
-                    <div className="flex-1 flex w-full">
+
+
+                    <div className="flex-1 flex w-full min-w-100 min-h-80 max-h-100 ">
                         {isInterruptionsError ? (
                             <div className="flex flex-1 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
                                 <p className="text-sm font-medium text-destructive">
@@ -215,44 +230,17 @@ export const Dashboard = () => {
                                 </p>
                             </div>
                         ) : (
-                            <CriticalInterruptionsChart
-                                response={interruptionsData!}
-                                isLoading={isInterruptionsLoading}
-                            />
+                            <Suspense fallback={<ChartFallback />}>
+                                <CriticalInterruptionsChart
+                                    response={interruptionsData!}
+                                    isLoading={isInterruptionsLoading}
+                                />
+                            </Suspense>
                         )}
                     </div>
 
-                    <div className="flex-1 flex w-full">
-                        {isDeptError ? (
-                            <div className="flex flex-1 h-87.5 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
-                                <p className="text-sm font-medium text-destructive">
-                                    {t('dashboards.metrics.error')}
-                                </p>
-                            </div>
-                        ) : (
-                            <TicketsByDepartmentChart
-                                data={deptData}
-                                isLoading={isDeptLoading}
-                            />
-                        )}
-                    </div>
 
-                    <div className="flex-1 flex w-full">
-                        {isIssueError ? (
-                            <div className="flex flex-1 h-87.5 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
-                                <p className="text-sm font-medium text-destructive">
-                                    {t('dashboards.metrics.error')}
-                                </p>
-                            </div>
-                        ) : (
-                            <TicketsByIssueTypeChart
-                                data={issueData}
-                                isLoading={isIssueLoading}
-                            />
-                        )}
-                    </div>
-
-                    <div className="flex flex-1 w-full">
+                    <div className="flex flex-1 w-full min-w-100 min-h-80 max-h-100">
                         {isResolutionError ? (
                             <div className="flex flex-1 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
                                 <p className="text-sm font-medium text-destructive">
@@ -260,10 +248,46 @@ export const Dashboard = () => {
                                 </p>
                             </div>
                         ) : (
-                            <ResolutionTimeChart
-                                response={resolutionData!}
-                                isLoading={isResolutionLoading}
-                            />
+                            <Suspense fallback={<ChartFallback />}>
+                                <ResolutionTimeChart
+                                    response={resolutionData!}
+                                    isLoading={isResolutionLoading}
+                                />
+                            </Suspense>
+                        )}
+                    </div>
+
+                    <div className="flex-1 flex w-full min-w-100 min-h-70 max-h-100">
+                        {isDeptError ? (
+                            <div className="flex flex-1 h-87.5 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
+                                <p className="text-sm font-medium text-destructive">
+                                    {t('dashboards.metrics.error')}
+                                </p>
+                            </div>
+                        ) : (
+                            <Suspense fallback={<ChartFallback />}>
+                                <TicketsByDepartmentChart
+                                    data={deptData}
+                                    isLoading={isDeptLoading}
+                                />
+                            </Suspense>
+                        )}
+                    </div>
+
+                    <div className="flex-1 flex w-full min-w-100 min-h-90 max-h-100">
+                        {isIssueError ? (
+                            <div className="flex flex-1 h-87.5 items-center justify-center rounded-xl border border-destructive bg-destructive/10 p-4 text-center">
+                                <p className="text-sm font-medium text-destructive">
+                                    {t('dashboards.metrics.error')}
+                                </p>
+                            </div>
+                        ) : (
+                            <Suspense fallback={<ChartFallback />}>
+                                <TicketsByIssueTypeChart
+                                    data={issueData}
+                                    isLoading={isIssueLoading}
+                                />
+                            </Suspense>
                         )}
                     </div>
                 </div>

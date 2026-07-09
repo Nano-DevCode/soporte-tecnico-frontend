@@ -1,15 +1,18 @@
+import type { TicketPriorityLevel } from "@/tickets/interfaces/ticket-priority-level.type";
+
 export interface ResolutionTimeData {
-    month: string;
-    priority: number;
+    priority: TicketPriorityLevel;
     avg_hours: number;
 }
 
 export interface ResolutionTimeResponse {
     success: boolean;
+    goals: { [key: string]: number };
     data: ResolutionTimeData[];
 }
 
 export interface TransformedResolutionData {
-    month: string;
-    [key: `priority_${number}`]: number;
+    priorityLabel: string;
+    avg_hours: number;
+    fill: string;
 }

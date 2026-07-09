@@ -4,7 +4,7 @@ import type { SubmitSurveyPayload } from "../schemas/createSurveySchema";
 
 export interface Props {
     ticketId: string,
-    answers?: SubmitSurveyPayload["answers"];
+    answers: SubmitSurveyPayload["answers"];
 }
 
 export const closeTicketAction = async (

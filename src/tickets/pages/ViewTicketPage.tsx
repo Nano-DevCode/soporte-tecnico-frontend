@@ -71,7 +71,14 @@ export const ViewTicketPage = () => {
             });
         }
         else if (event === TicketActions.CERRAR) {
-            closeTicket({ ticketId: ticket.id, ...payload }, {
+            if (!payload) {
+                sileo.error({
+                    title: t('common.errors.title'),
+                    description: t('tickets.actions.close.error.description'),
+                });
+                return null
+            }
+            closeTicket({ ticketId: ticket.id, answers: payload.answers }, {
                 onSuccess: () => {
                     sileo.success({
                         title: t('tickets.actions.close.success.title'),

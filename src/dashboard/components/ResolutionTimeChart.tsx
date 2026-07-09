@@ -1,10 +1,78 @@
 import { lazy, Suspense, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { type ChartConfig } from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 import type { ResolutionTimeResponse, TransformedResolutionData } from "../interfaces/ResolutionTimeByPriority";
-const ResolutionTimeChartContent = lazy(() => import("./ResolutionTimeChartContent").then(m => ({ default: m.ResolutionTimeChartContent })));
+const LazyRechartsContent = lazy(() =>
+    import("recharts").then((module) => {
+        const { BarChart, Cell, Bar, CartesianGrid, XAxis, YAxis, ReferenceLine } = module;
+        const DEFAULT_RADIUS: [number, number, number, number] | number = 5;
 
+        return {
+            default: ({ transformedData, chartConfig, xlabel, ylabel, goals }: { transformedData: TransformedResolutionData[], chartConfig: ChartConfig, xlabel: string, ylabel: string, goals: { [key: string]: number } }) => (
+                <ChartContainer config={chartConfig} className="h-full w-full">
+                    <BarChart
+                        data={transformedData}
+                        accessibilityLayer
+                        margin={{ top: 10, right: 10, left: 0, bottom: 20 }}
+                    >
+                        <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                        <XAxis
+                            dataKey="priorityLabel"
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={10}
+                            label={{
+                                value: xlabel,
+                                position: 'insideBottom',
+                                offset: -15,
+                                className: "fill-muted-foreground text-xs font-semibold"
+                            }}
+                        />
+                        <YAxis
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={10}
+                            label={{
+                                value: ylabel,
+                                angle: -90,
+                                position: 'insideLeft',
+                                offset: 15,
+                                className: "fill-muted-foreground text-xs font-semibold"
+                            }}
+                        />
+                        <ChartTooltip
+                            cursor={{ fill: "var(--background)", opacity: 0.2 }}
+                            content={<ChartTooltipContent hideLabel />}
+                        />
+
+                        {Object.entries(goals).map(([priority, limit]) => (
+                            <ReferenceLine
+                                key={`goal-${priority}`}
+                                y={limit}
+                                stroke={`var(--color-priority_${priority})`}
+                                strokeDasharray="3 3"
+                                label={{
+                                    position: "right",
+                                    value: `${limit}h`,
+                                    fill: `var(--color-priority_${priority})`,
+                                    fontSize: 12,
+                                    fontWeight: 600
+                                }}
+                            />
+                        ))}
+
+                        <Bar dataKey="avg_hours" radius={DEFAULT_RADIUS} maxBarSize={80}>
+                            {transformedData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.fill} />
+                            ))}
+                        </Bar>
+                    </BarChart>
+                </ChartContainer>
+            )
+        };
+    })
+);
 interface Props {
     response: ResolutionTimeResponse;
     isLoading?: boolean;
@@ -33,13 +101,12 @@ export const ResolutionTimeChart = ({ response, isLoading }: Props) => {
     } satisfies ChartConfig;
 
     const transformedData = useMemo(() => {
-        const map = new Map<string, TransformedResolutionData>();
-        response?.data?.forEach(({ month, priority, avg_hours }) => {
-            if (!map.has(month)) map.set(month, { month: month.substring(5) });
-            map.get(month)![`priority_${priority}`] = avg_hours;
-        });
-        return Array.from(map.values()).sort((a, b) => a.month.localeCompare(b.month));
-    }, [response]);
+        return response?.data?.map((item) => ({
+            priorityLabel: t(`tickets.priority.${item.priority}.name`),
+            avg_hours: item.avg_hours,
+            fill: `var(--color-priority_${item.priority})`,
+        })) || [];
+    }, [response, t]);
 
     if (isLoading) {
         return (
@@ -67,9 +134,15 @@ export const ResolutionTimeChart = ({ response, isLoading }: Props) => {
             <CardHeader>
                 <CardTitle>{t('dashboards.metrics.resolution_time.title')}</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="h-full">
                 <Suspense fallback={<div className="h-75 w-full animate-pulse bg-muted rounded-lg" />}>
-                    <ResolutionTimeChartContent chartConfig={chartConfig} transformedData={transformedData} />
+                    <LazyRechartsContent
+                        chartConfig={chartConfig}
+                        transformedData={transformedData}
+                        xlabel={t('dashboards.metrics.resolution_time.xlabel')}
+                        ylabel={t('dashboards.metrics.resolution_time.ylabel')}
+                        goals={response?.goals || {}}
+                    />
                 </Suspense>
             </CardContent>
         </Card>

@@ -8,13 +8,15 @@ import { getAvailableActions, TicketActions, type TicketActionsType, type Ticket
 import { useState } from 'react';
 import { ACTION_UI_CONFIG } from '@/tickets/utils/action-ui-config';
 import { Can } from '@/common/permission/Can';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { TicketDocumentButton } from '../details/TicketDocumentButton';
-import { TYPE_DOCUMENT_NAME } from '@/tickets/interfaces/ticket-details.response';
+import type { SubmitSurveyPayload } from '@/tickets/schemas/createSurveySchema';
+import { Dialog } from '@/components/ui/dialog';
+import { DialogClosedForm } from '../forms/DialogClosedForm';
+import { DialogArchiveForm } from '../forms/DialogArchiveForm';
+import { DialogAttendForm } from '../forms/DialogAttendContent';
 
 interface Props {
     ticket: Ticket;
-    onDirectAction?: (event: TicketActionsType, ticketId: string) => void;
+    onDirectAction?: (event: TicketActionsType, ticketId: string, payload?: SubmitSurveyPayload) => void;
 }
 
 export const CustomActionsMenuTicket = (
@@ -25,20 +27,11 @@ export const CustomActionsMenuTicket = (
 
     const availableActions = getAvailableActions(ticket.status_code as TicketStatusType);
 
-    const requestDocument = ticket.documents?.find((doc) => doc.type_document.name === TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM);
-    const responseDocument = ticket.documents?.find((doc) => doc.type_document.name === TYPE_DOCUMENT_NAME.WORK_ORDER_FORM);
-
-
-    const handleConfirm = () => {
-        if (eventToConfirm && onDirectAction) {
-            onDirectAction(eventToConfirm, ticket.id);
+    const handleFormAction = (event: TicketActionsType, payload?: SubmitSurveyPayload) => {
+        if (onDirectAction) {
+            onDirectAction(event, ticket.id, payload);
         }
-        setEventToConfirm(null);
     };
-
-    const currentConfig = eventToConfirm ? ACTION_UI_CONFIG[eventToConfirm] : null;
-    const titleKey = currentConfig?.confirmTitle;
-    const messageKey = currentConfig?.confirmMessage;
 
     return (
         <>
@@ -99,46 +92,31 @@ export const CustomActionsMenuTicket = (
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <AlertDialog open={!!eventToConfirm} onOpenChange={(open) => !open && setEventToConfirm(null)}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>
-                            {titleKey ? t(titleKey) : null}
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {messageKey ? t(messageKey) : null}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-
-                    {eventToConfirm && (eventToConfirm === TicketActions.CERRAR || eventToConfirm === TicketActions.ARCHIVAR) && (
-                        <div className="py-2 space-y-2">
-                            {responseDocument && (
-                                <TicketDocumentButton
-                                    documentType={TYPE_DOCUMENT_NAME.WORK_ORDER_FORM}
-                                    filename={responseDocument.name}
-                                    className="w-full justify-start"
-                                />
-                            )}
-
-                            {eventToConfirm === TicketActions.ARCHIVAR && requestDocument && (
-                                <TicketDocumentButton
-                                    documentType={TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM}
-                                    filename={requestDocument.name}
-                                    className="w-full justify-start"
-                                />
-                            )}
-                        </div>
-                    )}
-
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>{t('common.buttons.cancel')}</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleConfirm}>
-                            {t('common.buttons.continue')}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-
+            {eventToConfirm && (
+                <Dialog open={!!eventToConfirm} onOpenChange={(open) => !open && setEventToConfirm(null)}>
+                    {eventToConfirm === TicketActions.CERRAR ? (
+                        <DialogClosedForm
+                            eventToConfirm={eventToConfirm}
+                            setEventToConfirm={setEventToConfirm}
+                            onDirectAction={handleFormAction}
+                            documents={ticket.documents}
+                        />
+                    ) : eventToConfirm === TicketActions.ARCHIVAR ? (
+                        <DialogArchiveForm
+                            eventToConfirm={eventToConfirm}
+                            setEventToConfirm={setEventToConfirm}
+                            onDirectAction={handleFormAction}
+                            documents={ticket.documents}
+                        />
+                    ) : eventToConfirm === TicketActions.ATENDER ? (
+                        <DialogAttendForm
+                            eventToConfirm={eventToConfirm}
+                            setEventToConfirm={setEventToConfirm}
+                            onDirectAction={handleFormAction}
+                        />
+                    ) : null}
+                </Dialog>
+            )}
         </>
     )
 }

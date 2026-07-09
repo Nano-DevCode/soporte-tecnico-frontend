@@ -22,6 +22,7 @@ import { getAxiosErrorMessage } from '@/lib/helpers/getAxiosErrorMessage';
 import { useStartTicket } from '../hooks/useStartTicket';
 import { useArchiveTicket } from '../hooks/useArchiveTicket';
 import { useCloseTicket } from '../hooks/useCloseTicket';
+import type { SubmitSurveyPayload } from '../schemas/createSurveySchema';
 
 export const CustomListTickets = () => {
     const navigate = useNavigate();
@@ -68,7 +69,7 @@ export const CustomListTickets = () => {
         navigate(`/tickets/${id}`);
     }, [navigate]);
 
-    const handleDirectAction = useCallback((event: TicketActionsType, ticketId: string) => {
+    const handleDirectAction = useCallback((event: TicketActionsType, ticketId: string, payload?: SubmitSurveyPayload) => {
         if (event === TicketActions.ATENDER) {
             startTicket({ ticketId }, {
                 onSuccess: () => {
@@ -86,7 +87,14 @@ export const CustomListTickets = () => {
             });
         }
         else if (event === TicketActions.CERRAR) {
-            closeTicket({ ticketId }, {
+            if (!payload) {
+                sileo.error({
+                    title: t('common.errors.title'),
+                    description: t('tickets.actions.close.error.description'),
+                });
+                return null
+            }
+            closeTicket({ ticketId, answers: payload.answers }, {
                 onSuccess: () => {
                     sileo.success({
                         title: t('tickets.actions.close.success.title'),

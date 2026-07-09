@@ -1,10 +1,6 @@
 import { lazy } from "react";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { CanRoute } from "@/common/permission/CanRoute";
-import { CreateTicketOnBehalfPage } from "./pages/CreateTicketOnBehalfPage";
-import { ViewResponsePage } from "./pages/ViewResponsePage";
-import { EditResponsePage } from "./pages/EditResponsePage";
-import { ListCurrentTicketPage } from "./pages/ListCurrentTicketsPage";
 import { useRoutes } from "react-router";
 
 const ListTicketPage = lazy(() => import("./pages/admin/ListTicketsPage").then(module => ({ default: module.ListTicketPage })));
@@ -16,6 +12,10 @@ const InterveneTicketPage = lazy(() => import("./pages/InterveneTicketPage").the
 const RejectTicketPage = lazy(() => import("./pages/RejectTicketPage").then(module => ({ default: module.RejectTicketPage })));
 const RouteTicketPage = lazy(() => import("./pages/RouteTicketPage").then(module => ({ default: module.RouteTicketPage })));
 const ViewTicketPage = lazy(() => import("./pages/ViewTicketPage").then(module => ({ default: module.ViewTicketPage })));
+const CreateTicketOnBehalfPage = lazy(() => import("./pages/CreateTicketOnBehalfPage").then(module => ({ default: module.CreateTicketOnBehalfPage })));
+const ViewResponsePage = lazy(() => import("./pages/ViewResponsePage").then(module => ({ default: module.ViewResponsePage })));
+const EditResponsePage = lazy(() => import("./pages/EditResponsePage").then(module => ({ default: module.EditResponsePage })));
+const ListCurrentTicketPage = lazy(() => import("./pages/ListCurrentTicketsPage").then(module => ({ default: module.ListCurrentTicketPage })));
 
 export const TicketsRoutes = () => {
     return useRoutes([
