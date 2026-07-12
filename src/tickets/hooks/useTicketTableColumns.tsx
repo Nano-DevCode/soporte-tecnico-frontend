@@ -17,6 +17,7 @@ import type { PermissionsTypes } from "@/common/permission/permissions"
 import { TicketDocumentButton } from "../components/details/TicketDocumentButton"
 import { TYPE_DOCUMENT_NAME } from "../interfaces/ticket-details.response"
 import type { TicketActionsType } from "../utils/ticket-state-machine"
+import type { SubmitSurveyPayload } from "../schemas/createSurveySchema"
 
 declare module '@tanstack/react-table' {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,7 +30,7 @@ export const getTicketColumns = (
 	t: TFunction,
 	i18n: i18n,
 	can: (permission: PermissionsTypes) => boolean,
-	onDirectAction: (event: TicketActionsType, ticketId: string) => void
+	onDirectAction: (event: TicketActionsType, ticketId: string, payload?: SubmitSurveyPayload) => void
 ): ColumnDef<Ticket>[] => {
 	const allColumns: ColumnDef<Ticket>[] = [
 		{

@@ -1,10 +1,72 @@
 import { useTranslation } from "react-i18next";
 import { AlertCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { type ChartConfig } from "@/components/ui/chart";
-import type { CriticalInterruptionsResponse } from "../interfaces/critical-interruptions";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
+import type { CriticalInterruptionData, CriticalInterruptionsResponse } from "../interfaces/critical-interruptions";
 import { lazy, Suspense } from "react";
-const ChartContent = lazy(() => import("./CriticalInterruptionsChartContent").then(m => ({ default: m.CriticalInterruptionsChartContent })));
+const LazyRechartsContent = lazy(() =>
+    import("recharts").then((module) => {
+        const { BarChart, Bar, CartesianGrid, XAxis, YAxis } = module;
+        const DEFAULT_RADIUS: [number, number, number, number] | number = 5;
+
+        return {
+            default: ({ data, chartConfig, formatXAxis, xlabel, ylabel }:
+                { data: CriticalInterruptionData[], chartConfig: ChartConfig, formatXAxis: (monthStr: string) => string, xlabel: string, ylabel: string }) => (
+                <ChartContainer config={chartConfig} className="h-full w-full">
+                    <BarChart
+                        accessibilityLayer
+                        data={data}
+                        margin={{ top: 10, right: 10, left: 0, bottom: 20 }}
+                    >
+                        <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-muted" />
+                        <XAxis
+                            dataKey="month"
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={10}
+                            className="text-xs fill-muted-foreground font-medium"
+                            tickFormatter={formatXAxis}
+                            label={{
+                                value: xlabel,
+                                position: 'insideBottom',
+                                offset: -15,
+                                className: "fill-muted-foreground text-xs font-semibold"
+                            }}
+                        />
+                        <YAxis
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={10}
+                            className="text-xs fill-muted-foreground font-medium"
+                            allowDecimals={false}
+                            label={{
+                                value: ylabel,
+                                angle: -90,
+                                position: 'insideLeft',
+                                offset: 15,
+                                className: "fill-muted-foreground text-xs font-semibold"
+                            }}
+                        />
+                        <ChartTooltip
+                            cursor={{ fill: "var(--background)", opacity: 0.2 }}
+                            content={
+                                <ChartTooltipContent
+                                    labelFormatter={(value) => formatXAxis(String(value))}
+                                />
+                            }
+                        />
+                        <Bar
+                            dataKey="count"
+                            fill="var(--color-count)"
+                            radius={DEFAULT_RADIUS}
+                            maxBarSize={50}
+                        />
+                    </BarChart>
+                </ChartContainer>
+            )
+        };
+    })
+);
 
 interface Props {
     response: CriticalInterruptionsResponse;
@@ -61,7 +123,7 @@ export const CriticalInterruptionsChart = ({ response, isLoading }: Props) => {
                     {t('dashboards.metrics.critical_interruptions.description')}
                 </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex-1">
                 {data.length === 0 ? (
                     <div className="h-75 flex flex-col items-center justify-center text-center text-muted-foreground border border-dashed rounded-lg bg-muted/20">
                         <p className="text-sm">
@@ -70,10 +132,12 @@ export const CriticalInterruptionsChart = ({ response, isLoading }: Props) => {
                     </div>
                 ) : (
                     <Suspense fallback={<div className="h-75 w-full animate-pulse bg-muted rounded-lg" />}>
-                        <ChartContent
+                        <LazyRechartsContent
                             data={data}
                             chartConfig={chartConfig}
                             formatXAxis={formatXAxis}
+                            ylabel={t('dashboards.metrics.critical_interruptions.ylabel')}
+                            xlabel={t('dashboards.metrics.critical_interruptions.xlabel')}
                         />
                     </Suspense>
                 )}

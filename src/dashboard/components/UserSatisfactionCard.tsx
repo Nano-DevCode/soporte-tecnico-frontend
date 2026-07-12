@@ -58,7 +58,7 @@ export const UserSatisfactionCard = ({ data: metrics, isLoading }: UserSatisfact
     const { success, value, meta, details } = metrics;
 
     return (
-        <Card className="flex flex-col justify-between h-full w-full lg:max-w-120">
+        <Card className="flex flex-col h-100% w-full lg:max-w-120">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2 text-base font-semibold">

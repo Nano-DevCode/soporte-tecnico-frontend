@@ -14,12 +14,13 @@ import { Separator } from "@/components/ui/separator";
 import { TicketTagsBadge } from "../TicketTagsBadge";
 import { Can } from "@/common/permission/Can";
 import type { TicketActionsType } from "@/tickets/utils/ticket-state-machine";
+import type { SubmitSurveyPayload } from "@/tickets/schemas/createSurveySchema";
 
 interface Props {
     tickets: Ticket[];
     handleCardClick: (id: string) => void;
     isLoading: boolean,
-    onDirectAction: (event: TicketActionsType, ticketId: string) => void
+    onDirectAction: (event: TicketActionsType, ticketId: string, payload?: SubmitSurveyPayload) => void
 }
 
 export const CustomMobileCardsTickets = ({ tickets, handleCardClick, isLoading, onDirectAction }: Props) => {

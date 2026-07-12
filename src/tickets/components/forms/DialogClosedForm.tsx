@@ -8,8 +8,7 @@ import { TYPE_DOCUMENT_NAME, type Document } from '@/tickets/interfaces/ticket-d
 import { ACTION_UI_CONFIG } from '@/tickets/utils/action-ui-config';
 import { useActiveQuestions } from '@/questionnaire/hooks/useActiveQuestions';
 import { Loader2 } from 'lucide-react';
-import { sileo } from 'sileo';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { SubmitSurveyPayload } from '@/tickets/schemas/createSurveySchema';
 
 interface Props {
@@ -31,15 +30,6 @@ export const DialogClosedForm = ({ eventToConfirm, documents, setEventToConfirm,
     const messageKey = currentConfig?.confirmMessage;
 
     const shouldAbort = isError || !data || !responseDocument;
-    useEffect(() => {
-        if (shouldAbort && !isLoading) {
-            sileo.error({
-                description: t('common.fetch_error.description'),
-                title: t('common.fetch_error.title')
-            });
-            setEventToConfirm(null);
-        }
-    }, [shouldAbort, isLoading, t, setEventToConfirm]);
 
     const handleSurveySubmit = (answersPayload: SubmitSurveyPayload) => {
         if (eventToConfirm) {
@@ -56,7 +46,21 @@ export const DialogClosedForm = ({ eventToConfirm, documents, setEventToConfirm,
         );
     }
 
-    if (shouldAbort) return null
+    if (shouldAbort) {
+        return (
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{t('common.fetch_error.title')}</DialogTitle>
+                    <DialogDescription>{t('common.fetch_error.description')}</DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <Button variant="secondary" onClick={() => setEventToConfirm(null)}>
+                        {t('common.buttons.cancel')}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        );
+    }
 
     return (
         <DialogContent>

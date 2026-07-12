@@ -11,6 +11,7 @@ import { Dialog } from '@/components/ui/dialog';
 import { DialogClosedForm } from '../forms/DialogClosedForm';
 import { DialogArchiveForm } from '../forms/DialogArchiveForm';
 import type { SubmitSurveyPayload } from '@/tickets/schemas/createSurveySchema';
+import { DialogAttendForm } from '../forms/DialogAttendContent';
 
 interface TicketActionsProps {
     currentState: TicketStatusType;
@@ -85,7 +86,12 @@ export function TicketActionsComponent({ currentState, pendingEvent, ticketId, o
                                     onDirectAction={onDirectAction}
                                     documents={documents}
                                 />
-                                : null
+                                : eventToConfirm === TicketActions.ATENDER ?
+                                    <DialogAttendForm
+                                        eventToConfirm={eventToConfirm}
+                                        setEventToConfirm={setEventToConfirm}
+                                        onDirectAction={onDirectAction}
+                                    /> : null
 
                     }
                 </Dialog>

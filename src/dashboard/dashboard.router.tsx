@@ -1,15 +1,20 @@
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { CanRoute } from "@/common/permission/CanRoute";
-import { Dashboard } from "./pages/Dashboard";
+import { lazy } from "react";
+import { useRoutes } from "react-router";
 
-export const DashboardRoutes = [
-    {
-        index: true,
-        element:
-            <SuspenseWrapper>
-                <CanRoute permission="WATCH_DASHBOARD">
-                    <Dashboard />
-                </CanRoute>
-            </SuspenseWrapper>
-    }
-];
+const Dashboard = lazy(() => import("./pages/Dashboard").then(module => ({ default: module.Dashboard })));
+
+export const DashboardRoutes = () => {
+    return useRoutes([
+        {
+            index: true,
+            element:
+                <SuspenseWrapper>
+                    <CanRoute permission="WATCH_DASHBOARD">
+                        <Dashboard />
+                    </CanRoute>
+                </SuspenseWrapper>
+        }
+    ])
+};

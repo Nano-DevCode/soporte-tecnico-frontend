@@ -1,10 +1,12 @@
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
-import { CenterManagersPage } from "./pages/CenterManagersPage";
-import { CreateCenterManagerPage } from "./pages/CreateCenterManagerPage";
-import { EditCenterManagerPage } from "./pages/EditCenterManagerPage";
-import { ViewCenterManagerPage } from "./pages/ViewCenterManagerPage";
 import { CanRoute } from "@/common/permission/CanRoute";
 import { useRoutes } from "react-router";
+import { lazy } from "react";
+
+const CenterManagersPage = lazy(() => import("./pages/CenterManagersPage").then(module => ({ default: module.CenterManagersPage })));
+const CreateCenterManagerPage = lazy(() => import("./pages/CreateCenterManagerPage").then(module => ({ default: module.CreateCenterManagerPage })));
+const ViewCenterManagerPage = lazy(() => import("./pages/ViewCenterManagerPage").then(module => ({ default: module.ViewCenterManagerPage })));
+const EditCenterManagerPage = lazy(() => import("./pages/EditCenterManagerPage").then(module => ({ default: module.EditCenterManagerPage })));
 
 export const CenterManagersRoutes = () => {
     return useRoutes([

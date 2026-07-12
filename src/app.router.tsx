@@ -83,8 +83,8 @@ const router = createBrowserRouter([
                 element: <ToolsRoutes />
             },
             {
-                path: 'technical-reports',
-                children: TechnicalReportsRoutes,
+                path: 'technical-reports/*',
+                element: <TechnicalReportsRoutes />,
             },
             {
                 path: 'it-assets/*',
@@ -95,8 +95,8 @@ const router = createBrowserRouter([
                 element: <FoliosRoutes />
             },
             {
-                path: 'dashboard',
-                children: DashboardRoutes,
+                path: 'dashboard/*',
+                element: <DashboardRoutes />,
             },
             {
                 path: 'consumables/*',
@@ -107,8 +107,8 @@ const router = createBrowserRouter([
                 element: <MovementConsumableRoutes />,
             },
             {
-                path: 'reports',
-                children: ReportsRoutes,
+                path: 'reports/*',
+                element: <ReportsRoutes />,
             },
             {
                 path: 'survey/*',
