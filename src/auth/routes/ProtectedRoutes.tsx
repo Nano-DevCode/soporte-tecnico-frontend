@@ -1,13 +1,16 @@
 import type { PropsWithChildren } from "react";
 import { useAuthStore } from '../store/auth.store';
-import { Navigate } from "react-router";
+import { Navigate, useLocation } from "react-router";
 import { useUserRoles } from "../hooks/useUserRoles";
 
 export const AuthenticatedRoute = ({ children }: PropsWithChildren) => {
   const authStatus = useAuthStore(state => state.authStatus);
+  const location = useLocation();
 
   if (authStatus === 'checking') return null;
-  if (authStatus === 'not-authenticated') return <Navigate to='/auth/login' />;
+  if (authStatus === 'not-authenticated') {
+    return <Navigate to='/auth/login' state={{ from: location }} replace />;
+  }
 
   return children;
 };

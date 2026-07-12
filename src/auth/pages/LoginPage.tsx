@@ -3,7 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Heart, AlertCircle, Loader2 } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+// 1. Importamos useLocation desde react-router
+import { Link, useNavigate, useLocation } from "react-router";
 import { useState } from "react";
 import { useAuthStore } from "../store/auth.store";
 import { useTranslation } from 'react-i18next';
@@ -19,6 +20,7 @@ interface Inputs {
 export const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuthStore();
   
   const [posting, setPosting] = useState(false);
@@ -37,7 +39,8 @@ export const LoginPage = () => {
     try {
       const isValid = await login(data.email, data.password);
       if (isValid) {
-        navigate('/');
+        const from = (location.state)?.from?.pathname || '/';
+        navigate(from, { replace: true });
         return;
       }
       setErrorMsg(t("login_page_invalid_credentials"));

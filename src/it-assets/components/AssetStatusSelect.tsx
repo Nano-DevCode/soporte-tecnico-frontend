@@ -64,7 +64,7 @@ export const AssetStatusSelect = ({ itAsset, isDisabled }: Props) => {
               <div className="space-y-2 animate-in fade-in zoom-in-95 duration-200">
                 <Select onValueChange={field.onChange} value={field.value} disabled={isLoadingStatus || isDisabled}>
                   <FormControl>
-                    <SelectTrigger className="border-primary/50 focus:ring-primary/20">
+                    <SelectTrigger className="focus:ring-primary/20 w-full">
                       <SelectValue placeholder={t("itAssets.components.assetStatusSelect.placeholder")} />
                     </SelectTrigger>
                   </FormControl>
