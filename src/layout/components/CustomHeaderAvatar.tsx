@@ -39,7 +39,7 @@ export const CustomHeaderAvatar = () => {
             <Avatar className="h-9 w-9">
               <AvatarImage src="/placeholder-user.jpg" alt="Admin" />
               <AvatarFallback className="bg-primary text-xs text-primary-foreground">
-                { user?.staff.name.substring(0,2) }
+                { (user?.staff?.name || "US").substring(0,2) }
               </AvatarFallback>
             </Avatar>
           </Button>
@@ -49,9 +49,9 @@ export const CustomHeaderAvatar = () => {
 
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">{user?.staff.name}</p>
+              <p className="text-sm font-medium leading-none">{user?.staff?.name || "Cargando..."}</p>
               <p className="text-xs leading-none text-muted-foreground">
-                {user?.email}
+                {user?.email || "Cargando..."}
               </p>
             </div>
           </DropdownMenuLabel>
