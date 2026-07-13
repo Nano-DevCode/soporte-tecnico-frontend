@@ -17,7 +17,6 @@ export const useGetCriticalAvailability = () => {
     const tags = searchParams.get('tags') as string || undefined;
     const start_date = searchParams.get('start_date') as string || undefined;
     const end_date = searchParams.get('end_date') as string || undefined;
-    console.log(start_date)
 
     return useQuery({
         queryKey: dashboardQueryKeys.list({

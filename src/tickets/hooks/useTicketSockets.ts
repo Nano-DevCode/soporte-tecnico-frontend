@@ -23,16 +23,10 @@ export const useTicketSockets = () => {
             }
         };
 
-        // const handleFormalResponse = (data: { ticketId: string; message: string }) => {
-        //   handleTicketUpdated(data.ticketId);
-        // };
-
         socket.on('ticket_updated', handleTicketUpdated);
-        socket.on('new_assignment', handleTicketUpdated);
 
         return () => {
             socket.off('ticket_updated', handleTicketUpdated);
-            socket.off('new_assignment', handleTicketUpdated);
         };
     }, [queryClient]);
 };

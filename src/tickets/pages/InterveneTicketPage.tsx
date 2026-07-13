@@ -20,7 +20,7 @@ export const InterveneTicketPage = () => {
     const { navigateSmartBack, navigateFallback } = useSmartNavigation('/tickets');
 
     const { data: faultValidities, isLoading: isLoadingFault, isError: isFaultError } = useGetFaultValidities()
-    const { data: ticket, isLoading: isLoadingTicket, isError: isTicketError } = useGetTicketById(id);
+    const { data: ticket, isLoading: isLoadingTicket, isError: isTicketError, error } = useGetTicketById(id);
     const { mutate, isPending, isSuccess } = useInterveneTicket();
 
     const isLoading = isLoadingFault || isLoadingTicket;
@@ -32,8 +32,8 @@ export const InterveneTicketPage = () => {
 
         if (isTicketError || !ticket) {
             sileo.error({
-                title: t('tickets.not_found.title'),
-                description: t('tickets.not_found.message'),
+                title: t('common.errors.title'),
+                description: getAxiosErrorMessage(error),
                 duration: 6000,
             });
             navigateFallback();
@@ -48,7 +48,7 @@ export const InterveneTicketPage = () => {
             });
             navigateFallback();
         }
-    }, [faultValidities, isError, isLoading, isTicketError, navigateFallback, t, ticket]);
+    }, [error, faultValidities, isError, isLoading, isTicketError, navigateFallback, t, ticket]);
 
     const handleSubmit = (values: InterveneTicketFormOutput) => {
         if (!id) return
@@ -66,7 +66,7 @@ export const InterveneTicketPage = () => {
                     description: t('tickets.intervene_page.success.message'),
                     duration: 5000,
                 });
-                navigateFallback(`/tickets/${id}`);
+                navigateSmartBack(`/tickets/${id}`);
             },
             onError: (error) => {
                 console.error("Error en la mutación:", error);

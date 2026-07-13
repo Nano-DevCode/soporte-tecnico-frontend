@@ -7,13 +7,16 @@ export const useSmartNavigation = (defaultFallbackUrl: string) => {
 
     const navigateSmartBack = useCallback((fallbackOverride?: string) => {
         if (location.key !== "default") {
+            console.log('smartback')
             navigate(-1);
         } else {
+            console.log('fallbackbackoverride')
             navigate(fallbackOverride || defaultFallbackUrl, { replace: true });
         }
     }, [location.key, navigate, defaultFallbackUrl]);
 
     const navigateFallback = useCallback((fallbackOverride?: string) => {
+        console.log('fallbackback')
         navigate(fallbackOverride || defaultFallbackUrl, { replace: true });
     }, [navigate, defaultFallbackUrl]);
 

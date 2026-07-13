@@ -12,6 +12,9 @@ export const useFinishTicket = () => {
             queryClient.invalidateQueries({
                 queryKey: ticketsQueryKeys.lists()
             });
+            queryClient.invalidateQueries({
+                queryKey: ticketsQueryKeys.currentLists()
+            });
             queryClient.setQueryData(
                 ticketsQueryKeys.detail(ticket.id),
                 ticket

@@ -1,37 +1,30 @@
 import { useCallback, useMemo } from 'react'
 import { CustomPagination } from '@/components/custom/CustomPagination';
 import { useNavigate, useSearchParams } from 'react-router';
-import { useAllTickets } from '../hooks/useAllTickets';
 import { CustomMobileCardsTickets } from './list/CustomMobileCardsTickets';
 import { DataTable } from '@/components/custom/DataTable';
 import { useTranslation } from 'react-i18next';
-import { getTicketColumns } from '../hooks/useTicketTableColumns';
 import type { SortingState } from '@tanstack/react-table';
 import { useCustomTable } from '@/components/hooks/useCustomTable';
-import { CustomFilterTickets } from './CustomFilterTickets';
 import { AlertCircle, RefreshCcw, TicketIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { CustomEmptyListState } from '@/components/custom/CustomEmptyListState';
-import { TICKET_COLUMN_IDS } from '../interfaces/ticket-column-ids.types';
 import { useCan } from '@/common/permission/useCan';
 import { TicketActions, type TicketActionsType } from '../utils/ticket-state-machine';
+import { useArchiveTicket } from '../hooks/useArchiveTicket';
 import { sileo } from 'sileo';
 import { getAxiosErrorMessage } from '@/lib/helpers/getAxiosErrorMessage';
-import { useStartTicket } from '../hooks/useStartTicket';
-import { useArchiveTicket } from '../hooks/useArchiveTicket';
-import { useCloseTicket } from '../hooks/useCloseTicket';
-import type { SubmitSurveyPayload } from '../schemas/createSurveySchema';
+import { useClosedArchivedTickets } from '../hooks/useGet';
+import { getTicketArchiveColumns } from '../hooks/useTicketArchiveTableColumns ';
+import { CustomFilterTicketsArchives } from './CustomFilterTicketsArchives';
 
-export const CustomListTickets = () => {
+export const CustomArchiveTicketList = () => {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
-    const { can } = useCan();
     const [searchParams, setSearchParams] = useSearchParams();
-    const { data, isLoading: skeletonLoading, isError, refetch, isFetching } = useAllTickets();
-
-    const { mutate: startTicket } = useStartTicket();
-    const { mutate: closeTicket } = useCloseTicket();
+    const { data, isLoading: skeletonLoading, isError, refetch, isFetching } = useClosedArchivedTickets();
+    const { can } = useCan();
     const { mutate: archiveTicket } = useArchiveTicket();
 
     const sortBy = searchParams.get('sortBy') || 'created_at';
@@ -67,47 +60,13 @@ export const CustomListTickets = () => {
         navigate(`/tickets/${id}`);
     }, [navigate]);
 
-    const handleDirectAction = useCallback((event: TicketActionsType, ticketId: string, payload?: SubmitSurveyPayload) => {
-        if (event === TicketActions.ATENDER) {
-            startTicket({ ticketId }, {
-                onSuccess: () => {
-                    sileo.success({
-                        title: t('tickets.actions.attend.success.title'),
-                        description: t('tickets.actions.attend.success.description'),
-                    });
-                },
-                onError: (error) => {
-                    sileo.error({
-                        title: t('common.errors.title'),
-                        description: getAxiosErrorMessage(error) || t('tickets.actions.attend.error.description'),
-                    });
-                }
-            });
-        }
-        else if (event === TicketActions.CERRAR) {
-            if (!payload) {
-                sileo.error({
-                    title: t('common.errors.title'),
-                    description: t('tickets.actions.close.error.description'),
-                });
-                return null
-            }
-            closeTicket({ ticketId, answers: payload.answers }, {
-                onSuccess: () => {
-                    sileo.success({
-                        title: t('tickets.actions.close.success.title'),
-                        description: t('tickets.actions.close.success.description'),
-                    });
-                },
-                onError: (error) => {
-                    sileo.error({
-                        title: t('common.errors.title'),
-                        description: getAxiosErrorMessage(error) || t('tickets.actions.close.error.description'),
-                    });
-                }
-            });
-        }
-        else if (event === TicketActions.ARCHIVAR) {
+    const handleDirectAction = useCallback((
+        event: TicketActionsType,
+        ticketId: string,
+    ) => {
+        if (!ticketId) return;
+
+        if (event === TicketActions.ARCHIVAR) {
             archiveTicket({ ticketId }, {
                 onSuccess: () => {
                     sileo.success({
@@ -125,30 +84,28 @@ export const CustomListTickets = () => {
         } else {
             console.warn(t('tickets.actions.unhandled_event', { event }));
         }
-    }, [startTicket, closeTicket, archiveTicket, t]);
+    }, [archiveTicket, t]);
 
     const columns = useMemo(
-        () => getTicketColumns(t, i18n, can, handleDirectAction),
+        () => getTicketArchiveColumns(t, i18n, can, handleDirectAction),
         [t, i18n, can, handleDirectAction]
     );
 
     const ticketsList = data?.data ?? [];
     const totalData = data?.meta.total || 0;
+
     const table = useCustomTable({
         data: ticketsList,
         columns,
         sorting: tableSortingState,
         onSortingChange: handleSortingChange,
-        initialColumnVisibility: {
-            [TICKET_COLUMN_IDS.TAGS]: false,
-            [TICKET_COLUMN_IDS.REQUEST_DOCUMENT]: false,
-            [TICKET_COLUMN_IDS.RESPONSE_DOCUMENT]: false,
-        }
+        initialColumnVisibility: {}
     });
+
 
     return (
         <>
-            <CustomFilterTickets table={table} totalData={totalData} isLoadingData={skeletonLoading} />
+            <CustomFilterTicketsArchives table={table} totalData={totalData} isLoadingData={skeletonLoading} />
 
             {isError ? (
                 <Empty>
@@ -157,10 +114,10 @@ export const CustomListTickets = () => {
                             <AlertCircle />
                         </EmptyMedia>
                         <EmptyTitle>
-                            {t('tickets.list_page.error.title')}
+                            {t('tickets.list_archive_page.error.title')}
                         </EmptyTitle>
                         <EmptyDescription>
-                            {t('tickets.list_page.error.description')}
+                            {t('tickets.list_archive_page.error.description')}
                         </EmptyDescription>
                     </EmptyHeader>
                     <Button
@@ -182,8 +139,8 @@ export const CustomListTickets = () => {
                             emptyState={
                                 <CustomEmptyListState
                                     icon={TicketIcon}
-                                    title={t("tickets.list_page.empty.title")}
-                                    description={t("tickets.list_page.empty.description")}
+                                    title={t("tickets.list_archive_page.empty.title")}
+                                    description={t("tickets.list_archive_page.empty.description")}
                                 />}
                         />
                     </div>

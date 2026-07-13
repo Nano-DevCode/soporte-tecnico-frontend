@@ -8,6 +8,10 @@ export const ticketsQueryKeys = {
 
     currentList: (filters: Record<string, unknown>) => [...ticketsQueryKeys.currentLists(), filters] as const,
 
+    closedArchivedLists: () => [...ticketsQueryKeys.all, 'closed-archived'] as const,
+
+    closedArchivedList: (filters: Record<string, unknown>) => [...ticketsQueryKeys.closedArchivedLists(), filters] as const,
+
     details: () => [...ticketsQueryKeys.all, 'detail'] as const,
 
     detail: (id: string) => [...ticketsQueryKeys.details(), id] as const,

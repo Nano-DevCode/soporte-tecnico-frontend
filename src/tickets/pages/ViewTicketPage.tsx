@@ -27,13 +27,14 @@ import { TechnicalReportsAccordionSkeleton } from '../../technical-reports/compo
 import { TicketActionsComponent } from '../components/details/TicketActions';
 import { TechnicalReportsOfTicketItems } from '@/technical-reports/components/TechnicalReportsItemsOfTicket';
 import type { SubmitSurveyPayload } from '../schemas/createSurveySchema';
+import { TicketActorsCardSkeleton } from '../components/Skeletons/TicketActorsCardSkeleton';
 
 export const ViewTicketPage = () => {
     const { id } = useParams();
     const { t } = useTranslation();
     const { navigateFallback } = useSmartNavigation('/tickets');
 
-    const { isLoading, isError, data: ticket } = useGetTicketById(id);
+    const { isLoading, isError, data: ticket, error } = useGetTicketById(id);
     const { mutate: startTicket, isPending: isStarting } = useStartTicket();
     const { mutate: closeTicket, isPending: isClosing } = useCloseTicket();
     const { mutate: archiveTicket, isPending: isArchiving } = useArchiveTicket();
@@ -43,13 +44,13 @@ export const ViewTicketPage = () => {
 
         if (isError || !ticket) {
             sileo.error({
-                title: t('tickets.not_found.title'),
-                description: t('tickets.not_found.message'),
+                title: t('common.errors.title'),
+                description: getAxiosErrorMessage(error),
                 duration: 6000,
             });
             navigateFallback();
         }
-    }, [isError, isLoading, ticket, t, navigateFallback]);
+    }, [isError, isLoading, ticket, t, navigateFallback, error]);
 
     const handleDirectAction = (event: TicketActionsType, payload?: SubmitSurveyPayload) => {
         if (!ticket) return;
@@ -130,22 +131,35 @@ export const ViewTicketPage = () => {
 
                 <DetailHeaderTicketSkeleton />
 
-                <TicketActionsSkeleton />
+                <Can permission='WATCH_TICKET_ACTIONS'>
+                    <TicketActionsSkeleton />
+                </Can>
 
-                <div className="hidden lg:block">
-                    <TicketStepperSkeleton />
-                </div>
+                <Can permission='WATCH_TICKET_STEPPER'>
+                    <div className="hidden lg:block">
+                        <TicketStepperSkeleton />
+                    </div>
+                </Can>
 
-                <div className="grid gap-4 lg:grid-cols-3">
-                    <div className="lg:col-span-1 order-2 lg:order-1 space-y-4">
-                        {/* <TicketActorsCardSkeleton /> */}
-                        <TicketTimeLineSkeleton />
+                <div className="flex flex-col lg:flex-row gap-4">
+                    <div className="order-2 lg:order-1 lg:w-1/3 shrink-0 space-y-4 empty:hidden">
+                        <Can permission='WATCH_TICKET_ACTORS'>
+                            <TicketActorsCardSkeleton />
+                        </Can>
+                        <Can permission='WATCH_TICKET_TIMELINE'>
+
+                            <TicketTimeLineSkeleton />
+                        </Can>
                     </div>
 
-                    <div className="lg:col-span-2 order-1 lg:order-2 space-y-4">
+                    <div className="order-1 lg:order-2 flex-1 min-w-0 space-y-4">
                         <DetailsTicketSkeleton />
-                        <TechnicalReportsAccordionSkeleton />
-                        <TicketDocumentsSkeleton />
+                        <Can permission='WATCH_TICKET_DOCUMENTS'>
+                            <TicketDocumentsSkeleton />
+                        </Can>
+                        <Can permission='WATCH_TECHNICAL_REPORT'>
+                            <TechnicalReportsAccordionSkeleton />
+                        </Can>
                     </div>
                 </div>
             </div>
@@ -182,8 +196,8 @@ export const ViewTicketPage = () => {
                 </div>
             </Can>
 
-            <div className="grid gap-4 lg:grid-cols-3">
-                <div className="lg:col-span-1 order-2 lg:order-1 space-y-4">
+            <div className="flex flex-col lg:flex-row gap-4">
+                <div className="order-2 lg:order-1 lg:w-1/3 shrink-0 space-y-4 empty:hidden">
                     <Can permission='WATCH_TICKET_ACTORS'>
                         <TicketActorsCard ticket={ticket} />
                     </Can>
@@ -192,15 +206,15 @@ export const ViewTicketPage = () => {
                     </Can>
                 </div>
 
-                <div className="lg:col-span-2 order-1 lg:order-2 space-y-4">
+                <div className="order-1 lg:order-2 flex-1 min-w-0 space-y-4">
                     <DetailsTicket ticket={ticket} />
-
-                    <Can permission='WATCH_TECHNICAL_REPORT'>
-                        {canWatchTechnicalReports && <TechnicalReportsOfTicketItems ticketId={ticket.id} />}
-                    </Can>
 
                     <Can permission='WATCH_TICKET_DOCUMENTS'>
                         <TicketDocuments documents={ticket.documents} />
+                    </Can>
+
+                    <Can permission='WATCH_TECHNICAL_REPORT'>
+                        {canWatchTechnicalReports && <TechnicalReportsOfTicketItems ticketId={ticket.id} />}
                     </Can>
                 </div>
             </div>

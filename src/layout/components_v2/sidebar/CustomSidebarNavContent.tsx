@@ -65,7 +65,7 @@ export const CustomSidebarNavContent = memo(() => {
     {
       title: t("tickets.menu_options.label"),
       icon: Headset,
-      show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
+      show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician || isVisitor,
       subItems: [
         {
           title: t("tickets.menu_options.current"),
@@ -77,13 +77,19 @@ export const CustomSidebarNavContent = memo(() => {
           title: t("tickets.menu_options.history"),
           icon: TicketCheck,
           path: "/tickets",
-          show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician,
+          show: isSuperAdmin || isBossCC || isCoordinator || isBoss || isPlaning || isSecretaryCC || isTechnician || isVisitor,
+        },
+        {
+          title: t("tickets.menu_options.archive"),
+          icon: Archive,
+          path: "/tickets/archives",
+          show: isSuperAdmin || isBossCC || isSecretaryCC || isPlaning,
         },
         {
           title: t("technical_reports.menu_item.title"),
           icon: ClipboardList,
           path: "/technical-reports",
-          show: isSuperAdmin || isBossCC || isCoordinator || isSecretaryCC || isTechnician,
+          show: isSuperAdmin || isBossCC || isCoordinator || isSecretaryCC || isTechnician || isVisitor,
         },
       ]
     },
@@ -140,18 +146,18 @@ export const CustomSidebarNavContent = memo(() => {
       title: t("custom_nav_content_subitem_list_school_periods"),
       icon: CalendarRange,
       path: "/school-period",
-      show: isSuperAdmin || isBossCC || isSecretaryCC,
+      show: isSuperAdmin || isBossCC,
     },
     {
       title: t("custom_nav_content_subitem_list_center_managers"),
       icon: ShieldUser,
       path: "/center-managers",
-      show: isSuperAdmin || isBossCC || isSecretaryCC,
+      show: isSuperAdmin || isBossCC,
     },
     {
       title: t("common.nav_content.settings.folios.item"),
       icon: FileDigit,
-      show: isSuperAdmin || isBossCC || isBoss,
+      show: isSuperAdmin || isBossCC || isBoss || isPlaning,
       subItems: [
         {
           title: t("common.nav_content.settings.folios.subitems.list_departments"),
@@ -163,7 +169,7 @@ export const CustomSidebarNavContent = memo(() => {
           title: t("common.nav_content.settings.folios.subitems.my_department"),
           icon: Building,
           path: "/folios/tickets/my-department",
-          show: isSuperAdmin || isBoss
+          show: isSuperAdmin || isBoss || isPlaning
         },
         {
           title: t("common.nav_content.settings.folios.subitems.responses"),
@@ -177,7 +183,7 @@ export const CustomSidebarNavContent = memo(() => {
       title: t("reports.menu.label"),
       icon: FileSpreadsheet,
       path: "/reports",
-      show: isSuperAdmin || isBossCC || isCoordinator || isSecretaryCC || isTechnician,
+      show: isSuperAdmin || isBossCC || isCoordinator || isSecretaryCC,
     },
     {
       title: t("settings"),

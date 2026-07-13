@@ -12,6 +12,9 @@ export const useArchiveTicket = () => {
             queryClient.invalidateQueries({
                 queryKey: ticketsQueryKeys.lists()
             });
+            queryClient.invalidateQueries({
+                queryKey: ticketsQueryKeys.currentLists()
+            });
             queryClient.setQueryData(
                 ticketsQueryKeys.detail(ticket.id),
                 ticket

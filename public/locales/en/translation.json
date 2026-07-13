@@ -1588,5 +1588,1436 @@
         }
       }
     }
+  },
+  "common": {
+    "buttons": {
+      "create": "Create",
+      "update": "Update",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "save_changes": "Save changes",
+      "view": "View Details",
+      "refresh": "Refresh",
+      "retry": "Retry",
+      "clean": "Clear",
+      "continue": "Yes, Continue",
+      "download_excel": "Download Excel",
+      "download_pdf": "Download PDF",
+      "downloading": "Downloading...",
+      "confirm": "Confirm"
+    },
+    "date": {
+      "no_date": "No date"
+    },
+    "metadata": {
+      "created_at": "Registration date",
+      "updated_at": "Last Update"
+    },
+    "notifications": {
+      "error_title": "An error occurred",
+      "empty_list": "No results"
+    },
+    "warnings": {
+      "discard_changes": "You have unsaved changes. Are you sure you want to leave?"
+    },
+    "filters": {
+      "label": "Filters",
+      "clean": "Clear",
+      "status": {
+        "name": "Status",
+        "options": {
+          "all": "All",
+          "active": "Active",
+          "inactive": "Inactive"
+        }
+      },
+      "search": "Search...",
+      "columns": "Columns",
+      "more_filters": "See more filters",
+      "less_filters": "Hide filters",
+      "all": "All"
+    },
+    "state": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "list": {
+      "totalData": "{{totalData}} results"
+    },
+    "fetch_error": {
+      "title": "Information unavailable",
+      "description": "There was a problem connecting to the server. Please try again, and if the problem persists, contact the Computing Center."
+    },
+    "inputs": {
+      "optional": "(Optional)",
+      "without_description": "No description"
+    },
+    "errors": {
+      "title": "An error has occurred!"
+    },
+    "nav_content": {
+      "settings": {
+        "folios": {
+          "item": "Folios",
+          "subitems": {
+            "list_departments": "Department Requests",
+            "responses": "Responses",
+            "my_department": "My department"
+          }
+        }
+      }
+    }
+  },
+  "center_managers": {
+    "list_page": {
+      "title": "Computing Center Managers Management",
+      "description": "Manage the Computing Center managers.",
+      "table": {
+        "headers": {
+          "name": "Name",
+          "rfc": "RFC",
+          "status": "Status",
+          "actions": "Actions"
+        }
+      },
+      "filters": {
+        "searchBar_placeholder": "Search Computing Center Manager..."
+      },
+      "actions": {
+        "new": "Add Computing Center Manager",
+        "activate": "Activate",
+        "deactivate": "Deactivate"
+      },
+      "empty": {
+        "title": "No Computing Center managers found",
+        "description": "Try adjusting the search filters"
+      }
+    },
+    "create_page": {
+      "title": "New Computing Center Manager",
+      "description": "Register a new computing center manager to group and manage future technical support requests.",
+      "success": {
+        "title": "Success",
+        "message": "Computing Center Manager successfully created."
+      },
+      "error": {
+        "title": "Error",
+        "message": "An error occurred while creating the Computing Center Manager."
+      }
+    },
+    "update_page": {
+      "title": "Edit Computing Center Manager",
+      "description": "Update the personal information, RFC, or general data of this manager.",
+      "success": {
+        "title": "Success",
+        "message": "Computing Center Manager successfully updated."
+      },
+      "error": {
+        "title": "Error",
+        "message": "An error occurred while updating the Computing Center Manager."
+      },
+      "not_found": {
+        "title": "Record not found",
+        "message": "The center manager you are trying to edit does not exist or has been deleted."
+      }
+    },
+    "view_page": {
+      "title": "Computing Center Manager Details",
+      "description": "Detailed, read-only information of the Computing Center manager",
+      "not_found": {
+        "title": "Record not found",
+        "message": "The center manager you are trying to view does not exist or has been deleted."
+      },
+      "sections": {
+        "personal_data": "Personal Data",
+        "administrative_record": "Administrative Record",
+        "status": "Record Status"
+      },
+      "status": {
+        "active": "Active record in the system",
+        "inactive": "Inactive record in the system"
+      }
+    },
+    "dialog": {
+      "active": {
+        "title": "Activate Computing Center Manager",
+        "description": "Do you confirm the activation of this manager? From this moment on, new technical support requests will be generated under their name.",
+        "notifications": {
+          "success": "The manager {{name}} has been activated."
+        }
+      },
+      "deactive": {
+        "title": "Deactivate Computing Center Manager",
+        "description": "Do you confirm the deactivation of this Computing Center manager? Doing so will suspend the creation of new technical support requests in the system.",
+        "notifications": {
+          "success": "The manager {{name}} has been deactivated."
+        }
+      }
+    },
+    "form": {
+      "header": {
+        "title": "Computing Center Manager Data",
+        "description": "Personal information."
+      },
+      "fields": {
+        "names": {
+          "label": "Name(s)",
+          "placeholder": "E.g. John"
+        },
+        "first_last_name": {
+          "label": "Paternal Last Name",
+          "placeholder": "E.g. Smith"
+        },
+        "second_last_name": {
+          "label": "Maternal Last Name",
+          "placeholder": "E.g. Doe"
+        },
+        "rfc": {
+          "label": "RFC",
+          "placeholder": "E.g. PEGJ800101XYZ",
+          "description": "13 alphanumeric characters. Will be converted to uppercase."
+        }
+      },
+      "errors": {
+        "names_required": "Name is required",
+        "names_max": "Name cannot exceed 100 characters",
+        "first_last_name_required": "Paternal last name is required",
+        "first_last_name_max": "Paternal last name cannot exceed 100 characters",
+        "second_last_name_required": "Maternal last name is required",
+        "second_last_name_max": "Maternal last name cannot exceed 100 characters",
+        "rfc_required": "RFC is required",
+        "rfc_min": "RFC must have at least 10 characters",
+        "rfc_max": "RFC cannot exceed 13 characters",
+        "rfc_format": "RFC can only contain letters and numbers"
+      }
+    }
+  },
+  "tickets": {
+    "menu_options": {
+      "label": "Help Desk",
+      "current": "My Current Requests",
+      "history": "My Request History",
+      "archive": "Closed and Archived Requests"
+    },
+    "document_not_found": "Pending",
+    "data": {
+      "affected_name": "Directly Responsible for the Equipment",
+      "sender_name": "Sender Name",
+      "department": "Department",
+      "email": "Email",
+      "equipment_location": "Equipment Location",
+      "available_hours": "Available Hours",
+      "issue_type": "Issue Type",
+      "description": "Detailed Description",
+      "coordinator": "Coordinator",
+      "asigned_to": "Assigned To",
+      "canalized_to": "Referred To",
+      "date": "Date",
+      "status": "Status"
+    },
+    "data_default": {
+      "department": "No department",
+      "school_period": "N/A",
+      "issue_type": "General",
+      "tags": "Unclassified"
+    },
+    "filters": {
+      "status": "Status",
+      "priority": "Priority",
+      "date": {
+        "label": "Date",
+        "from": "From",
+        "to": "To",
+        "wathever": "Any",
+        "no_date": "None"
+      }
+    },
+    "status": {
+      "RECIBIDA": {
+        "name": "Received",
+        "description": "The request has entered the system and is queued for review."
+      },
+      "RECHAZADA": {
+        "name": "Rejected",
+        "description": "The request is not applicable or lacks the necessary information."
+      },
+      "CANALIZADA": {
+        "name": "Referred",
+        "description": "The request has been sent to the specialized area for handling."
+      },
+      "ASIGNADA": {
+        "name": "Assigned",
+        "description": "A specific technician has taken responsibility for this request."
+      },
+      "ATENDIENDO": {
+        "name": "In Progress",
+        "description": "The technician is actively working on the solution."
+      },
+      "SOLUCIONADA": {
+        "name": "Resolved",
+        "description": "The technical issue has been successfully resolved."
+      },
+      "NO_SOLUCIONADA": {
+        "name": "Not Resolved",
+        "description": "It was not possible to resolve the issue with the current resources."
+      },
+      "PAUSADA": {
+        "name": "Paused",
+        "description": "Work is stopped (e.g., waiting for a part or user response)."
+      },
+      "FINALIZADA": {
+        "name": "Finished",
+        "description": "The technical process has concluded and is awaiting administrative closure."
+      },
+      "CERRADA": {
+        "name": "Closed",
+        "description": "The request has completed its entire lifecycle."
+      },
+      "ARCHIVADA": {
+        "name": "Archived",
+        "description": "The old request has been moved to the history."
+      },
+      "UNKNOWN": {
+        "name": "Unknown",
+        "description": "Status not recognized by the system."
+      }
+    },
+    "priority": {
+      "1": {
+        "name": "Critical",
+        "description": "Emergency. Affects the entire institution or halts a vital service."
+      },
+      "2": {
+        "name": "High",
+        "description": "Affects a department or important process, halting key functions."
+      },
+      "3": {
+        "name": "Medium",
+        "description": "Standard failure. Affects a user but their general work can continue."
+      },
+      "4": {
+        "name": "Low",
+        "description": "Preventive requests, inquiries, or cosmetic issues that do not affect operations."
+      },
+      "UNKNOWN": {
+        "name": "Unknown",
+        "description": "Priority level not defined in the system."
+      }
+    },
+    "actions": {
+      "unhandled_event": "Event {{event}} is not handled in ViewTicketPage.",
+      "create": {
+        "label": "Create"
+      },
+      "on_behalf": {
+        "label": "New Request For"
+      },
+      "edit": {
+        "label": "Edit"
+      },
+      "reject": {
+        "label": "Reject"
+      },
+      "route": {
+        "label": "Refer"
+      },
+      "assign": {
+        "label": "Assign Technicians"
+      },
+      "attend": {
+        "label": "Start Working",
+        "confirm_title": "Start working on the request?",
+        "confirm_message": "Your start time will be recorded and the requester will be notified.",
+        "success": {
+          "title": "Work started!",
+          "description": "The resolution time has begun."
+        },
+        "error": {
+          "description": "Could not start work. Please try again."
+        }
+      },
+      "finish": {
+        "label": "Log Response"
+      },
+      "close": {
+        "label": "Close",
+        "confirm_title": "Close request?",
+        "confirm_message": "Confirm receipt of the work order to conclude the request.",
+        "success": {
+          "title": "Request closed!",
+          "description": "The request has been permanently closed and can no longer be modified."
+        },
+        "error": {
+          "description": "Could not close the request. Please check the status and try again."
+        }
+      },
+      "archive": {
+        "label": "Archive",
+        "confirm_title": "Archive this request?",
+        "confirm_message": "Confirm receipt of the request forms.",
+        "success": {
+          "title": "Request archived!",
+          "description": "The request has been successfully moved to the historical archive."
+        },
+        "error": {
+          "description": "Could not archive the request. Please try again."
+        }
+      },
+      "intervene": {
+        "label": "Add Log Entry"
+      },
+      "watch_response": {
+        "label": "View Work Order"
+      }
+    },
+    "documents": {
+      "request_pdf": "Maintenance Request Form",
+      "work_order_pdf": "Work Order (Final Report)",
+      "errors": {
+        "title": "An error has occurred!",
+        "loading_request": "An error occurred while trying to open the technical support request. Please try again.",
+        "loading_response": "An error occurred while trying to open the work order. Please try again."
+      }
+    },
+    "not_found": {
+      "title": "Request not found",
+      "message": "The request you are trying to access does not exist or has been deleted."
+    },
+    "view_page": {
+      "title": "Request Progress",
+      "description": "View the progress of the request",
+      "details": {
+        "sections": {
+          "requester_info": "Requester Information",
+          "issue_details": "Issue Details",
+          "sender_info": "Sender Information"
+        }
+      },
+      "timeline": {
+        "title": "Change History",
+        "description": "View changes to the request"
+      },
+      "involved_staff": {
+        "title": "Involved Staff",
+        "description": "Staff involved in the request"
+      },
+      "technical_reports": {
+        "title": "Logs",
+        "description": "History of logs generated for this request."
+      },
+      "documents": {
+        "title": "Documents",
+        "description": "Files and forms generated from this request."
+      }
+    },
+    "reject_page": {
+      "title": "Reject Request",
+      "description": "The request will be returned for modification",
+      "success": {
+        "title": "Request rejected",
+        "message": "The justification has been saved and the request has been successfully rejected."
+      },
+      "error": {
+        "title": "Error rejecting",
+        "message": "There was a problem trying to reject the request."
+      }
+    },
+    "edit_page": {
+      "title": "Edit Request",
+      "description": "Modify the request information.",
+      "success": {
+        "title": "Request updated",
+        "message": "The changes have been saved successfully."
+      },
+      "error": {
+        "title": "Error editing",
+        "message": "There was a problem trying to update the request."
+      }
+    },
+    "list_page": {
+      "title": "Request List",
+      "description": "View and manage all technical support requests registered in the system",
+      "actions": {
+        "new": "New Request",
+        "route": "Refer",
+        "start": "Refer",
+        "assigne": "Assign",
+        "edit": "Edit",
+        "reject": "Reject"
+      },
+      "table": {
+        "headers": {
+          "folio": "Folio",
+          "department_manager": "Department Manager",
+          "department": "Department",
+          "issue_type": "Issue",
+          "created_at": "Date",
+          "status": "Status",
+          "priority": "Priority",
+          "school_period": "Period",
+          "actions": "Actions",
+          "tags": "Tags",
+          "request_document": "Request Form",
+          "response_document": "Response Form"
+        }
+      },
+      "empty": {
+        "title": "No Requests found",
+        "description": "Try adjusting the search filters"
+      },
+      "error": {
+        "title": "Could not load requests",
+        "description": "There was a connection problem with the server. Please try again."
+      }
+    },
+    "list_current_page": {
+      "title": "Current Requests List",
+      "description": "View and manage current technical support requests."
+    },
+    "list_archive_page": {
+      "title": "Closed and Archived Requests",
+      "description": "View all technical support requests that have completed their service cycle and manage their receipt and documentation.",
+      "empty": {
+        "title": "No closed or archived requests",
+        "description": "There are no requests that have been closed or archived in the system yet."
+      },
+      "error": {
+        "title": "Error loading history",
+        "description": "We could not load the list of closed and archived requests. Please try again."
+      }
+    },
+    "create_page": {
+      "title": "New Technical Support Request",
+      "description": "Register a new technical support request.",
+      "success": {
+        "title": "Success",
+        "message": "Request sent."
+      },
+      "error": {
+        "title": "Error",
+        "message": "An error occurred while sending the technical support request."
+      }
+    },
+    "create_on_behalf_page": {
+      "title": "New Technical Support Request For...",
+      "description": "Register a new technical support request on behalf of a specific department.",
+      "success": {
+        "title": "Success",
+        "message": "Request sent."
+      },
+      "error": {
+        "title": "Error",
+        "message": "An error occurred while sending the technical support request."
+      }
+    },
+    "assign_page": {
+      "title": "Assign technicians to the request",
+      "description": "Assign the technicians who will handle the request.",
+      "success": {
+        "title": "Successful assignment",
+        "message": "Technicians assigned."
+      },
+      "error": {
+        "title": "Error assigning",
+        "message": "An error occurred while assigning the technicians."
+      },
+      "fetch_error": {
+        "title": "Information unavailable",
+        "description": "There was a problem connecting to the server. You have been redirected to the main list for safety."
+      }
+    },
+    "finish_page": {
+      "title": "Log work order",
+      "description": "Log the details of the work order to finish this technical support request.",
+      "success": {
+        "title": "Request finished",
+        "message": "The request has been successfully finished."
+      },
+      "error": {
+        "title": "Error finishing request",
+        "message": "An error occurred while trying to finish the request, please try again."
+      }
+    },
+    "intervene_page": {
+      "title": "Add intervention log",
+      "description": "Document the progress in handling this request.",
+      "success": {
+        "title": "Log added",
+        "message": "The log has been successfully added."
+      },
+      "error": {
+        "title": "Error saving",
+        "message": "An error occurred while saving the request log."
+      }
+    },
+    "route_page": {
+      "title": "Refer Request",
+      "description": "Refer the request to a coordinator for handling.",
+      "success": {
+        "title": "Request referred",
+        "message": "The request has been successfully referred"
+      },
+      "error": {
+        "title": "Error saving",
+        "message": "An error occurred while referring the technical support request."
+      }
+    },
+    "form": {
+      "header": {
+        "title": "Request Data",
+        "description": "Technical support request information."
+      },
+      "reject": {
+        "header": {
+          "title": "Reject Request",
+          "description": "Indicate the reason why this request does not proceed."
+        },
+        "fields": {
+          "justification": {
+            "label": "Rejection Justification",
+            "placeholder": "Explain in detail the reason why this request does not proceed..."
+          }
+        },
+        "buttons": {
+          "submit": "Confirm Rejection"
+        },
+        "errors": {
+          "justification_required": "You must provide a justification for the rejection.",
+          "justification_min": "The justification must have at least 10 characters.",
+          "justification_max": "The justification is too long (maximum 1000 characters)."
+        }
+      },
+      "intervene": {
+        "header": {
+          "title": "Intervention Log Form",
+          "description": "Complete the following log fields."
+        },
+        "fields": {
+          "diagnosis": {
+            "label": "Technical Diagnosis",
+            "placeholder": "E.g. The power supply was burned out due to a voltage variation..."
+          },
+          "work_performed": {
+            "label": "Work Performed",
+            "placeholder": "E.g. The power supply was replaced and a general cleaning was done..."
+          },
+          "required_materials": {
+            "label": "Other materials used",
+            "placeholder": "E.g. Paper was used for cleaning. (Leave blank if not applicable)",
+            "description": "Describe if any other material outside the inventory was used, otherwise the checkout of said material from the inventory must be registered (Request it from the inventory administrator)."
+          },
+          "is_resolved": {
+            "label": "Was the request issue resolved?",
+            "options": {
+              "yes": {
+                "label": "Yes, issue resolved",
+                "description": "The incident was successfully resolved and the equipment or service is operating normally."
+              },
+              "no": {
+                "label": "No, requires follow-up",
+                "description": "The issue persists. It requires spare parts, time, or a second review."
+              }
+            }
+          },
+          "tags": {
+            "label": "Add classification tags for the request",
+            "placeholder": "Search tags",
+            "description": "Type and press 'Create' to add new tags.",
+            "create": {
+              "label": "Create tag"
+            },
+            "not_found": {
+              "label": "No tags found."
+            },
+            "searching": "Searching for matches...",
+            "loading_more": "Loading more..."
+          },
+          "equipment_ids": {
+            "label": "Affected equipment",
+            "placeholder": "Search equipment by inventory number",
+            "description": "Search and select the equipment affected in this intervention...",
+            "not_found": {
+              "label": "No equipment found with that inventory number."
+            },
+            "searching": "Searching for matches...",
+            "loading_more": "Loading more..."
+          },
+          "fault_validity": {
+            "label": "Nature of the issue",
+            "placeholder": "Select an option...",
+            "description": "Select the option that best describes the cause of the issue described in the request."
+          }
+        },
+        "buttons": {
+          "submit": "Save Log"
+        },
+        "errors": {
+          "diagnosis_required": "Diagnosis is required.",
+          "diagnosis_min": "Diagnosis must have at least 10 characters.",
+          "diagnosis_max": "Diagnosis cannot exceed 1000 characters.",
+          "work_performed_required": "You must describe the work performed.",
+          "work_performed_min": "Work description must have at least 10 characters.",
+          "work_performed_max": "Work description cannot exceed 2000 characters.",
+          "materials_required": "The materials field is required (can be left empty).",
+          "materials_max": "The materials list cannot exceed 500 characters.",
+          "is_resolved_required": "You must indicate whether the request was resolved or not.",
+          "is_resolved_invalid": "The resolution value must be true or false.",
+          "tags_invalid": "The tag must be valid text.",
+          "tags_min": "Tags must have at least 2 characters.",
+          "tags_max": "Tags cannot exceed 30 characters.",
+          "tags_max_items": "You cannot add more than 10 tags per intervention.",
+          "equipments_invalid": "The equipment must be a valid text.",
+          "fault_validity_required": "You must select the nature of the intervention.",
+          "fault_validity_invalid": "The validity selection is invalid.",
+          "tags_required_when_resolved": "You must add at least one tag if the request was resolved."
+        }
+      },
+      "finish": {
+        "header": {
+          "title": "Work Order",
+          "description": "Complete the work order information."
+        },
+        "fields": {
+          "diagnosis": {
+            "label": "Final Diagnosis",
+            "placeholder": "E.g. A network node failure was confirmed due to wiring in poor condition..."
+          },
+          "work_done": {
+            "label": "Work Done",
+            "placeholder": "E.g. A new RJ45 connector was crimped and connectivity was validated..."
+          },
+          "maintenance_type": {
+            "label": "Maintenance Type",
+            "placeholder": "Select an option..."
+          },
+          "service_type": {
+            "label": "Service Type",
+            "placeholder": "Select an option..."
+          }
+        },
+        "buttons": {
+          "submit": "Finish Request"
+        },
+        "errors": {
+          "diagnosis_required": "The final diagnosis is required.",
+          "diagnosis_min": "The diagnosis must have at least 10 characters.",
+          "diagnosis_max": "The diagnosis cannot exceed 1000 characters.",
+          "work_done_required": "The description of the work done is required.",
+          "work_done_min": "The work done must have at least 10 characters.",
+          "work_done_max": "The work done cannot exceed 2000 characters.",
+          "maintenance_type_required": "You must select the maintenance type.",
+          "service_type_required": "You must select the service type."
+        }
+      },
+      "route": {
+        "header": {
+          "title": "Refer Request",
+          "description": "Select the corresponding coordination to handle this request."
+        },
+        "fields": {
+          "coordination": {
+            "label": "Coordination",
+            "placeholder": "Select the coordination..."
+          },
+          "coordinator": {
+            "label": "Coordinator",
+            "placeholder": "Select a coordinator...",
+            "not_found": "No coordinator found."
+          },
+          "priority": {
+            "label": "Priority",
+            "placeholder": "Select the attention priority..."
+          }
+        },
+        "buttons": {
+          "submit": "Confirm Referral"
+        },
+        "errors": {
+          "coordination_required": "You must select a coordinator.",
+          "priority_required": "You must assign a priority to the request.",
+          "priority_invalid": "The priority must be a valid integer.",
+          "priority_min": "The minimum allowed priority is 1.",
+          "priority_max": "The maximum allowed priority is 4."
+        }
+      },
+      "assign": {
+        "header": {
+          "title": "Assign Technicians",
+          "description": "Select up to 4 technicians to handle this request."
+        },
+        "fields": {
+          "technicians": {
+            "label": "Assigned Technicians",
+            "placeholder": "Search technician...",
+            "not_found": "No technician found.",
+            "description": "4 selected"
+          }
+        },
+        "buttons": {
+          "submit": "Assign Technicians"
+        },
+        "errors": {
+          "technicians_required": "You must select the technicians to assign to the request.",
+          "technicians_min": "Please select at least one technician.",
+          "technicians_max": "You cannot assign this request to more than 4 technicians."
+        }
+      },
+      "create_on_behalf": {
+        "fields": {
+          "department_manager": {
+            "label": "Department Manager",
+            "description": "The request will be issued on behalf of the selected department manager",
+            "placeholder": "Search and Select the department manager...",
+            "empty": "No matches found with that name"
+          }
+        }
+      },
+      "fields": {
+        "affected_name": {
+          "label": "Name of the person directly responsible for the equipment",
+          "placeholder": "E.g. John Doe"
+        },
+        "contact_email": {
+          "label": "Contact Email",
+          "placeholder": "user@example.com"
+        },
+        "equipment_location": {
+          "label": "Equipment Location",
+          "placeholder": "E.g. Computer Lab, Machine 15"
+        },
+        "available_hours": {
+          "label": "Available hours for service",
+          "placeholder": "E.g. Monday to Friday from 10:00 to 14:00"
+        },
+        "issue_type": {
+          "label": "Issue Type",
+          "placeholder": "Select a category..."
+        },
+        "evidence_url": {
+          "label": "Evidence URL (Optional)",
+          "placeholder": "https://...",
+          "description": "Select an image to upload"
+        },
+        "description": {
+          "label": "Detailed description of the issue",
+          "placeholder": "Describe step by step what happened or the behavior of the equipment..."
+        }
+      },
+      "errors": {
+        "description_required": "The problem description is required.",
+        "description_max": "The description cannot exceed 1000 characters.",
+        "affected_name_required": "The name of the person directly responsible for the equipment is required.",
+        "affected_name_max": "The name cannot exceed 100 characters.",
+        "evidence_url_format": "Enter a valid URL starting with http:// or https://.",
+        "contact_email_required": "The contact email is required.",
+        "contact_email_format": "Enter a valid email address (e.g., user@example.com).",
+        "available_hours_required": "Please indicate what time you are available.",
+        "available_hours_max": "The hours text cannot exceed 100 characters.",
+        "equipment_location_required": "The equipment location is required.",
+        "equipment_location_max": "The location cannot exceed 200 characters.",
+        "issue_type_required": "You must select a category or issue type.",
+        "issue_type_invalid": "The selected issue type is invalid.",
+        "user_id_invalid": "The selected user is invalid.",
+        "user_id_required": "The Department Manager is required."
+      }
+    },
+    "components": {
+      "ticketDetailsCard": {
+        "loading": "Loading full request information...",
+        "headerTitle": "Associated Request Details",
+        "unclassified": "Unclassified",
+        "status": "STATUS",
+        "fields": {
+          "affected": "Affected",
+          "location": "Location",
+          "priority": "Priority",
+          "level": "Level",
+          "schedule": "Available Hours",
+          "na": "N/A",
+          "description": "Problem Description (Original Report)",
+          "boss": "Department Manager",
+          "technicians": "Assigned Technicians"
+        }
+      }
+    }
+  },
+  "rejection_reports": {
+    "header": {
+      "title": "Log Rejection Report",
+      "description": "Reason why the request did not proceed."
+    },
+    "sections": {
+      "details": "Rejection Report"
+    },
+    "data": {
+      "date": "Rejection date",
+      "justification": "Reason for rejection"
+    },
+    "not_found": {
+      "title": "Report not found",
+      "message": "The report you are trying to access does not exist or has been deleted."
+    },
+    "error": {
+      "title": "Error loading",
+      "description": "Could not retrieve the rejection report. Check your connection."
+    }
+  },
+  "technical_reports": {
+    "name_list": "Log No.",
+    "name_element": "Technical Log",
+    "data": {
+      "diagnosis": "Technical Diagnosis",
+      "work_done": "Work Performed",
+      "materials_used": "Other Materials Used",
+      "materials_none_used": "None",
+      "fault_validity": "Nature of the intervention",
+      "equipments": "Affected Equipment",
+      "date": "Date",
+      "is_resolved": {
+        "label": "Issue status",
+        "true": "Resolved",
+        "false": "Not resolved"
+      }
+    },
+    "empty": {
+      "title": "No solutions found",
+      "description": "Try searching with other keywords or describe the symptom differently.",
+      "no_interventions": "No logged interventions."
+    },
+    "not_found": {
+      "title": "Log not found.",
+      "description": "Please try again"
+    },
+    "menu_item": {
+      "title": "Logs"
+    },
+    "list_page": {
+      "title": "Logs",
+      "description": "View and manage all logs registered in the system",
+      "actions": {},
+      "table": {
+        "headers": {}
+      },
+      "empty": {
+        "title": "No logs found",
+        "description": "Try adjusting the search filters"
+      }
+    },
+    "view_page": {
+      "title": "Log Details",
+      "description": "View the details of the log",
+      "details": {
+        "header": {
+          "title": "Log Information",
+          "description": "Information about the service provided to the request"
+        },
+        "sections": {
+          "requester_info": "Requester Information",
+          "issue_details": "Issue Details",
+          "sender_info": "Sender Information"
+        }
+      }
+    },
+    "edit_page": {
+      "title": "Edit log",
+      "description": "Edit the log information",
+      "details": {
+        "sections": {
+          "requester_info": "Requester Information",
+          "issue_details": "Issue Details",
+          "sender_info": "Sender Information"
+        }
+      }
+    },
+    "error": {
+      "title": "Error loading",
+      "description": "Could not retrieve the logs. Check your connection."
+    }
+  },
+  "responses": {
+    "data": {
+      "diagnosis": "Diagnosis",
+      "work_done": "Work Done",
+      "date": "Date",
+      "ticket_folio": "Request folio",
+      "response_folio": "Work order folio",
+      "maintenance_type": "Maintenance type",
+      "service_type": "Service type"
+    },
+    "not_found": {
+      "title": "Work order not found.",
+      "message": "Please try again"
+    },
+    "document_not_found": "Pending",
+    "view_page": {
+      "title": "Work Order Details",
+      "description": "View the details of the work order",
+      "details": {
+        "header": {
+          "title": "Work order information",
+          "description": "Information about the response issued to the requester."
+        }
+      }
+    },
+    "edit_page": {
+      "title": "Edit Work Order",
+      "description": "Edit the work order information",
+      "details": {
+        "header": {
+          "title": "Work order information",
+          "description": "Information about the response issued to the requester."
+        }
+      },
+      "success": {
+        "title": "Response Updated",
+        "message": "The response data was updated successfully"
+      },
+      "error": {
+        "title": "An error has occurred!",
+        "message": "The response data could not be updated"
+      }
+    }
+  },
+  "folios": {
+    "data": {
+      "department_name": "Department",
+      "acronym": "Acronym",
+      "period_name": "Period",
+      "current_value": "Current number",
+      "next_value": "Next number",
+      "next_folio_preview": "Next folio"
+    },
+    "tickets": {
+      "data_description": {
+        "current_value": "Folio number of the last request generated by this department",
+        "next_value": "Folio number that the next request generated by this department will have",
+        "next_folio_preview": "Folio that the next request generated by this department will have"
+      },
+      "not_found": {
+        "title": "Request folio details for the department not found",
+        "message": "Could not find the request folio details for the specified department"
+      },
+      "view_page": {
+        "title": "Department request folio details",
+        "description": "View the current information of the department's request folio",
+        "details": {
+          "sections": {
+            "department_details": "Department information",
+            "folio_details": "Current folio details",
+            "period_details": "Period information"
+          }
+        }
+      },
+      "view_my_department_page": {
+        "title": "Your department request folio details",
+        "description": "View the current information of your department's request folio",
+        "details": {
+          "sections": {
+            "department_details": "Department information",
+            "folio_details": "Current folio details",
+            "period_details": "Period information"
+          }
+        }
+      },
+      "edit_page": {
+        "title": "Edit department request folio",
+        "description": "Modify the request folio for the selected department.",
+        "success": {
+          "title": "Request folio updated",
+          "message": "The changes have been saved successfully."
+        },
+        "details": {
+          "sections": {
+            "config": "Configure the new value for the folio"
+          }
+        },
+        "error": {
+          "title": "Error editing the request folio",
+          "message": "There was a problem trying to update the department's request folio."
+        }
+      },
+      "edit_my_department_page": {
+        "title": "Edit your department request folio",
+        "description": "Modify your department's request folio.",
+        "success": {
+          "title": "Request folio updated",
+          "message": "The changes have been saved successfully."
+        },
+        "details": {
+          "sections": {
+            "config": "Configure the new value for the folio"
+          }
+        },
+        "error": {
+          "title": "Error editing the request folio",
+          "message": "There was a problem trying to update the department's request folio."
+        }
+      },
+      "forms": {
+        "folio": {
+          "header": {
+            "title": "Request folio data",
+            "description": "Information on the request folio value"
+          },
+          "fields": {
+            "folio": {
+              "label": "Folio number for the next request",
+              "placeholder": "Enter the folio number",
+              "description": "The entered number will be the number taken by the next request created by the department."
+            },
+            "next_folio_preview": {
+              "label": "Folio preview for the next request",
+              "placeholder": "Enter a folio number",
+              "description": "The next request created by the department will have the following folio after saving the change."
+            }
+          },
+          "buttons": {
+            "submit": "Save"
+          },
+          "errors": {
+            "requested_folio_required": "The folio number is required.",
+            "requested_folio_invalid": "The folio number must be a valid integer.",
+            "requested_folio_positive": "The folio number must be greater than zero.",
+            "requested_min_folio": "The folio number must be greater than the next folio number: {{currentValueFolio}}."
+          }
+        }
+      }
+    },
+    "responses": {
+      "data_description": {
+        "current_value": "Folio number of the last generated response.",
+        "next_value": "Folio number that the next generated response will have.",
+        "next_folio_preview": "Folio that the next generated response will have."
+      },
+      "not_found": {
+        "title": "Response folio details not found",
+        "message": "Could not find the details for the response folio."
+      },
+      "view_page": {
+        "title": "Department response folio details",
+        "description": "View the current status of the department's response folio",
+        "details": {
+          "sections": {
+            "department_details": "Department information",
+            "folio_details": "Current folio details",
+            "period_details": "Period information"
+          }
+        }
+      },
+      "edit_page": {
+        "title": "Edit the response folio",
+        "description": "Modify the response folio.",
+        "success": {
+          "title": "Response folio updated",
+          "message": "The changes have been saved successfully."
+        },
+        "details": {
+          "sections": {
+            "config": "Configure the new value for the folio"
+          }
+        },
+        "error": {
+          "title": "Error editing the response folio",
+          "message": "There was a problem trying to update the department's response folio."
+        }
+      },
+      "forms": {
+        "folio": {
+          "header": {
+            "title": "Response folio data",
+            "description": "Information on the response folio value"
+          },
+          "fields": {
+            "folio": {
+              "label": "Folio number for the next response",
+              "placeholder": "Enter the folio number",
+              "description": "The entered number will be the number taken by the next response created after saving the change."
+            },
+            "next_folio_preview": {
+              "label": "Folio preview for the next response",
+              "placeholder": "Enter a folio number",
+              "description": "The next response created will have the following folio after saving the change."
+            }
+          },
+          "buttons": {
+            "submit": "Save"
+          },
+          "errors": {
+            "requested_folio_required": "The folio number is required.",
+            "requested_folio_invalid": "The folio number must be a valid integer.",
+            "requested_folio_positive": "The folio number must be greater than zero.",
+            "requested_min_folio": "The folio number must be greater than the next folio number: {{currentValueFolio}}."
+          }
+        }
+      }
+    },
+    "actions": {
+      "config_folio": "Configure Folio"
+    },
+    "list_page": {
+      "title": "Request Folios",
+      "description": "View and configure the request folios for each department.",
+      "actions": {
+        "change": "Change Folio"
+      },
+      "table": {
+        "headers": {
+          "department_name": "Department",
+          "acronym": "Acronym",
+          "period_name": "Period",
+          "current_value": "Current value",
+          "next_value": "Next value",
+          "next_folio_preview": "Next folio preview",
+          "actions": "Actions"
+        }
+      },
+      "empty": {
+        "title": "No records found",
+        "description": "Try adjusting the search filters"
+      },
+      "error": {
+        "title": "Could not load the folios",
+        "description": "There was a connection problem with the server. Please try again."
+      }
+    }
+  },
+  "dashboards": {
+    "title": "Dashboard",
+    "metrics": {
+      "error": "Error loading metric",
+      "no_data": "No data found",
+      "mttr": {
+        "title": "Mean Time To Recovery",
+        "meta_text": "Target: ≤ {{meta}} hours",
+        "under_target": "below target (Excellent)",
+        "over_target": "above target (Critical)",
+        "hours_suffix": "hrs",
+        "vs_previous": "vs. previous quarter",
+        "previous_period": "Previous MTTR: {{previous}} hrs"
+      },
+      "critical_availability": {
+        "title": "Critical Services Availability",
+        "meta_text": "Established target: {{meta}}%",
+        "above_target": "above target",
+        "below_target": "below target"
+      },
+      "critical_interruptions": {
+        "title": "Critical Interruptions per Month",
+        "description": "Requests with critical priority reported",
+        "empty": "No critical requests were logged in this period.",
+        "bar_label": "Critical failures",
+        "xlabel": "Month",
+        "ylabel": "Quantity"
+      },
+      "resolution_time": {
+        "title": "Average Resolution Time (Hours)",
+        "priority_1": "Critical",
+        "priority_2": "High",
+        "priority_3": "Medium",
+        "priority_4": "Low",
+        "xlabel": "Priority",
+        "ylabel": "Hours"
+      },
+      "first_level_resolution": {
+        "title": "First Contact Resolution (FCR)",
+        "above_target": "above target",
+        "below_target": "below target",
+        "meta_text": "Established target: {{meta}}%",
+        "details_text": "{{first}} out of {{total}} requests resolved without escalation"
+      },
+      "sla_compliance": {
+        "title": "SLA Compliance",
+        "above_target": "above target",
+        "below_target": "below target",
+        "meta_text": "Established target: {{meta}}%",
+        "details_text": "{{met}} out of {{total}} requests resolved on time"
+      },
+      "maintenance": {
+        "title": "Equipment Maintained",
+        "at_target": "target achieved",
+        "below_target": "below target",
+        "meta_text": "Scheduled target: {{meta}}%",
+        "details_text": "{{maintained}} out of {{total}} equipment serviced"
+      },
+      "cost_per_incident": {
+        "title": "Cost per Incident",
+        "under_budget": "under budget",
+        "over_budget": "over budget",
+        "meta_text": "Established limit: {{meta}}",
+        "details_text": "Total spend: {{cost}} on {{total}} requests"
+      },
+      "satisfaction": {
+        "title": "User Satisfaction",
+        "description": "Percentage of users who rated the service with 4 or 5 stars.",
+        "goal": "Target",
+        "meta_achieved": "Target achieved",
+        "meta_below": "Below target",
+        "avg_score_label": "Average Score",
+        "surveys_label": "Surveys",
+        "surveys_count": "{{count}} answered",
+        "breakdown_title": "Breakdown by evaluated aspect",
+        "empty": {
+          "title": "No information available",
+          "description": "Could not load satisfaction metrics with the current filters."
+        }
+      }
+    },
+    "common": {
+      "noDataAvailable": "No data available for the selected period."
+    },
+    "charts": {
+      "common": {
+        "totalTickets": "Total Requests"
+      },
+      "department": {
+        "title": "Requests by Department",
+        "description": "Distribution of handled incidents by area",
+        "xlabel": "Quantity",
+        "ylabel": "Department"
+      },
+      "issueType": {
+        "title": "Requests by Issue Type",
+        "description": "Classification of incidents by their technical nature",
+        "xlabel": "Issue Types",
+        "ylabel": "Quantity"
+      }
+    }
+  },
+  "reports": {
+    "menu": {
+      "label": "Reports"
+    },
+    "page_title": "Reports",
+    "page_description": "Generate and download statistical and operational system reports.",
+    "coming_soon": "Module under construction. Available soon.",
+    "tickets_summary": {
+      "title": "Requests Summary",
+      "description": "General statistics of technical support requests.",
+      "select_period": "Select a period"
+    },
+    "performance": {
+      "title": "Technician Performance",
+      "description": "Metrics for resolution times and workload per technician."
+    },
+    "errors": {
+      "period_requiered": "The school period is required"
+    }
+  },
+  "school_periods": {
+    "not_found": {
+      "title": "An error has occurred!",
+      "message": "There was an error retrieving the selected period, please try again."
+    },
+    "edit_page": {
+      "success": {
+        "title": "Success",
+        "message": "The period has been successfully updated"
+      },
+      "error": {
+        "title": "An error has occurred!"
+      }
+    }
+  },
+  "surveys": {
+    "menu": {
+      "questions": "Satisfaction Questions"
+    },
+    "questions": {
+      "data": {
+        "question": "Question",
+        "type": "Question type",
+        "type_options": {
+          "RATING": "Rating",
+          "TEXT": "Open text"
+        },
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "actions": {
+        "activate": "Activate",
+        "deactivate": "Deactivate"
+      },
+      "dialogs": {
+        "activate_title": "Activate this question?",
+        "activate_desc": "The question \"{{question}}\" will be available again and will be presented to users when closing new support requests.",
+        "deactivate_title": "Deactivate this question?",
+        "deactivate_desc": "The question \"{{question}}\" will be hidden from future forms. This will not alter existing historical responses."
+      },
+      "notifications": {
+        "activated_success": "The question was activated successfully.",
+        "deactivated_success": "The question was deactivated successfully.",
+        "status_error": "An error occurred while trying to change the question status."
+      },
+      "list_page": {
+        "title": "Question Management",
+        "description": "Manage the catalog of active and inactive questions for the satisfaction form.",
+        "actions": {
+          "new": "New Question"
+        },
+        "error": {
+          "title": "Error loading questions",
+          "description": "A technical problem occurred while retrieving the question catalog. Please try again."
+        },
+        "empty": {
+          "title": "No questions registered",
+          "description": "No satisfaction questions were found that match the current filters or the catalog is empty."
+        }
+      },
+      "create_page": {
+        "title": "New Question",
+        "description": "Add a new question to the technical support satisfaction form.",
+        "success": {
+          "title": "Question created",
+          "message": "The question has been saved successfully, activate it to make it available in the catalog."
+        },
+        "error": {
+          "title": "Error creating the question"
+        }
+      },
+      "edit_page": {
+        "title": "Edit Question",
+        "description": "Modify the text or response type of the selected satisfaction question.",
+        "success": {
+          "title": "Question updated",
+          "message": "The changes have been saved successfully."
+        },
+        "error": {
+          "title": "Error updating",
+          "not_found": "The requested question was not found or is no longer available."
+        }
+      },
+      "form": {
+        "header": {
+          "title": "Satisfaction Question Form",
+          "description": "Configure the text and response type for technical support satisfaction surveys."
+        },
+        "fields": {
+          "text": {
+            "label": "Satisfaction question",
+            "placeholder": "E.g: How would you rate the service received from the technician?"
+          },
+          "type": {
+            "label": "Response type",
+            "placeholder": "Select the response format..."
+          },
+          "is_active": {
+            "label": "Question active and visible to users when closing requests"
+          }
+        },
+        "validation": {
+          "text_required": "The question text is required.",
+          "text_string": "Must be a valid string.",
+          "text_min": "The question is too short (minimum {{min}} characters).",
+          "text_max": "The question cannot exceed {{max}} characters.",
+          "type_required": "Select a question type.",
+          "type_invalid": "The selected question type is invalid."
+        }
+      },
+      "types": {
+        "rating": "1 to 5 Star Rating",
+        "text": "Open comment (Free text)"
+      }
+    }
   }
 }

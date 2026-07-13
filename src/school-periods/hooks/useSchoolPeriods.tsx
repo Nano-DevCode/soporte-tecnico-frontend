@@ -4,7 +4,11 @@ import { getSchoolPeriodsAction } from "../actions/get-school-periods.action";
 import { schoolPeriodQueryKeys } from "../keys/school-period-query.keys";
 import { STALE_TIME_5_MIN } from "@/config/query-constants";
 
-export const useSchoolPeriods = () => {
+interface Options {
+  enabled?: boolean;
+}
+
+export const useSchoolPeriods = (options?: Options) => {
 
   const [searchParams] = useSearchParams();
 
@@ -28,6 +32,7 @@ export const useSchoolPeriods = () => {
     }),
     placeholderData: keepPreviousData,
     staleTime: STALE_TIME_5_MIN,
+    enabled: options?.enabled !== undefined ? options.enabled : true,
   })
 
   return { data, isLoading, isError, isFetching, refetch, isPlaceholderData };

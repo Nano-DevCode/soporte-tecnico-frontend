@@ -48,7 +48,7 @@ export const CreateTicketPage = () => {
             navigateSmartBack();
 
         } catch (error) {
-            if (isAxiosError(error) && error.response?.status === 409) {
+            if (isAxiosError(error) && error.response?.status === 429) {
                 return;
             }
             console.error("Error en la mutación:", error);

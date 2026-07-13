@@ -14,6 +14,7 @@ import { TextHighlighter } from "@/components/custom/TextHoi";
 import { TechnicalIsResolvedBadge } from "../ui/TechnicalIsResolvedBadge";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
+import { Can } from "@/common/permission/Can";
 
 export interface SimpleTicket {
     id: string;
@@ -93,7 +94,7 @@ export const CustomTechnicalReportElement = ({ ticket, searchTerm }: Props) => {
                                             <div className="flex items-center gap-2">
                                                 <FileText className="h-4 w-4 text-muted-foreground" />
                                                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                                                    Bitácora
+                                                    {t('technical_reports.name_element')}
                                                 </span>
                                             </div>
                                             <div className="flex flex-wrap-reverse items-center justify-end gap-2">
@@ -108,7 +109,7 @@ export const CustomTechnicalReportElement = ({ ticket, searchTerm }: Props) => {
                                             <div className="space-y-1.5">
                                                 <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                                                     <PackageSearch className="h-3.5 w-3.5" />
-                                                    Diagnóstico
+                                                    {t('technical_reports.data.diagnosis')}
                                                 </div>
                                                 <p className="text-sm text-foreground leading-relaxed line-clamp-2">
                                                     <TextHighlighter text={report.diagnosis} search={searchTerm} />
@@ -118,7 +119,7 @@ export const CustomTechnicalReportElement = ({ ticket, searchTerm }: Props) => {
                                             <div className="space-y-1.5">
                                                 <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                                                     <Wrench className="h-3.5 w-3.5" />
-                                                    Trabajo Realizado
+                                                    {t('technical_reports.data.work_done')}
                                                 </div>
                                                 <p className="text-sm text-foreground leading-relaxed line-clamp-2">
                                                     <TextHighlighter text={report.work_performed} search={searchTerm} />
@@ -133,13 +134,15 @@ export const CustomTechnicalReportElement = ({ ticket, searchTerm }: Props) => {
                                             }>
                                                 {t('common.buttons.view')}
                                             </Button>
-                                            <Button size={"xs"} onClick={(e) => {
-                                                e.stopPropagation();
-                                                navigate(`/technical-reports/${report.id}/edit`)
-                                            }
-                                            }>
-                                                {t('common.buttons.edit')}
-                                            </Button>
+                                            <Can permission="EDIT_TECHNICAL_REPORT">
+                                                <Button size={"xs"} onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    navigate(`/technical-reports/${report.id}/edit`)
+                                                }
+                                                }>
+                                                    {t('common.buttons.edit')}
+                                                </Button>
+                                            </Can>
                                         </div>
 
                                     </div>
@@ -152,7 +155,7 @@ export const CustomTechnicalReportElement = ({ ticket, searchTerm }: Props) => {
                                 <div className="absolute left-0 top-7 w-6 border-t-2 border-muted/60" />
                                 <div className="absolute -left-0.5 top-7.25 bottom-0 w-1 bg-background" />
                                 <div className="text-sm text-muted-foreground italic bg-muted/20 px-4 py-2 rounded-lg border border-dashed inline-block">
-                                    No hay intervenciones registradas.
+                                    {t('technical_reports.empty.no_interventions')}
                                 </div>
                             </div>
                         )}

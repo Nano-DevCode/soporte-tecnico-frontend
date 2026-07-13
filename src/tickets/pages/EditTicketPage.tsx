@@ -23,7 +23,7 @@ export const EditTicketPage = () => {
     const { navigateFallback, navigateSmartBack } = useSmartNavigation('/tickets');
 
     const { data: issueTypes, isLoading: isLoadingIssues, isError: isErrorIssue } = useAllIssueTypes();
-    const { data: ticket, isLoading: isLoadingTicket, isError: isErrorTicket } = useGetTicketById(id);
+    const { data: ticket, isLoading: isLoadingTicket, isError: isErrorTicket, error } = useGetTicketById(id);
     const { mutate, isPending, isSuccess } = useEditTicket();
 
     const isLoading = isLoadingIssues || isLoadingTicket;
@@ -33,8 +33,8 @@ export const EditTicketPage = () => {
 
         if (isErrorTicket || !ticket) {
             sileo.error({
-                title: t('tickets.not_found.title'),
-                description: t('tickets.not_found.message'),
+                title: t('common.errors.title'),
+                description: getAxiosErrorMessage(error),
                 duration: 6000,
             });
             navigateFallback();
@@ -49,7 +49,7 @@ export const EditTicketPage = () => {
             });
             navigateFallback();
         }
-    }, [isLoading, isErrorTicket, ticket, isErrorIssue, issueTypes, t, navigateFallback]);
+    }, [isLoading, isErrorTicket, ticket, isErrorIssue, issueTypes, t, navigateFallback, error]);
 
     const handleSubmit = (values: TicketFormOutput) => {
         if (!id) return;

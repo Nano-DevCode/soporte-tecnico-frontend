@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
@@ -27,6 +27,7 @@ import type { DepartmentManager } from "@/common/department-managers/interfaces/
 import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "@/components/ui/combobox";
 import { getFullName } from "@/lib/helpers/toFullName";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
     ticket?: TicketDetailsResponse,
@@ -35,13 +36,14 @@ interface Props {
     issueTypes: IssueType[]
     departmentManagers: DepartmentManager[]
 
-    onSubmit: (ticket: TicketOnBehalfFormOutput) => void,
+    onSubmit: (ticket: TicketOnBehalfFormOutput, idempotencyKey: string) => void,
     onCancel: () => void,
 
 }
 
 export const CreateTicketOnBehalfForm = ({ onSubmit, isPending, titleButton, onCancel, issueTypes, departmentManagers }: Props) => {
     const { t } = useTranslation();
+    const [idempotencyKey] = useState(() => uuidv4());
 
     const schema = useMemo(() => TicketOnBehalfSchema(t), [t]);
 
@@ -60,6 +62,10 @@ export const CreateTicketOnBehalfForm = ({ onSubmit, isPending, titleButton, onC
     });
 
     const isBusy = isPending || form.formState.isSubmitting;
+
+    const handleSafeSubmit = (data: TicketOnBehalfFormOutput) => {
+        onSubmit(data, idempotencyKey);
+    };
 
     const handleCancel = () => {
         if (form.formState.isDirty) {
@@ -81,7 +87,7 @@ export const CreateTicketOnBehalfForm = ({ onSubmit, isPending, titleButton, onC
             <Separator />
             <CardContent>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} noValidate id="form-ticket">
+                    <form onSubmit={form.handleSubmit(handleSafeSubmit)} noValidate id="form-ticket">
 
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 items-start">
                             <FormField

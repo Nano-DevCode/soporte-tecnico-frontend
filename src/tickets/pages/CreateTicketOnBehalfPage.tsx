@@ -10,12 +10,13 @@ import { CustomFormPageLayout } from "@/components/custom/CustomFormPageLayout";
 import { CreateTicketOnBehalfForm } from "../components/forms/CreateTicketOnBehalfForm";
 import { useGetDepartmentManagers } from "@/common/department-managers/hooks/useGetDepartmentManagers";
 import { TicketOnBehalfFormSkeleton } from "../components/Skeletons/TickeOnBehalfFormSkeleton";
+import { isAxiosError } from "axios";
 
 export const CreateTicketOnBehalfPage = () => {
     const { t } = useTranslation();
     const { navigateFallback, navigateSmartBack } = useSmartNavigation('/tickets');
 
-    const { mutate, isPending, isSuccess } = useCreateTicketOnBehalf();
+    const { mutateAsync, isPending, isSuccess } = useCreateTicketOnBehalf();
 
     const { data: issueTypes, isLoading: isIssueLoading, isError: isIssueError } = useAllIssueTypes();
     const { data: managers, isLoading: isManagersLoading, isError: isManagersError } = useGetDepartmentManagers();
@@ -36,25 +37,27 @@ export const CreateTicketOnBehalfPage = () => {
         }
     }, [isError, isLoading, issueTypes, managers, navigateFallback, t]);
 
-    const handleSubmit = (values: TicketOnBehalfFormOutput) => {
-        mutate(values, {
-            onSuccess: () => {
-                sileo.success({
-                    title: t('tickets.create_page.success.title'),
-                    description: t('tickets.create_page.success.message'),
-                    duration: 5000,
-                });
-                navigateSmartBack();
-            },
-            onError: (error) => {
-                console.error("Error en la mutación:", error);
-                sileo.error({
-                    title: t('tickets.create_page.error.title'),
-                    description: getAxiosErrorMessage(error),
-                    duration: 7000,
-                });
-            },
-        });
+    const handleSubmit = async (values: TicketOnBehalfFormOutput, idempotencyKey: string) => {
+        try {
+            await mutateAsync({ data: values, idempotencyKey });
+
+            sileo.success({
+                title: t('tickets.create_page.success.title'),
+                description: t('tickets.create_page.success.message'),
+                duration: 5000,
+            });
+            navigateSmartBack();
+
+        } catch (error) {
+            if (isAxiosError(error) && error.response?.status === 429) {
+                return;
+            }
+            sileo.error({
+                title: t('tickets.create_page.error.title'),
+                description: getAxiosErrorMessage(error as Error),
+                duration: 7000,
+            });
+        }
     };
 
     const handleCancel = () => {

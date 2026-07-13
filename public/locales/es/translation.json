@@ -193,7 +193,7 @@
       "refresh": "Recargar",
       "retry": "Reintentar",
       "clean": "Limpiar",
-      "continue": "Si, Continuar",
+      "continue": "Sí, Continuar",
       "download_excel": "Descargar Excel",
       "download_pdf": "Descargar PDF",
       "downloading": "Descargando...",
@@ -226,7 +226,7 @@
       },
       "search": "Buscar...",
       "columns": "Columnas",
-      "more_filters": "Ver mas filtros",
+      "more_filters": "Ver más filtros",
       "less_filters": "Ocultar filtros",
       "all": "Todos"
     },
@@ -239,14 +239,14 @@
     },
     "fetch_error": {
       "title": "Información no disponible",
-      "description": "Hubo un problema al conectar con el servidor. Por favor intenta de nuevo y si el problema persiste, comunicate con el Centro de Cómputo."
+      "description": "Hubo un problema al conectar con el servidor. Por favor intenta de nuevo y si el problema persiste, comunícate con el Centro de Cómputo."
     },
     "inputs": {
       "optional": "(Opcional)",
       "without_description": "Sin descripción"
     },
     "errors": {
-      "title": "!Ha ocurrido un error!"
+      "title": "¡Ha ocurrido un error!"
     },
     "nav_content": {
       "settings": {
@@ -283,7 +283,7 @@
       },
       "empty": {
         "title": "No se encontraron jefes de Centro de Cómputo",
-        "description": "Intenta ajustar los filtros de busqueda"
+        "description": "Intenta ajustar los filtros de búsqueda"
       }
     },
     "create_page": {
@@ -334,14 +334,14 @@
     "dialog": {
       "active": {
         "title": "Activar Jefe de Centro de Cómputo",
-        "description": "¿Confirmas la activación de este responsable? A partir de este momento, las nuevas órdenes de trabajo se generarán bajo su nombre.",
+        "description": "¿Confirmas la activación de este responsable? A partir de este momento, las nuevas respuestas de solicitudes de soporte técnico se generarán bajo su nombre.",
         "notifications": {
           "success": "El responsable {{name}} ha sido activado."
         }
       },
       "deactive": {
         "title": "Desactivar Jefe de Centro de Cómputo",
-        "description": "¿Confirmas la desactivación de este responsable del Centro de Cómputo? Al hacerlo, se suspenderá la creación de nuevas órdenes de trabajo en el sistema.",
+        "description": "¿Confirmas la desactivación de este responsable del Centro de Cómputo? Al hacerlo, se suspenderá la posibilidad de responder solicitudes de soporte técnico en el sistema.",
         "notifications": {
           "success": "El responsable {{name}} ha sido desactivado."
         }
@@ -388,8 +388,9 @@
   "tickets": {
     "menu_options": {
       "label": "Mesa de ayuda",
-      "current": "Solicitudes Actuales",
-      "history": "Historial de Solicitudes"
+      "current": "Mis Solicitudes Actuales",
+      "history": "Historial de Solicitudes",
+      "archive": "Solicitudes Cerradas y Archivadas"
     },
     "document_not_found": "Pendiente",
     "data": {
@@ -403,7 +404,7 @@
       "description": "Descripción detallada",
       "coordinator": "Coordinador",
       "asigned_to": "Asignado a",
-      "canalized_to": "Canalizado a ",
+      "canalized_to": "Canalizado a",
       "date": "Fecha",
       "status": "Estado"
     },
@@ -427,19 +428,19 @@
     "status": {
       "RECIBIDA": {
         "name": "Recibida",
-        "description": "El ticket ha entrado al sistema y está en cola para ser revisado."
+        "description": "La solicitud ha entrado al sistema y está en cola para ser revisada."
       },
       "RECHAZADA": {
         "name": "Rechazada",
-        "description": "El ticket no procede o no cuenta con la información necesaria."
+        "description": "La solicitud no procede o no cuenta con la información necesaria."
       },
       "CANALIZADA": {
         "name": "Canalizada",
-        "description": "El ticket ha sido enviado al área especializada para su atención."
+        "description": "La solicitud ha sido enviada al área especializada para su atención."
       },
       "ASIGNADA": {
         "name": "Asignada",
-        "description": "Un técnico específico ya ha tomado la responsabilidad de este ticket."
+        "description": "Un técnico específico ya ha tomado la responsabilidad de esta solicitud."
       },
       "ATENDIENDO": {
         "name": "Atendiendo",
@@ -463,11 +464,11 @@
       },
       "CERRADA": {
         "name": "Cerrada",
-        "description": "El ticket ha completado todo su ciclo de vida."
+        "description": "La solicitud ha completado todo su ciclo de vida."
       },
       "ARCHIVADA": {
         "name": "Archivada",
-        "description": "El ticket antiguo ha sido movido al historial."
+        "description": "La solicitud antigua ha sido archivada."
       },
       "UNKNOWN": {
         "name": "Desconocido",
@@ -477,19 +478,19 @@
     "priority": {
       "1": {
         "name": "Crítica",
-        "description": "Emergencia. Afecta a toda la institución o detiene un servicio vital. SLA: 1 a 4 horas."
+        "description": "Emergencia. Afecta a toda la institución o detiene un servicio vital."
       },
       "2": {
         "name": "Alta",
-        "description": "Afecta a un departamento o proceso importante, deteniendo funciones clave. SLA: 4 a 8 horas."
+        "description": "Afecta a un departamento o proceso importante, deteniendo funciones clave."
       },
       "3": {
         "name": "Media",
-        "description": "Falla estándar. Afecta a un usuario pero su trabajo general puede continuar. SLA: 1 a 3 días hábiles."
+        "description": "Falla estándar. Afecta a un usuario pero su trabajo general puede continuar."
       },
       "4": {
         "name": "Baja",
-        "description": "Solicitudes preventivas, dudas o problemas estéticos que no afectan la operación. SLA: 3 a 5 días hábiles."
+        "description": "Solicitudes preventivas, dudas o problemas estéticos que no afectan la operación."
       },
       "UNKNOWN": {
         "name": "Desconocida",
@@ -502,7 +503,7 @@
         "label": "Crear"
       },
       "on_behalf": {
-        "label": "Nuevo Ticket Para"
+        "label": "Nueva Solicitud Para"
       },
       "edit": {
         "label": "Editar"
@@ -518,7 +519,7 @@
       },
       "attend": {
         "label": "Comenzar a Atender",
-        "confirm_title": "¿Iniciar atención del ticket?",
+        "confirm_title": "¿Iniciar atención de la solicitud?",
         "confirm_message": "Se registrará tu hora de inicio y se notificará al solicitante.",
         "success": {
           "title": "¡Atención iniciada!",
@@ -536,11 +537,11 @@
         "confirm_title": "¿Cerrar solicitud?",
         "confirm_message": "Confirme la recepción de la orden de trabajo para dar por concluida la solicitud.",
         "success": {
-          "title": "¡Ticket cerrado!",
-          "description": "El ticket se ha cerrado definitivamente y ya no admite modificaciones."
+          "title": "¡Solicitud cerrada!",
+          "description": "La solicitud se ha cerrado definitivamente y ya no admite modificaciones."
         },
         "error": {
-          "description": "No se pudo cerrar el ticket. Por favor, verifica el estado e inténtalo de nuevo."
+          "description": "No se pudo cerrar la solicitud. Por favor, verifica el estado e inténtalo de nuevo."
         }
       },
       "archive": {
@@ -548,11 +549,11 @@
         "confirm_title": "¿Archivar esta solicitud?",
         "confirm_message": "Confirme la recepción de los formatos de la solicitud.",
         "success": {
-          "title": "¡Ticket archivado!",
-          "description": "El ticket ha sido movido al archivo histórico exitosamente."
+          "title": "¡Solicitud archivada!",
+          "description": "La solicitud ha sido movida al archivo histórico exitosamente."
         },
         "error": {
-          "description": "No se pudo archivar el ticket. Por favor, inténtalo de nuevo."
+          "description": "No se pudo archivar la solicitud. Por favor, inténtalo de nuevo."
         }
       },
       "intervene": {
@@ -566,14 +567,14 @@
       "request_pdf": "Formato de Solicitud de Mantenimiento",
       "work_order_pdf": "Orden de Trabajo (Reporte Final)",
       "errors": {
-        "title": "!Ha ocurrido un error!",
+        "title": "¡Ha ocurrido un error!",
         "loading_request": "Ocurrió un error al intentar abrir la solicitud de soporte técnico. Por favor, intenta de nuevo.",
         "loading_response": "Ocurrió un error al intentar abrir la orden de trabajo. Por favor, intenta de nuevo."
       }
     },
     "not_found": {
-      "title": "Ticket no encontrado",
-      "message": "El ticket al que intentas acceder no existe o fue eliminado."
+      "title": "Solicitud no encontrada",
+      "message": "La solicitud a la que intentas acceder no existe o fue eliminada."
     },
     "view_page": {
       "title": "Progreso de la solicitud",
@@ -586,7 +587,7 @@
         }
       },
       "timeline": {
-        "title": "Historial de cambio",
+        "title": "Historial de cambios",
         "description": "Visualiza los cambios de la solicitud"
       },
       "involved_staff": {
@@ -595,7 +596,7 @@
       },
       "technical_reports": {
         "title": "Bitácoras",
-        "description": "Historial de bitácoras generadas para este ticket."
+        "description": "Historial de bitácoras generadas para esta solicitud."
       },
       "documents": {
         "title": "Documentos",
@@ -604,10 +605,10 @@
     },
     "reject_page": {
       "title": "Rechazar Solicitud",
-      "description": "La solicitud será devuelto para su modificación",
+      "description": "La solicitud será devuelta para su modificación",
       "success": {
         "title": "Solicitud rechazada",
-        "message": "La justificación se ha guardado y la solicitud ha sido rechazado correctamente."
+        "message": "La justificación se ha guardado y la solicitud ha sido rechazada correctamente."
       },
       "error": {
         "title": "Error al rechazar",
@@ -618,19 +619,19 @@
       "title": "Editar Solicitud",
       "description": "Modifica la información de la solicitud.",
       "success": {
-        "title": "Ticket actualizado",
+        "title": "Solicitud actualizada",
         "message": "Los cambios se han guardado correctamente."
       },
       "error": {
         "title": "Error al editar",
-        "message": "Hubo un problema al intentar actualizar el ticket."
+        "message": "Hubo un problema al intentar actualizar la solicitud."
       }
     },
     "list_page": {
       "title": "Lista de Solicitudes",
       "description": "Visualiza y gestiona todas las solicitudes de soporte técnico registradas en el sistema",
       "actions": {
-        "new": "Nuevo Ticket",
+        "new": "Nueva Solicitud",
         "route": "Canalizar",
         "start": "Canalizar",
         "assigne": "Asignar",
@@ -655,10 +656,10 @@
       },
       "empty": {
         "title": "No se encontraron Solicitudes",
-        "description": "Intenta ajustar los filtros de busqueda"
+        "description": "Intenta ajustar los filtros de búsqueda"
       },
       "error": {
-        "title": "No se pudieron cargar los tickets",
+        "title": "No se pudieron cargar las solicitudes",
         "description": "Hubo un problema de conexión con el servidor. Por favor, intenta de nuevo."
       }
     },
@@ -666,9 +667,21 @@
       "title": "Lista de Solicitudes Actuales",
       "description": "Visualiza y gestiona las solicitudes de soporte técnico actuales."
     },
+    "list_archive_page": {
+      "title": "Solicitudes Cerradas y Archivadas",
+      "description": "Visualiza todas las solicitudes de soporte técnico que han concluido su ciclo de atención y gestiona su recepción y documentación.",
+      "empty": {
+        "title": "No hay solicitudes cerradas o archivadas",
+        "description": "Aún no hay solicitudes que hayan sido cerradas o archivadas en el sistema."
+      },
+      "error": {
+        "title": "Error al cargar el historial",
+        "description": "No pudimos cargar la lista de solicitudes cerradas y archivadas. Por favor, intenta de nuevo."
+      }
+    },
     "create_page": {
       "title": "Nueva Solicitud de Soporte Técnico",
-      "description": "Registra una nueva solicitud de soporte tecnico.",
+      "description": "Registra una nueva solicitud de soporte técnico.",
       "success": {
         "title": "Éxito",
         "message": "Solicitud enviada."
@@ -680,7 +693,7 @@
     },
     "create_on_behalf_page": {
       "title": "Nueva Solicitud de Soporte Técnico Para...",
-      "description": "Registra una nueva solicitud de soporte tecnico a nombre de un departamento en especifico.",
+      "description": "Registra una nueva solicitud de soporte técnico a nombre de un Departamento en específico.",
       "success": {
         "title": "Éxito",
         "message": "Solicitud enviada."
@@ -692,7 +705,7 @@
     },
     "assign_page": {
       "title": "Asignar técnicos a la solicitud",
-      "description": "Asigna a los técnicos que atenderan la solicitud.",
+      "description": "Asigna a los técnicos que atenderán la solicitud.",
       "success": {
         "title": "Asignación exitosa",
         "message": "Técnicos asignados."
@@ -715,7 +728,7 @@
       },
       "error": {
         "title": "Error al finalizar la solicitud",
-        "message": "Ocurrió un error al intentar finalizar la solicitud, por favor intentelo nuevamente."
+        "message": "Ocurrió un error al intentar finalizar la solicitud, por favor inténtelo nuevamente."
       }
     },
     "intervene_page": {
@@ -784,7 +797,7 @@
           "required_materials": {
             "label": "Otros materiales utilizados",
             "placeholder": "Ej. Se utilizó papel para limpiar. (Dejar en blanco si no aplica)",
-            "description": "Describe si se utilizó algun otro material ajeno al inventario, en caso contrario se debe registrar la salida de dicho material del inventario (Solicitalo al administrador del inventario)."
+            "description": "Describe si se utilizó algún otro material ajeno al inventario, en caso contrario se debe registrar la salida de dicho material del inventario (Solicítalo al administrador del inventario)."
           },
           "is_resolved": {
             "label": "¿El problema de la solicitud fue solucionado?",
@@ -802,7 +815,7 @@
           "tags": {
             "label": "Agrega etiquetas de clasificación para la solicitud",
             "placeholder": "Buscar etiquetas",
-            "description": "Escribe y presiona 'Crear' para anadir nuevas etiquetas.",
+            "description": "Escribe y presiona 'Crear' para añadir nuevas etiquetas.",
             "create": {
               "label": "Crear etiqueta"
             },
@@ -849,7 +862,7 @@
           "equipments_invalid": "La etiqueta debe ser un texto válido.",
           "fault_validity_required": "Debe seleccionar la naturaleza de la intervención.",
           "fault_validity_invalid": "La selección de validez no es válida.",
-          "tags_required_when_resolved": "Debe agregar al menos una etiqueta (tag) si el ticket fue solucionado."
+          "tags_required_when_resolved": "Debe agregar al menos una etiqueta (tag) si la solicitud fue solucionada."
         }
       },
       "finish": {
@@ -876,7 +889,7 @@
           }
         },
         "buttons": {
-          "submit": "Finalizar Ticket"
+          "submit": "Finalizar Solicitud"
         },
         "errors": {
           "diagnosis_required": "El diagnóstico final es obligatorio.",
@@ -891,8 +904,8 @@
       },
       "route": {
         "header": {
-          "title": "Canalizar Ticket",
-          "description": "Selecciona la coordinación correspondiente para atender este ticket."
+          "title": "Canalizar Solicitud",
+          "description": "Selecciona la coordinación correspondiente para atender esta solicitud."
         },
         "fields": {
           "coordination": {
@@ -914,7 +927,7 @@
         },
         "errors": {
           "coordination_required": "Debes seleccionar a un coordinador.",
-          "priority_required": "Debes asignar una prioridad al ticket.",
+          "priority_required": "Debes asignar una prioridad a la solicitud.",
           "priority_invalid": "La prioridad debe ser un número entero válido.",
           "priority_min": "La prioridad mínima permitida es 1.",
           "priority_max": "La prioridad máxima permitida es 4."
@@ -923,7 +936,7 @@
       "assign": {
         "header": {
           "title": "Asignar Técnicos",
-          "description": "Selecciona hasta 4 técnicos para atender este ticket."
+          "description": "Selecciona hasta 4 técnicos para atender esta solicitud."
         },
         "fields": {
           "technicians": {
@@ -937,16 +950,16 @@
           "submit": "Asignar Técnicos"
         },
         "errors": {
-          "technicians_required": "Debes seleccionar a los técnicos para asignar el ticket.",
+          "technicians_required": "Debes seleccionar a los técnicos para asignar la solicitud.",
           "technicians_min": "Por favor, selecciona al menos un técnico.",
-          "technicians_max": "No puedes asignar este ticket a más de 4 técnicos."
+          "technicians_max": "No puedes asignar esta solicitud a más de 4 técnicos."
         }
       },
       "create_on_behalf": {
         "fields": {
           "department_manager": {
             "label": "Jefe de Departamento",
-            "description": "La solicitud saldra a nombre del jefe de departamento seleccionado",
+            "description": "La solicitud saldrá a nombre del jefe de departamento seleccionado",
             "placeholder": "Busca y Selecciona al jefe de departamento...",
             "empty": "No se encontraron coincidencias con ese nombre"
           }
@@ -1003,8 +1016,8 @@
     },
     "components": {
       "ticketDetailsCard": {
-        "loading": "Cargando información completa del ticket...",
-        "headerTitle": "Detalles del Ticket Asociado",
+        "loading": "Cargando información completa de la solicitud...",
+        "headerTitle": "Detalles de la Solicitud Asociada",
         "unclassified": "Sin Clasificar",
         "status": "ESTADO",
         "fields": {
@@ -1027,15 +1040,15 @@
       "description": "Motivo por el cual la solicitud no procedió."
     },
     "sections": {
-      "details": "Rrporte de Rechazo"
+      "details": "Reporte de Rechazo"
     },
     "data": {
       "date": "Fecha de rechazo",
       "justification": "Motivo del rechazo"
     },
     "not_found": {
-      "title": "Reporte no encontrado",
-      "message": "El Reporte al que intentas acceder no existe o fue eliminado."
+      "title": "Reporte de rechazo no encontrado",
+      "message": "El reporte al que intentas acceder no existe o fue eliminado."
     },
     "error": {
       "title": "Error al cargar",
@@ -1044,6 +1057,7 @@
   },
   "technical_reports": {
     "name_list": "Bitácora No.",
+    "name_element": "Bitácora Técnica",
     "data": {
       "diagnosis": "Diagnóstico Técnico",
       "work_done": "Trabajo Realizado",
@@ -1058,8 +1072,13 @@
         "false": "No solucionado"
       }
     },
+    "empty": {
+      "title": "No se encontraron coincidencias",
+      "description": "Intenta buscar con otras palabras clave o describe el síntoma de otra forma.",
+      "no_interventions": "No hay intervenciones registradas."
+    },
     "not_found": {
-      "title": "No se encontro la bitácora.",
+      "title": "No se encontró la bitácora.",
       "description": "Por favor intente de nuevo"
     },
     "menu_item": {
@@ -1073,8 +1092,8 @@
         "headers": {}
       },
       "empty": {
-        "title": "No se encontraron Bitácoras",
-        "description": "Intenta ajustar los filtros de busqueda"
+        "title": "No se encontraron bitácoras",
+        "description": "Intenta ajustar los filtros de búsqueda"
       }
     },
     "view_page": {
@@ -1083,7 +1102,7 @@
       "details": {
         "header": {
           "title": "Información de la Bitácora",
-          "description": "Información sobre la atención realizada la solicitud"
+          "description": "Información sobre la atención realizada a la solicitud"
         },
         "sections": {
           "requester_info": "Información del solicitante",
@@ -1105,7 +1124,7 @@
     },
     "error": {
       "title": "Error al cargar",
-      "description": "No se pudieron obtener las Bitácoras. Revisa tu conexión."
+      "description": "No se pudieron obtener las bitácoras. Revisa tu conexión."
     }
   },
   "responses": {
@@ -1119,12 +1138,12 @@
       "service_type": "Tipo de servicio"
     },
     "not_found": {
-      "title": "No se encontro la orden de trabajo.",
+      "title": "No se encontró la orden de trabajo.",
       "message": "Por favor intente de nuevo"
     },
     "document_not_found": "Pendiente",
     "view_page": {
-      "title": "Detalles de la Orden de trabajo",
+      "title": "Detalles de la orden de trabajo",
       "description": "Visualiza los detalles de la orden de trabajo",
       "details": {
         "header": {
@@ -1134,7 +1153,7 @@
       }
     },
     "edit_page": {
-      "title": "Editar Orden de trabajo",
+      "title": "Editar orden de trabajo",
       "description": "Edita la información de la orden de trabajo",
       "details": {
         "header": {
@@ -1142,13 +1161,13 @@
           "description": "Información sobre la respuesta emitida al solicitante."
         }
       },
-       "success": {
+      "success": {
         "title": "Respuesta Actualizada",
-        "message": "Se actualizarón los datos de las respuesta"
+        "message": "Se actualizaron los datos de la respuesta"
       },
       "error": {
-        "title": "!Ha ocurrido un error!",
-        "message": "Se actualizarón los datos de las respuesta"
+        "title": "¡Ha ocurrido un error!",
+        "message": "No se pudieron actualizar los datos de la respuesta"
       }
     }
   },
@@ -1163,9 +1182,9 @@
     },
     "tickets": {
       "data_description": {
-        "current_value": "Número de folio de la ultima solicitud generada por este departamento",
-        "next_value": "Número de folio que tendra la siguiente solicitud generada por este departamento",
-        "next_folio_preview": "Folio que tendra la siguiente solicitud generada por este departamento"
+        "current_value": "Número de folio de la última solicitud generada por este departamento",
+        "next_value": "Número de folio que tendrá la siguiente solicitud generada por este departamento",
+        "next_folio_preview": "Folio que tendrá la siguiente solicitud generada por este departamento"
       },
       "not_found": {
         "title": "Detalles del folio de solicitudes para el departamento no encontrados",
@@ -1194,7 +1213,7 @@
         }
       },
       "edit_page": {
-        "title": "Editar Folio de solicitud del departamento",
+        "title": "Editar folio de solicitud del departamento",
         "description": "Modifica el folio de la solicitud para el departamento seleccionado.",
         "success": {
           "title": "Folio de solicitud actualizado",
@@ -1237,12 +1256,12 @@
             "folio": {
               "label": "Número del folio para la siguiente solicitud",
               "placeholder": "Ingresa el número de folio",
-              "description": "El número ingresado sera el número que tome la siguiente solicitud creada por el departamento."
+              "description": "El número ingresado será el número que tome la siguiente solicitud creada por el departamento."
             },
             "next_folio_preview": {
-              "label": "Previsualización del Folio para la siguiente solicitud",
+              "label": "Previsualización del folio para la siguiente solicitud",
               "placeholder": "Ingresa un número de folio",
-              "description": "La siguiente solicitud creada por el departamento tendra el siguiente folio despues de guardar el cambio."
+              "description": "La siguiente solicitud creada por el departamento tendrá el siguiente folio después de guardar el cambio."
             }
           },
           "buttons": {
@@ -1259,9 +1278,9 @@
     },
     "responses": {
       "data_description": {
-        "current_value": "Número de folio de la ultima respuesta generada.",
-        "next_value": "Número de folio que tendra la siguiente respuesta generada.",
-        "next_folio_preview": "Folio que tendra la siguiente respuesta generada."
+        "current_value": "Número de folio de la última respuesta generada.",
+        "next_value": "Número de folio que tendrá la siguiente respuesta generada.",
+        "next_folio_preview": "Folio que tendrá la siguiente respuesta generada."
       },
       "not_found": {
         "title": "Detalles del folio de respuestas no encontrados",
@@ -1273,8 +1292,8 @@
         "details": {
           "sections": {
             "department_details": "Información del departamento",
-            "folio_details": "Detalles actuales del Folio",
-            "period_details": "Información del perido"
+            "folio_details": "Detalles actuales del folio",
+            "period_details": "Información del periodo"
           }
         }
       },
@@ -1305,12 +1324,12 @@
             "folio": {
               "label": "Número del folio para la siguiente respuesta",
               "placeholder": "Ingresa el número de folio",
-              "description": "El número ingresado sera el número que tome la siguiente respuesta que se cree despues de guardar el cambio."
+              "description": "El número ingresado será el número que tome la siguiente respuesta que se cree después de guardar el cambio."
             },
             "next_folio_preview": {
-              "label": "Previsualización del Folio para la siguiente solicitud",
+              "label": "Previsualización del folio para la siguiente solicitud",
               "placeholder": "Ingresa un número de folio",
-              "description": "La siguiente respuesta que se cree tendra el siguiente folio despues de guardar el cambio."
+              "description": "La siguiente respuesta que se cree tendrá el siguiente folio después de guardar el cambio."
             }
           },
           "buttons": {
@@ -1347,7 +1366,7 @@
       },
       "empty": {
         "title": "No se encontraron registros",
-        "description": "Intenta ajustar los filtros de busqueda"
+        "description": "Intenta ajustar los filtros de búsqueda"
       },
       "error": {
         "title": "No se pudieron cargar los folios",
@@ -1397,14 +1416,14 @@
         "above_target": "por encima de la meta",
         "below_target": "por debajo de la meta",
         "meta_text": "Meta establecida: {{meta}}%",
-        "details_text": "{{first}} de {{total}} tickets resueltos sin escalar"
+        "details_text": "{{first}} de {{total}} solicitudes resueltas sin escalar"
       },
       "sla_compliance": {
         "title": "Cumplimiento de SLA",
         "above_target": "por encima de la meta",
         "below_target": "por debajo de la meta",
         "meta_text": "Meta establecida: {{meta}}%",
-        "details_text": "{{met}} de {{total}} tickets resueltos a tiempo"
+        "details_text": "{{met}} de {{total}} solicitudes resueltas a tiempo"
       },
       "maintenance": {
         "title": "Equipos con Mantenimiento",
@@ -1418,7 +1437,7 @@
         "under_budget": "por debajo del límite",
         "over_budget": "por encima del límite",
         "meta_text": "Límite establecido: {{meta}}",
-        "details_text": "Gasto total: {{cost}} en {{total}} tickets"
+        "details_text": "Gasto total: {{cost}} en {{total}} solicitudes"
       },
       "satisfaction": {
         "title": "Satisfacción del Usuario",
@@ -1441,16 +1460,16 @@
     },
     "charts": {
       "common": {
-        "totalTickets": "Total de Tickets"
+        "totalTickets": "Total de Solicitudes"
       },
       "department": {
-        "title": "Tickets por Departamento",
+        "title": "Solicitudes por Departamento",
         "description": "Distribución de incidentes atendidos por cada área",
         "xlabel": "Cantidad",
         "ylabel": "Departamento"
       },
       "issueType": {
-        "title": "Tickets por Tipo de Problema",
+        "title": "Solicitudes por Tipo de Problema",
         "description": "Clasificación de incidentes según su naturaleza técnica",
         "xlabel": "Tipos de problemas",
         "ylabel": "Cantidad"
@@ -1465,7 +1484,7 @@
     "page_description": "Genera y descarga reportes estadísticos y operativos del sistema.",
     "coming_soon": "Módulo en construcción. Disponible próximamente.",
     "tickets_summary": {
-      "title": "Resumen de Tickets",
+      "title": "Resumen de Solicitudes",
       "description": "Estadísticas generales de solicitudes de soporte técnico.",
       "select_period": "Selecciona un periodo"
     },
@@ -1479,16 +1498,16 @@
   },
   "school_periods": {
     "not_found": {
-      "title": "!Ha ocurrido un error!",
+      "title": "¡Ha ocurrido un error!",
       "message": "Hubo un error al obtener el periodo seleccionado, por favor vuelve a intentarlo."
     },
     "edit_page": {
       "success": {
-        "title": "Exito",
+        "title": "Éxito",
         "message": "El periodo ha sido actualizado exitosamente"
       },
       "error": {
-        "title": "!Ha ocurrido un error!"
+        "title": "¡Ha ocurrido un error!"
       }
     }
   },
@@ -1513,7 +1532,7 @@
       },
       "dialogs": {
         "activate_title": "¿Activar esta pregunta?",
-        "activate_desc": "La pregunta \"{{question}}\" volverá a estar disponible y se presentará a los usuarios al cerrar nuevos tickets de soporte.",
+        "activate_desc": "La pregunta \"{{question}}\" volverá a estar disponible y se presentará a los usuarios al cerrar nuevas solicitudes de soporte.",
         "deactivate_title": "¿Desactivar esta pregunta?",
         "deactivate_desc": "La pregunta \"{{question}}\" se ocultará de los formularios futuros. Esto no alterará las respuestas históricas ya recopiladas."
       },
@@ -1542,7 +1561,7 @@
         "description": "Agrega una nueva pregunta al formulario de satisfacción de soporte técnico.",
         "success": {
           "title": "Pregunta creada",
-          "message": "La pregunta se ha guardado exitosamentel, activale para que este disponible en el catálogo."
+          "message": "La pregunta se ha guardado exitosamente, actívala para que esté disponible en el catálogo."
         },
         "error": {
           "title": "Error al crear la pregunta"
@@ -1575,7 +1594,7 @@
             "placeholder": "Selecciona el formato de respuesta..."
           },
           "is_active": {
-            "label": "Pregunta activa visible para los usuarios al cerrar tickets"
+            "label": "Pregunta activa visible para los usuarios al cerrar solicitudes"
           }
         },
         "validation": {

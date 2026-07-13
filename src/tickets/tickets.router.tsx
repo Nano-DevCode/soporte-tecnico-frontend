@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { CanRoute } from "@/common/permission/CanRoute";
 import { useRoutes } from "react-router";
+import { ListArchiveTicketsPage } from "./pages/ListArchiveTicketsPage";
 
 const ListTicketPage = lazy(() => import("./pages/admin/ListTicketsPage").then(module => ({ default: module.ListTicketPage })));
 const AssignTicketPage = lazy(() => import("./pages/AssignTicketPage").then(module => ({ default: module.AssignTicketPage })));
@@ -34,6 +35,15 @@ export const TicketsRoutes = () => {
                 <SuspenseWrapper>
                     <CanRoute permission="WATCH_CURRENT_TICKET_LIST">
                         <ListCurrentTicketPage />
+                    </CanRoute>
+                </SuspenseWrapper>
+        },
+        {
+            path: 'archives',
+            element:
+                <SuspenseWrapper>
+                    <CanRoute permission="WATCH_ARCHIVE_TICKET_LIST">
+                        <ListArchiveTicketsPage />
                     </CanRoute>
                 </SuspenseWrapper>
         },

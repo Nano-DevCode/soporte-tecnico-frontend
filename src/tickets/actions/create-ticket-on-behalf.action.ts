@@ -2,13 +2,24 @@ import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 import type { CreateTicketOnBehalfPayload } from "../interfaces/create-ticket-payload.interface";
 import type { TicketDetailsResponse } from "../interfaces/ticket-details.response";
 
+
+interface Props {
+    data: CreateTicketOnBehalfPayload;
+    idempotencyKey: string;
+}
+
 export const createTicketOnBehalfAction = async (
-    ticketOnBehalfPayload: CreateTicketOnBehalfPayload
+    { data: ticketOnBehalfPayload, idempotencyKey }: Props
 ): Promise<TicketDetailsResponse> => {
 
     const { data } = await soporteTecnicoApi.post<TicketDetailsResponse>(
         '/tickets/on-behalf',
-        ticketOnBehalfPayload
+        ticketOnBehalfPayload,
+        {
+            headers: {
+                'x-idempotency-key': idempotencyKey,
+            },
+        }
     );
 
     return {

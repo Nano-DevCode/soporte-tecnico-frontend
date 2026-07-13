@@ -21,7 +21,7 @@ export const RouteTicketPage = () => {
     const { t } = useTranslation();
     const { navigateFallback, navigateSmartBack } = useSmartNavigation('/tickets');
 
-    const { isLoading: isLoadingTicket, isError: isErrorTicket, data: ticket } = useGetTicketById(id);
+    const { isLoading: isLoadingTicket, isError: isErrorTicket, data: ticket, error } = useGetTicketById(id);
     const { isLoading: isLoadingCoordinators, isError: isErrorCoordinator, data: coordinators } = useGetCoordinators();
     const { mutate, isPending, isSuccess } = useRouteTicket();
 
@@ -32,8 +32,8 @@ export const RouteTicketPage = () => {
 
         if (isErrorTicket || !ticket) {
             sileo.error({
-                title: t('tickets.not_found.title'),
-                description: t('tickets.not_found.message'),
+                title: t('common.errors.title'),
+                description: getAxiosErrorMessage(error),
                 duration: 6000,
             });
             navigateFallback();
@@ -48,7 +48,7 @@ export const RouteTicketPage = () => {
             });
             navigateFallback();
         }
-    }, [isLoading, ticket, t, navigateFallback, isErrorTicket, isErrorCoordinator, coordinators]);
+    }, [isLoading, ticket, t, navigateFallback, isErrorTicket, isErrorCoordinator, coordinators, error]);
 
     const handleSubmit = (values: RouteTicketFormOutput) => {
         if (!id) return

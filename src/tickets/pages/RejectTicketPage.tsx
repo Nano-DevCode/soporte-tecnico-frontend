@@ -20,7 +20,7 @@ export const RejectTicketPage = () => {
     const { t } = useTranslation();
     const { navigateFallback, navigateSmartBack } = useSmartNavigation('/tickets');
 
-    const { isLoading, isError, data: ticket } = useGetTicketById(id);
+    const { isLoading, isError, data: ticket, error } = useGetTicketById(id);
     const { mutate, isPending, isSuccess } = useRejectTicket();
 
 
@@ -29,14 +29,14 @@ export const RejectTicketPage = () => {
 
         if (isError || !ticket) {
             sileo.error({
-                title: t('tickets.not_found.title'),
-                description: t('tickets.not_found.message'),
+                title: t('common.errors.title'),
+                description: getAxiosErrorMessage(error),
                 duration: 6000,
             });
 
             navigateFallback();
         }
-    }, [isError, isLoading, ticket, id, t, navigateFallback]);
+    }, [isError, isLoading, ticket, id, t, navigateFallback, error]);
 
     const handleSubmit = (values: RejectTicketFormOutput) => {
         if (!id) return

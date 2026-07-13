@@ -25,7 +25,8 @@ export const AssignTicketPage = () => {
     const {
         isLoading: loadingTicket,
         isError: isTicketError,
-        data: ticket
+        data: ticket,
+        error
     } = useGetTicketById(id);
 
     const {
@@ -43,8 +44,8 @@ export const AssignTicketPage = () => {
 
         if (isTicketError || !ticket) {
             sileo.error({
-                title: t('tickets.not_found.title'),
-                description: t('tickets.not_found.message'),
+                title: t('common.errors.title'),
+                description: getAxiosErrorMessage(error),
                 duration: 6000,
             });
             navigateFallback();
@@ -59,7 +60,7 @@ export const AssignTicketPage = () => {
             });
             navigateFallback();
         }
-    }, [t, isLoading, ticket, isTicketError, isTechsError, technicians, navigateFallback]);
+    }, [t, isLoading, ticket, isTicketError, isTechsError, technicians, navigateFallback, error]);
 
     const handleSubmit = (values: AssignTicketFormOutput) => {
         if (!id) return
@@ -71,7 +72,7 @@ export const AssignTicketPage = () => {
                     description: t('tickets.assign_page.success.message'),
                     duration: 5000,
                 });
-                navigateFallback(`/tickets/${id}`);
+                navigateSmartBack(`/tickets/${id}`);
             },
             onError: (error) => {
                 console.error("Error en la mutación:", error);

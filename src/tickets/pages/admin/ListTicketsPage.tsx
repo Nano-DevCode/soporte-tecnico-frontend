@@ -1,4 +1,4 @@
-import { Plus, ShieldUser } from "lucide-react";
+import { Plus, TicketCheck } from "lucide-react";
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { useTranslation } from "react-i18next";
 import { CustomListTickets } from "@/tickets/components/CustomListTickets";
@@ -12,7 +12,7 @@ export function ListTicketPage() {
 
   return (
     <>
-      <CustomTitleCard icon={ShieldUser}
+      <CustomTitleCard icon={TicketCheck}
         title={t("tickets.list_page.title")}
         description={t("tickets.list_page.description")} />
       <div className="space-y-3 md:space-y-6">

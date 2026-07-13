@@ -7,18 +7,16 @@ import type { Ticket } from "../interfaces/ticket.interface";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useGetStatus } from "@/common/status/hooks/useGetStatus";
 import type { TicketStatusCode } from "../interfaces/ticket-status-code.interface";
-import { TicketPriorityLevel } from "../interfaces/ticket-priority-level.type";
 import type { TicketColumnId } from "../interfaces/ticket-column-ids.types";
 import { useDepartments } from "@/users/hooks/useDepartment";
-import { useAllIssueTypes } from "@/IssueTypes/hooks/useAllIssueTypes";
+import { useSchoolPeriods } from "@/school-periods/hooks/useSchoolPeriods";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useTicketFilters } from "../hooks/useTicketFilters";
 import { CustomFilterSelect } from "@/components/custom/CustomFilterSelect";
 import { CustomFilterDate } from "@/components/custom/CustomFilterDate";
-import { InfiniteScrollComboboxTags } from "@/common/tags/components/InfiniteScrollComboboxTags";
 import { Can } from "@/common/permission/Can";
+import { TicketStatus } from "../utils/ticket-state-machine";
 import { useCan } from "@/common/permission/useCan";
-import { useSchoolPeriodsForSelect } from "@/school-periods/hooks/useSchoolPeriodsForSelect";
 
 interface Props {
   table: Table<Ticket>;
@@ -26,26 +24,14 @@ interface Props {
   isLoadingData: boolean;
 }
 
-export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) => {
+export const CustomFilterTicketsArchives = ({ table, totalData, isLoadingData }: Props) => {
   const { t } = useTranslation();
-  const { can } = useCan();
+  const { can } = useCan()
   const { filters, updateFilter, updateMultipleFilters, resetFilters, hasActiveFilters } = useTicketFilters();
 
   const { data: statuses, isLoading: loadingStatuses } = useGetStatus();
-  const { data: schoolPeriods, isLoading: loadingPeriods } = useSchoolPeriodsForSelect({
-    enabled: can('WATCH_TICKET_PERIOD_FILTER')
-  });
-  const { data: departments, isLoading: loadingDepartments } = useDepartments({
-    enabled: can('WATCH_TICKET_DEPARTMENT_FILTER')
-  });
-  const { data: issueTypes, isLoading: loadingIssues } = useAllIssueTypes({
-    enabled: can('WATCH_TICKET_ISSUE_FILTER')
-  });
-
-  const priorityOptions = Object.entries(TicketPriorityLevel).map(([, value]) => ({
-    value: value.toString(),
-    label: t(`tickets.priority.${value}.name`)
-  }));
+  const { data: schoolPeriods, isLoading: loadingPeriods } = useSchoolPeriods({ enabled: can('WATCH_TICKET_PERIOD_ARCHIVE_FILTER') });
+  const { data: departments, isLoading: loadingDepartments } = useDepartments({ enabled: can('WATCH_TICKET_DEPARTMENT_ARCHIVE_FILTER') });
 
   type StatusNameTranslationKey = `tickets.status.${TicketStatusCode}.name`;
   type ColumnsNameTranslationKey = `tickets.list_page.table.headers.${TicketColumnId}`;
@@ -69,17 +55,14 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
           defaultValue={filters.status}
           isLoading={loadingStatuses}
           onChange={(v) => updateFilter("status", v)}
-          options={statuses?.map(s => ({ value: s.code, label: t(`tickets.status.${s.code}.name` as StatusNameTranslationKey) }))}
+          options={
+            statuses?.filter(s => s.code === TicketStatus.CERRADA || s.code === TicketStatus.ARCHIVADA)
+              .map(s => ({
+                value: s.code,
+                label: t(`tickets.status.${s.code}.name` as StatusNameTranslationKey)
+              }))
+          }
         />
-
-        <Can permission='WATCH_TICKET_PRIORITY'>
-          <CustomFilterSelect
-            label={t("tickets.list_page.table.headers.priority")}
-            defaultValue={filters.priority}
-            onChange={(v) => updateFilter("priority", v)}
-            options={priorityOptions}
-          />
-        </Can>
 
         <div className="hidden md:block ml-auto">
           <DropdownMenu >
@@ -127,7 +110,7 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
           <AccordionContent className="pb-0" >
             <div className="flex flex-col md:flex-row flex-wrap items-center gap-2 py-0 pt-2">
 
-              <Can permission='WATCH_TICKET_DEPARTMENT_FILTER'>
+              <Can permission='WATCH_TICKET_DEPARTMENT_ARCHIVE_FILTER'>
                 <CustomFilterSelect
                   label={t("tickets.list_page.table.headers.department")}
                   defaultValue={filters.department}
@@ -137,23 +120,13 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
                 />
               </Can>
 
-              <Can permission='WATCH_TICKET_PERIOD_FILTER'>
+              <Can permission='WATCH_TICKET_PERIOD_ARCHIVE_FILTER'>
                 <CustomFilterSelect
                   label={t("tickets.list_page.table.headers.school_period")}
                   defaultValue={filters.school_period}
                   isLoading={loadingPeriods}
                   onChange={(v) => updateFilter("school_period", v)}
-                  options={schoolPeriods?.map(p => ({ value: p.id, label: p.name }))}
-                />
-              </Can>
-
-              <Can permission='WATCH_TICKET_ISSUE_FILTER'>
-                <CustomFilterSelect
-                  label={t("tickets.list_page.table.headers.issue_type")}
-                  defaultValue={filters.issue_type}
-                  isLoading={loadingIssues}
-                  onChange={(v) => updateFilter("issue_type", v)}
-                  options={issueTypes?.map(i => ({ value: i.id.toString(), label: i.name }))}
+                  options={schoolPeriods?.data.map(p => ({ value: p.id, label: p.name }))}
                 />
               </Can>
 
@@ -172,15 +145,6 @@ export const CustomFilterTickets = ({ table, totalData, isLoadingData }: Props) 
                   minDate={filters.start_date ? new Date(`${filters.start_date}T00:00:00`) : undefined}
                 />
               </div>
-              <Can permission='WATCH_TICKET_TAGS'>
-                <div className="w-full shrink-0">
-                  <InfiniteScrollComboboxTags
-                    value={filters.tags}
-                    onChange={(newTagsArray) => updateFilter("tags", newTagsArray)}
-                    creatable={false}
-                  />
-                </div>
-              </Can>
 
             </div>
           </AccordionContent>

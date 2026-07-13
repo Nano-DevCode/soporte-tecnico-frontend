@@ -9,7 +9,7 @@ export const SortableHeader = <TData, TValue>(column: Column<TData, TValue>, tit
     <Button
       variant="ghost"
       onClick={() => column.toggleSorting(isSorted === "asc")}
-      className="-ml-4 h-8 data-[state=open]:bg-accent"
+      className="-ml-4 h-8 data-[state=open]:bg-accent font-bold"
     >
       <span>{title}</span>
       {isSorted === "desc" ? (
