@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi, getBaseUrl } from "@/api/soporteTecnicoApi";
 // import { t } from "i18next";
 import type { ConsumablesResponse } from '../interfaces/consumable.interfaces';
 
@@ -37,7 +37,8 @@ export const getConsumablesAction = async (
 
     const responseData = data?.consumables || [];
     const responseMeta = data?.meta || { total: 0, page: 1, lastPage: 1 };
-    const BASE_URL = import.meta.env.VITE_API_URL || '';
+    
+    const BASE_URL = getBaseUrl(); 
 
     const consumablesWithImages = responseData.map((consumable) => ({
       ...consumable,
@@ -53,7 +54,7 @@ export const getConsumablesAction = async (
       },
     };
 
-  } catch  {
+  } catch {
     //console.error(t("api_consumables_fetch_error"), error);
     return {
       consumables: [],

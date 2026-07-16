@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi, API_BASE_URL } from "@/api/soporteTecnicoApi";
 import type { ToolsResponse } from "../interfaces/toolsResponse.interface";
 
 interface Options {
@@ -48,15 +48,13 @@ export const getToolsAction = async (
     }
   );
 
-  const BASE_URL = import.meta.env.VITE_API_URL;
-
   const { tools: tools, ...restOfData } = data;
 
   const toolsWithImages = tools.map((tool) => ({
     ...tool,
 
     imageUrl: tool.imageUrl
-      ? `${BASE_URL}${tool.imageUrl}`
+      ? `${API_BASE_URL}${tool.imageUrl}`
       : null,
   }));
 

@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
+import { soporteTecnicoApi, API_BASE_URL } from "@/api/soporteTecnicoApi"
 import type { ToolsMovementResponse } from "../interfaces/toolsMovementResponse";
 
 interface Options {
@@ -15,11 +15,9 @@ export const getToolsMovementsAction = async (options: Options): Promise<ToolsMo
     params: options 
   });  
 
-  const baseUrl = import.meta.env.VITE_API_URL;
-
   const mappedMovements = data.toolsMovements.map(movement => {
     if (movement.tool?.imageUrl && !movement.tool.imageUrl.startsWith('http')) {
-      movement.tool.imageUrl = `${baseUrl}${movement.tool.imageUrl}`;
+      movement.tool.imageUrl = `${API_BASE_URL}${movement.tool.imageUrl}`;
     }
     
     return movement;

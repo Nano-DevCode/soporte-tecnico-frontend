@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi, API_BASE_URL } from "@/api/soporteTecnicoApi";
 import type { ItAssetsResponse } from "../interfaces/itAssetsResponse.interface";
 
 interface Options {
@@ -48,15 +48,12 @@ export const getItAssetsAction = async (
     }
   );
 
-  const BASE_URL = import.meta.env.VITE_API_URL;
-
   const { itAssets, ...restOfData } = data;
 
   const itAssetsWithImages = itAssets.map((itAsset) => ({
     ...itAsset,
-
     imageUrl: itAsset.imageUrl
-      ? `${BASE_URL}${itAsset.imageUrl}`
+      ? `${API_BASE_URL}${itAsset.imageUrl}`
       : null,
   }));
 

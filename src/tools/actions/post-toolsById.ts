@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
+import { soporteTecnicoApi, API_BASE_URL } from "@/api/soporteTecnicoApi"
 import type { Tool } from "../interfaces/toolsResponse";
 
 interface Options {
@@ -14,12 +14,10 @@ export const getToolsByIdsAction = async(options: Options): Promise<Tool[]> => {
 
   const { data } = await soporteTecnicoApi.post<Tool[]>('/tools/by-ids', { ids });  
 
-  const BASE_URL = import.meta.env.VITE_API_URL;
-
   const toolsWithImages: Tool[] = data.map(tool => ({
     ...tool,
     imageUrl: tool.imageUrl 
-      ? `${BASE_URL}${tool.imageUrl}` 
+      ? `${API_BASE_URL}${tool.imageUrl}` 
       : null
   }));
 

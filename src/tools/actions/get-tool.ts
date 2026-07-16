@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
+import { soporteTecnicoApi, API_BASE_URL } from "@/api/soporteTecnicoApi"
 import type { Tool } from "../interfaces/toolsResponse";
 
 interface Options {
@@ -9,12 +9,10 @@ export const getOneToolActions = async(options: Options): Promise<Tool> => {
   const { id } = options;
   const { data } = await soporteTecnicoApi.get<Tool>(`/tools/${id}`);  
 
-  const BASE_URL = import.meta.env.VITE_API_URL;
-
   const toolWithImage: Tool = {
     ...data,
     imageUrl: data.imageUrl 
-      ? `${BASE_URL}${data.imageUrl}` 
+      ? `${API_BASE_URL}${data.imageUrl}` 
       : null
   };
 

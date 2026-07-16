@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi"
+import { soporteTecnicoApi, API_BASE_URL } from "@/api/soporteTecnicoApi"
 import type { ItAssetsMovementResponse } from "../interfaces/itAssetsMovementResponse";
 
 interface Options {
@@ -15,11 +15,9 @@ export const getItAssetsMovementsAction = async (options: Options): Promise<ItAs
     params: options 
   });  
 
-  const baseUrl = import.meta.env.VITE_API_URL;
-
   const mappedMovements = data.itAssetsMovements.map(movement => {
     if (movement.itAsset?.imageUrl && !movement.itAsset.imageUrl.startsWith('http')) {
-      movement.itAsset.imageUrl = `${baseUrl}${movement.itAsset.imageUrl}`;
+      movement.itAsset.imageUrl = `${API_BASE_URL}${movement.itAsset.imageUrl}`;
     }
     
     return movement;
