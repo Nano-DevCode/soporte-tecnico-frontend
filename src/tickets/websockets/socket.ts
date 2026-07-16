@@ -1,9 +1,11 @@
 import { io } from 'socket.io-client';
+import { API_BASE_URL } from '@/api/soporteTecnicoApi';
 
-export const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://10.168.0.108:8081/realtime', {
+const SOCKET_URL = API_BASE_URL.replace('/api', '/realtime');
+
+export const socket = io(SOCKET_URL, {
   withCredentials: true,
   transports: ['polling', 'websocket'],
-
   autoConnect: false,
   reconnection: true,
   reconnectionAttempts: Infinity,
