@@ -5,7 +5,7 @@ import { useUserRoles } from "@/auth/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks, TicketCheck, Headset, FileSpreadsheet, HelpCircle } from "lucide-react";
+import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks, TicketCheck, Headset, FileSpreadsheet, HelpCircle, HammerIcon } from "lucide-react";
 
 // Types para la configuración
 type NavSubItem = {
@@ -94,67 +94,6 @@ export const CustomSidebarNavContent = memo(() => {
       ]
     },
     {
-      title: "User",
-      icon: Users,
-      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
-      subItems: [
-        { title: t("custom_nav_content_users"), path: "/users", show: true },
-        { title: t("custom_nav_content_depatment"), path: "/departments", show: true },
-      ]
-    },
-    {
-      title: "Activos TI",
-      icon: MonitorCog,
-      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
-      subItems: [
-        { title: "Inventario", path: "/it-assets", show: true },
-        { title: "Bicatora", path: "/it-assets/movements", show: true },
-      ]
-    },
-    {
-      title: "Herramientas",
-      icon: MonitorCog,
-      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
-      subItems: [
-        { title: "Inventario", path: "/tools", show: true },
-        { title: "Bicatora", path: "/tools/movements", show: true },
-      ]
-    },
-    // {
-    //   title: t("custom_nav_content_subitem_list_tickets"),
-    //   icon: Hammer,
-    //   path: "/tools",
-    //   show: isSuperAdmin || isCoordinator || isBossCC,
-    // },
-    {
-      title: t("custom_nav_content_subitem_list_consumables"),
-      icon: Blocks,
-      show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC || isVisitor,
-      subItems: [
-        { title: t("custom_nav_content_catalog_consumables"), path: "/consumables", show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC || isVisitor, },
-        { title: t("custom_nav_content_movements_history"), path: "/consumable-movements", show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC || isVisitor, },
-      ]
-    },
-    {
-
-      title: t("custom_nav_content_list_equipments"),
-      icon: Archive,
-      show: isSuperAdmin || isTechnician || isCoordinator || isBossCC || isSecretaryCC || isVisitor,
-      path: "/equipments",
-    },
-    {
-      title: t("custom_nav_content_subitem_list_school_periods"),
-      icon: CalendarRange,
-      path: "/school-period",
-      show: isSuperAdmin || isBossCC,
-    },
-    {
-      title: t("custom_nav_content_subitem_list_center_managers"),
-      icon: ShieldUser,
-      path: "/center-managers",
-      show: isSuperAdmin || isBossCC,
-    },
-    {
       title: t("common.nav_content.settings.folios.item"),
       icon: FileDigit,
       show: isSuperAdmin || isBossCC || isBoss || isPlaning,
@@ -180,6 +119,49 @@ export const CustomSidebarNavContent = memo(() => {
       ]
     },
     {
+      title: "Usuarios",
+      icon: Users,
+      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
+      subItems: [
+        { title: t("custom_nav_content_users"), path: "/users", show: true },
+        { title: t("custom_nav_content_depatment"), path: "/departments", show: true },
+      ]
+    },
+    {
+      title: "Activos TI",
+      icon: MonitorCog,
+      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
+      subItems: [
+        { title: "Inventario", path: "/it-assets", show: true },
+        { title: "Bitácora", path: "/it-assets/movements", show: true },
+      ]
+    },
+    {
+      title: "Herramientas",
+      icon: HammerIcon,
+      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
+      subItems: [
+        { title: "Inventario", path: "/tools", show: true },
+        { title: "Bitácora", path: "/tools/movements", show: true },
+      ]
+    },
+    {
+      title: t("custom_nav_content_subitem_list_consumables"),
+      icon: Blocks,
+      show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC || isVisitor,
+      subItems: [
+        { title: t("custom_nav_content_catalog_consumables"), path: "/consumables", show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC || isVisitor, },
+        { title: t("custom_nav_content_movements_history"), path: "/consumable-movements", show: isSuperAdmin || isInventory || isBossCC || isCoordinator || isSecretaryCC || isVisitor, },
+      ]
+    },
+    {
+
+      title: t("custom_nav_content_list_equipments"),
+      icon: Archive,
+      show: isSuperAdmin || isTechnician || isCoordinator || isBossCC || isSecretaryCC || isVisitor,
+      path: "/equipments",
+    },
+    {
       title: t("reports.menu.label"),
       icon: FileSpreadsheet,
       path: "/reports",
@@ -190,8 +172,18 @@ export const CustomSidebarNavContent = memo(() => {
       icon: Cog,
       show: true,
       subItems: [
-        { title: t("general"), path: "/settings/general", show: true },
-        // { title: t("notifications"), path: "/settings/notifications", show: true },
+        {
+          title: t("custom_nav_content_subitem_list_school_periods"),
+          icon: CalendarRange,
+          path: "/school-period",
+          show: isSuperAdmin || isBossCC,
+        },
+        {
+          title: t("custom_nav_content_subitem_list_center_managers"),
+          icon: ShieldUser,
+          path: "/center-managers",
+          show: isSuperAdmin || isBossCC,
+        },
         {
           icon: HelpCircle,
           title: t("surveys.menu.questions"),
@@ -202,6 +194,29 @@ export const CustomSidebarNavContent = memo(() => {
     }
   ], [t, isSuperAdmin, isCoordinator, isBossCC, isVisitor, isInventory, isSecretaryCC, isTechnician, isBoss, isPlaning]);
 
+  const activeMenuPath = useMemo(() => {
+    const allPaths = navItems
+      .flatMap(item => (item.subItems ? item.subItems.map(sub => sub.path) : [item.path]))
+      .filter(Boolean) as string[];
+
+    let bestMatch = "";
+
+    for (const path of allPaths) {
+      if (path === "/") {
+        if (pathname === "/") bestMatch = "/";
+        continue;
+      }
+
+      const isMatch = pathname === path || pathname.startsWith(`${path}/`);
+
+      if (isMatch && path.length > bestMatch.length) {
+        bestMatch = path;
+      }
+    }
+
+    return bestMatch;
+  }, [pathname, navItems]);
+
   return (
     <ScrollArea className="flex-1 min-h-0 px-3 py-4">
       <nav className="flex flex-col gap-1">
@@ -209,7 +224,7 @@ export const CustomSidebarNavContent = memo(() => {
           if (!item.show) return acc;
 
           if (item.subItems) {
-            const isActiveGroup = item.subItems.some(sub => pathname === sub.path);
+            const isActiveGroup = item.subItems.some(sub => sub.path === activeMenuPath);
 
             acc.push(
               <Collapsible key={item.title} className="group/collapsible" defaultOpen={isActiveGroup}>
@@ -226,7 +241,11 @@ export const CustomSidebarNavContent = memo(() => {
                     {item.subItems.reduce((subAcc: React.ReactNode[], sub) => {
                       if (!sub.show) return subAcc;
                       subAcc.push(
-                        <Link key={sub.path} to={sub.path} className={getSubItemClass(pathname === sub.path)}>
+                        <Link
+                          key={sub.path}
+                          to={sub.path}
+                          className={getSubItemClass(sub.path === activeMenuPath)}
+                        >
                           {sub.icon ? <sub.icon className="h-4 w-4" /> : <List className="h-4 w-4" />}
                           {sub.title}
                         </Link>
@@ -239,7 +258,11 @@ export const CustomSidebarNavContent = memo(() => {
             );
           } else {
             acc.push(
-              <Link key={item.path!} to={item.path!} className={getItemClass(pathname === item.path)}>
+              <Link
+                key={item.path!}
+                to={item.path!}
+                className={getItemClass(item.path === activeMenuPath)}
+              >
                 <item.icon className="h-5 w-5 shrink-0" />
                 <span className="flex-1">{item.title}</span>
               </Link>

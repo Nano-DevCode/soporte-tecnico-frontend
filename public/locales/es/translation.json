@@ -390,7 +390,7 @@
       "label": "Mesa de ayuda",
       "current": "Mis Solicitudes Actuales",
       "history": "Historial de Solicitudes",
-      "archive": "Solicitudes Cerradas y Archivadas"
+      "archive": "Solicitudes Cerradas o Archivadas"
     },
     "document_not_found": "Pendiente",
     "data": {
@@ -415,6 +415,7 @@
       "tags": "Por clasificar"
     },
     "filters": {
+      "search": "Buscar por folio...",
       "status": "Estado",
       "priority": "Prioridad",
       "date": {
@@ -432,7 +433,7 @@
       },
       "RECHAZADA": {
         "name": "Rechazada",
-        "description": "La solicitud no procede o no cuenta con la información necesaria."
+        "description": "La solicitud no procede o no cuenta con la información necesaria. Editela para ver el motivo"
       },
       "CANALIZADA": {
         "name": "Canalizada",
@@ -448,7 +449,7 @@
       },
       "SOLUCIONADA": {
         "name": "Solucionada",
-        "description": "El problema técnico ha sido resuelto exitosamente."
+        "description": "El problema ha sido resuelto exitosamente."
       },
       "NO_SOLUCIONADA": {
         "name": "No solucionada",
@@ -464,11 +465,11 @@
       },
       "CERRADA": {
         "name": "Cerrada",
-        "description": "La solicitud ha completado todo su ciclo de vida."
+        "description": "La atención de la solicitud ha completado todo su ciclo de vida."
       },
       "ARCHIVADA": {
         "name": "Archivada",
-        "description": "La solicitud antigua ha sido archivada."
+        "description": "La solicitud ha sido archivada."
       },
       "UNKNOWN": {
         "name": "Desconocido",
@@ -578,7 +579,7 @@
     },
     "view_page": {
       "title": "Progreso de la solicitud",
-      "description": "Visualiza el avance de la solicitud",
+      "description": "Visualiza el avance de la solicitud.",
       "details": {
         "sections": {
           "requester_info": "Información del solicitante",
@@ -588,14 +589,14 @@
       },
       "timeline": {
         "title": "Historial de cambios",
-        "description": "Visualiza los cambios de la solicitud"
+        "description": "Visualiza los cambios de la solicitud."
       },
       "involved_staff": {
         "title": "Personal involucrado",
-        "description": "Personal involucrado en la solicitud"
+        "description": "Personal involucrado en la solicitud."
       },
       "technical_reports": {
-        "title": "Bitácoras",
+        "title": "Bitácoras de Intervención",
         "description": "Historial de bitácoras generadas para esta solicitud."
       },
       "documents": {
@@ -605,7 +606,7 @@
     },
     "reject_page": {
       "title": "Rechazar Solicitud",
-      "description": "La solicitud será devuelta para su modificación",
+      "description": "La solicitud será devuelta para su modificación.",
       "success": {
         "title": "Solicitud rechazada",
         "message": "La justificación se ha guardado y la solicitud ha sido rechazada correctamente."
@@ -624,12 +625,12 @@
       },
       "error": {
         "title": "Error al editar",
-        "message": "Hubo un problema al intentar actualizar la solicitud."
+        "message": "Hubo un problema al intentar actualizar la información de la solicitud."
       }
     },
     "list_page": {
-      "title": "Lista de Solicitudes",
-      "description": "Visualiza y gestiona todas las solicitudes de soporte técnico registradas en el sistema",
+      "title": "Histoial de Solicitudes",
+      "description": "Visualiza y gestiona todas tus solicitudes de soporte técnico registradas en el sistema",
       "actions": {
         "new": "Nueva Solicitud",
         "route": "Canalizar",
@@ -656,7 +657,7 @@
       },
       "empty": {
         "title": "No se encontraron Solicitudes",
-        "description": "Intenta ajustar los filtros de búsqueda"
+        "description": "No hay solicitudes registradas, intenta ajustar los filtros de búsqueda"
       },
       "error": {
         "title": "No se pudieron cargar las solicitudes",
@@ -665,7 +666,7 @@
     },
     "list_current_page": {
       "title": "Lista de Solicitudes Actuales",
-      "description": "Visualiza y gestiona las solicitudes de soporte técnico actuales."
+      "description": "Visualiza y gestiona tus solicitudes de soporte técnico que actualmente estan en proceso y requieren de tu atención."
     },
     "list_archive_page": {
       "title": "Solicitudes Cerradas y Archivadas",
@@ -684,7 +685,7 @@
       "description": "Registra una nueva solicitud de soporte técnico.",
       "success": {
         "title": "Éxito",
-        "message": "Solicitud enviada."
+        "message": "La solicitud ha sido creada exitosamente."
       },
       "error": {
         "title": "Error",
@@ -693,10 +694,10 @@
     },
     "create_on_behalf_page": {
       "title": "Nueva Solicitud de Soporte Técnico Para...",
-      "description": "Registra una nueva solicitud de soporte técnico a nombre de un Departamento en específico.",
+      "description": "Registra una nueva solicitud de soporte técnico a nombre de un jefe de Departamento en específico.",
       "success": {
         "title": "Éxito",
-        "message": "Solicitud enviada."
+        "message": "La solicitud ha sido creada exitosamente."
       },
       "error": {
         "title": "Error",
@@ -708,7 +709,7 @@
       "description": "Asigna a los técnicos que atenderán la solicitud.",
       "success": {
         "title": "Asignación exitosa",
-        "message": "Técnicos asignados."
+        "message": "Técnicos asignados correctamente."
       },
       "error": {
         "title": "Error al asignar",
@@ -720,8 +721,8 @@
       }
     },
     "finish_page": {
-      "title": "Registrar orden de trabajo",
-      "description": "Registra los detalles de la orden de trabajo para finalizar esta solicitud de soporte técnico.",
+      "title": "Registrar respuesta",
+      "description": "Registra los detalles de la respuesta para finalizar esta solicitud de soporte técnico y generar la orden de trabajo.",
       "success": {
         "title": "Solicitud finalizada",
         "message": "La solicitud ha sido finalizada exitosamente."
@@ -733,7 +734,7 @@
     },
     "intervene_page": {
       "title": "Registrar bitácora de intervención",
-      "description": "Documenta el avance en la atención de esta solicitud.",
+      "description": "Documenta lo realizado en la intervención de esta solicitud.",
       "success": {
         "title": "Bitácora registrada",
         "message": "La bitácora ha sido registrada exitosamente."
@@ -748,7 +749,7 @@
       "description": "Canaliza la solicitud a un coordinador para su atención.",
       "success": {
         "title": "Solicitud canalizada",
-        "message": "La solicitud ha sido canalizada exitosamente"
+        "message": "La solicitud ha sido canalizada exitosamente."
       },
       "error": {
         "title": "Error al guardar",
@@ -762,8 +763,8 @@
       },
       "reject": {
         "header": {
-          "title": "Rechazar Solicitud",
-          "description": "Indica el motivo por el cual esta solicitud no procede."
+          "title": "Formulario de rechazo",
+          "description": "Indica el motivo por el cual esta solicitud es rechazada."
         },
         "fields": {
           "justification": {
@@ -782,8 +783,12 @@
       },
       "intervene": {
         "header": {
-          "title": "Formulario de la bitácora de intervención",
+          "title": "Formulario de intervención",
           "description": "Completa los siguientes campos de la bitácora."
+        },
+        "sections": {
+          "report": "Bitácora",
+          "ticket_clasify": "Clasificación de la solicitud"
         },
         "fields": {
           "diagnosis": {
@@ -813,7 +818,7 @@
             }
           },
           "tags": {
-            "label": "Agrega etiquetas de clasificación para la solicitud",
+            "label": "Agrega etiquetas de clasificación a la solicitud",
             "placeholder": "Buscar etiquetas",
             "description": "Escribe y presiona 'Crear' para añadir nuevas etiquetas.",
             "create": {
@@ -836,9 +841,9 @@
             "loading_more": "Cargando más..."
           },
           "fault_validity": {
-            "label": "Naturaleza del problema",
+            "label": "Clasificación de la causa real de la solicitud",
             "placeholder": "Seleccione una opción...",
-            "description": "Selecciona la opción que mejor describa la causa del problema descrito en la solicitud."
+            "description": "Define el origen real del problema tras el diagnóstico técnico. A diferencia de las etiquetas libres, esta clasificación determina formalmente si la incidencia era un problema real o solo una falsa alarma."
           }
         },
         "buttons": {
@@ -959,7 +964,7 @@
         "fields": {
           "department_manager": {
             "label": "Jefe de Departamento",
-            "description": "La solicitud saldrá a nombre del jefe de departamento seleccionado",
+            "description": "La solicitud saldrá a nombre del jefe de departamento seleccionado y no podra ser modificado despues.",
             "placeholder": "Busca y Selecciona al jefe de departamento...",
             "empty": "No se encontraron coincidencias con ese nombre"
           }
@@ -1057,7 +1062,7 @@
   },
   "technical_reports": {
     "name_list": "Bitácora No.",
-    "name_element": "Bitácora Técnica",
+    "name_element": "Bitácora de Intervención",
     "data": {
       "diagnosis": "Diagnóstico Técnico",
       "work_done": "Trabajo Realizado",
@@ -1074,7 +1079,7 @@
     },
     "empty": {
       "title": "No se encontraron coincidencias",
-      "description": "Intenta buscar con otras palabras clave o describe el síntoma de otra forma.",
+      "description": "Intenta buscar con otras palabras clave.",
       "no_interventions": "No hay intervenciones registradas."
     },
     "not_found": {
@@ -1082,32 +1087,27 @@
       "description": "Por favor intente de nuevo"
     },
     "menu_item": {
-      "title": "Bitácoras"
+      "title": "Bitácoras de Intervención"
     },
     "list_page": {
-      "title": "Bitácoras",
-      "description": "Visualiza y gestiona todas las bitácoras registradas en el sistema",
+      "title": "Bitácoras de Intervención",
+      "description": "Visualiza y gestiona todas las bitácoras de intervención registradas en el sistema.",
       "actions": {},
       "table": {
         "headers": {}
       },
       "empty": {
         "title": "No se encontraron bitácoras",
-        "description": "Intenta ajustar los filtros de búsqueda"
+        "description": "Aun no hay bitácoras de intervención registradas en el sistema"
       }
     },
     "view_page": {
-      "title": "Detalles de la bitácora",
-      "description": "Visualiza los detalles de la bitácora",
+      "title": "Detalles de la bitácora de Intervención",
+      "description": "Visualiza los detalles de la bitácora.",
       "details": {
         "header": {
           "title": "Información de la Bitácora",
-          "description": "Información sobre la atención realizada a la solicitud"
-        },
-        "sections": {
-          "requester_info": "Información del solicitante",
-          "issue_details": "Detalles del problema",
-          "sender_info": "Información del remitente"
+          "description": "Información sobre la interveción realizada a la solicitud."
         }
       }
     },
@@ -1138,26 +1138,26 @@
       "service_type": "Tipo de servicio"
     },
     "not_found": {
-      "title": "No se encontró la orden de trabajo.",
+      "title": "No se encontró la respuesta.",
       "message": "Por favor intente de nuevo"
     },
     "document_not_found": "Pendiente",
     "view_page": {
-      "title": "Detalles de la orden de trabajo",
-      "description": "Visualiza los detalles de la orden de trabajo",
+      "title": "Detalles de la respuesta",
+      "description": "Visualiza los detalles de la respuesta",
       "details": {
         "header": {
-          "title": "Información de la orden de trabajo",
+          "title": "Información de la respuesta",
           "description": "Información sobre la respuesta emitida al solicitante."
         }
       }
     },
     "edit_page": {
-      "title": "Editar orden de trabajo",
-      "description": "Edita la información de la orden de trabajo",
+      "title": "Editar respuesta",
+      "description": "Edita la información de la respuesta.",
       "details": {
         "header": {
-          "title": "Información de la orden de trabajo",
+          "title": "Información de la respuesta",
           "description": "Información sobre la respuesta emitida al solicitante."
         }
       },
@@ -1182,28 +1182,28 @@
     },
     "tickets": {
       "data_description": {
-        "current_value": "Número de folio de la última solicitud generada por este departamento",
-        "next_value": "Número de folio que tendrá la siguiente solicitud generada por este departamento",
-        "next_folio_preview": "Folio que tendrá la siguiente solicitud generada por este departamento"
+        "current_value": "Número de folio de la última solicitud generada por este Departamento",
+        "next_value": "Número de folio que tendrá la siguiente solicitud generada por este Departamento",
+        "next_folio_preview": "Folio que tendrá la siguiente solicitud generada por este Departamento"
       },
       "not_found": {
-        "title": "Detalles del folio de solicitudes para el departamento no encontrados",
-        "message": "No se pudieron encontrar los detalles para el folio de solicitudes del departamento especificado"
+        "title": "Detalles del folio de solicitudes para el Departamento no encontrados",
+        "message": "No se pudieron encontrar los detalles para el folio de solicitudes del Departamento especificado."
       },
       "view_page": {
-        "title": "Detalles del folio de solicitud del departamento",
-        "description": "Visualiza la información actual del folio de solicitud del departamento",
+        "title": "Detalles del folio de solicitud del Departamento",
+        "description": "Visualiza la información actual del folio de solicitud del Departamento seleccionado.",
         "details": {
           "sections": {
-            "department_details": "Información del departamento",
+            "department_details": "Información del Departamento",
             "folio_details": "Detalles actuales del folio",
             "period_details": "Información del periodo"
           }
         }
       },
       "view_my_department_page": {
-        "title": "Detalles del folio de solicitud de su departamento",
-        "description": "Visualiza la información actual del folio de solicitud de su departamento",
+        "title": "Detalles del folio de solicitud de su Departamento",
+        "description": "Visualiza la información actual del folio de solicitud de su Departamento.",
         "details": {
           "sections": {
             "department_details": "Información del departamento",
@@ -1213,8 +1213,8 @@
         }
       },
       "edit_page": {
-        "title": "Editar folio de solicitud del departamento",
-        "description": "Modifica el folio de la solicitud para el departamento seleccionado.",
+        "title": "Editar folio de solicitud del Departamento",
+        "description": "Modifica el folio de la solicitud para el Departamento seleccionado.",
         "success": {
           "title": "Folio de solicitud actualizado",
           "message": "Los cambios se han guardado correctamente."
@@ -1226,12 +1226,12 @@
         },
         "error": {
           "title": "Error al editar el folio de la solicitud",
-          "message": "Hubo un problema al intentar actualizar el folio de solicitud del departamento."
+          "message": "Hubo un problema al intentar actualizar el folio de solicitud del Departamento."
         }
       },
       "edit_my_department_page": {
-        "title": "Editar el folio de solicitud de su departamento",
-        "description": "Modifique el folio de la solicitud de su departamento.",
+        "title": "Editar el folio de solicitud de su Departamento",
+        "description": "Modifique el folio de la solicitud de su Departamento.",
         "success": {
           "title": "Folio de solicitud actualizado",
           "message": "Los cambios se han guardado correctamente."
@@ -1243,7 +1243,7 @@
         },
         "error": {
           "title": "Error al editar el folio de la solicitud",
-          "message": "Hubo un problema al intentar actualizar el folio de solicitud del departamento."
+          "message": "Hubo un problema al intentar actualizar el folio de solicitud del Departamento."
         }
       },
       "forms": {
@@ -1256,12 +1256,12 @@
             "folio": {
               "label": "Número del folio para la siguiente solicitud",
               "placeholder": "Ingresa el número de folio",
-              "description": "El número ingresado será el número que tome la siguiente solicitud creada por el departamento."
+              "description": "El número ingresado será el número que tome la siguiente solicitud creada por el Departamento."
             },
             "next_folio_preview": {
               "label": "Previsualización del folio para la siguiente solicitud",
               "placeholder": "Ingresa un número de folio",
-              "description": "La siguiente solicitud creada por el departamento tendrá el siguiente folio después de guardar el cambio."
+              "description": "La siguiente solicitud creada por el Departamento tendrá el siguiente folio después de guardar el cambio."
             }
           },
           "buttons": {
@@ -1287,8 +1287,8 @@
         "message": "No se pudieron encontrar los detalles para el folio de respuestas."
       },
       "view_page": {
-        "title": "Detalles del folio de respuestas del departamento",
-        "description": "Visualiza el estado actual del folio de respuestas del departamento",
+        "title": "Detalles del folio de respuestas del Departamento",
+        "description": "Visualiza el estado actual del folio de respuestas del Departamento.",
         "details": {
           "sections": {
             "department_details": "Información del departamento",
@@ -1311,7 +1311,7 @@
         },
         "error": {
           "title": "Error al editar el folio de respuesta",
-          "message": "Hubo un problema al intentar actualizar el folio de respuesta del departamento."
+          "message": "Hubo un problema al intentar actualizar el folio de respuesta del Departamento."
         }
       },
       "forms": {
@@ -1349,7 +1349,7 @@
     },
     "list_page": {
       "title": "Folios de solicitudes",
-      "description": "Visualiza y configura los folios de las solicitudes para cada departamento.",
+      "description": "Visualiza y configura los folios de las solicitudes para cada Departamento.",
       "actions": {
         "change": "Cambiar Folio"
       },

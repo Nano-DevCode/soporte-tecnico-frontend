@@ -22,7 +22,7 @@ export const ListTicketFolioDepartments = () => {
 
     const limitNum = Number(searchParams.get('limit')) || 10;
     const pageNum = Number(searchParams.get('page')) || 1;
-    const search = searchParams.get('search') || undefined;
+    const search = searchParams.get('search') || '';
 
     const dataList = data ?? [];
 
@@ -30,15 +30,6 @@ export const ListTicketFolioDepartments = () => {
         () => getTicketFoliosColumns(t),
         [t]
     );
-
-    const activeColumnFilters = useMemo(() => {
-        if (!search) return [];
-
-        return [{
-            id: "department_name",
-            value: search,
-        }];
-    }, [search]);
 
     const table = useCustomTable({
         data: dataList,
@@ -50,7 +41,7 @@ export const ListTicketFolioDepartments = () => {
             pageIndex: pageNum - 1,
             pageSize: limitNum
         },
-        columnFilters: activeColumnFilters
+        globalFilter: search
     });
 
     const handleCardClick = useCallback((id: string) => {

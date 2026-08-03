@@ -26,6 +26,11 @@ export const InterveneTicketSchema = (t: TFunction) => z.object({
     equipment_ids: z.custom<EquipmentItem[]>().optional().default([]),
     fault_validity_id: z.uuid(t('tickets.form.intervene.errors.fault_validity_invalid'))
         .min(1, t('tickets.form.intervene.errors.fault_validity_required')),
+    issue_type: z.coerce.number({
+        error: t('tickets.form.errors.issue_type_invalid')
+    })
+        .int(t('tickets.form.errors.issue_type_invalid'))
+        .positive(t('tickets.form.errors.issue_type_required')),
 }).superRefine((data, ctx) => {
     if (data.is_resolved === true && data.tags.length === 0) {
         ctx.addIssue({

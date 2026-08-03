@@ -1,7 +1,7 @@
 export interface IssueType {
     id:          number;
     name:        string;
-    description: string;
+    description?: string;
     created_at:  Date;
     updated_at:  Date;
 }

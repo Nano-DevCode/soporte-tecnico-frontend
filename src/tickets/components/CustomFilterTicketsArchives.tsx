@@ -42,7 +42,7 @@ export const CustomFilterTicketsArchives = ({ table, totalData, isLoadingData }:
       <div className="flex flex-wrap items-center gap-2">
         <CustomDebouncedSearch
           defaultValue={filters.search}
-          placeholder={t('common.filters.search')}
+          placeholder={t('tickets.filters.search')}
           onSearch={(value) => updateFilter("search", value)}
           className="min-w-1/1 lg:min-w-3/5"
           totalData={totalData}

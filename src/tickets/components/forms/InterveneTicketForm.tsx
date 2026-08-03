@@ -27,16 +27,20 @@ import type { FaultValidity } from "@/common/fault-validities/interfaces/fault-v
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Tag } from "@/common/tags/interfaces/tag.interface";
 import { InfiniteScrollComboboxTags } from "@/common/tags/components/InfiniteScrollComboboxTags";
+import type { IssueType } from "@/IssueTypes/interfaces/issue-type";
+import { CustomSectionInfo } from "@/components/custom/CustomSectionInfo";
 
 interface Props {
     isPending: boolean;
     faultValidities: FaultValidity[];
     ticketTags?: Tag[];
+    ticketIssueType?: IssueType;
+    issueTypes: IssueType[];
     onSubmit: (data: InterveneTicketFormOutput) => void;
     onCancel: () => void;
 }
 
-export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, faultValidities, ticketTags }: Props) => {
+export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, faultValidities, ticketTags, issueTypes, ticketIssueType }: Props) => {
     const { t } = useTranslation();
     const schema = useMemo(() => InterveneTicketSchema(t), [t]);
 
@@ -50,6 +54,7 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, faultValidi
             tags: ticketTags?.map((tag) => tag.name) || [],
             equipment_ids: [],
             fault_validity_id: "",
+            issue_type: ticketIssueType?.id ? String(ticketIssueType.id) : "",
         },
     });
 
@@ -82,6 +87,8 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, faultValidi
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} id="form-intervene-ticket">
                         <div className="space-y-6">
+
+                            <CustomSectionInfo label={t('tickets.form.intervene.sections.report')} />
 
                             <FormField
                                 control={form.control}
@@ -245,6 +252,8 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, faultValidi
                                 )}
                             />
 
+                            <CustomSectionInfo label={t('tickets.form.intervene.sections.ticket_clasify')} />
+
                             <FormField
                                 control={form.control}
                                 name="tags"
@@ -282,6 +291,36 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, faultValidi
                                         </FormItem>
                                     )
                                 }}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="issue_type"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t('tickets.form.fields.issue_type.label')}</FormLabel>
+                                        <Select
+                                            name={field.name}
+                                            disabled={isBusy}
+                                            onValueChange={field.onChange}
+                                            value={field.value as string}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder={t('tickets.form.fields.issue_type.placeholder')} />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {issueTypes.map((type) => (
+                                                    <SelectItem key={type.id} value={String(type.id)}>
+                                                        {type.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
 
                         </div>

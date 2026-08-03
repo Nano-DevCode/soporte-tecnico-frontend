@@ -23,10 +23,11 @@ interface UseCustomTableProps<TData, TValue> {
     manualFiltering?: boolean;
 
     pagination?: PaginationState;
-
+    globalFilter?: string;
     columnFilters?: ColumnFiltersState;
 
     onSortingChange?: (sorting: SortingState) => void;
+    onGlobalFilterChange?: (value: string) => void;
 }
 
 export function useCustomTable<TData, TValue>({
@@ -40,6 +41,8 @@ export function useCustomTable<TData, TValue>({
     pagination,
     columnFilters,
     onSortingChange,
+    onGlobalFilterChange,
+    globalFilter,
 }: UseCustomTableProps<TData, TValue>) {
 
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(initialColumnVisibility);
@@ -49,6 +52,8 @@ export function useCustomTable<TData, TValue>({
     const [internalColumnFilters, setInternalColumnFilters] = React.useState<ColumnFiltersState>(
         []
     )
+
+    const [internalGlobalFilter, setInternalGlobalFilter] = React.useState('');
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({
@@ -78,11 +83,14 @@ export function useCustomTable<TData, TValue>({
         onColumnFiltersChange: setInternalColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
 
+        onGlobalFilterChange: onGlobalFilterChange || setInternalGlobalFilter,
+
         state: {
             sorting: manualSorting ? sorting : automaticSorting,
             columnVisibility,
             pagination,
             columnFilters: columnFilters !== undefined ? columnFilters : internalColumnFilters,
+            globalFilter: globalFilter !== undefined ? globalFilter : internalGlobalFilter,
         }
     });
 

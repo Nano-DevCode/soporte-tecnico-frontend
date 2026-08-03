@@ -47,7 +47,8 @@ export const allowedActionsByStatus: Record<TicketStatusType, TicketActionsType[
     [TicketStatus.NO_SOLUCIONADA]: [
         TicketActions.ASIGNAR,
         TicketActions.FINALIZAR,
-        TicketActions.WATCH_TECHNICAL_REPORT
+        TicketActions.WATCH_TECHNICAL_REPORT,
+        TicketActions.CANALIZAR,
     ],
     [TicketStatus.FINALIZADA]: [
         TicketActions.CERRAR,

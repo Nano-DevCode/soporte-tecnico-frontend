@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { InterveneTicketFormSkeleton } from "../components/Skeletons/InterveneTicketFormSkeleton";
 import { useGetTicketById } from "../hooks/useGetTicketById";
 import { InterveneTicketForm } from "../components/forms/InterveneTicketForm";
+import { useAllIssueTypes } from "@/IssueTypes/hooks/useAllIssueTypes";
 
 export const InterveneTicketPage = () => {
     const { id } = useParams();
@@ -20,11 +21,12 @@ export const InterveneTicketPage = () => {
     const { navigateSmartBack, navigateFallback } = useSmartNavigation('/tickets');
 
     const { data: faultValidities, isLoading: isLoadingFault, isError: isFaultError } = useGetFaultValidities()
+    const { data: issueTypes, isLoading: isLoadingIssue, isError: isIssueError } = useAllIssueTypes();
     const { data: ticket, isLoading: isLoadingTicket, isError: isTicketError, error } = useGetTicketById(id);
     const { mutate, isPending, isSuccess } = useInterveneTicket();
 
-    const isLoading = isLoadingFault || isLoadingTicket;
-    const isError = isFaultError || isTicketError;
+    const isLoading = isLoadingFault || isLoadingTicket || isLoadingIssue;
+    const isError = isFaultError || isTicketError || isIssueError;
 
 
     useEffect(() => {
@@ -40,7 +42,7 @@ export const InterveneTicketPage = () => {
             return;
         }
 
-        if (isError || !faultValidities) {
+        if (isError || !faultValidities || !issueTypes) {
             sileo.error({
                 title: t('common.fetch_error.title'),
                 description: t('common.fetch_error.description'),
@@ -48,7 +50,7 @@ export const InterveneTicketPage = () => {
             });
             navigateFallback();
         }
-    }, [error, faultValidities, isError, isLoading, isTicketError, navigateFallback, t, ticket]);
+    }, [error, faultValidities, isError, isLoading, isTicketError, issueTypes, navigateFallback, t, ticket]);
 
     const handleSubmit = (values: InterveneTicketFormOutput) => {
         if (!id) return
@@ -83,7 +85,7 @@ export const InterveneTicketPage = () => {
         navigateSmartBack(`/tickets/${id}`);
     };
 
-    if (isLoading || !faultValidities || !ticket || !id) {
+    if (isLoading || !faultValidities || !issueTypes || !ticket || !id) {
         return (
             <CustomFormPageLayout
                 backLink={`/tickets/${id}`}
@@ -107,6 +109,8 @@ export const InterveneTicketPage = () => {
                 onSubmit={handleSubmit}
                 onCancel={handleCancel}
                 faultValidities={faultValidities}
+                issueTypes={issueTypes}
+                ticketIssueType={ticket.issue_type}
             />
         </CustomFormPageLayout>
     )

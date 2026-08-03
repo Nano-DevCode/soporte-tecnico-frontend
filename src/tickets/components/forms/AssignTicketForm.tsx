@@ -201,7 +201,7 @@ export const AssignTicketForm = ({ onSubmit, isPending, onCancel, ticket, techni
                 <Button
                     type="submit"
                     form="form-assign-ticket"
-                    disabled={isBusy || (!form.formState.isDirty && ticket.currentStatusCode !== TicketStatus.NO_SOLUCIONADA)}
+                    disabled={isBusy || (!form.formState.isDirty && ticket.currentStatusCode !== TicketStatus.NO_SOLUCIONADA && ticket.currentStatusCode !== TicketStatus.CANALIZADA)}
                     className="w-full sm:w-auto"
                 >
                     {isBusy ? (
