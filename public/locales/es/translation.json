@@ -841,9 +841,9 @@
             "loading_more": "Cargando más..."
           },
           "fault_validity": {
-            "label": "Clasificación de la causa real de la solicitud",
+            "label": "Clasificación de la causa real identficada en este diagnostico",
             "placeholder": "Seleccione una opción...",
-            "description": "Define el origen real del problema tras el diagnóstico técnico. A diferencia de las etiquetas libres, esta clasificación determina formalmente si la incidencia era un problema real o solo una falsa alarma."
+            "description": "Define el origen real del problema tras el diagnóstico técnico en esta interveción. A diferencia de las etiquetas libres, esta clasificación determina formalmente si la incidencia era un problema real o solo una falsa alarma."
           }
         },
         "buttons": {

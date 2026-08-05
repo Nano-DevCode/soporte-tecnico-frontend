@@ -270,6 +270,9 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, faultValidi
                                     return (
                                         <FormItem>
                                             <FormLabel>{t('tickets.form.intervene.fields.tags.label')}{!isResolved && <CustomOptionalInput />}</FormLabel>
+                                            <FormDescription>
+                                                {t('tickets.form.intervene.fields.tags.description')}
+                                            </FormDescription>
                                             <FormControl>
                                                 <InfiniteScrollComboboxTags
                                                     onChange={field.onChange}
@@ -277,9 +280,6 @@ export const InterveneTicketForm = ({ onSubmit, isPending, onCancel, faultValidi
                                                     disabled={isBusy}
                                                 />
                                             </FormControl>
-                                            <FormDescription>
-                                                {t('tickets.form.intervene.fields.tags.description')}
-                                            </FormDescription>
                                             {errorMessage &&
                                                 <p
                                                     data-slot="form-message"
