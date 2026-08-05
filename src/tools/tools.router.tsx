@@ -13,7 +13,7 @@ export const toolRoutes = [
         index: true,
         element: 
         <SuspenseWrapper>
-            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}>
+            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician", "isSecretaryCC"]}>
                 </RoleRoute>
             <ToolPage />
         </SuspenseWrapper>
@@ -36,20 +36,20 @@ export const toolRoutes = [
             </RoleRoute >
         </SuspenseWrapper>
     },
-    {
+    /* {
         path: 'catalog',
         element: 
         <SuspenseWrapper>
-            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}>
+            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician", "isSecretaryCC"]}>
                 <ToolBagPage />
             </RoleRoute>
         </SuspenseWrapper>
-    },
+    }, */
     {
         path: ':id',
         element:
         <SuspenseWrapper>
-            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}>
+            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician", "isSecretaryCC"]}>
                 <ToolDetailsPage/>
             </RoleRoute >
         </SuspenseWrapper>

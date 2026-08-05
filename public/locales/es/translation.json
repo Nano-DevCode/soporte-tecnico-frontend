@@ -63,7 +63,7 @@
   "custom_benefist_card_follow_trasnparent": "Seguimiento Transparente",
   "custom_benefist_card_monitoring_progress": "Monitorea el progreso de tus solicitudes en tiempo real y sin esperas.",
   "custom_benefist_card_historial": "Historial Detallado",
-  "custom_benefist_card_register_follow": "Mantén un registro completo de todos tus tickets y soluciones pasadas.",
+  "custom_benefist_card_register_follow": "Mantén un registro completo de todas tus solicitudes y soluciones pasadas.",
   "custom_information_welcome": "Bienvenido al Portal de Servicio Técnico",
   "custom_information_departament": "del Departamento Centro de Cómputo",
   "custom_information_description": "Soporte tecnológico para la comunidad del Instituto Tecnológico de Oaxaca. Accede a nuestros servicios de soporte técnico en cualquier momento, estaremos dispuestos a ayudarte.",
@@ -2195,18 +2195,18 @@
   "consumableForm.details.title": "Detalles del Movimiento",
   "consumableForm.details.description": "Especifica el destino y motivo de la salida del inventario.",
   "consumableForm.details.applicationQuestion": "¿En qué vas a ocupar los consumibles?",
-  "consumableForm.details.ticketLabel": "Selecciona el Folio del Ticket",
-  "consumableForm.details.ticketPlaceholder": "Buscar por folio o descripción del ticket...",
+  "consumableForm.details.ticketLabel": "Selecciona el Folio de la Solicitude de Soporte (Ticket)",
+  "consumableForm.details.ticketPlaceholder": "Buscar por folio o descripción de la solicitud de soporte...",
   "consumableForm.details.departmentLabel_optional": "Departamento Destino (Opcional)",
   "consumableForm.details.departmentLabel_default": "Departamento Destino (Preseleccionado por Defecto)",
   "consumableForm.details.departmentPlaceholder": "Seleccionar departamento de destino...",
   "consumableForm.details.observationsLabel": "Descripción / Justificación de la salida",
   "consumableForm.details.optional": "opcional",
-  "consumableForm.details.observationsPlaceholderTicket": "Notas u observaciones adicionales sobre el despacho de este ticket (opcional)...",
+  "consumableForm.details.observationsPlaceholderTicket": "Notas u observaciones adicionales sobre el despacho de esta solicitud de soporte (opcional)...",
   "consumableForm.details.observationsPlaceholderInternal": "Especifica detalladamente el motivo o destino del uso interno...",
   "consumableForm.details.observationsPlaceholderDamaged": "Describe las condiciones o mermas del daño detectado en el material...",
   "consumableForm.details.submitButton": "Generar Salida de Almacén",
-  "consumableForm.errors.ticketRequired": "El ticket es requerido para generar la salida",
+  "consumableForm.errors.ticketRequired": "La solicitud de soporte es requerida para generar la salida",
   "consumableForm.errors.justificationRequired": "La justificación es obligatoria",
   "consumableForm.dialog.title": "¿Confirmar Despacho de Inventario?",
   "consumableForm.dialog.description": "Esta acción afectará los niveles de stock de los consumibles seleccionados, RECUERDA no se permitirán modificaciones una vez registrado el movimiento, por ello revisa los elementos de tu consumo. ¿Deseas continuar?",
@@ -2500,7 +2500,7 @@
         "statusRequired": "Debes seleccionar un estado",
         "staffRequired": "Debes seleccionar un empleado para esta salida",
         "descriptionLength": "La descripción es obligatoria y debe tener al menos 10 caracteres",
-        "ticketRequired": "Debes vincular un ticket para esta salida"
+        "ticketRequired": "Debes vincular una solicitud de soporte para esta salida"
       },
       "sileo": {
         "loading": {
@@ -2529,7 +2529,7 @@
       },
       "tabs": {
         "staff": "Salida a Personal",
-        "ticket": "Salida por Ticket"
+        "ticket": "Salida por Solicitud de Soporte Técnico"
       },
       "form": {
         "voucherLabel": "Folio / Comprobante (Opcional)",
@@ -2832,8 +2832,8 @@
         "na": "N/A",
         "voucherLabel": "Folio de Vale",
         "noVoucher": "Sin vale registrado",
-        "ticketLabel": "Ticket de Soporte Vinculado",
-        "noTicket": "No se vinculó a ningún ticket",
+        "ticketLabel": "Solicitud de Soporte Técnico Vinculada",
+        "noTicket": "No se vinculó a ninguna solicitud de soporte",
         "descriptionLabel": "Descripción de Salida",
         "noDescription": "Sin descripción.",
         "observationsLabel": "Observaciones",
@@ -2916,9 +2916,9 @@
         "outDescriptionPlaceholder": "Motivo de la asignación, detalles de entrega..."
       },
       "ticketOutSection": {
-        "label": "Vincular a un Ticket",
-        "placeholder": "Selecciona un ticket asignado...",
-        "previewTitle": "Información del Ticket",
+        "label": "Vincular a una Solicitud de Soporte",
+        "placeholder": "Selecciona una solicitud asignada...",
+        "previewTitle": "Información de la Solicitud",
         "folio": "Folio:",
         "createdAt": "Fecha de creación:",
         "priority": "Prioridad:",
@@ -3066,7 +3066,7 @@
         "statusRequired": "Debes seleccionar un estado",
         "staffRequired": "Debes seleccionar un empleado para esta salida",
         "descriptionLength": "La descripción es obligatoria y debe tener al menos 10 caracteres",
-        "ticketRequired": "Debes vincular un ticket para esta salida"
+        "ticketRequired": "Debes vincular una solicitud de soporte para esta salida"
       },
       "sileo": {
         "loading": {
@@ -3095,7 +3095,7 @@
       },
       "tabs": {
         "staff": "Salida a Personal",
-        "ticket": "Salida por Ticket"
+        "ticket": "Salida por Solicitud de Soporte"
       },
       "form": {
         "voucherLabel": "Folio / Comprobante (Opcional)",
@@ -3398,8 +3398,8 @@
         "na": "N/A",
         "voucherLabel": "Folio de Vale",
         "noVoucher": "Sin vale registrado",
-        "ticketLabel": "Ticket de Soporte Vinculado",
-        "noTicket": "No se vinculó a ningún ticket",
+        "ticketLabel": "Solicitud de Soporte Vinculada",
+        "noTicket": "No se vinculó a ninguna solicitud de soporte",
         "descriptionLabel": "Descripción de Salida",
         "noDescription": "Sin descripción.",
         "observationsLabel": "Observaciones",
@@ -3482,9 +3482,9 @@
         "outDescriptionPlaceholder": "Motivo de la asignación, detalles de entrega..."
       },
       "ticketOutSection": {
-        "label": "Vincular a un Ticket",
-        "placeholder": "Selecciona un ticket asignado...",
-        "previewTitle": "Información del Ticket",
+        "label": "Vincular a una Solicitud de Soporte",
+        "placeholder": "Selecciona una solicitud de soporte asignada...",
+        "previewTitle": "Información de la Solicitud de Soporte",
         "folio": "Folio:",
         "createdAt": "Fecha de creación:",
         "priority": "Prioridad:",
@@ -3702,9 +3702,9 @@
         "editingSave": "Guardar Cambios",
         "creatingSave": "Crear Usuario",
         "roleBossCC": "Jefe del Centro de Computo",
-        "roleCorrdinator": "Son los encagados de cada area ya sea de redes, soporte tecnico y sotfware, ellos son los encargados de atender los tickets y problemas de su area.",
+        "roleCorrdinator": "Son los encagados de cada area ya sea de redes, soporte tecnico y sotfware, ellos son los encargados de atender las solicitudes de soporte técnico y problemas de su area.",
         "roleBoosDept": "Son los jefes de cada departamento a los cuales va dirijido el servicio de soporte.",
-        "roleTecni": "Son todos aquellos que prestan servicios y pueden atender tickets.",
+        "roleTecni": "Son todos aquellos que prestan servicios y pueden atender solicitudes de soporte técnico.",
         "rolePlanning": "Es el area de planeación.",
         "roleSecreCC": "Es el área de secretaría del Departamento de Centro de Computo.",
         "roleInventary": "Son aquellos encargados de la gestión de inventario del Departamento de Centro de Computo.",
