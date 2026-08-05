@@ -36,7 +36,7 @@ export const toolRoutes = [
             </RoleRoute >
         </SuspenseWrapper>
     },
-    /* {
+    {
         path: 'catalog',
         element: 
         <SuspenseWrapper>
@@ -44,7 +44,7 @@ export const toolRoutes = [
                 <ToolBagPage />
             </RoleRoute>
         </SuspenseWrapper>
-    }, */
+    },
     {
         path: ':id',
         element:

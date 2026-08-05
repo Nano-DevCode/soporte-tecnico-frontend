@@ -9,7 +9,7 @@ import { CenterManagersRoutes } from "./computing-center-managers/center-manager
 import { TicketsRoutes } from "./tickets/tickets.router";
 
 import { EquipmentRoutes } from "./Equipments/equipments.routes";
-import { toolRoutes } from "./tools/tools.router";
+/* import { toolRoutes } from "./tools/tools.router"; */
 import { ItAssetsRoutes } from "./it-assets/it-assets.router";
 import { TechnicalReportsRoutes } from "./technical-reports/technical-reports.router";
 import { FoliosRoutes } from "./folios/folio.router";
@@ -74,10 +74,10 @@ const router = createBrowserRouter([
                 path: 'equipments/*',
                 element: <EquipmentRoutes />,
             },
-            {
+/*             {
                 path: 'tools2',
                 children: toolRoutes,
-            },
+            }, */
             {
                 path: 'tools/*',
                 element: <ToolsRoutes />
