@@ -16,7 +16,8 @@ const ALLOWED_ROLES: UserRole[] = [
   "isCoordinator", 
   "isBossCC", 
   "isSuperAdmin", 
-  "isTechnician"
+  "isTechnician",
+  "isInventory"
 ];
 
 export const ItAssetsRoutes = () => {
