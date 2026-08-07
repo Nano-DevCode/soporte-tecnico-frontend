@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Filter, FilterX } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useDepartments } from "@/users/hooks/useDepartment";
-import { useSchoolPeriods } from "@/school-periods/hooks/useSchoolPeriods";
+// import { useSchoolPeriods } from "@/school-periods/hooks/useSchoolPeriods";
 import { useAllIssueTypes } from "@/IssueTypes/hooks/useAllIssueTypes";
 import { CustomFilterSelect } from "@/components/custom/CustomFilterSelect";
 import { CustomFilterDate } from "@/components/custom/CustomFilterDate";
@@ -15,7 +15,7 @@ export const FilterDashboard = () => {
     const { t } = useTranslation();
     const { filters, updateFilter, updateMultipleFilters, resetFilters, hasActiveFilters } = useDashboardFilters();
 
-    const { data: schoolPeriods, isLoading: loadingPeriods } = useSchoolPeriods();
+    // const { data: schoolPeriods, isLoading: loadingPeriods } = useSchoolPeriods();
     const { data: departments, isLoading: loadingDepartments } = useDepartments();
     const { data: issueTypes, isLoading: loadingIssues } = useAllIssueTypes();
 
@@ -63,7 +63,7 @@ export const FilterDashboard = () => {
                             />
                         </div>
 
-                        <div className="col-span-4 sm:col-span-4 md:col-span-2">
+                        {/* <div className="col-span-4 sm:col-span-4 md:col-span-2">
                             <CustomFilterSelect
                                 label={t("tickets.list_page.table.headers.school_period")}
                                 defaultValue={filters.school_period}
@@ -71,7 +71,7 @@ export const FilterDashboard = () => {
                                 onChange={(v) => updateFilter("school_period", v)}
                                 options={schoolPeriods?.data.map(p => ({ value: p.id, label: p.name }))}
                             />
-                        </div>
+                        </div> */}
 
 
                         <div className="col-span-4 md:col-span-2">
