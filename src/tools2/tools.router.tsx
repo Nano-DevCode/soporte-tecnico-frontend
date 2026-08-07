@@ -16,7 +16,8 @@ const ALLOWED_ROLES: UserRole[] = [
   "isCoordinator", 
   "isBossCC", 
   "isSuperAdmin", 
-  "isTechnician"
+  "isTechnician",
+  "isInventory"
 ];
 
 export const ToolsRoutes = () => {
@@ -25,7 +26,7 @@ export const ToolsRoutes = () => {
             index: true,
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor", "isSecretaryCC"]}>
                         <ToolsPage />
                     </RoleRoute>
                 </SuspenseWrapper>
@@ -75,7 +76,7 @@ export const ToolsRoutes = () => {
             path: 'movements',
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor", "isSecretaryCC"]}>
                         <ToolsMovementsPage />
                     </RoleRoute>
                 </SuspenseWrapper>
@@ -85,7 +86,7 @@ export const ToolsRoutes = () => {
             path: 'movements/:id',
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor"]}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor", "isSecretaryCC"]}>
                         <ToolsMovementViewPage />
                     </RoleRoute>
                 </SuspenseWrapper>
@@ -95,7 +96,7 @@ export const ToolsRoutes = () => {
             path: ':id',
             element: (
                 <SuspenseWrapper>
-                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor", "isSecretaryCC"]}>
                         <ToolsDetailsPage />
                     </RoleRoute>
                 </SuspenseWrapper>
