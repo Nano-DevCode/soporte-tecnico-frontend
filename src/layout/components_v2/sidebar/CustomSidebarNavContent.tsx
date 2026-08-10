@@ -119,7 +119,7 @@ export const CustomSidebarNavContent = memo(() => {
       ]
     },
     {
-      title: "Usuarios",
+      title: t("custom_nav_content_users"),
       icon: Users,
       show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
       subItems: [
@@ -128,21 +128,21 @@ export const CustomSidebarNavContent = memo(() => {
       ]
     },
     {
-      title: "Activos TI",
+      title: t("custom_nav_content_it_assets"),
       icon: MonitorCog,
       show: isSuperAdmin || isCoordinator || isBossCC || isVisitor || isInventory,
       subItems: [
-        { title: "Inventario", path: "/it-assets", show: true },
-        { title: "Bitácora", path: "/it-assets/movements", show: true },
+        { title: t("custom_nav_content_inventory"), path: "/it-assets", show: true },
+        { title: t("custom_nav_content_log"), path: "/it-assets/movements", show: true },
       ]
     },
     {
-      title: "Herramientas",
+      title: t("custom_nav_content_tools"),
       icon: HammerIcon,
       show: isSuperAdmin || isCoordinator || isBossCC || isVisitor || isInventory,
       subItems: [
-        { title: "Inventario", path: "/tools", show: true },
-        { title: "Bitácora", path: "/tools/movements", show: true },
+        { title: t("custom_nav_content_inventory"), path: "/tools", show: true },
+        { title: t("custom_nav_content_log"), path: "/tools/movements", show: true },
       ]
     },
     {
