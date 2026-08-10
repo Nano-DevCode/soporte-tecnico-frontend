@@ -130,7 +130,7 @@ export const CustomSidebarNavContent = memo(() => {
     {
       title: "Activos TI",
       icon: MonitorCog,
-      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
+      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor || isInventory,
       subItems: [
         { title: "Inventario", path: "/it-assets", show: true },
         { title: "Bitácora", path: "/it-assets/movements", show: true },
@@ -139,7 +139,7 @@ export const CustomSidebarNavContent = memo(() => {
     {
       title: "Herramientas",
       icon: HammerIcon,
-      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
+      show: isSuperAdmin || isCoordinator || isBossCC || isVisitor || isInventory,
       subItems: [
         { title: "Inventario", path: "/tools", show: true },
         { title: "Bitácora", path: "/tools/movements", show: true },
