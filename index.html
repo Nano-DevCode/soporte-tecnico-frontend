@@ -8,12 +8,40 @@
     <title>Soporte Técnico</title>
 
     <script>
+      // 1. Manejo del tema (Oscuro / Claro)
       (function() {
         const storageKey = 'soporte-tecnico-theme';
         const theme = localStorage.getItem(storageKey) || 'system';
         const isDark = theme === 'dark' || 
           (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
         document.documentElement.classList.add(isDark ? 'dark' : 'light');
+      })();
+
+      // 2. Parche contra traductores/extensiones (Evita crash por removeChild e insertBefore)
+      (function() {
+        if (typeof window === 'undefined') return;
+
+        const originalRemoveChild = Node.prototype.removeChild;
+        Node.prototype.removeChild = function(child) {
+          if (child.parentNode !== this) {
+            if (console) {
+              console.warn('removeChild: El nodo a eliminar no es hijo de este nodo. Evitando crash.', child, this);
+            }
+            return child;
+          }
+          return originalRemoveChild.call(this, child);
+        };
+
+        const originalInsertBefore = Node.prototype.insertBefore;
+        Node.prototype.insertBefore = function(newNode, referenceNode) {
+          if (referenceNode && referenceNode.parentNode !== this) {
+            if (console) {
+              console.warn('insertBefore: El nodo de referencia no es hijo de este nodo. Evitando crash.', referenceNode);
+            }
+            return newNode;
+          }
+          return originalInsertBefore.call(this, newNode, referenceNode);
+        };
       })();
     </script>
 
@@ -24,8 +52,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@300;400;700&display=swap" rel="stylesheet">
 
   </head>
-  <body>
-    <div id="root"></div>
+  <!-- 1. Refuerzo de atributos no-translate en <body> y en el <div id="root"> -->
+  <body translate="no" class="notranslate">
+    <div id="root" translate="no" class="notranslate"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
