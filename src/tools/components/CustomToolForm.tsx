@@ -302,7 +302,7 @@ export const CustomToolForm = ({ mode, initialData, onSubmitCallback, isMutating
             render={() => (
               <FormItem className="space-y-2 sm:col-span-2">
                 <FormLabel className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                  <ImageIcon className="h-4 w-4" /> Imagen de la Herramienta {!isEditMode && <span className="text-red-500">*</span>}
+                  <ImageIcon className="h-4 w-4" /> Imagen de la Herramienta {!isEditMode /* && <span className="text-red-500">*</span> */}
                 </FormLabel>
                 <FormControl>
                   <Label 
@@ -320,7 +320,7 @@ export const CustomToolForm = ({ mode, initialData, onSubmitCallback, isMutating
                       accept="image/*"
                       className="hidden" 
                       {...form.register("image", { 
-                        required: !isEditMode ? "La imagen es obligatoria" : false,
+                        /* required: !isEditMode ? "La imagen es obligatoria" : false, */
                         validate: {
                           maxSize: (files) => {
                             if (!files || files.length === 0) return true;

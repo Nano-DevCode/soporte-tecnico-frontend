@@ -146,9 +146,9 @@ export const CustomUserForm = ({
           {isCoordinador && (
             <div className="space-y-2 animate-in fade-in zoom-in-95 duration-200">
               <Label htmlFor="idTelegram" className={cn("flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground", errors.idTelegram && "text-red-500")}>
-                <Send className="h-3.5 w-3.5" aria-hidden="true" /> {t("users.components.customUserForm.idTelegram")} <span className="text-red-500">*</span>
+                <Send className="h-3.5 w-3.5" aria-hidden="true" /> {t("users.components.customUserForm.idTelegram")}
               </Label>
-              <Input id="idTelegram" autoComplete="nope" className={cn("bg-muted/10", errors.idTelegram && "border-red-500")} {...register("idTelegram", { required: t("users.components.customUserForm.idTelegramRequired"), pattern: { value: alphanumericRegex, message: t("users.components.customUserForm.idTelegramError") } })} />
+              <Input id="idTelegram" autoComplete="nope" className={cn("bg-muted/10", errors.idTelegram && "border-red-500")} {...register("idTelegram", { /* required: t("users.components.customUserForm.idTelegramRequired"), */ pattern: { value: alphanumericRegex, message: t("users.components.customUserForm.idTelegramError") } })} />
               {errors.idTelegram && <p className="text-xs font-medium text-red-500">{errors.idTelegram.message}</p>}
             </div>
           )}
