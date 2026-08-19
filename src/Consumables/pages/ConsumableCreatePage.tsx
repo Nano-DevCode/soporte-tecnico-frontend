@@ -71,7 +71,9 @@ export const ConsumableCreatePage = () => {
                                 { backendKeyword: "brand", fieldPath: "consumable.id_brand_consumable" },
                                 { backendKeyword: "ubication", fieldPath: "consumable.id_ubication_consumable" },
                                 { backendKeyword: "measurement", fieldPath: "consumable.id_unit_measurement" },
-                                { backendKeyword: "uses", fieldPath: "consumable.number_uses" }
+                                { backendKeyword: "uses", fieldPath: "consumable.number_uses" },
+                                { backendKeyword: "file", fieldPath: "consumable.imageUrl" }, // <-- Mapea errores de archivo del backend al input de la imagen
+                                { backendKeyword: "image", fieldPath: "consumable.imageUrl" }
                             ],
                             // El callback nos devuelve el string limpio procesado por la utilidad
                             (cleanMessage) => {

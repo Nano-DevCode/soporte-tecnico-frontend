@@ -17,13 +17,14 @@ interface ImageDropzoneProps {
 export const ConsumableImageDropzone: React.FC<ImageDropzoneProps> = ({
     register,
     previewUrl,
-    isEditMode,
+    // isEditMode,
     disabled,
     error
 }) => (
     <div className="lg:col-span-1 flex flex-col justify-start space-y-2.5">
         <Label className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-2">
-            <ImageIcon className="h-3.5 w-3.5" /> {t("consumables.form.label_image")} {!isEditMode && <span className="text-destructive">*</span>}
+            {/* <ImageIcon className="h-3.5 w-3.5" /> {t("consumables.form.label_image")} {!isEditMode && <span className="text-destructive">*</span>} */}
+            <ImageIcon className="h-3.5 w-3.5" /> {t("consumables.form.label_image")}
         </Label>
 
         <div className="relative group w-full aspect-square max-w-[260px] mx-auto lg:max-w-none">
@@ -32,7 +33,7 @@ export const ConsumableImageDropzone: React.FC<ImageDropzoneProps> = ({
                 className={cn(
                     "relative flex flex-col h-full w-full cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-muted-foreground/20 bg-muted/30 p-4 text-center transition-all hover:bg-muted/50 hover:border-primary/40 overflow-hidden select-none",
                     previewUrl && "border-solid border-border bg-background p-1.5 shadow-sm hover:bg-background",
-                    error && "border-destructive bg-destructive/5 text-destructive",
+                    // error && "border-destructive bg-destructive/5 text-destructive",
                     disabled && "opacity-50 cursor-not-allowed pointer-events-none"
                 )}
             >
@@ -63,9 +64,9 @@ export const ConsumableImageDropzone: React.FC<ImageDropzoneProps> = ({
                     accept="image/jpeg, image/png, image/webp"
                     disabled={disabled}
                     className="hidden"
-                    {...register("consumable.imageUrl", {
-                        required: !isEditMode ? t("consumables.form.error_required_image") : false
-                    })}
+                    {...register("consumable.imageUrl", 
+                        // {required: !isEditMode ? t("consumables.form.error_required_image") : false}
+                )}
                 />
             </Label>
         </div>
