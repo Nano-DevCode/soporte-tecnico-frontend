@@ -41,7 +41,7 @@ export const ImageUploadField = ({ disabled, currentImageUrl }: ImageUploadProps
         <FormItem className="w-full md:col-span-2">
           <FormLabel>
             {t("itAssets.components.imageUploadField.label")}
-            {!displayUrl && <span className="text-red-500"> *</span>}
+            {!displayUrl && <span className="text-muted-foreground/50 font-normal normal-case ml-1">(Opcional)</span>}
           </FormLabel>
           <FormControl>
             <div className="flex flex-col items-center justify-center w-full">

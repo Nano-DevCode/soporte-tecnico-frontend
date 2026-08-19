@@ -33,7 +33,7 @@ const ItAssetsCreatePage = () => {
     invoiceId: z.string().optional(),
     description: z.string().trim().optional(),
     observations: z.string().trim().optional(),
-    imageFile: z.any().refine((file) => file instanceof File, t("itAssets.createPage.validation.imageFile")),
+    imageFile: z.any().optional().refine((file) => !file || file instanceof File, t("itAssets.createPage.validation.imageFile")),
   }), [t]);
 
   type CreateAssetFormValues = z.infer<typeof createAssetSchema>;
