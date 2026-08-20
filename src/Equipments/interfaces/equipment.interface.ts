@@ -2,7 +2,8 @@ export type EquipmentCategory = 'computer' | 'printer' | 'network' | 'computador
 
 export interface Equipment {
   id: string;
-  folio: string;          
+  folio: string; 
+  num_serial: string;         
   type: string;           // "computer", "printer", o "network"
   model: string;
   responsableName: string;

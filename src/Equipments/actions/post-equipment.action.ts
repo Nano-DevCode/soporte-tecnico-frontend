@@ -4,6 +4,7 @@ import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
 export interface EquipmentPayload {
     id?: string;
     num_inventario?: string;
+    num_serial?: string ;
     id_model?: string;
     id_brand?: string;
 

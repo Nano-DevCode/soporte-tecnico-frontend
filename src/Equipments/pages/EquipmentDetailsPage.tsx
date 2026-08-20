@@ -152,6 +152,13 @@ export const EquipmentDetailsPage = () => {
               <br />
 
               <div className="col-span-2 space-y-1">
+                <dt className="font-medium text-muted-foreground">{("Número de Serie")}</dt>
+                <dd className="font-semibold flex items-top gap-1.5 text-justify flex-row">
+                  {equipment?.num_serial || t("eq_details_no_notes")}
+                </dd>
+              </div>
+
+              <div className="col-span-2 space-y-1">
                 <dt className="font-medium text-muted-foreground">{t("eq_details_description_label")}</dt>
                 <dd className="font-semibold flex items-top gap-1.5 text-justify flex-row">
                   {equipment?.description || t("eq_details_no_notes")}

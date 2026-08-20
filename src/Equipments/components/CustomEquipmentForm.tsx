@@ -47,6 +47,7 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                 ? { id: initialData.id_type_equipment.id, name: initialData.id_type_equipment.name }
                 : undefined,
             num_inventario: initialData?.num_inventario ?? "",
+            num_serial: initialData?.num_serial ?? "",
             id_brand: initialData?.id_model?.id_brand
                 ? { id: initialData.id_model.id_brand.id, name: initialData.id_model.id_brand.name }
                 : undefined,
@@ -207,6 +208,7 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
 
         const formattedData = {
             ...data,
+            num_serial: data.num_serial?.trim() ? data.num_serial.trim() : null,
             id_type_equipment: toId(data.id_type_equipment),
             id_model: toId(data.id_model),
             id_responsable: toId(data.id_responsable),
@@ -348,7 +350,30 @@ export const EquipmentForm = ({ mode, onSubmit, isSubmitting, initialData }: Pro
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                    <Label className="text-xs font-bold uppercase">Numero de serie</Label>
+                    <Input
+                        {...register("num_serial", {
+                            // required: t("eq_form_validate_inventory_required"),
+                            // minLength: { value: 3, message: t("eq_form_validate_min_chars", { count: 3 }) },
+                            maxLength: { value: 300, message: t("eq_form_validate_max_chars", { count: 300 })},
+                            setValueAs: (value: string) => {
+                                if (typeof value !== "string") return null;
+                                const trimmed = value.trim();
+                                return trimmed === "" ? null : trimmed;
+                                },
+                        })}
+                        disabled={isReadOnly}
+                        className={`bg-slate-50/50 border-zinc-300 focus:ring-0 ${errors.num_serial ? 'border-red-500 bg-red-50/20' : ''}`}
+                        placeholder="Número de serie: S3RI300123MAC"
+                    />
+                    {errors.num_serial && (
+                        <p className="text-xs font-semibold text-red-500 mt-1 flex items-center gap-1">
+                            <AlertCircle size={12} /> {String(errors.num_serial?.message)}
+                        </p>
+                    )}
+                </div>
                 {/* CONFIGURACIÓN DE MARCA */}
                 <div className="space-y-2">
                     <Label className="text-xs font-bold uppercase tracking-wider">{t("eq_form_label_brand")}<span className="text-red-600">*</span></Label>
