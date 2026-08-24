@@ -76,18 +76,32 @@ export function ConsumableDetailsView({ consumable }: Props) {
                                 </span>
 
                                 <div className="flex flex-wrap items-center gap-2.5">
-                                    {/* Estado del Stock */}
-                                    {consumable.available_stock <= 5 ? (
-                                        <Badge variant="outline" className="bg-background text-red-700 dark:text-red-400 border-red-200 dark:border-red-900/50 gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md shadow-2xs">
-                                            <AlertCircle className="h-3.5 w-3.5 text-red-500 shrink-0" /> {t("consumables.details.stock_critical", { stock: consumable.available_stock || t("consumables.details.stock_fallback") })}
+                                    {consumable.available_stock <= (consumable.stockMin ?? 0) ? (
+                                        //  ROJO: Stock minimo o muy bajo d stock
+                                        <Badge
+                                            variant="outline"
+                                            className="bg-red-50 text-red-700 border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900/50 gap-1 text-[11px] font-semibold px-2 py-0.5"
+                                        >
+                                            <AlertCircle className="h-3.5 w-3.5 text-red-500" />
+                                            {t("consumables.card.stock_critical", { stock: consumable.available_stock })}
                                         </Badge>
-                                    ) : consumable.available_stock < 10 ? (
-                                        <Badge variant="outline" className="bg-background text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/50 gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md shadow-2xs">
-                                            <AlertCircle className="h-3.5 w-3.5 text-amber-500 shrink-0" /> {t("consumables.details.stock_low", { stock: consumable.available_stock || t("consumables.details.stock_fallback") })}
+                                    ) : consumable.available_stock < (consumable.stockMax ?? 0) ? (
+                                        // AMARILLO: Stock Medio (entre el min y el max)
+                                        <Badge
+                                            variant="outline"
+                                            className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/50 gap-1 text-[11px] font-semibold px-2 py-0.5"
+                                        >
+                                            <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
+                                            {t("consumables.card.stock_low", { stock: consumable.available_stock })}
                                         </Badge>
                                     ) : (
-                                        <Badge variant="outline" className="bg-background text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/50 gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md shadow-2xs">
-                                            <Box className="h-3.5 w-3.5 text-emerald-500 shrink-0" /> {t("consumables.details.stock_available", { stock: consumable.available_stock || t("consumables.details.stock_fallback") })}
+                                        // VERDE: Stock maxicom o saludable
+                                        <Badge
+                                            variant="outline"
+                                            className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/50 gap-1 text-[11px] font-semibold px-2 py-0.5"
+                                        >
+                                            <Box className="h-3.5 w-3.5 text-emerald-500" />
+                                            {t("consumables.card.stock_normal", { stock: consumable.available_stock })}
                                         </Badge>
                                     )}
 

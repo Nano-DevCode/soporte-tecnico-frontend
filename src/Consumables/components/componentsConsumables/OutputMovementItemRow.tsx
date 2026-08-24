@@ -107,7 +107,7 @@ export const ConsumableItemRow: React.FC<ConsumableItemRowProps> = ({
                     <Tag size={12} />
                     {item.id_unit_measurement?.name || t("consumableForm.list.unidentified")}
                 </span>
-                <span className={`flex items-center gap-1 px-2 py-0.5 rounded-md border ${item.available_stock < 10 ? "bg-destructive/5 text-destructive border-destructive/25" : "bg-muted text-muted-foreground border-border"}`}>
+                <span className={`flex items-center gap-1 px-2 py-0.5 rounded-md border ${item.available_stock < 1 ? "bg-destructive/5 text-destructive border-destructive/25" : "bg-muted text-foreground border-border"}`}>
                     <Box size={12} />
                     {t("consumableForm.list.stockLabel", { count: item.available_stock })}
                 </span>

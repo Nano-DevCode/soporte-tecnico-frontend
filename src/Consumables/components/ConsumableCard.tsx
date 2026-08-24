@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import type { Consumable } from "../interfaces/consumable.interfaces";
 import { CustomConsumableActionsMenu } from "./CustomConsumablesActionsMenu";
 import { Link } from "react-router";
-import { t } from "i18next"; 
+import { t } from "i18next";
 import { CanAction } from "../permissions/Can";
 import { useCan } from "../permissions/useCan";
 
@@ -30,7 +30,7 @@ export function ConsumableCard({ item, isInBag, onToggleBag }: Props) {
                     : "border-border/60 hover:border-blue-500/30"
             )}
                 title={t("consumables.card.click_details")}>
-                
+
                 <div className="group relative w-full h-44 bg-muted/40 border-b border-border/40 flex items-center justify-center overflow-hidden p-4">
                     {/* Código del ítem */}
                     <span className="absolute bottom-2 left-2 text-[12px] font-bold px-2 py-0.5 rounded-md bg-zinc-200
@@ -60,17 +60,32 @@ export function ConsumableCard({ item, isInBag, onToggleBag }: Props) {
                 <CardContent className="p-4 flex-1 flex flex-col gap-3 justify-between">
                     <div className="space-y-2.5">
                         <div className="flex items-center justify-between gap-2">
-                            {item.available_stock <= 5 ? (
-                                <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900/50 gap-1 text-[11px] font-semibold px-2 py-0.5">
-                                    <AlertCircle className="h-3.5 w-3.5 text-red-500" /> {t("consumables.card.stock_critical", { stock: item.available_stock })}
+                            {item.available_stock <= (item.stockMin ?? 0) ? (
+                                //  ROJO: Stock minimo o muy bajo d stock
+                                <Badge
+                                    variant="outline"
+                                    className="bg-red-50 text-red-700 border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900/50 gap-1 text-[11px] font-semibold px-2 py-0.5"
+                                >
+                                    <AlertCircle className="h-3.5 w-3.5 text-red-500" />
+                                    {t("consumables.card.stock_critical", { stock: item.available_stock })}
                                 </Badge>
-                            ) : item.available_stock < 10 ? (
-                                <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/50 gap-1 text-[11px] font-semibold px-2 py-0.5">
-                                    <AlertCircle className="h-3.5 w-3.5 text-amber-500" /> {t("consumables.card.stock_low", { stock: item.available_stock })}
+                            ) : item.available_stock < (item.stockMax ?? 0) ? (
+                                // AMARILLO: Stock Medio (entre el min y el max)
+                                <Badge
+                                    variant="outline"
+                                    className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/50 gap-1 text-[11px] font-semibold px-2 py-0.5"
+                                >
+                                    <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
+                                    {t("consumables.card.stock_low", { stock: item.available_stock })}
                                 </Badge>
                             ) : (
-                                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-900/50 gap-1 text-[11px] font-semibold px-2 py-0.5">
-                                    <Box className="h-3.5 w-3.5 text-blue-500" /> {t("consumables.card.stock_normal", { stock: item.available_stock })}
+                                // VERDE: Stock maxicom o saludable
+                                <Badge
+                                    variant="outline"
+                                    className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/50 gap-1 text-[11px] font-semibold px-2 py-0.5"
+                                >
+                                    <Box className="h-3.5 w-3.5 text-emerald-500" />
+                                    {t("consumables.card.stock_normal", { stock: item.available_stock })}
                                 </Badge>
                             )}
 

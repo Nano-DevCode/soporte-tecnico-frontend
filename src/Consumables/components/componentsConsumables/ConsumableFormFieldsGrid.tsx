@@ -10,7 +10,8 @@ import {
     useTypeConsumables,
     useBrandConsumables,
     useUbicationConsumables,
-    useUnitMeasurementConsumables} from "@/Consumables/hooks/useConsumableCatalog"
+    useUnitMeasurementConsumables
+} from "@/Consumables/hooks/useConsumableCatalog"
 
 interface FieldsGridProps {
     register: UseFormRegister<FieldValues>;
@@ -238,6 +239,53 @@ export const ConsumableFormFieldsGrid: React.FC<FieldsGridProps> = ({
             {consumableErrors?.id_ubication_consumable && (
                 <p className="text-xs font-medium text-destructive mt-1 flex items-center gap-1.5 animate-in fade-in-50 slide-in-from-top-1">
                     <AlertCircle size={13} /> {consumableErrors.id_ubication_consumable.message}
+                </p>
+            )}
+        </div>
+
+        <div className="space-y-1.5">
+            <Label className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
+                <Hash size={13} /> {"Cantidad Miníma en stock"}
+            </Label>
+            <Input
+                {...register("consumable.stockMin", {
+                    valueAsNumber: true
+                }
+                )}
+                type="number"
+                min={0}
+                placeholder={t("consumables.form.placeholder_uses")}
+                className={cn(
+                    "bg-background border-input focus:ring-0 focus-visible:ring-1 focus-visible:ring-primary h-10 w-full transition-shadow shadow-sm",
+                    consumableErrors?.stockMin && "border-destructive bg-destructive/5 focus-visible:ring-destructive"
+                )}
+            />
+            {consumableErrors?.stockMin && (
+                <p className="text-xs font-medium text-destructive mt-1 flex items-center gap-1.5 animate-in fade-in-50 slide-in-from-top-1">
+                    <AlertCircle size={13} /> {consumableErrors.stockMin.message}
+                </p>
+            )}
+        </div>
+        <div className="space-y-1.5">
+            <Label className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
+                <Hash size={13} /> {"Cantidad saludable en stock"}
+            </Label>
+            <Input
+                {...register("consumable.stockMax", {
+                    valueAsNumber: true
+                }
+                )}
+                type="number"
+                min={0}
+                placeholder={t("consumables.form.placeholder_uses")}
+                className={cn(
+                    "bg-background border-input focus:ring-0 focus-visible:ring-1 focus-visible:ring-primary h-10 w-full transition-shadow shadow-sm",
+                    consumableErrors?.stockMax && "border-destructive bg-destructive/5 focus-visible:ring-destructive"
+                )}
+            />
+            {consumableErrors?.stockMax && (
+                <p className="text-xs font-medium text-destructive mt-1 flex items-center gap-1.5 animate-in fade-in-50 slide-in-from-top-1">
+                    <AlertCircle size={13} /> {consumableErrors.stockMax.message}
                 </p>
             )}
         </div>

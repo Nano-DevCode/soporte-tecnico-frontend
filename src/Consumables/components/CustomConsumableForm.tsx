@@ -23,6 +23,8 @@ import { ConsumableFormActions } from "./componentsConsumables/ConsumableFormAct
 export interface ConsumableInitialData {
   name?: string;
   description?: string;
+  stockMin?:number;
+  stockMax?:number;
   id_type_consumable?: number | string;
   id_brand_consumable?: number | string;
   id_ubication_consumable?: number | string;
