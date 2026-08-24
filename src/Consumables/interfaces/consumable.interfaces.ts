@@ -9,6 +9,8 @@ export interface Consumable {
   item_code: string;
   name: string;
   description: string;
+  stockMin:number;
+  stockMax:number;
   number_uses: number;
   imageUrl: string | null;
   available_stock: number;

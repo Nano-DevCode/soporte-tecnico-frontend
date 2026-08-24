@@ -18,6 +18,8 @@ export const ConsumableCreatePage = () => {
             consumable: {
                 name: "",
                 description: "",
+                stockMin:0,
+                stockMax:0,
                 id_type_consumable: null,
                 id_brand_consumable: null,
                 id_ubication_consumable: null,
@@ -40,6 +42,8 @@ export const ConsumableCreatePage = () => {
         const formData = new FormData();
         formData.append("name", c.name.trim());
         formData.append("description", c.description.trim());
+        formData.append("stockMin", c.stockMin);
+        formData.append("stockMax", c.stockMax);
         formData.append("id_type_consumable", String(typeId));
         formData.append("id_brand_consumable", String(brandId));
         formData.append("id_ubication_consumable", String(ubicationId));
@@ -67,6 +71,8 @@ export const ConsumableCreatePage = () => {
                             [
                                 { backendKeyword: "name", fieldPath: "consumable.name" },
                                 { backendKeyword: "description", fieldPath: "consumable.description" },
+                                { backendKeyword: "stockMin", fieldPath: "consumable.stockMin" },
+                                { backendKeyword: "stockMax", fieldPath: "consumable.stockMax" },
                                 { backendKeyword: "type", fieldPath: "consumable.id_type_consumable" },
                                 { backendKeyword: "brand", fieldPath: "consumable.id_brand_consumable" },
                                 { backendKeyword: "ubication", fieldPath: "consumable.id_ubication_consumable" },

@@ -25,6 +25,8 @@ export const ConsumableEditPage = () => {
                 consumable: {
                     name: consumable.name,
                     description: consumable.description,
+                    stockMin: consumable.stockMin,
+                    stockMax: consumable.stockMax,
                     id_type_consumable: consumable.id_type_consumable,
                     id_brand_consumable: consumable.id_brand_consumable,
                     id_ubication_consumable: consumable.id_ubication_consumable,
@@ -49,6 +51,8 @@ export const ConsumableEditPage = () => {
         const formData = new FormData();
         formData.append("name", c.name.trim());
         formData.append("description", c.description.trim());
+        formData.append("stockMin", c.stockMin);
+        formData.append("stockMax", c.stockMax);
         formData.append("id_type_consumable", String(typeId));
         formData.append("id_brand_consumable", String(brandId));
         formData.append("id_ubication_consumable", String(ubicationId));
@@ -72,6 +76,8 @@ export const ConsumableEditPage = () => {
                         [
                             { backendKeyword: "name", fieldPath: "consumable.name" },
                             { backendKeyword: "description", fieldPath: "consumable.description" },
+                            { backendKeyword: "stockMin", fieldPath: "consumable.stockMin" },
+                            { backendKeyword: "stockMax", fieldPath: "consumable.stockMax" },
                             { backendKeyword: "type", fieldPath: "consumable.id_type_consumable" },
                             { backendKeyword: "brand", fieldPath: "consumable.id_brand_consumable" },
                             { backendKeyword: "ubication", fieldPath: "consumable.id_ubication_consumable" },
