@@ -23,6 +23,7 @@ import { ToolsRoutes } from "./tools2/tools.router";
 import { DepartmentRoutes } from "./departments/departments.routes";
 import { QuestionnaireRoutes } from "./questionnaire/questionnaire.router";
 import { ReportsRoutes } from "./reports/reports";
+import { FeaturesRoutes } from "./features/features.router";
 
 // const PanelLayout = lazy(() => import("./layout/PanelLayout"))
 const PanelLayoutV2 = lazy(() => import("./layout/PanelLayoutV2"))
@@ -113,6 +114,10 @@ const router = createBrowserRouter([
             {
                 path: 'survey/*',
                 element: <QuestionnaireRoutes />,
+            },
+            {
+                path: 'features/*',
+                element: <FeaturesRoutes />,
             },
         ],
     },

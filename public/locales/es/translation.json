@@ -5,6 +5,8 @@
   "name_ito": "Instituto Tecnológico de Oaxaca",
   "profile": "Perfil",
   "settings": "Configuración",
+  "future_features": "Funciones Futuras",
+  "future_features_description": "Explora y activa funciones experimentales, en fase beta o de próximo lanzamiento antes que nadie.",
   "logout": "Cerrar Sesión",
   "list_users": "Lista de Usuarios",
   "create_user": "Crear Usuario",

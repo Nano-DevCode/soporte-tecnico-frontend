@@ -2,6 +2,7 @@ import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from 'react-i18next';
 import { CustomHeaderAvatar } from "../components/CustomHeaderAvatar";
+import { NotificationBell } from "@/features/notifications/components/NotificationBell";
 
 interface Props {
   onSidebarToggle: () => void;
@@ -26,8 +27,10 @@ export function CustomAppHeader({ onSidebarToggle }: Props) {
             </span>
           </Button>
         </div>
-
-        <CustomHeaderAvatar />
+        <div className="flex items-center gap-2">
+          <NotificationBell />
+          <CustomHeaderAvatar />
+        </div>
       </header>
     </>
   )

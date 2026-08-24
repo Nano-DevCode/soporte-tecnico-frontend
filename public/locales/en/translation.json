@@ -5,6 +5,8 @@
   "name_ito": "Oaxaca Institute of Technology",
   "profile": "Profile",
   "settings": "Settings",
+  "future_features": "Future Features",
+  "future_features_description": "Explore and enable experimental features, beta versions, or upcoming releases before anyone else.",
   "logout": "Log Out",
   "users": "Users",
   "list_users": "User List",

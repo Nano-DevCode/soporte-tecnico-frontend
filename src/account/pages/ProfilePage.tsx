@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { CustomReadOnlyField } from "../components/CustomReadOnlyField";
 import { useProfile } from "../hooks/useUserProfile";
+import { NotificationPreferencesCard } from "../components/NotificationPreferencesCard";
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { useTranslation } from "react-i18next";
 
@@ -120,6 +121,10 @@ const ProfilePage = () => {
           </CardContent>
         </Card>
 
+      </div>
+
+      <div className="mt-8">
+        <NotificationPreferencesCard />
       </div>
     </div>
   );

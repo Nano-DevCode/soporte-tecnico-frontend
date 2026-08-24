@@ -4,6 +4,7 @@ import { CustomAppSidebar } from "./components_v2/CustomAppSidebar";
 import { useState } from "react";
 import { CustomAppHeader } from "./components_v2/CustomAppHeader";
 import { useTicketSockets } from "@/tickets/hooks/useTicketSockets";
+import { QuickCommandPalette } from "@/features/components/QuickCommandPalette";
 
 const PanelLayoutV2 = () => {
     useTicketSockets()
@@ -45,6 +46,8 @@ const PanelLayoutV2 = () => {
 
                 <CustomFooter />
             </div>
+            
+            <QuickCommandPalette />
         </div>
     )
 }

@@ -5,7 +5,7 @@ import { useUserRoles } from "@/auth/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks, TicketCheck, Headset, FileSpreadsheet, HelpCircle, HammerIcon } from "lucide-react";
+import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks, TicketCheck, Headset, FileSpreadsheet, HelpCircle, HammerIcon, Sparkles } from "lucide-react";
 
 // Types para la configuración
 type NavSubItem = {
@@ -189,6 +189,12 @@ export const CustomSidebarNavContent = memo(() => {
           title: t("surveys.menu.questions"),
           path: "/survey/questions",
           show: isSuperAdmin
+        },
+        {
+          icon: Sparkles,
+          title: t("future_features", "Funciones Futuras"),
+          path: "/features",
+          show: true
         },
       ]
     }
