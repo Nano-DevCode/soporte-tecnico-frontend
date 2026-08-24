@@ -42,7 +42,7 @@ export const allowedActionsByStatus: Record<TicketStatusType, TicketActionsType[
     [TicketStatus.RECHAZADA]: [TicketActions.CORREGIR, TicketActions.WATCH_REJECTION_REPORT],
     [TicketStatus.CANALIZADA]: [TicketActions.ASIGNAR, TicketActions.CANALIZAR],
     [TicketStatus.ASIGNADA]: [TicketActions.ATENDER, TicketActions.ASIGNAR],
-    [TicketStatus.ATENDIENDO]: [TicketActions.INTERVENIR],
+    [TicketStatus.ATENDIENDO]: [TicketActions.INTERVENIR, TicketActions.FINALIZAR],
     [TicketStatus.SOLUCIONADA]: [TicketActions.FINALIZAR, TicketActions.WATCH_TECHNICAL_REPORT],
     [TicketStatus.NO_SOLUCIONADA]: [
         TicketActions.ASIGNAR,

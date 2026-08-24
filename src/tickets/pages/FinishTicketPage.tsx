@@ -96,12 +96,12 @@ export const FinishTicketPage = () => {
             title={t('tickets.finish_page.title')}
             description={t('tickets.finish_page.description')}
         >
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-                <div className="lg:col-span-5 order-2 lg:order-1">
+            <div className="flex flex-col lg:flex-row gap-4 items-start w-full">
+                <div className="order-2 lg:order-1 w-full lg:w-5/12 empty:hidden">
                     <TechnicalReportsAccordion ticketId={id} />
                 </div>
 
-                <div className="lg:col-span-7 order-1 lg:order-2 lg:sticky lg:top-15">
+                <div className="order-1 lg:order-2 lg:sticky lg:top-15 flex-1 w-full">
                     <FinishTicketForm
                         maintenanceTypes={maintenanceTypes}
                         serviceTypes={serviceTypes}
