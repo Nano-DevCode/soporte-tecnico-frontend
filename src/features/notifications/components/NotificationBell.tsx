@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Bell, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Bell, BellRing, Check } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import {
@@ -8,17 +8,47 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { getUnreadCount, getNotifications, markAsRead, markAllAsRead, type Notification } from '../api/notifications.api';
+import { 
+  getUnreadCount, 
+  getNotifications, 
+  markAsRead, 
+  markAllAsRead, 
+  type Notification 
+} from '../api/notifications.api';
 import { useNotificationSocket } from '../hooks/useNotificationSocket';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useNavigate } from 'react-router';
 
+// Función para pedir permiso al navegador
+const requestBrowserNotificationPermission = async () => {
+  if (!('Notification' in window)) return false;
+  if (Notification.permission === 'granted') return true;
+  const permission = await Notification.requestPermission();
+  return permission === 'granted';
+};
+
 export function NotificationBell() {
   useNotificationSocket();
   const queryClient = useQueryClient();
-  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  
+  // Estado para saber si ya tenemos el permiso
+  const [permissionStatus, setPermissionStatus] = useState<NotificationPermission>('default');
+
+  // Revisar el estado del permiso al cargar el componente
+  useEffect(() => {
+    if ('Notification' in window) {
+      setPermissionStatus(Notification.permission);
+    }
+  }, []);
+
+  // Función que se ejecuta al hacer clic en el botón de activar
+  const handleEnableNotifications = async () => {
+    const granted = await requestBrowserNotificationPermission();
+    setPermissionStatus(granted ? 'granted' : 'denied');
+  };
 
   const { data: unreadCount = 0 } = useQuery({
     queryKey: ['notifications', 'unread'],
@@ -60,6 +90,7 @@ export function NotificationBell() {
           )}
         </Button>
       </PopoverTrigger>
+      
       <PopoverContent className="w-80 p-0" align="end">
         <div className="flex items-center justify-between border-b px-4 py-3">
           <span className="font-semibold text-sm">Notificaciones</span>
@@ -75,6 +106,25 @@ export function NotificationBell() {
             </Button>
           )}
         </div>
+
+        {/* BOTÓN DE PERMISOS: Solo se muestra si no se ha dado respuesta aún */}
+        {permissionStatus === 'default' && (
+          <div className="bg-muted/50 p-3 border-b flex flex-col gap-2 items-start">
+            <p className="text-xs text-muted-foreground">
+              Activa las notificaciones para enterarte cuando minimizas la ventana.
+            </p>
+            <Button 
+              size="sm" 
+              variant="secondary" 
+              className="w-full text-xs h-8"
+              onClick={handleEnableNotifications}
+            >
+              <BellRing className="w-3 h-3 mr-2" />
+              Activar notificaciones
+            </Button>
+          </div>
+        )}
+
         <ScrollArea className="h-80">
           {notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center text-sm text-muted-foreground">
@@ -86,8 +136,9 @@ export function NotificationBell() {
               {notifications.map((notif: Notification) => (
                 <div
                   key={notif.id}
-                  className={`flex items-start gap-3 border-b p-4 transition-colors hover:bg-muted/50 ${!notif.isRead ? 'bg-primary/5' : ''
-                    }`}
+                  className={`flex items-start gap-3 border-b p-4 transition-colors hover:bg-muted/50 ${
+                    !notif.isRead ? 'bg-primary/5' : ''
+                  }`}
                 >
                   <div className="flex-1 space-y-1">
                     <p className={`text-sm ${!notif.isRead ? 'font-medium' : ''}`}>

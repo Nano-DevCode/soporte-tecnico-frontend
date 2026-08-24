@@ -5,12 +5,16 @@ import { socket } from '@/tickets/websockets/socket';
 import { useNavigate } from 'react-router';
 import type { Notification } from '../api/notifications.api';
 
+const notificationAudio = new Audio('/notification.mp3');
+
 export const playNotificationSound = () => {
   try {
-    const audio = new Audio('/notification.mp3');
-    audio.play().catch(e => console.error("Error al reproducir el sonido de notificación", e));
+    notificationAudio.currentTime = 0; 
+    notificationAudio.play().catch(e => {
+      console.warn("El navegador bloqueó el sonido por falta de interacción.", e);
+    });
   } catch (e) {
-    console.error("No se pudo crear el objeto Audio", e);
+    console.error("No se pudo reproducir el audio", e);
   }
 };
 
