@@ -28,10 +28,7 @@ export const useNotificationSocket = () => {
     }
 
     const handleNotification = (payload: Notification) => {
-      // Reproducir sonido
       playNotificationSound();
-
-      // Mostrar toast con botón de acción si tiene entityId
       toast.info(payload.title, {
         description: payload.message,
         action: payload.entityId ? {
@@ -40,7 +37,21 @@ export const useNotificationSocket = () => {
         } : undefined,
       });
 
-      // Invalidar las queries para refrescar la lista y contador
+      if ('Notification' in window && Notification.permission === 'granted') {
+        const browserNotification = new window.Notification(payload.title, {
+          body: payload.message,
+          icon: '/logo.png', 
+          silent: true,
+        });
+
+        browserNotification.onclick = () => {
+          window.focus(); // Trae la pestaña al frente
+          if (payload.entityId) {
+            navigate(`/tickets/${payload.entityId}`);
+          }
+          browserNotification.close();
+        };
+      }
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
     };
 
