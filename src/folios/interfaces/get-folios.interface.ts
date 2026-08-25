@@ -16,5 +16,12 @@ export interface ResponseFolio {
     next_folio_preview: string;
 }
 
+export interface OTFolio {
+    year:               string;
+    current_value:      number;
+    next_value:         number;
+    next_folio_preview: string;
+}
+
 export type DataItemFolio = keyof ItemFolio;
 export type DataResponseFolio = keyof ItemFolio;

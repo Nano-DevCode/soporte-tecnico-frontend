@@ -44,6 +44,16 @@ export const getTicketColumns = (
 			)
 		},
 		{
+			accessorKey: "internal_folio",
+			id: TICKET_COLUMN_IDS.OT_FOLIO,
+			header: ({ column }) => SortableHeader(column, "No. Orden"),
+			cell: ({ row }) => (
+				<span className="whitespace-nowrap font-mono text-sm font-semibold uppercase tracking-wider">
+					{row.original.internal_folio ?? '-'}
+				</span>
+			)
+		},
+		{
 			accessorKey: "school_period.name",
 			id: TICKET_COLUMN_IDS.SCHOOL_PERIOD,
 			header: ({ column }) => SortableHeader(column, t("tickets.list_page.table.headers.school_period")),
@@ -179,6 +189,9 @@ export const getTicketColumns = (
 	]
 
 	return allColumns.filter(col => {
+		if (col.id === TICKET_COLUMN_IDS.OT_FOLIO && !can("WATCH_TICKET_OT_FOLIO")) {
+			return false;
+		}
 		if (col.id === TICKET_COLUMN_IDS.PRIORITY && !can("WATCH_TICKET_PRIORITY")) {
 			return false;
 		}

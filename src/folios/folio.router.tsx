@@ -10,6 +10,8 @@ const ViewMyTicketFolioDepartmentPage = lazy(() => import("./pages/ViewMyTicketF
 const EditMyTicketFolioDepartmentPage = lazy(() => import("./pages/EditMyTicketFolioDepartmentPage").then(module => ({ default: module.EditMyTicketFolioDepartmentPage })));
 const ViewResponseFolioPage = lazy(() => import("./pages/ViewResponseFolioPage").then(module => ({ default: module.ViewResponseFolioPage })));
 const EditResponseFolioPage = lazy(() => import("./pages/EditResponseFolioPage").then(module => ({ default: module.EditResponseFolioPage })));
+const ViewOTFolioPage = lazy(() => import("./pages/ViewOTFolioPage").then(module => ({ default: module.ViewOTFolioPage })));
+const EditOTFolioPage = lazy(() => import("./pages/EditOTFolioPage").then(module => ({ default: module.EditOTFolioPage })));
 
 export const FoliosRoutes = () => {
     return useRoutes([
@@ -74,6 +76,24 @@ export const FoliosRoutes = () => {
                 <SuspenseWrapper>
                     <CanRoute permission="EDIT_RESPONSE_FOLIO">
                         <EditResponseFolioPage />
+                    </CanRoute>
+                </SuspenseWrapper >
+        },
+        {
+            path: 'ot',
+            element:
+                <SuspenseWrapper>
+                    <CanRoute permission="SHOW_OT_FOLIO_DETAILS">
+                        <ViewOTFolioPage />
+                    </CanRoute>
+                </SuspenseWrapper >
+        },
+        {
+            path: 'ot/edit',
+            element:
+                <SuspenseWrapper>
+                    <CanRoute permission="EDIT_OT_FOLIO">
+                        <EditOTFolioPage />
                     </CanRoute>
                 </SuspenseWrapper >
         }

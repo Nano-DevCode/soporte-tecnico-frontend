@@ -4,6 +4,7 @@ import type { Document } from "./ticket-details.response";
 export interface Ticket {
     id:            string;
     folio:         string;
+    internal_folio: string | null;
     status:        string;
     status_code:   string;
     priority:      number;

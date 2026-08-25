@@ -23,6 +23,7 @@ export interface TicketDetailsResponse {
     jefe_depto:         User;
     attends:            Attend[];
     coordinator:        User;
+    routingFailed?:     boolean;
 }
 
 export interface IssueType {

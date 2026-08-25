@@ -39,13 +39,21 @@ export const CreateTicketOnBehalfPage = () => {
 
     const handleSubmit = async (values: TicketOnBehalfFormOutput, idempotencyKey: string) => {
         try {
-            await mutateAsync({ data: values, idempotencyKey });
+            const response = await mutateAsync({ data: values, idempotencyKey });
 
-            sileo.success({
-                title: t('tickets.create_page.success.title'),
-                description: t('tickets.create_page.success.message'),
-                duration: 5000,
-            });
+            if (response.routingFailed) {
+                sileo.warning({
+                    title: t('tickets.create_on_behalf_page.warning.title'),
+                    description: t('tickets.create_on_behalf_page.warning.message'),
+                    duration: 7000,
+                });
+            } else {
+                sileo.success({
+                    title: t('tickets.create_page.success.title'),
+                    description: t('tickets.create_page.success.message'),
+                    duration: 5000,
+                });
+            }
             navigateSmartBack();
 
         } catch (error) {

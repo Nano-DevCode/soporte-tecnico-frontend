@@ -18,3 +18,14 @@ export const responseFoliosQueryKeys = {
 
     detail: (id: string) => [...responseFoliosQueryKeys.details(), id] as const,
 };
+
+export const otFoliosQueryKeys = {
+    all: ['ot-folios'] as const,
+    lists: () => [...otFoliosQueryKeys.all, 'list'] as const,
+
+    list: (filters: Record<string, unknown>) => [...otFoliosQueryKeys.lists(), filters] as const,
+
+    details: () => [...otFoliosQueryKeys.all, 'detail'] as const,
+
+    detail: (id: string) => [...otFoliosQueryKeys.details(), id] as const,
+};

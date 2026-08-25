@@ -261,7 +261,8 @@
           "subitems": {
             "list_departments": "Solicitudes de Departamentos",
             "responses": "Respuestas",
-            "my_department": "Mi departamento"
+            "my_department": "Mi departamento",
+            "ot": "Interno"
           }
         }
       }
@@ -658,7 +659,8 @@
           "actions": "Acciones",
           "tags": "Etiquetas",
           "request_document": "Formato de solicitud",
-          "response_document": "Formato de respuesta"
+          "response_document": "Formato de respuesta",
+          "ot_folio": "No. Orden"
         }
       },
       "empty": {
@@ -708,6 +710,10 @@
       "error": {
         "title": "Error",
         "message": "Ocurrió un error al enviar la solicitud de soporte técnico."
+      },
+      "warning": {
+        "title": "Ticket creado con advertencias",
+        "message": "La solicitud se creó exitosamente, pero hubo un error al auto-canalizarla. Por favor asigne o canalice el ticket manualmente."
       }
     },
     "assign_page": {
@@ -1348,6 +1354,59 @@
             "requested_min_folio": "El número de folio debe ser mayor al número de folio siguiente: {{currentValueFolio}}."
           }
         }
+      }
+    },
+    "ot": {
+      "not_found": {
+        "title": "Detalles del folio OT no encontrados",
+        "message": "No se pudieron encontrar los detalles para el folio interno del Centro de Cómputo."
+      },
+      "view_page": {
+        "title": "Folio Interno (OT)",
+        "description": "Visualice el estado del folio interno (OT)."
+      },
+      "edit_page": {
+        "title": "Editar Folio OT",
+        "description": "Configurar siguiente folio.",
+        "success": {
+          "title": "Folio OT actualizado",
+          "message": "Los cambios se han guardado correctamente."
+        },
+        "error": {
+          "title": "Error al editar el folio OT",
+          "message": "Hubo un problema al intentar actualizar el folio OT."
+        },
+        "details": {
+          "sections": {
+            "config": "Configura el nuevo valor para el folio"
+          }
+        }
+      },
+      "forms": {
+        "folio": {
+          "fields": {
+            "folio": {
+              "label": "Número de folio para la siguiente solicitud y su orden de trabajo",
+              "placeholder": "Ingresa el número de folio",
+              "description": "El número ingresado será el número que tome la siguiente solicitud y su orden de trabajo que se cree."
+            },
+            "next_folio_preview": {
+              "label": "Previsualización del folio para la siguiente solicitud y su orden de trabajo",
+              "placeholder": "Ingresa un número de folio",
+              "description": "La siguiente solicitud y su orden de trabajo que se cree tendrá el siguiente folio después de guardar."
+            }
+          }
+        }
+      },
+      "details": {
+        "header_title": "Folio Interno del Centro de Cómputo (OT)",
+        "header_description": "Administre el folio interno de las solicitudes y órdenes de trabajo.",
+        "period_section": "Detalles del periodo (Anual)",
+        "year": "Año",
+        "counter_section": "Detalles del contador",
+        "current_value": "Valor actual",
+        "next_value": "Siguiente valor a asignar",
+        "preview": "Vista previa del siguiente folio (Ejemplo con DEP)"
       }
     },
     "actions": {

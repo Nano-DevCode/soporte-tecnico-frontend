@@ -116,6 +116,12 @@ export const CustomSidebarNavContent = memo(() => {
           path: "/folios/responses",
           show: isSuperAdmin || isBossCC
         },
+        {
+          title: t("common.nav_content.settings.folios.subitems.ot"),
+          icon: MessageSquareReply,
+          path: "/folios/ot",
+          show: isSuperAdmin || isBossCC
+        },
       ]
     },
     {
@@ -194,7 +200,7 @@ export const CustomSidebarNavContent = memo(() => {
           icon: Sparkles,
           title: t("future_features", "Funciones Futuras"),
           path: "/features",
-          show: true
+          show: isSuperAdmin
         },
       ]
     }
