@@ -164,11 +164,11 @@ const ItAssetsUpdatePage = () => {
     if (data.imageFile instanceof File) {
       formData.append("file", data.imageFile);
     }
-    if (data.idInventary) {
+    if (data.idInventary !== undefined) {
       formData.append("idInventary", data.idInventary);
     }
-    if (data.name) {
-      formData.append("name", data.name); // <--- 4. AGREGADO AL FORMDATA
+    if (data.name !== undefined) {
+      formData.append("name", data.name);
     }
     if (data.invoiceId) {
       formData.append("invoiceId", data.invoiceId);

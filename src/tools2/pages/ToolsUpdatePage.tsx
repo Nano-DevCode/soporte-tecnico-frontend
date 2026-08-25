@@ -82,8 +82,12 @@ const ToolsUpdatePage = () => {
       formData.append("file", data.imageFile); 
     }
 
-    if (data.idInventary) formData.append("idInventary", data.idInventary);
-    if (data.name) formData.append("name", data.name);
+    if (data.idInventary !== undefined) {
+      formData.append("idInventary", data.idInventary);
+    }
+    if (data.name !== undefined) {
+      formData.append("name", data.name);
+    }
     if (data.invoiceId) formData.append("invoiceId", data.invoiceId);
     if (data.description) formData.append("description", data.description);
 
