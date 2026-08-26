@@ -30,8 +30,8 @@ export const DetailsResponseFolio = ({ responseFolio: responseFolio, children }:
                     <CustomSectionInfo label={t('folios.responses.view_page.details.sections.period_details')} />
                     <CustomInfoRow
                         icon={<CalendarRange className="w-4 h-4 text-muted-foreground" />}
-                        label={t('folios.data.period_name')}
-                        value={responseFolio.period_name}
+                        label={t('folios.ot.details.year')}
+                        value={responseFolio.year}
                     />
                 </div>
 

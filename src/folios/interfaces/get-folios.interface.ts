@@ -9,8 +9,7 @@ export interface ItemFolio {
     next_folio_preview: string;
 }
 export interface ResponseFolio {
-    period_id:          string;
-    period_name:        string;
+    year:               string;
     current_value:      number;
     next_value:         number;
     next_folio_preview: string;

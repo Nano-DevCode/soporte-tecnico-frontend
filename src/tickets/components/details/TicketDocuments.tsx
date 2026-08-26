@@ -5,6 +5,7 @@ import { CustomHeaderCard } from "@/components/custom/CustomHeaderCard";
 import { Separator } from "@/components/ui/separator";
 import { TYPE_DOCUMENT_NAME, type Document } from "@/tickets/interfaces/ticket-details.response";
 import { TicketDocumentButton } from "./TicketDocumentButton";
+import { useParams } from "react-router";
 
 interface Props {
     documents: Document[];
@@ -12,6 +13,7 @@ interface Props {
 
 export const TicketDocuments = ({ documents }: Props) => {
     const { t } = useTranslation();
+    const { id } = useParams<{ id: string }>();
 
     const requestDocument = documents?.find((doc) => doc.type_document.name === TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM);
     const responseDocument = documents?.find((doc) => doc.type_document.name === TYPE_DOCUMENT_NAME.WORK_ORDER_FORM);
@@ -33,7 +35,8 @@ export const TicketDocuments = ({ documents }: Props) => {
                     <TicketDocumentButton
                         documentType={TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM}
                         filename={requestDocument.name}
-                        className="w-full justify-start"
+                        ticketId={id!}
+                        className="flex-1 justify-start"
                     />
                 )}
 
@@ -41,7 +44,8 @@ export const TicketDocuments = ({ documents }: Props) => {
                     <TicketDocumentButton
                         documentType={TYPE_DOCUMENT_NAME.WORK_ORDER_FORM}
                         filename={responseDocument.name}
-                        className="w-full justify-start"
+                        ticketId={id!}
+                        className="flex-1 justify-start"
                     />
                 )}
             </CardContent>

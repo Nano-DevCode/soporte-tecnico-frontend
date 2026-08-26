@@ -89,15 +89,16 @@ export const getTicketArchiveColumns = (
 			enableSorting: false,
 			header: () => <div className="text-center">{t("tickets.list_page.table.headers.request_document")}</div>,
 			cell: ({ row }) => {
-				const filename = row.original.documents?.find(
+				const document = row.original.documents?.find(
 					(doc) => doc.type_document.name === TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM
-				)?.name;
+				);
 				return (
 					<div className="text-center" onClick={(e) => e.stopPropagation()}>
-						{filename ? (
+						{document?.name ? (
 							<TicketDocumentButton
 								documentType={TYPE_DOCUMENT_NAME.SERVICE_REQUEST_FORM}
-								filename={filename}
+								filename={document.name}
+								ticketId={row.original.id}
 								withTitle={false}
 							/>
 						) : (
@@ -112,15 +113,16 @@ export const getTicketArchiveColumns = (
 			enableSorting: false,
 			header: () => <div className="text-center">{t("tickets.list_page.table.headers.response_document")}</div>,
 			cell: ({ row }) => {
-				const filename = row.original.documents?.find(
+				const document = row.original.documents?.find(
 					(doc) => doc.type_document.name === TYPE_DOCUMENT_NAME.WORK_ORDER_FORM
-				)?.name;
+				);
 				return (
 					<div className="text-center" onClick={(e) => e.stopPropagation()}>
-						{filename ? (
+						{document?.name ? (
 							<TicketDocumentButton
 								documentType={TYPE_DOCUMENT_NAME.WORK_ORDER_FORM}
-								filename={filename}
+								filename={document.name}
+								ticketId={row.original.id}
 								withTitle={false}
 							/>
 						) : (

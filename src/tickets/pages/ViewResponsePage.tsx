@@ -95,6 +95,7 @@ export const ViewResponsePage = () => {
                         <TicketDocumentButton
                             documentType={TYPE_DOCUMENT_NAME.WORK_ORDER_FORM}
                             filename={filename}
+                            ticketId={id!}
                         />
                     )
                     }

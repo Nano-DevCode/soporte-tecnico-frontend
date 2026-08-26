@@ -11,7 +11,7 @@ export const updateResponseFolioAction = async (
 ): Promise<ResponseFolio> => {
 
     const { data } = await soporteTecnicoApi.patch<ResponseFolio>(
-        `/folio-counters/current-period/responses`,
+        `/folio-counters/current-year/responses`,
         editResponsePayload
     );
 

@@ -22,7 +22,7 @@ interface Props {
 
 }
 
-const ACRONYM_CC = "CC";
+const ACRONYM_OT = "OT";
 
 const defaultFormValues = {
     requestedNextFolio: ""
@@ -97,7 +97,7 @@ export const ResponseFolioForm = ({ responseFolio, onSubmit, isPending, titleBut
                                         disabled={true}
                                         value={
                                             requestedNextFolio
-                                                ? `${ACRONYM_CC}-${responseFolio?.period_name}-${String(requestedNextFolio).padStart(4, '0')}`
+                                                ? `${ACRONYM_OT}-${responseFolio?.year}-${String(requestedNextFolio).padStart(4, '0')}-DEP`
                                                 : ""
                                         }
                                     />
