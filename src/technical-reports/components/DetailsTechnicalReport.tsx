@@ -1,6 +1,6 @@
 import { CustomInfoRow } from '@/components/custom/CustomInfoRow'
-// import { toFormatLocalDateString } from '@/lib/helpers/to-format-local-date-string'
-import { Bug, FileText, Info, Package, Wrench } from 'lucide-react'
+import { toFormatLocalDateString } from '@/lib/helpers/to-format-local-date-string'
+import { Bug, CalendarClock, FileText, Info, Package, Wrench } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { TechnicalReportDetails } from '../interfaces/technical-report-details.interface'
 import { CustomEquipmentSummaryCard } from '@/Equipments/components/CustomEquipmentSummaryCard'
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const DetailsTechnicalReport = ({ technicalReport }: Props) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     return (
         <div className="space-y-5">
             <div className="flex flex-col md:flex-row flex-wrap gap-y-5 gap-x-2">
@@ -59,13 +59,13 @@ export const DetailsTechnicalReport = ({ technicalReport }: Props) => {
                 value={technicalReport.materials_used || t('technical_reports.data.materials_none_used')}
             />
 
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5">
                 <CustomInfoRow
                     icon={<CalendarClock className="w-4 h-4 text-muted-foreground" />}
                     label={t('technical_reports.data.date')}
                     value={toFormatLocalDateString(technicalReport.created_at, i18n.language, 'PPp')}
                 />
-            </div> */}
+            </div>
         </div>
     )
 }
