@@ -93,7 +93,7 @@ export const DialogUpdateInternalFolio = ({ ticketId, currentFolio }: Props) => 
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        El formato anterior era CC-PERIODO-NUMERO, el nuevo es OT-AÑO-NUMERO-DEP.
+                                        El formato anterior era CC-PERIODO-NUMERO, el nuevo es OT-AÑO-NUMERO-DEPARTAMENTO.
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
