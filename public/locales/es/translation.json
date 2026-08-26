@@ -266,6 +266,18 @@
           }
         }
       }
+    },
+    "messages": {
+      "success": {
+        "title": "Éxito"
+      },
+      "error": {
+        "title": "Ocurrió un error",
+        "description": "Hubo un problema al procesar la solicitud. Por favor, inténtalo de nuevo."
+      }
+    },
+    "validations": {
+      "required": "Este campo es obligatorio."
     }
   },
   "center_managers": {
@@ -1354,6 +1366,9 @@
             "requested_min_folio": "El número de folio debe ser mayor al número de folio siguiente: {{currentValueFolio}}."
           }
         }
+      },
+      "update": {
+        "success": "Folio interno actualizado correctamente."
       }
     },
     "ot": {
@@ -3874,6 +3889,11 @@
         "dialogUpConfirm": "Sí, dar de alta",
         "dialogCancel": "Cancelar"
       }
+    }
+  },
+  "errors": {
+    "tickets": {
+      "folio_already_exists": "El folio interno especificado ya existe en otro ticket."
     }
   }
 }
