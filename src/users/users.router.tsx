@@ -2,6 +2,7 @@ import { RoleRoute, type UserRole } from "@/auth/routes/ProtectedRoutes";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
 import { lazy } from "react";
 import { useRoutes } from "react-router";
+import TechniciansResolutionKPI from "./pages/TechniciansResolutionKPI";
 const UserPage = lazy(() => import('./pages/UserPage'));
 const UserCreatePage = lazy(() => import('./pages/UserCreatePage'));
 const UserDetailsPage = lazy(() => import('./pages/UserDetailsPage'));
@@ -32,6 +33,16 @@ export const UsersRoutes = () => {
             )
         },
         {
+            path: 'technicians-resolution',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <TechniciansResolutionKPI />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
             path: 'edit/:id',
             element: (
                 <SuspenseWrapper>
@@ -50,6 +61,6 @@ export const UsersRoutes = () => {
                     </RoleRoute>
                 </SuspenseWrapper>
             )
-        },
+        }
     ]);
 };
