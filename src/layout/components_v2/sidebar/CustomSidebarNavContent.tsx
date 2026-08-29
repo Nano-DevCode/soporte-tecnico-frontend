@@ -130,6 +130,7 @@ export const CustomSidebarNavContent = memo(() => {
       show: isSuperAdmin || isCoordinator || isBossCC || isVisitor,
       subItems: [
         { title: t("custom_nav_content_users"), path: "/users", show: true },
+        { title: t("custom_nav_content_kpi_technical"), path: "/users/technicians-resolution", show: true },
         { title: t("custom_nav_content_depatment"), path: "/departments", show: true },
       ]
     },

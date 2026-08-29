@@ -22,7 +22,7 @@
   "made_with": "Hecho con",
   "by_made_center_computer_department": "por el Departamento de Centro de Cómputo",
   "dashboard": "Dashboard",
-  "start": "inicio",
+  "start": "Inicio",
   "requerid_email": "El correo es obligatorio",
   "requerid_email_format": "Debe ser un correo válido",
   "requerid_password": "La contraseña es obligatoria",
@@ -52,6 +52,7 @@
   "custom_nav_content_start": "Inicio",
   "custom_nav_content_dashboard": "Dashboard",
   "custom_nav_content_users": "Usuarios",
+  "custom_nav_content_kpi_technical": "KPI de Técnicos",
   "custom_nav_content_depatment": "Departamentos",
   "custom_nav_content_it_assets": "Activos TI",
   "custom_nav_content_inventory": "Inventario",
@@ -3829,6 +3830,22 @@
         "noData": "No se encontró información del personal asignado.",
         "nc": "NC",
         "rfc": "RFC"
+      },
+      "customKpiFilters": {
+        "placeholderSearch": "Buscar por nombre, correo o matrícula...",
+        "performancePlaceholder": "Rendimiento",
+        "allPerformance": "Todos los estados",
+        "excellent": "🟢 Excelente (≥ 80%)",
+        "regular": "🟡 Regular (60% - 79%)",
+        "attention": "🔴 Atención (< 60%)",
+        "sortByPlaceholder": "Ordenar por...",
+        "sortGlobalEffectiveness": "Efectividad Global",
+        "sortPendingTickets": "Tickets Pendientes",
+        "sortResolutionTime": "Tiempo de Resolución",
+        "sortAssignedVolume": "Volumen Asignado",
+        "descendingOrder": "Orden Descendente",
+        "ascendingOrder": "Orden Ascendente",
+        "clear": "Limpiar"
       }
     },
     "pages": {
@@ -3888,6 +3905,29 @@
         "dialogDownConfirm": "Sí, dar de baja",
         "dialogUpConfirm": "Sí, dar de alta",
         "dialogCancel": "Cancelar"
+      },
+      "techniciansResolutionKpiPage": {
+        "title": "KPI de Técnicos",
+        "description": "Analiza la efectividad, carga de trabajo y tiempos promedios del equipo de soporte.",
+        "emptyState": {
+          "title": "No se encontraron resultados",
+          "description": "Ningún técnico coincide con los filtros de búsqueda actuales. Intenta modificar tus criterios o limpia los filtros.",
+          "clearFilters": "Limpiar todos los filtros"
+        },
+        "card": {
+          "effectivenessRate": "Tasa de Efectividad",
+          "metrics": {
+            "assigned": "Asignados",
+            "resolved": "Resueltos",
+            "pending": "Pendientes",
+            "avgTime": "Tiempo Prom."
+          }
+        },
+        "tones": {
+          "excellent": "Excelente",
+          "regular": "Regular",
+          "attention": "Atención"
+        }
       }
     }
   },

@@ -4,8 +4,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { FilterX, Search, ArrowDownAZ, ArrowUpZA } from "lucide-react";
 import { useSearchParams } from "react-router";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next"; // <-- Importamos useTranslation
 
 export const CustomKpiFilters = () => {
+  const { t } = useTranslation(); 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const searchTerm = searchParams.get("search") || "";
@@ -54,7 +56,7 @@ export const CustomKpiFilters = () => {
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />
         <Input
           name="searchKpi"
-          placeholder="Buscar por nombre, correo o matrícula..."
+          placeholder={t("users.components.customKpiFilters.placeholderSearch")}
           className="pl-9 h-10 bg-background/60 transition-all focus:bg-background"
           value={localSearch}
           onChange={(e) => setLocalSearch(e.target.value)}
@@ -65,26 +67,26 @@ export const CustomKpiFilters = () => {
         {/* Filtro por Semáforo de Rendimiento */}
         <Select value={performanceFilter} onValueChange={(v) => updateFilters("performanceStatus", v)}>
           <SelectTrigger className="w-full sm:w-40 h-10 bg-background/60">
-            <SelectValue placeholder="Rendimiento" />
+            <SelectValue placeholder={t("users.components.customKpiFilters.performancePlaceholder")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos los estados</SelectItem>
-            <SelectItem value="excellent">🟢 Excelente (≥ 80%)</SelectItem>
-            <SelectItem value="regular">🟡 Regular (60% - 79%)</SelectItem>
-            <SelectItem value="attention">🔴 Atención (&lt; 60%)</SelectItem>
+            <SelectItem value="all">{t("users.components.customKpiFilters.allPerformance")}</SelectItem>
+            <SelectItem value="excellent">{t("users.components.customKpiFilters.excellent")}</SelectItem>
+            <SelectItem value="regular">{t("users.components.customKpiFilters.regular")}</SelectItem>
+            <SelectItem value="attention">{t("users.components.customKpiFilters.attention")}</SelectItem>
           </SelectContent>
         </Select>
 
         {/* Filtro por Criterio de Ordenamiento */}
         <Select value={sortByFilter} onValueChange={(v) => updateFilters("sortBy", v)}>
           <SelectTrigger className="w-full sm:w-37.5 h-10 bg-background/60">
-            <SelectValue placeholder="Ordenar por..." />
+            <SelectValue placeholder={t("users.components.customKpiFilters.sortByPlaceholder")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Efectividad Global</SelectItem>
-            <SelectItem value="pending">Tickets Pendientes</SelectItem>
-            <SelectItem value="speed">Tiempo de Resolución</SelectItem>
-            <SelectItem value="assigned">Volumen Asignado</SelectItem>
+            <SelectItem value="all">{t("users.components.customKpiFilters.sortGlobalEffectiveness")}</SelectItem>
+            <SelectItem value="pending">{t("users.components.customKpiFilters.sortPendingTickets")}</SelectItem>
+            <SelectItem value="speed">{t("users.components.customKpiFilters.sortResolutionTime")}</SelectItem>
+            <SelectItem value="assigned">{t("users.components.customKpiFilters.sortAssignedVolume")}</SelectItem>
           </SelectContent>
         </Select>
 
@@ -93,7 +95,7 @@ export const CustomKpiFilters = () => {
           size="icon"
           className="h-10 w-10 shrink-0 bg-background/60 text-muted-foreground hover:text-foreground"
           onClick={() => updateFilters("order", orderFilter === "DESC" ? "ASC" : "DESC")}
-          title={orderFilter === "DESC" ? "Orden Descendente" : "Orden Ascendente"}
+          title={orderFilter === "DESC" ? t("users.components.customKpiFilters.descendingOrder") : t("users.components.customKpiFilters.ascendingOrder")}
         >
           {orderFilter === "DESC" ? <ArrowDownAZ className="h-4 w-4" /> : <ArrowUpZA className="h-4 w-4" />}
         </Button>
@@ -106,7 +108,7 @@ export const CustomKpiFilters = () => {
             className="h-10 px-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all"
           >
             <FilterX className="h-4 w-4 sm:mr-2" />
-            <span className="hidden sm:inline">Limpiar</span>
+            <span className="hidden sm:inline">{t("users.components.customKpiFilters.clear")}</span>
           </Button>
         )}
       </div>
