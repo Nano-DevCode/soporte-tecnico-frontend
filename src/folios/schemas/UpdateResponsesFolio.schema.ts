@@ -1,7 +1,7 @@
 import type { TFunction } from "i18next";
 import z from "zod";
 
-export const ResponseFolioSchema = (t: TFunction, minValueFolio: number) => z.object({
+export const ResponseFolioSchema = (t: TFunction, minValueFolio: number = 1) => z.object({
     requestedNextFolio: z.coerce.number({
         error: t('folios.responses.forms.folio.errors.requested_folio_required')
     })

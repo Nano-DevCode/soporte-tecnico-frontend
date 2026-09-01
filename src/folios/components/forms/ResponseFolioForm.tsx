@@ -31,7 +31,7 @@ const defaultFormValues = {
 export const ResponseFolioForm = ({ responseFolio, onSubmit, isPending, titleButton, onCancel }: Props) => {
     const { t } = useTranslation();
 
-    const schema = useMemo(() => ResponseFolioSchema(t, responseFolio?.next_value ?? 0), [responseFolio?.next_value, t]);
+    const schema = useMemo(() => ResponseFolioSchema(t), [t]);
 
 
     const form = useForm<ResponseFolioFormInput, unknown, ResponseFolioFormOutput>({
