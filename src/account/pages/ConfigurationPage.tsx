@@ -1,6 +1,7 @@
 import { Settings } from "lucide-react";
 import { CustomLanguageConfiguration } from "../components/CustomLanguageConfiguration";
 import { CustomPasswordConfiguration } from "../components/CustomPasswordConfiguration";
+import { CustomSessionsConfiguration } from "../components/CustomSessionsConfiguration";
 import { CustomTitleCard } from "@/components/custom/CustomTitleCard";
 import { useTranslation } from "react-i18next";
 
@@ -19,6 +20,7 @@ const ConfigurationPage = () => {
       <div className="flex flex-col gap-8 mt-2">
         <CustomLanguageConfiguration />
         <CustomPasswordConfiguration />
+        <CustomSessionsConfiguration />
       </div>
 
     </div>

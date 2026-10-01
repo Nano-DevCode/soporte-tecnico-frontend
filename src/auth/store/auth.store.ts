@@ -3,6 +3,7 @@ import { AppRoles, type AuthResponse } from '../interfaces/authResponse.interfac
 import { loginAction } from '../actions/login.action';
 import { checkAuthAction } from '../actions/check-auth.action';
 import { logoutAction } from '../actions/logout';
+import { logoutAllAction } from '../actions/logout-all.action';
 import { logError } from '@/utils/logger';
 
 type AuthStatus = 'authenticated' | 'not-authenticated' | 'checking';
@@ -27,6 +28,7 @@ type AuthState = {
 
   login: (email: string, password: string) => Promise<boolean>,
   logout: () => Promise<void>,
+  logoutAll: () => Promise<void>,
   checkAuthStatus: () => Promise<boolean>,
 }
 
@@ -69,6 +71,16 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
       await logoutAction();
     } catch (error) {
       logError(error, "AuthStore", "Error al cerrar sesión");
+    } finally {
+      set({ user: null, authStatus: 'not-authenticated', lastCheck: null, sessionStart: null });
+    }
+  },
+
+  logoutAll: async () => {
+    try {
+      await logoutAllAction();
+    } catch (error) {
+      logError(error, "AuthStore", "Error al cerrar todas las sesiones");
     } finally {
       set({ user: null, authStatus: 'not-authenticated', lastCheck: null, sessionStart: null });
     }
