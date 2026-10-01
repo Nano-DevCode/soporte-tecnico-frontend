@@ -2,6 +2,7 @@ import { AppRoles, type AppRoleType } from "@/auth/interfaces/authResponse.inter
 
 export const PERMISSIONS = {
     WATCH_DASHBOARD: 'WATCH_DASHBOARD',
+    WATCH_AUDIT_LOGS: 'WATCH_AUDIT_LOGS',
 
     WATCH_PERIOD: 'WATCH_PERIOD',
     WATCH_PERIOD_LIST: 'WATCH_PERIOD_LIST',
@@ -268,6 +269,7 @@ export const ROLE_PERMISSIONS: Record<AppRoleType, Partial<PermissionsTypes[]>> 
     ],
     [AppRoles.SuperAdmin]: [
         PERMISSIONS.WATCH_DASHBOARD,
+        PERMISSIONS.WATCH_AUDIT_LOGS,
 
         PERMISSIONS.WATCH_MANAGER,
         PERMISSIONS.WATCH_MANAGER_LIST,

@@ -5,7 +5,7 @@ import { useUserRoles } from "@/auth/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks, TicketCheck, Headset, FileSpreadsheet, HelpCircle, HammerIcon, Sparkles, Timer } from "lucide-react";
+import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks, TicketCheck, Headset, FileSpreadsheet, HelpCircle, HammerIcon, Sparkles, Timer, History } from "lucide-react";
 
 // Types para la configuración
 type NavSubItem = {
@@ -207,6 +207,12 @@ export const CustomSidebarNavContent = memo(() => {
           icon: Sparkles,
           title: t("future_features", "Funciones Futuras"),
           path: "/features",
+          show: isSuperAdmin
+        },
+        {
+          icon: History,
+          title: t("audit.menu_title", "Registro de Auditoría"),
+          path: "/audit-logs",
           show: isSuperAdmin
         },
       ]

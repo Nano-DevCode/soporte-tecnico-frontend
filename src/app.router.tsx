@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import { lazy } from "react";
 import { InicioPage } from "./inicio/pages/InicioPage";
 import { AuthLayout } from './auth/layout/AuthLayout';
-import { AuthenticatedRoute, NotAuthenticatedRoute } from "./auth/routes/ProtectedRoutes";
+import { AuthenticatedRoute, NotAuthenticatedRoute, RoleRoute } from "./auth/routes/ProtectedRoutes";
 import { UsersRoutes } from "./users/users.router";
 import { SchoolPeriodsRoutes } from "./school-periods/school-periods.router";
 import { CenterManagersRoutes } from "./computing-center-managers/center-manager.router";
@@ -27,6 +27,7 @@ import { FeaturesRoutes } from "./features/features.router";
 
 // const PanelLayout = lazy(() => import("./layout/PanelLayout"))
 const PanelLayoutV2 = lazy(() => import("./layout/PanelLayoutV2"))
+const AuditLogsPage = lazy(() => import("./audit/pages/AuditLogsPage").then(module => ({ default: module.AuditLogsPage })))
 
 const router = createBrowserRouter([
     {
@@ -118,6 +119,16 @@ const router = createBrowserRouter([
             {
                 path: 'features/*',
                 element: <FeaturesRoutes />,
+            },
+            {
+                path: 'audit-logs/*',
+                element: (
+                    <RoleRoute allowedRoles={['isSuperAdmin']}>
+                        <SuspenseWrapper>
+                            <AuditLogsPage />
+                        </SuspenseWrapper>
+                    </RoleRoute>
+                ),
             },
         ],
     },
