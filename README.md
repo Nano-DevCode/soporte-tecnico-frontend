@@ -13,7 +13,7 @@
 [![Socket.io](https://img.shields.io/badge/Socket.io-v4-010101?logo=socketdotio&logoColor=white)](https://socket.io/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 
-[Explorar Módulos](#-módulos-y-funcionalidades) • [Arquitectura](#-arquitectura-del-sistema) • [Roles y Permisos](#-matriz-de-control-de-acceso-rbac) • [Instalación](#-instalación-y-despliegue) • [Galería de Capturas](#-catálogo-visual-del-sistema)
+[Explorar Módulos](#-módulos-y-funcionalidades) • [Arquitectura](#-arquitectura-del-sistema) • [Roles y Permisos](#-matriz-de-control-de-acceso-rbac) • [Instalación](#-instalación-y-despliegue) • [Capturas](#-catálogo-visual-del-sistema) • [Equipo y Licencia](#-equipo-de-desarrollo-y-colaboradores)
 
 </div>
 
@@ -274,6 +274,28 @@ docker compose up -d --build
 
 ---
 
-## 📄 Licencia
+## 👥 Equipo de Desarrollo y Colaboradores
 
-Este proyecto está bajo la licencia [MIT](LICENSE). Desarrollado por **[Nano-DevCode](https://github.com/Nano-DevCode)**.
+El diseño, arquitectura, desarrollo técnico e implementación de este sistema fue realizado por el siguiente equipo:
+
+| Desarrollador / Colaborador | Perfil & Contacto | Aportes Principales en Git |
+| :--- | :--- | :--- |
+| **Nano-DevCode** | [![GitHub](https://img.shields.io/badge/GitHub-Nano--DevCode-181717?style=flat&logo=github)](https://github.com/Nano-DevCode)<br>📧 `mayka708.ms@gmail.com` | **Lead Developer & Arquitectura Full-Stack**<br>• Core de la aplicación React 19 / TypeScript / Vite<br>• Integración de WebSocket / React Query / Zustand<br>• Módulos de SLA, Auditoría, Seguridad y Sanitización<br>*(95 commits registrados)* |
+| **AlexDro360** | [![GitHub](https://img.shields.io/badge/GitHub-AlexDro360-181717?style=flat&logo=github)](https://github.com/AlexDro360)<br>📧 `21160666@itoaxaca.edu.mx` | **Core Contributor**<br>• Desarrollo de componentes UI e interfaces de usuario<br>• Implementación de formularios y flujos operativos de tickets<br>• Integración de vistas y lógica de negocio<br>*(41 commits registrados)* |
+| **JazminMartinezC** | [![GitHub](https://img.shields.io/badge/GitHub-JazminMartinezC-181717?style=flat&logo=github)](https://github.com/JazminMartinezC)<br>📧 `21160705@itoaxaca.edu.mx` | **Core Contributor**<br>• Maquetación, estilos Tailwind y componentes interactivos<br>• Estructuración de tablas de datos y catálogos<br>• Flujos de navegación y validaciones<br>*(29 commits registrados)* |
+
+---
+
+## 📄 Derechos de Autor y Licencia
+
+**Copyright © 2024–2026 Equipo de Desarrollo. Todos los derechos reservados.**
+
+> [!IMPORTANT]
+> **Aviso de Titularidad de Derechos y Uso Institucional:**  
+> **Nuestro equipo de desarrollo es el titular y propietario exclusivo de la totalidad de los derechos de autor, derechos patrimoniales y propiedad intelectual** derivados de esta plataforma, su código fuente, arquitectura, módulos, diseño de interfaz y esquemas de datos.
+> 
+> Este sistema fue diseñado, desarrollado e implementado como una solución integral de Service Desk e ITSM para una **institución educativa y pública**.
+> 
+> **Condiciones de Uso y Restricciones:**  
+> Queda estrictamente prohibida la copia, reproducción, distribución, comercialización, modificación no autorizada o sublicenciamiento total o parcial de este software sin la previa autorización explícita y por escrito de los titulares de los derechos de autor. Todos los derechos reservados.
+
