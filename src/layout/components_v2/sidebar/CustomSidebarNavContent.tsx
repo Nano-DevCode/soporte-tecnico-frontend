@@ -5,7 +5,7 @@ import { useUserRoles } from "@/auth/hooks/useUserRoles";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks, TicketCheck, Headset, FileSpreadsheet, HelpCircle, HammerIcon, Sparkles } from "lucide-react";
+import { LayoutDashboard, Users, ChevronRight, List, Cog, Home, Ticket, CalendarRange, ShieldUser, Archive, ClipboardList, MonitorCog, FileDigit, Building, Building2, MessageSquareReply, Blocks, TicketCheck, Headset, FileSpreadsheet, HelpCircle, HammerIcon, Sparkles, Timer } from "lucide-react";
 
 // Types para la configuración
 type NavSubItem = {
@@ -84,6 +84,12 @@ export const CustomSidebarNavContent = memo(() => {
           icon: Archive,
           path: "/tickets/archives",
           show: isSuperAdmin || isBossCC || isSecretaryCC || isPlaning,
+        },
+        {
+          title: t("tickets.menu_options.sla_monitoring", "Monitoreo de SLA"),
+          icon: Timer,
+          path: "/tickets/sla",
+          show: isSuperAdmin || isBossCC || isCoordinator || isTechnician,
         },
         {
           title: t("technical_reports.menu_item.title"),

@@ -17,6 +17,7 @@ const CreateTicketOnBehalfPage = lazy(() => import("./pages/CreateTicketOnBehalf
 const ViewResponsePage = lazy(() => import("./pages/ViewResponsePage").then(module => ({ default: module.ViewResponsePage })));
 const EditResponsePage = lazy(() => import("./pages/EditResponsePage").then(module => ({ default: module.EditResponsePage })));
 const ListCurrentTicketPage = lazy(() => import("./pages/ListCurrentTicketsPage").then(module => ({ default: module.ListCurrentTicketPage })));
+const SlaMonitoringPage = lazy(() => import("@/sla/pages/SlaMonitoringPage").then(module => ({ default: module.SlaMonitoringPage })));
 
 export const TicketsRoutes = () => {
     return useRoutes([
@@ -44,6 +45,15 @@ export const TicketsRoutes = () => {
                 <SuspenseWrapper>
                     <CanRoute permission="WATCH_ARCHIVE_TICKET_LIST">
                         <ListArchiveTicketsPage />
+                    </CanRoute>
+                </SuspenseWrapper>
+        },
+        {
+            path: 'sla',
+            element:
+                <SuspenseWrapper>
+                    <CanRoute permission="WATCH_SLA_MONITOR">
+                        <SlaMonitoringPage />
                     </CanRoute>
                 </SuspenseWrapper>
         },

@@ -18,3 +18,4 @@ export const logoutAllAction = async (): Promise<LogoutAllResponse> => {
     throw error;
   }
 };
+
