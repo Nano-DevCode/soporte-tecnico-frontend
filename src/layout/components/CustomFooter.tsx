@@ -31,7 +31,7 @@ export const CustomFooter = () => {
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Mail className="h-3.5 w-3.5 shrink-0" />
-              <a href="mailto:soporte@ito.edu.mx" className="hover:text-primary transition-colors truncate">
+              <a href={`mailto:${t("custom_footer_attention_email")}`} className="hover:text-primary transition-colors truncate">
                 {t("custom_footer_attention_email")}
               </a>
             </div>

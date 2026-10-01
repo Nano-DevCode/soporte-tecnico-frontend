@@ -78,7 +78,7 @@ const ForgotPasswordPage = () => {
                   <Input 
                     id="email" 
                     type="email" 
-                    placeholder="tu-correo@itoaxaca.edu.mx" 
+                    placeholder="usuario@ejemplo.com" 
                     {...register("email", {
                       onChange: () => { if(error || isSuccess) reset() },
                       required: t("requerid_email"),

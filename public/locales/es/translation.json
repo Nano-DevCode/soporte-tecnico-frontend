@@ -47,7 +47,7 @@
   "forget_password_sending": "Enviando...",
   "custom_footer_center_computer_department": "Departamento de Centro de Cómputo",
   "custom_footer_attention_hours": "Lun - Vie: 8:00 - 18:00 hrs",
-  "custom_footer_attention_email": "soporte@ito.edu.mx",
+  "custom_footer_attention_email": "soporte@ejemplo.com",
   "custom_footer_all_rights_reserved_for_center_computer_department": "Todos los derechos reservados para el Departamento de Centro de Cómputo",
   "custom_nav_content_start": "Inicio",
   "custom_nav_content_dashboard": "Dashboard",
@@ -1002,7 +1002,7 @@
         },
         "contact_email": {
           "label": "Correo de contacto",
-          "placeholder": "usuario@itoaxaca.edu.mx"
+          "placeholder": "usuario@ejemplo.com"
         },
         "equipment_location": {
           "label": "Ubicación del equipo",

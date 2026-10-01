@@ -7,9 +7,20 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Environment variables
 .env
+.env.*
+!.env.template
 
+# Bundle analyzers & build inspection
+stats.html
+bundle-analysis.html
+*.html.gz
+
+# Agent & AI configuration
 .agents
+AGENTS.md
+GEMINI.md
 
 node_modules
 dist
