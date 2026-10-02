@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { Brand } from "./get-brand.action";
 import { t } from "i18next";
 

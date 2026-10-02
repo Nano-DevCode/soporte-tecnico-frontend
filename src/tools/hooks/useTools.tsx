@@ -1,120 +1,105 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "react-router";
+import { getToolsAction } from "../actions/get-tools";
+import { createToolAction } from "../actions/create-tool";
+import { getToolAction } from "../actions/get-tool";
+import { updateToolAction } from "../actions/update-tool";
+import { changeStatusToolAction } from "../actions/changeStatus-tools";
 
-// Importaciones de tus actions
-import { getToolsActions } from '../actions/get-tools';
-import { changeStatusToolAction } from '../actions/change-status-tool';
-import { createToolsActions } from '../actions/create-tools';
-import { updateToolsActions } from '../actions/update-tools';
-import { getOneToolActions } from '../actions/get-tool';
-import { getToolsByIdsAction } from '../actions/post-toolsById';
 
-// Agregamos bagIds como parámetro opcional con un arreglo vacío por defecto
-export const useTools = (bagIds: string[] = []) => {
+export const useTools = () => {
   const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
-
+  
   const { id } = useParams();
 
   const limit = Number(searchParams.get('limit')) || 10;
+  const brandId = searchParams.get('brandId') || undefined;
+  const modelId = searchParams.get('modelId') || undefined;
+  const typeId = searchParams.get('typeId') || undefined;
+  const status = searchParams.get('status') === 'true'
+    ? true
+    : searchParams.get('status') === 'false'
+      ? false
+      : undefined;
   const page = Number(searchParams.get('page')) || 1;
   const offset = (page - 1) * limit;
-  const status = searchParams.get('status') || undefined; 
-  const query = searchParams.get("query")?.trim() || undefined; 
-  
-  const brandId = searchParams.get("brandId")?.trim() || undefined; 
-  const typeId = searchParams.get("typeId")?.trim() || undefined; 
-  const haveInternalId = searchParams.get("haveInternalId")?.trim() || undefined;
+  const query = searchParams.get("query")?.trim() || undefined;
 
-  const toolsQuery = useQuery({
-    queryKey: ['tools', { limit, offset, status, query, brandId, typeId, haveInternalId }],
-    queryFn: () => getToolsActions({ limit, offset, status, query, brandId, typeId, haveInternalId }),
+  const {
+    data: toolsData,
+    isLoading: isLoadingTools,
+    isFetching: isFetchingTools,
+    error: errorTools,
+    refetch
+  } = useQuery({
+    queryKey: ['tools', { limit, offset, query, brandId, modelId, status, typeId}],
+    queryFn: () => getToolsAction({ limit, offset, query, brandId, modelId, status, typeId}),
     staleTime: 1000 * 60 * 5,
     select: (response) => ({
-      tools: response.tools,
+      tools: response.tools ,
       meta: response.meta,
     }),
   });
 
-  const getOneQuery = useQuery({
+  const {
+    data: toolData,
+    isLoading: isLoadingTool,
+    isFetching: isFetchingTool,
+    error: errorTool
+  } = useQuery({
     queryKey: ['tool', id], 
-    queryFn: () => getOneToolActions({ id: id! }),
+    queryFn: () => getToolAction({ id: id! }), 
+    enabled: !!id, 
     staleTime: 1000 * 60 * 5,
-    enabled: !!id,
   });
 
-  const getByIdsQuery = useQuery({
-    queryKey: ['tools', 'bag', bagIds], 
-    queryFn: () => getToolsByIdsAction({ ids: bagIds }),
-    staleTime: 1000 * 60 * 5, // Mantiene la caché por 5 minutos
-    enabled: bagIds.length > 0,
+  const createToolMutation = useMutation({
+    mutationFn: createToolAction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tools'] });
+    },
+  });
+
+  const updateToolsMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: FormData }) => 
+      updateToolAction({ id }, data), 
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['tools'] });
+      queryClient.invalidateQueries({ queryKey: ['tool', variables.id] });
+    },
   });
 
   const changeStatusMutation = useMutation({
     mutationFn: changeStatusToolAction,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tools'] });
-    },
-    onError: (error) => {
-      console.error("Error al cambiar el estado de la herramienta:", error);
-    }
-  });
-
-  const createToolMutation = useMutation({
-    mutationFn: createToolsActions,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tools'] });
-    },
-    onError: (error) => {
-      console.error("Error al guardar la Herramienta:", error);
-    }
-  });
-
-  const updateToolMutation = useMutation({
-    mutationFn: updateToolsActions,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tools'] });
       if (id) {
         queryClient.invalidateQueries({ queryKey: ['tool', id] });
       }
-      queryClient.invalidateQueries({ queryKey: ['tools', 'bag'] });
     },
-    onError: (error) => {
-      console.error("Error al guardar la Herramienta:", error);
-    }
   });
   
   return {
-    // Datos Catálogo
-    tools: toolsQuery.data?.tools ?? [],
-    meta: toolsQuery.data?.meta,
-    isLoading: toolsQuery.isLoading,
-    isFetching: toolsQuery.isFetching,
-    error: toolsQuery.error,
-    refetch: toolsQuery.refetch,
+    tools: toolsData?.tools ?? [],
+    meta: toolsData?.meta,
+    isLoading: isLoadingTools,
+    isFetching: isFetchingTools,
+    error: errorTools,
+    refetch,
+    
+    tool: toolData,
+    isLoadingTool,
+    isFetchingTool,
+    errorTool,
 
-    // Dato Individual
-    tool: getOneQuery.data,
-    toolLoading: getOneQuery.isLoading,
-
-    // NUEVO: Datos de la Bolsa
-    bagTools: getByIdsQuery.data ?? [],
-    isBagLoading: getByIdsQuery.isLoading,
-    isBagFetching: getByIdsQuery.isFetching,
-
-    // Crear Herramienta
-    createToolAsync: createToolMutation.mutateAsync,
-    isCreating: createToolMutation.isPending,
-    createError: createToolMutation.error,
-
-    // Update Herramienta
-    updateToolAsync: updateToolMutation.mutateAsync,
-    isUpdating: updateToolMutation.isPending,
-    updateError: updateToolMutation.error,
-
-    // Cambiar Estado
     changeStatusAsync: changeStatusMutation.mutateAsync,
     isChangingStatus: changeStatusMutation.isPending,
-    changeStatusError: changeStatusMutation.error,
+
+    createMutation: createToolMutation,
+    isCreatingTool: createToolMutation.isPending,
+
+    updateToolsMutation: updateToolsMutation,
+    isUpdatingTools: updateToolsMutation.isPending,
   };
 };

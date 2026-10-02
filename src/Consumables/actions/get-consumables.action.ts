@@ -1,5 +1,4 @@
-import { soporteTecnicoApi, getBaseUrl } from "@/api/soporteTecnicoApi";
-// import { t } from "i18next";
+import { soporteTecnicoApi, getBaseUrl } from "../../api/soporteTecnicoApi";
 import type { ConsumablesResponse } from '../interfaces/consumable.interfaces';
 
 interface GetConsumablesOptions {
@@ -40,10 +39,17 @@ export const getConsumablesAction = async (
     
     const BASE_URL = getBaseUrl(); 
 
-    const consumablesWithImages = responseData.map((consumable) => ({
-      ...consumable,
-      imageUrl: consumable.imageUrl ? `${BASE_URL}${consumable.imageUrl}` : null,
-    }));
+    const consumablesWithImages = responseData.map((consumable) => {
+      let finalImageUrl = consumable.imageUrl || null;
+      if (finalImageUrl && !finalImageUrl.startsWith("http://") && !finalImageUrl.startsWith("https://")) {
+        const cleanPath = finalImageUrl.startsWith("/") ? finalImageUrl : `/${finalImageUrl}`;
+        finalImageUrl = `${BASE_URL}${cleanPath}`;
+      }
+      return {
+        ...consumable,
+        imageUrl: finalImageUrl,
+      };
+    });
 
     return {
       consumables: consumablesWithImages,

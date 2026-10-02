@@ -19,7 +19,7 @@ import { MovementConsumableRoutes } from "./Consumables/movementConsumables.rout
 import { SuspenseWrapper } from "./components/custom/SuspenseWrapper";
 import { AuthRoutes } from "./auth/auth.router";
 import { AccountRoutes } from './account/account.router';
-import { ToolsRoutes } from "./tools2/tools.router";
+import { ToolsRoutes } from "./tools/tools.router";
 import { DepartmentRoutes } from "./departments/departments.routes";
 import { QuestionnaireRoutes } from "./questionnaire/questionnaire.router";
 import { ReportsRoutes } from "./reports/reports";

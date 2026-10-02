@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { TypePrinting } from "./get-typeprinting.action";
 
 export const createTypePrintingAction = async (payload: string | { name: string }): Promise<TypePrinting> => {

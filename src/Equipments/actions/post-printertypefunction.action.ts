@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { PrinterTypeFunction } from "./get-printertypefuction.action";
 import { t } from "i18next";
 

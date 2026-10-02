@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 // import { t } from "i18next";
 
 // --- INTERFACES ---
@@ -10,7 +10,8 @@ export interface PrinterTypeFunction {
 }
 
 export interface PrinterTypeFunctionsResponse {
-    printerTypeFunctions: PrinterTypeFunction[];
+    printerFunctions: PrinterTypeFunction[];
+    printerTypeFunctions?: PrinterTypeFunction[];
     meta: {
         total: number;
         page: number;
@@ -30,7 +31,11 @@ export const getPrinterTypeFunctionAction = async (
     const { limit = 10, offset = 0, query = undefined } = options;
 
     try {
-        const { data } = await soporteTecnicoApi.get<PrinterTypeFunctionsResponse>('/printerfunctiontypes', {
+        const { data } = await soporteTecnicoApi.get<{
+            printerFunctions?: PrinterTypeFunction[];
+            printerTypeFunctions?: PrinterTypeFunction[];
+            meta: { total: number; page: number; lastPage: number };
+        }>('/printerfunctiontypes', {
             params: {
                 limit: isNaN(Number(limit)) ? 10 : Number(limit),
                 offset: isNaN(Number(offset)) ? 0 : Number(offset),
@@ -39,11 +44,17 @@ export const getPrinterTypeFunctionAction = async (
             },
         });
 
-        return data;
+        const list = data.printerFunctions || data.printerTypeFunctions || [];
+        return {
+            printerFunctions: list,
+            printerTypeFunctions: list,
+            meta: data.meta,
+        };
     } catch (error) {
         // console.error(t("api_printer_functions_fetch_error"), error);
         void error;
         return {
+            printerFunctions: [],
             printerTypeFunctions: [],
             meta: {
                 total: 0,

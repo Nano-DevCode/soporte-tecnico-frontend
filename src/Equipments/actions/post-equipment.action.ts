@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 
 export interface EquipmentPayload {
     id?: string;

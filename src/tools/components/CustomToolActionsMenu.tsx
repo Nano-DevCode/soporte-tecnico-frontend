@@ -1,20 +1,21 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Eye, MoreHorizontal, Pencil, PowerOff, CheckCircle } from "lucide-react"; // Íconos actualizados
+import { Eye, MoreHorizontal, Pencil, PowerOff, CheckCircle } from "lucide-react";
 import { Link } from "react-router";
 import { cn } from "@/lib/utils";
-import type { Tool } from "../interfaces/toolsResponse";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
+import type { Tool } from "../interfaces/toolsResponse.interface";
 
 interface Props {
   tool: Tool;
   handleDownClick: (tool: Tool) => void;
+  disable?: boolean;
 }
 
 export const CustomToolActionsMenu = ({
-  tool, handleDownClick
+  tool, handleDownClick, disable = false
 }: Props ) => {
-  
+  const { t } = useTranslation();
   const isActive = tool.status;
 
   return (
@@ -25,6 +26,7 @@ export const CustomToolActionsMenu = ({
             variant="ghost"
             size="icon"
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            disabled={disable}
           >
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -34,16 +36,16 @@ export const CustomToolActionsMenu = ({
           <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
             <Link to={`/tools/${tool.id}`}>
               <Eye className="h-4 w-4 text-muted-foreground" />
-              {t("tools.actionsMenu.view", "view")}
+              {t("tools.components.actionsMenu.view")}
             </Link>
           </DropdownMenuItem>
           
-          <Link to={`/tools/edit/${tool.id}`}>
-            <DropdownMenuItem className="gap-2 cursor-pointer">
+          <DropdownMenuItem className="gap-2 cursor-pointer" asChild>
+            <Link to={`/tools/edit/${tool.id}`}>
               <Pencil className="h-4 w-4 text-muted-foreground" />
-              {t("tools.actionsMenu.edit", "edit")}
-            </DropdownMenuItem>
-          </Link>
+              {t("tools.components.actionsMenu.edit")}
+            </Link>
+          </DropdownMenuItem>
           
           <DropdownMenuSeparator />
 
@@ -59,12 +61,12 @@ export const CustomToolActionsMenu = ({
             {isActive ? (
               <>
                 <PowerOff className="h-4 w-4" />
-                {t("tools.actionsMenu.down", "deactivate")}
+                {t("tools.components.actionsMenu.down")}
               </>
             ) : (
               <>
                 <CheckCircle className="h-4 w-4" />
-                {t("tools.actionsMenu.up", "reactivate")}
+                {t("tools.components.actionsMenu.up")}
               </>
             )}
           </DropdownMenuItem>
@@ -73,4 +75,6 @@ export const CustomToolActionsMenu = ({
       </DropdownMenu>
     </>
   )
-}
+};
+
+export default CustomToolActionsMenu;

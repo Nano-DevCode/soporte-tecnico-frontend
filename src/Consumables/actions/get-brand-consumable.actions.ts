@@ -1,5 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-// import { t } from "i18next";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 
 // --- INTERFACES ---
 export interface BrandConsumable {

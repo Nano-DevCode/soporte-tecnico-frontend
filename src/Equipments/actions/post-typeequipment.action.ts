@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { EquipmentType } from './get-equipmentType.action';
 
 interface CreateComputerTypeDto {

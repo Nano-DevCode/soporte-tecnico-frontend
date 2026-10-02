@@ -2,7 +2,7 @@ import { useCatalogFactory } from "./use-catalog-factory";
 
 // Acciones de Marcas
 import { getBrandConsumablesAction, getBrandConsumableByIdAction } from "../actions/get-brand-consumable.actions";
-import { createBrandConsumableAction } from "../actions/post-brand-consumable.action copy";
+import { createBrandConsumableAction } from "../actions/post-brand-consumable.action";
 // Acciones de Tipos
 import { getTypeConsumablesAction, getTypeConsumableByIdAction } from "../actions/get-type-consumable.actions";
 import { createTypeConsumableAction } from "../actions/post-type-consumable.action";

@@ -1,5 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-// import { t } from "i18next";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { Consumable } from "../interfaces/consumable.interfaces"; 
 import type { BatchProductItem } from "./get-batches-consumables";
 import type { Department } from "./get-departament.actions";

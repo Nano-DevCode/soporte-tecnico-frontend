@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 // import { t } from "i18next";
 
 // --- INTERFACES ---
@@ -10,7 +10,8 @@ export interface ComputerTypeEquipment {
 }
 
 export interface ComputerTypeEquipmentsResponse {
-    computerTypeEquipments: ComputerTypeEquipment[];
+    equipmentTypes: ComputerTypeEquipment[];
+    computerTypeEquipments?: ComputerTypeEquipment[];
     meta: {
         total: number;
         page: number;
@@ -30,7 +31,11 @@ export const getComputerTypeEquipmentsAction = async (
     const { limit = 10, offset = 0, query = undefined } = options;
 
     try {
-        const { data } = await soporteTecnicoApi.get<ComputerTypeEquipmentsResponse>('/computerequipmenttypes', {
+        const { data } = await soporteTecnicoApi.get<{
+            equipmentTypes?: ComputerTypeEquipment[];
+            computerTypeEquipments?: ComputerTypeEquipment[];
+            meta: { total: number; page: number; lastPage: number };
+        }>('/computerequipmenttypes', {
             params: {
                 limit: isNaN(Number(limit)) ? 10 : Number(limit),
                 offset: isNaN(Number(offset)) ? 0 : Number(offset),
@@ -39,10 +44,16 @@ export const getComputerTypeEquipmentsAction = async (
             },
         });
 
-        return data;
+        const list = data.equipmentTypes || data.computerTypeEquipments || [];
+        return {
+            equipmentTypes: list,
+            computerTypeEquipments: list,
+            meta: data.meta,
+        };
     } catch (e)  { void e;
         // console.error(t("api_computer_types_fetch_error"), error);
         return {
+            equipmentTypes: [],
             computerTypeEquipments: [],
             meta: {
                 total: 0,

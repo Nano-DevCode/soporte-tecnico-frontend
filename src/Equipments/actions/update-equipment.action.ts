@@ -1,6 +1,6 @@
 
 import type { Equipment } from "../interfaces/equipment.interface";
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { EquipmentPayload } from "./post-equipment.action";
 import { isAxiosError } from "axios";
 

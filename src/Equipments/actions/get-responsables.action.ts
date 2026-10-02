@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 // import { t } from "i18next";
 
 // --- INTERFACES ---
@@ -21,8 +21,8 @@ export interface UIResponsible {
 }
 
 export interface ResponsiblesResponse {
-    // Debe coincidir exactamente con la propiedad que envía tu Backend en su JSON paginado
-    responsibles: Responsible[];
+    responsibleEquipments: Responsible[];
+    responsibles?: Responsible[];
     meta: {
         total: number;
         page: number;
@@ -45,7 +45,11 @@ export const getResponsiblesAction = async (options: Options = {}): Promise<Resp
     const { limit = 10, offset = 0, query = undefined } = options;
 
     try {
-        const { data } = await soporteTecnicoApi.get<ResponsiblesResponse>('/responsibleequipments', {
+        const { data } = await soporteTecnicoApi.get<{
+            responsibleEquipments?: Responsible[];
+            responsibles?: Responsible[];
+            meta: { total: number; page: number; lastPage: number };
+        }>('/responsibleequipments', {
             params: {
                 limit: isNaN(Number(limit)) ? 10 : Number(limit),
                 offset: isNaN(Number(offset)) ? 0 : Number(offset),
@@ -53,12 +57,18 @@ export const getResponsiblesAction = async (options: Options = {}): Promise<Resp
             },
         });
 
-        return data;
+        const list = data.responsibleEquipments || data.responsibles || [];
+        return {
+            responsibleEquipments: list,
+            responsibles: list,
+            meta: data.meta,
+        };
     } catch (error) {
         // console.error(t("api_responsibles_fetch_error"), error);
         void error;
         // Retorno estructuralmente seguro para evitar fallos de lectura de propiedades en la UI (.map(), etc.)
         return {
+            responsibleEquipments: [],
             responsibles: [],
             meta: {
                 total: 0,

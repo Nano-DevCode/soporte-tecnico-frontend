@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 // import { t } from "i18next";
 
 // --- INTERFACES ---
@@ -10,7 +10,8 @@ export interface TypeStorage {
 }
 
 export interface TypeStoragesResponse {
-    typeStorages: TypeStorage[];
+    storageTypes: TypeStorage[];
+    typeStorages?: TypeStorage[];
     meta: {
         total: number;
         page: number;
@@ -28,7 +29,11 @@ export const getTypeStoragesAction = async (options: Options = {}): Promise<Type
     const { limit = 10, offset = 0, query = undefined } = options;
 
     try {
-        const { data } = await soporteTecnicoApi.get<TypeStoragesResponse>('/storagetypes', {
+        const { data } = await soporteTecnicoApi.get<{
+            storageTypes?: TypeStorage[];
+            typeStorages?: TypeStorage[];
+            meta: { total: number; page: number; lastPage: number };
+        }>('/storagetypes', {
             params: {
                 limit: isNaN(Number(limit)) ? 10 : Number(limit),
                 offset: isNaN(Number(offset)) ? 0 : Number(offset),
@@ -36,11 +41,17 @@ export const getTypeStoragesAction = async (options: Options = {}): Promise<Type
             },
         });
 
-        return data;
+        const list = data.storageTypes || data.typeStorages || [];
+        return {
+            storageTypes: list,
+            typeStorages: list,
+            meta: data.meta,
+        };
     } catch (error) {
         // console.error(t("api_storages_fetch_error"), error);
         void error;
         return {
+            storageTypes: [],
             typeStorages: [],
             meta: {
                 total: 0,

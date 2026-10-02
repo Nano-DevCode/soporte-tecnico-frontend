@@ -1,5 +1,5 @@
 // import { t } from "i18next";
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 
 interface StatusResponse {
     id: string;

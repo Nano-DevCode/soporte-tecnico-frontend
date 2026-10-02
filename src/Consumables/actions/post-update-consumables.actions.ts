@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { Consumable } from "../interfaces/consumable.interfaces";
 
 const prepareFormData = (payload: FormData): FormData => {

@@ -1,5 +1,5 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
-import { t } from "i18next"
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
+import { t } from "i18next";
 // --- CONSTANTS ---
 export const TicketStatus = {
     IDLE: 'IDLE' as const,

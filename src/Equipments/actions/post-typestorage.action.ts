@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { TypeStorage } from "./get-typestorage.action";
 
 export const createTypeStorageAction = async (payload: string | { name: string }): Promise<TypeStorage> => {

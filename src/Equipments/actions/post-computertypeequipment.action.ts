@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { ComputerTypeEquipment } from './get-computertypeequipment.action';
 import { t } from "i18next";
 

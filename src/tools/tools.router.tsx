@@ -1,57 +1,106 @@
 import { lazy } from "react";
+import { useRoutes } from "react-router";
 import { SuspenseWrapper } from "@/components/custom/SuspenseWrapper";
-import { RoleRoute } from "@/auth/routes/ProtectedRoutes";
+import { RoleRoute, type UserRole } from "@/auth/routes/ProtectedRoutes";
 
-const ToolPage = lazy(() => import('./pages/ToolPage').then(m => ({ default: m.ToolPage })));
-const ToolCreatePage = lazy(() => import('./pages/ToolCreatePage').then(m => ({ default: m.ToolCreatePage })));
-const ToolEditPage = lazy(() => import('./pages/ToolUpdatePage').then(m => ({ default: m.ToolEditPage })));
-const ToolDetailsPage = lazy(() => import('./pages/ToolDetailsPage').then(m => ({ default: m.ToolDetailsPage })));
-const ToolBagPage = lazy(() => import('./components/CustomToolBagSheet').then(m => ({ default: m.ToolBagPage })));
+const ToolsMovementOut = lazy(() => import("./pages/ToolsMovementOut"));
+const ToolsMovementIn = lazy(() => import("./pages/ToolsMovementIn"));
+const ToolsCreatePage = lazy(() => import("./pages/ToolsCreatePage"));
+const ToolsUpdatePage = lazy(() => import("./pages/ToolsUpdatePage"));
+const ToolsPage = lazy(() => import("./pages/ToolsPage"));
+const ToolsMovementsPage = lazy(() => import("./pages/ToolsMovementsPage"));
+const ToolsMovementViewPage = lazy(() => import("./pages/ToolsMovementViewPage"));
+const ToolsDetailsPage = lazy(() => import("./pages/ToolsDetailsPage"));
 
-export const toolRoutes = [
-    {
-        index: true,
-        element: 
-        <SuspenseWrapper>
-            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician", "isSecretaryCC"]}>
-                </RoleRoute>
-            <ToolPage />
-        </SuspenseWrapper>
-    },
-    {
-        path: 'new',
-        element: 
-        <SuspenseWrapper>
-            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}>
-                <ToolCreatePage/>
-            </RoleRoute >
-        </SuspenseWrapper>
-    },
-    {
-        path: 'edit/:id',
-        element: 
-        <SuspenseWrapper>
-            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician"]}>
-                <ToolEditPage />
-            </RoleRoute >
-        </SuspenseWrapper>
-    },
-    {
-        path: 'catalog',
-        element: 
-        <SuspenseWrapper>
-            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician", "isSecretaryCC"]}>
-                <ToolBagPage />
-            </RoleRoute>
-        </SuspenseWrapper>
-    },
-    {
-        path: ':id',
-        element:
-        <SuspenseWrapper>
-            <RoleRoute allowedRoles={["isCoordinator","isBossCC","isSuperAdmin", "isTechnician", "isSecretaryCC"]}>
-                <ToolDetailsPage/>
-            </RoleRoute >
-        </SuspenseWrapper>
-    }
-]
+const ALLOWED_ROLES: UserRole[] = [
+  "isCoordinator", 
+  "isBossCC", 
+  "isSuperAdmin", 
+  "isTechnician",
+  "isInventory"
+];
+
+export const ToolsRoutes = () => {
+    return useRoutes([
+        {
+            index: true,
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor", "isSecretaryCC"]}>
+                        <ToolsPage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'new',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ToolsCreatePage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'edit/:id',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ToolsUpdatePage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'out/:id',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ToolsMovementOut />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'in/:id',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={ALLOWED_ROLES}>
+                        <ToolsMovementIn />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'movements',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor", "isSecretaryCC"]}>
+                        <ToolsMovementsPage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: 'movements/:id',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor", "isSecretaryCC"]}>
+                        <ToolsMovementViewPage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        },
+        {
+            path: ':id',
+            element: (
+                <SuspenseWrapper>
+                    <RoleRoute allowedRoles={[...ALLOWED_ROLES, "isVisitor", "isSecretaryCC"]}>
+                        <ToolsDetailsPage />
+                    </RoleRoute>
+                </SuspenseWrapper>
+            )
+        }
+    ]);
+};

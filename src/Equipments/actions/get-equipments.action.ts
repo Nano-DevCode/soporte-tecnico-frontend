@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import { getEquipmentTypesAction, type EquipmentType } from "./get-equipmentType.action";
 // import { t } from "i18next";
 

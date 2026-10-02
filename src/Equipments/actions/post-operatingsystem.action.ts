@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { OperatingSystem } from "./get-operatingsystem.action";
 import { t } from "i18next";
 

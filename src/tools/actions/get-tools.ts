@@ -1,47 +1,65 @@
 import { soporteTecnicoApi, API_BASE_URL } from "@/api/soporteTecnicoApi";
-import type { ToolsResponse } from "../interfaces/toolsResponse";
+import type { ToolsResponse } from "../interfaces/toolsResponse.interface";
 
 interface Options {
-  haveInternalId?: string;
   limit?: number | string;
   offset?: number | string;
-  status?: string;
   query?: string;
   brandId?: string;
-  modelId?: string;
   typeId?: string;
+  modelId?: string;
+  status?: boolean;
 }
 
-export const getToolsActions = async(options: Options): Promise<ToolsResponse> => {
-  const { limit = 10, offset = 0, status = undefined, query = undefined, modelId=undefined , typeId = undefined, brandId = undefined, haveInternalId = undefined} = options;
-  
-  const statusValue = status === 'true' ? true : status === 'false' ? false : undefined;
-  const haveInternalIdValue = haveInternalId === 'true' ? true : haveInternalId === 'false' ? false : undefined;
+export const getToolsAction = async (
+  options: Options
+): Promise<ToolsResponse> => {
 
-  const { data } = await soporteTecnicoApi.get<ToolsResponse>('/tools', {
-    params: {
-      limit: isNaN(Number(limit)) ? 10 : Number(limit),
-      offset: isNaN(Number(offset)) ? 0 : Number(offset),
-      status: statusValue,
-      query: query ? query.trim().replaceAll('+', ' ') : undefined,
-      modelId: modelId,
-      typeId: typeId,
-      brandId: brandId,
-      haveInternalId: haveInternalIdValue
-    },
-  });  
+  const {
+    limit = 10,
+    offset = 0,
+    query = undefined,
+    brandId = undefined,
+    typeId = undefined,
+    modelId = undefined,
+    status = undefined,
+  } = options;
 
-  const { tools, ...restOfData } = data;
+  const { data } = await soporteTecnicoApi.get<ToolsResponse>(
+    "/tools",
+    {
+      params: {
+        limit: isNaN(Number(limit))
+          ? 10
+          : Number(limit),
 
-  const toolsWithImages = tools.map(tool => ({
+        offset: isNaN(Number(offset))
+          ? 0
+          : Number(offset),
+
+        query: query
+          ? query.trim().replaceAll("+", " ")
+          : undefined,
+        brandId: brandId ?? undefined,
+        typeId: typeId ?? undefined,
+        modelId: modelId ?? undefined,
+        status: status ?? undefined,
+      },
+    }
+  );
+
+  const { tools: tools, ...restOfData } = data;
+
+  const toolsWithImages = tools.map((tool) => ({
     ...tool,
-    imageUrl: tool.imageUrl 
-      ? `${API_BASE_URL}${tool.imageUrl}` 
-      : null
+
+    imageUrl: tool.imageUrl
+      ? `${API_BASE_URL}${tool.imageUrl}`
+      : null,
   }));
 
   return {
     ...restOfData,
-    tools: toolsWithImages
+    tools: toolsWithImages,
   };
-}
+};

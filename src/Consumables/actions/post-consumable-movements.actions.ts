@@ -1,6 +1,6 @@
 import axios from "axios"; 
 import type { CreateConsumableMovementDto, ConsumableMovementResponse } from "../interfaces/consumable-movement.interfaces";
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 
 export const registerConsumableOutput = async (
     payload: CreateConsumableMovementDto

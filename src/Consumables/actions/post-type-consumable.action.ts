@@ -1,4 +1,4 @@
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { TypeConsumable } from "./get-type-consumable.actions";
 import { t } from "i18next";
 

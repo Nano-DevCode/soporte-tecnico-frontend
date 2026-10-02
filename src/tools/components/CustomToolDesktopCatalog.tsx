@@ -1,18 +1,15 @@
-import { memo, useState, useEffect, useCallback } from "react";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { memo } from "react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Layers, Wrench, Package, Briefcase, Trash2, Lock } from "lucide-react";
-import { t } from "i18next";
-import type { Tool } from "../interfaces/toolsResponse";
-import { CustomToolActionsMenu } from "./CustomToolActionsMenu";
-import CustomNotFoundTable from "@/components/custom/CustomNotFoundTable";
-
-// Utilidad para clases (Asegúrate de tenerla importada)
+import { Monitor, LogIn, LogOut } from "lucide-react"; 
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-
-// Importamos las funciones preparadas para IDs
-import { addToToolBag, removeFromToolBag, TOOL_BAG_EVENT } from "./CustomToolBag"; 
+import { Link } from "react-router"; 
+import { Button } from "@/components/ui/button";
+import { CustomToolActionsMenu } from "./CustomToolActionsMenu";
+import type { Tool } from "../interfaces/toolsResponse.interface";
+import CustomNotFoundCatalog from "@/components/custom/CustomNotFoundCatalog";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 interface Props {
   tools: Tool[];
@@ -20,136 +17,147 @@ interface Props {
 }
 
 export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props) => {
-  const [bagToolIds, setBagToolIds] = useState<string[]>([]);
-
-  const loadBagIds = useCallback(() => {
-    const currentBag: string[] = JSON.parse(localStorage.getItem("custom_tool_bag") || "[]");
-    setBagToolIds(currentBag); 
-  }, []);
-
-  useEffect(() => {
-    loadBagIds();
-    window.addEventListener(TOOL_BAG_EVENT, loadBagIds);
-    return () => window.removeEventListener(TOOL_BAG_EVENT, loadBagIds);
-  }, [loadBagIds]);
+  const { t } = useTranslation();
+  const isVisitor = useAuthStore((state) => state.isVisitor);
 
   if (tools.length === 0) {
     return (
-      <Card className="w-full shadow-sm">
-        <CustomNotFoundTable 
-          title={t("tools.notFound.title", "No se encontraron herramientas")}
-          description={t("tools.notFound.description", "No hay herramientas disponibles en este momento")}
-          icon={Wrench}
-        />
-      </Card>
+      <CustomNotFoundCatalog
+        title={t("tools.components.desktopCatalog.notFound.title")}
+        description={t("tools.components.desktopCatalog.notFound.description")}
+        icon={Monitor} 
+      />
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
       {tools.map((tool) => {
-        const isAdded = bagToolIds.includes(tool.id);
-        const isUnavailable = !tool.status || tool.inUse;
-
         return (
-          <Card key={tool.id} className="group flex flex-col overflow-hidden hover:shadow-lg transition-all duration-300">
-            <div className="aspect-square w-full bg-secondary/30 flex flex-col items-center justify-center border-b border-border relative overflow-hidden group">
-              <div className="absolute top-2 left-2 z-10">
-                <span className="bg-background/80 backdrop-blur-sm text-muted-foreground text-[10px] font-mono px-2 py-1 rounded-md border border-border shadow-sm">
-                  #{tool.idInternal ?? tool.id.substring(0, 8)}
-                </span>
-              </div>
-
-              {tool.imageUrl ? (
-                <img 
-                  src={tool.imageUrl} 
-                  alt={tool.id ?? "Imagen de la herramienta"} 
-                  className={`w-full h-full object-cover transition-transform duration-300 ${tool.inUse ? 'grayscale opacity-70' : 'group-hover:scale-105'}`}
-                />
-              ) : (
-                <Wrench className={`w-20 h-20 transition-transform duration-300 ${tool.inUse ? 'text-muted-foreground/30' : 'text-primary/20 group-hover:scale-110'}`} strokeWidth={1.5} />
-              )}
-            </div>
-
-            {/* ENCABEZADO */}
-            <CardHeader className="p-4 pb-2">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-start justify-between gap-2">
-                  <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20 border-transparent text-[10px] font-bold uppercase tracking-wider">
-                    {tool.type.name}
-                  </Badge>
-                  <Badge variant={tool.status ? "default" : "destructive"} className="text-[10px] uppercase font-semibold px-2 py-0.5 shadow-none">
-                    {tool.status ? t("tools.listTable.active", "Activa") : t("tools.listTable.inactive", "Inactiva ")}
-                  </Badge>
-                </div>
+          <Card 
+            key={tool.id} 
+            className="group relative flex flex-col overflow-hidden border-border/60 bg-background transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl"
+          >
+            <Link to={`/tools/${tool.id}`} className="flex flex-col flex-1 cursor-pointer">
+              {/* === ÁREA DE IMAGEN === */}
+              <div className="relative aspect-4/3 w-full overflow-hidden bg-muted/20 flex items-center justify-center border-b border-border/40">
                 
-                {/* BADGE: En Uso / Disponible */}
-                <div className="flex justify-start">
+                {/* ID flotante (Sin restricciones de ancho) */}
+                <div className="absolute top-3 left-3 z-20">
                   <Badge 
                     variant="outline" 
-                    className={`text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 ${
-                      tool.inUse 
-                        ? "bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800" 
-                        : "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800"
-                    }`}
+                    className="bg-background/90 backdrop-blur-md border-border/50 shadow-sm text-[10px] font-mono px-2 py-0.5 whitespace-nowrap flex items-center"
                   >
-                    {tool.inUse ? "En Uso" : "Disponible"}
+                    <span>#{tool.idInventary ?? tool.id}</span>
                   </Badge>
                 </div>
-              </div>
-            </CardHeader>
 
-            {/* CONTENIDO */}
-            <CardContent className="p-4 pt-0 flex flex-col flex-1 gap-2 mt-2">
-              <div className="flex items-center gap-1.5 text-sm font-medium text-foreground">
-                <Layers className="h-4 w-4 text-muted-foreground shrink-0" />
-                <span className="line-clamp-1" title={tool.model.brand.name}>
-                  Marca: {tool.model.brand.name}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5 text-sm text-muted-foreground mt-auto pt-2">
-                <Package className="h-4 w-4 shrink-0" />
-                <span>Modelo: <strong className="text-foreground">{tool.model.name}</strong></span>
-              </div>
-            </CardContent>
+                {/* Badge de Disponibilidad */}
+                <div className="absolute top-3 right-3 z-20">
+                  <Badge 
+                    variant="outline" 
+                    className={cn(
+                      "text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 border shadow-sm backdrop-blur-md",
+                      tool.inUse 
+                        ? "bg-amber-50/90 text-amber-700 border-amber-200 dark:bg-amber-950/80 dark:text-amber-400 dark:border-amber-900/60" 
+                        : "bg-emerald-50/90 text-emerald-700 border-emerald-200 dark:bg-emerald-950/80 dark:text-emerald-400 dark:border-emerald-900/60"
+                    )}
+                  >
+                    {tool.inUse 
+                      ? t("tools.components.desktopCatalog.availability.inUse") 
+                      : t("tools.components.desktopCatalog.availability.available")}
+                  </Badge>
+                </div>
 
-            {/* PIE DE TARJETA */}
-            <CardFooter className="p-3 bg-muted/20 border-t border-border flex justify-between items-center mt-auto gap-2">
-              
-              {/* BOTÓN CON DISEÑO ADAPTATIVO */}
-              <Button 
-                size="sm" 
-                variant={isUnavailable ? "secondary" : isAdded ? "outline" : "default"}
-                className={cn(
-                  "flex-1 gap-2 text-xs transition-all",
-                  // Estilos hermosos para el botón "Quitar" (Fondo rojo suave en claro, translúcido en oscuro)
-                  isAdded && !isUnavailable && "border-red-200 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 dark:border-red-900/50 dark:bg-red-900/10 dark:text-red-500 dark:hover:bg-red-900 dark:hover:text-white",
-                  // Estilo gris sólido para cuando está "Ocupada/Inactiva"
-                  isUnavailable && "bg-muted text-muted-foreground opacity-100 dark:bg-muted/50 border-transparent"
-                )}
-                onClick={() => isAdded ? removeFromToolBag(tool.id) : addToToolBag(tool.id)}
-                disabled={isUnavailable}
-              >
-                {tool.inUse ? (
-                  <>
-                    <Lock className="h-4 w-4" />
-                    Ocupada
-                  </>
-                ) : isAdded ? (
-                  <>
-                    <Trash2 className="h-4 w-4" />
-                    {t("tools.catalog.remove", "Quitar")}
-                  </>
+                {tool.imageUrl ? (
+                  <img 
+                    src={tool.imageUrl} 
+                    alt={t("tools.components.desktopCatalog.imageAlt")} 
+                    className={cn(
+                      "w-full h-full object-cover transition-transform duration-500 group-hover:scale-105",
+                      tool.inUse && "grayscale-50 opacity-80"
+                    )}
+                  />
                 ) : (
-                  <>
-                    <Briefcase className="h-4 w-4" />
-                    {t("tools.catalog.add", "Agregar")}
-                  </>
+                  <Monitor 
+                    className={cn(
+                      "w-14 h-14 transition-transform duration-500 group-hover:scale-110",
+                      tool.inUse ? "text-muted-foreground/30" : "text-primary/20"
+                    )} 
+                    strokeWidth={1.5} 
+                  />
                 )}
-              </Button>
+                
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/5 to-transparent z-10 pointer-events-none" />
+              </div>
 
-              <CustomToolActionsMenu tool={tool} handleDownClick={handleDownClick} />
-            </CardFooter>
+              {/* === CONTENIDO PRINCIPAL === */}
+              <CardContent className="relative z-20 flex flex-1 flex-col p-5 gap-3.5">
+                
+                <div className="flex items-start justify-between gap-2">
+                  <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest line-clamp-1">
+                    {tool.toolType?.name || "—"}
+                  </span>
+                  
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className={cn(
+                      "h-2 w-2 rounded-full", 
+                      tool.status ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" : "bg-destructive"
+                    )} />
+                    <span className="text-[10px] font-medium text-muted-foreground">
+                      {tool.status 
+                        ? t("tools.components.desktopCatalog.status.active") 
+                        : t("tools.components.desktopCatalog.status.inactive")}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 mt-auto">
+                  <div>
+                    <span className="text-[9px] font-bold uppercase text-muted-foreground/70 tracking-wider">Modelo</span>
+                    <h3 className="line-clamp-1 text-base font-bold tracking-tight text-foreground leading-snug" title={tool.model?.name}>
+                      {tool.model?.name || "Sin modelo"}
+                    </h3>
+                  </div>
+                  <div>
+                    <span className="text-[9px] font-bold uppercase text-muted-foreground/70 tracking-wider">Marca</span>
+                    <p className="line-clamp-1 text-sm text-muted-foreground leading-snug" title={tool.model?.brand?.name}>
+                      {tool.model?.brand?.name || "Sin marca"}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Link>
+
+            {isVisitor() || (
+              <CardFooter className="p-4 bg-muted/10 border-t border-border/40 flex justify-between items-center gap-3 relative z-30">
+                <div className="flex-1">
+                  {tool.inUse ? (
+                    <Link 
+                      to={`/tools/in/${tool.id}`} 
+                      className={cn("block w-full", !tool.status && "pointer-events-none")}
+                    onClick={(e) => !tool.status && e.preventDefault()}
+                  >
+                    <Button variant="secondary" size="sm" className="w-full gap-2 text-amber-600 hover:text-amber-700 hover:bg-amber-100/80 dark:hover:bg-amber-900/50" disabled={!tool.status}>
+                      <LogIn className="h-4 w-4" />
+                      {t("tools.components.desktopCatalog.buttons.in")}
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link 
+                    to={`/tools/out/${tool.id}`} 
+                    className={cn("block w-full", !tool.status && "pointer-events-none")}
+                    onClick={(e) => !tool.status && e.preventDefault()}
+                  >
+                    <Button variant="default" size="sm" className="w-full gap-2" disabled={!tool.status}>
+                      <LogOut className="h-4 w-4" />
+                      {t("tools.components.desktopCatalog.buttons.out")}
+                    </Button>
+                  </Link>
+                )}
+              </div>
+              <CustomToolActionsMenu tool={tool} handleDownClick={handleDownClick} disable={isVisitor()} />
+            </CardFooter>)}
           </Card>
         );
       })}
@@ -157,4 +165,4 @@ export const CustomToolDesktopCatalog = memo(({ tools, handleDownClick }: Props)
   );
 });
 
-CustomToolDesktopCatalog.displayName = "CustomToolDesktopCatalog";
+export default memo(CustomToolDesktopCatalog);

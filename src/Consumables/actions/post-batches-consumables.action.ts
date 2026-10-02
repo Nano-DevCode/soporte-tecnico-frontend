@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-catch */
-import { soporteTecnicoApi } from "@/api/soporteTecnicoApi";
+import { soporteTecnicoApi } from "../../api/soporteTecnicoApi";
 import type { BatchProductItem } from "./get-batches-consumables"; 
 
 // 1. Interfaz para el elemento individual de la bolsa de herramientas (Detalle)
