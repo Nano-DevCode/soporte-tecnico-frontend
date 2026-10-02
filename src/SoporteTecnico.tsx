@@ -15,13 +15,13 @@ const queryClient = new QueryClient();
 
 const CheckAuthProvider = ({ children }: PropsWithChildren) => {
 
-  const { checkAuthStatus } = useAuthStore();
+  const { authStatus, checkAuthStatus } = useAuthStore();
 
   const { isLoading } = useQuery({
     queryKey: ['auth'],
     queryFn: checkAuthStatus,
     retry: false,
-    refetchInterval: 1000 * 60 * 1.5,
+    refetchInterval: authStatus === 'authenticated' ? 1000 * 60 * 4 : false,
     refetchOnWindowFocus: false,
   });
 

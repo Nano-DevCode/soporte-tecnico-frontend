@@ -5,10 +5,11 @@ import { checkAuthAction } from '../actions/check-auth.action';
 import { logoutAction } from '../actions/logout';
 import { logoutAllAction } from '../actions/logout-all.action';
 import { logError } from '@/utils/logger';
+import { socket } from '../../tickets/websockets/socket';
 
 type AuthStatus = 'authenticated' | 'not-authenticated' | 'checking';
 
-const FIVE_MINUTES = 5 * 60 * 1000;
+const THROTTLE_CHECK_MS = 60 * 1000; // 1 minuto para evitar peticiones simultáneas innecesarias
 
 type AuthState = {
   user: AuthResponse | null,
@@ -68,6 +69,9 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   logout: async () => {
     try {
+      if (socket.connected) {
+        socket.disconnect();
+      }
       await logoutAction();
     } catch (error) {
       logError(error, "AuthStore", "Error al cerrar sesión");
@@ -78,6 +82,9 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   logoutAll: async () => {
     try {
+      if (socket.connected) {
+        socket.disconnect();
+      }
       await logoutAllAction();
     } catch (error) {
       logError(error, "AuthStore", "Error al cerrar todas las sesiones");
@@ -89,8 +96,12 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   checkAuthStatus: async () => {
     const { lastCheck, authStatus, logout, sessionStart } = get();
 
-    if (authStatus === 'authenticated' && lastCheck && Date.now() - lastCheck < FIVE_MINUTES) {
+    if (authStatus === 'authenticated' && lastCheck && Date.now() - lastCheck < THROTTLE_CHECK_MS) {
       return true;
+    }
+
+    if (authStatus === 'not-authenticated') {
+      return false;
     }
 
     try {
@@ -103,7 +114,11 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
       });
       return true;
     } catch {
-      await logout(); 
+      if (authStatus === 'authenticated') {
+        await logout();
+      } else {
+        set({ user: null, authStatus: 'not-authenticated', lastCheck: null, sessionStart: null });
+      }
       return false;
     }
   },

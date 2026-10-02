@@ -24,9 +24,9 @@ export const CustomHeaderAvatar = () => {
 
   // Función manejadora del logout
   const handleLogout = async () => {
-     queryClient.clear();
     await logout();
     navigate("/auth/login");
+    queryClient.clear();
   };
 
   return (

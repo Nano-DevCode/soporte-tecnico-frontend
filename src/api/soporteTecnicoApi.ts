@@ -64,8 +64,7 @@ soporteTecnicoApi.interceptors.response.use(
     const isAuthRoute =
       requestUrl.includes('/auth/login') ||
       requestUrl.includes('/auth/refresh') ||
-      requestUrl.includes('/auth/logout') ||
-      requestUrl.includes('/auth/check-auth-status');
+      requestUrl.includes('/auth/logout');
 
     if (isAuthRoute || originalRequest._retry) {
       return Promise.reject(error);
