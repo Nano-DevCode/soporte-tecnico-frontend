@@ -221,56 +221,127 @@ docker compose up -d --build
 
 ## 📸 Catálogo Visual del Sistema
 
-> *Las capturas de pantalla de la interfaz se encuentran organizadas en la carpeta `docs/screenshots/`.*
+> *El sistema cuenta con un catálogo exhaustivo de capturas de pantalla organizadas por módulos temáticos en la carpeta [`docs/screenshots/`](docs/screenshots/).*
 
-### Autenticación y Control de Sesiones
-| Pantalla de Login | Recuperación de Contraseña |
+### 1. Autenticación, Seguridad y Control de Sesiones
+| Inicio de Sesión Institucional | Recuperación de Contraseña |
 | :---: | :---: |
-| ![Login](docs/screenshots/01-auth/01-login.png) | ![Recuperar Contraseña](docs/screenshots/01-auth/02-forgot-password.png) |
+| ![Login](docs/screenshots/01-auth/01-login-screen.png) | ![Recuperar Contraseña](docs/screenshots/01-auth/03-forgot-password.png) |
 
-| Gestión de Sesiones Activas (Redis) | Cambio de Contraseña y Preferencias |
+| Seguridad y Sesiones Activas en Redis | Preferencias de Idioma y Cuenta |
 | :---: | :---: |
-| ![Sesiones](docs/screenshots/01-auth/03-active-sessions.png) | ![Configuración](docs/screenshots/01-auth/04-account-settings.png) |
+| ![Sesiones Activas](docs/screenshots/01-auth/05-sessions-revocation.png) | ![Preferencias](docs/screenshots/01-auth/04-account-settings.png) |
+
+| Perfil Personal del Usuario |
+| :---: |
+| ![Perfil de Usuario](docs/screenshots/01-auth/06-user-profile.png) |
 
 ---
 
-### Mesa de Ayuda y Gestión de Tickets
-| Listado de Tickets Actuales | Detalle de Incidencia con Stepper |
+### 2. Analítica Ejecutiva y Rendimiento de Técnicos
+| Panel de Control Ejecutivo (Métricas ITSM) | Tablero de Rendimiento y Efectividad por Técnico |
 | :---: | :---: |
-| ![Tickets Actuales](docs/screenshots/02-tickets/01-current-tickets.png) | ![Detalle Ticket](docs/screenshots/02-tickets/02-ticket-detail-stepper.png) |
-
-| Levantamiento de Ticket | Levantamiento a Nombre de Tercero (On-Behalf) |
-| :---: | :---: |
-| ![Nuevo Ticket](docs/screenshots/02-tickets/03-create-ticket.png) | ![Ticket On-Behalf](docs/screenshots/02-tickets/04-ticket-on-behalf.png) |
-
-| Modal de Asignación a Técnicos | Diagnóstico e Intervención en Sitio |
-| :---: | :---: |
-| ![Asignar Ticket](docs/screenshots/02-tickets/05-assign-ticket.png) | ![Intervención Técnica](docs/screenshots/02-tickets/06-intervene-ticket.png) |
+| ![Dashboard Overview](docs/screenshots/02-dashboard/01-dashboard-overview.png) | ![KPI de Técnicos](docs/screenshots/02-dashboard/07-technicians-kpi-board.png) |
 
 ---
 
-### SLA y Trazabilidad (Auditoría)
-| Tablero de Monitoreo Proactivo de SLA | Comparador de Cambios (Audit Diff Viewer) |
+### 3. Mesa de Ayuda y Ciclo de Vida del Ticket
+| Bandeja de Tickets Actuales en Seguimiento | Historial Maestro de Incidencias |
 | :---: | :---: |
-| ![Monitoreo SLA](docs/screenshots/03-sla-audit/01-sla-monitoring.png) | ![Auditoría Diff](docs/screenshots/03-sla-audit/02-audit-diff-dialog.png) |
+| ![Tickets Actuales](docs/screenshots/03-tickets/01-current-tickets-list.png) | ![Historial Tickets](docs/screenshots/03-tickets/02-all-tickets-history.png) |
+
+| Formulario de Levantamiento Directo | Levantamiento a Nombre de Tercero (On-Behalf) |
+| :---: | :---: |
+| ![Crear Ticket](docs/screenshots/03-tickets/04-create-ticket-form.png) | ![Ticket On-Behalf](docs/screenshots/03-tickets/05-create-ticket-on-behalf.png) |
+
+| Detalle Técnico de la Incidencia | Línea de Tiempo Dinámica (Stepper de Fases) |
+| :---: | :---: |
+| ![Detalle Ticket](docs/screenshots/03-tickets/06-ticket-detail-view.png) | ![Stepper](docs/screenshots/03-tickets/07-ticket-stepper-timeline.png) |
+
+| Asignación de Cuadrilla de Técnicos | Canalización / Derivación entre Áreas |
+| :---: | :---: |
+| ![Asignar Técnico](docs/screenshots/03-tickets/08-assign-ticket-modal.png) | ![Canalizar Ticket](docs/screenshots/03-tickets/09-route-ticket-modal.png) |
+
+| Diagnóstico y Bitácora de Intervención Técnica | Conclusión del Servicio y Orden de Trabajo |
+| :---: | :---: |
+| ![Intervención Técnica](docs/screenshots/03-tickets/10-intervene-ticket-form.png) | ![Cierre Ticket](docs/screenshots/03-tickets/11-finish-ticket-form.png) |
+
+| Encuesta de Satisfacción del Usuario (CSAT) | Diálogo de Rechazo Justificado |
+| :---: | :---: |
+| ![Encuesta CSAT](docs/screenshots/03-tickets/14-service-survey-modal.png) | ![Rechazar Ticket](docs/screenshots/03-tickets/12-reject-ticket-dialog.png) |
+
+| Formato Oficial de Solicitud de Soporte (PDF) | Orden de Trabajo de Mantenimiento (PDF) |
+| :---: | :---: |
+| ![Formato Solicitud PDF](docs/screenshots/03-tickets/13-ticket-documents-tab.png) | ![Orden de Trabajo PDF](docs/screenshots/03-tickets/16-work-order-document-pdf.png) |
 
 ---
 
-### Activos TI, Inventario y Almacén
-| Catálogo de Equipos de Cómputo | Ficha Técnica de Hardware |
+### 4. Monitoreo Proactivo de Acuerdos de Nivel de Servicio (SLA)
+| Tablero General de Monitoreo de SLA en Tiempo Real | Tabla de Conteo Regresivo y Barras de Consumo |
 | :---: | :---: |
-| ![Inventario Equipos](docs/screenshots/04-inventory/01-equipment-catalog.png) | ![Ficha Técnica](docs/screenshots/04-inventory/02-equipment-specifications.png) |
-
-| Control de Consumibles y Stock | Salida de Refacciones Vinculada a Ticket |
-| :---: | :---: |
-| ![Consumibles](docs/screenshots/04-inventory/03-consumables-stock.png) | ![Salida Almacén](docs/screenshots/04-inventory/04-consumable-output.png) |
+| ![Monitoreo SLA](docs/screenshots/04-sla/01-sla-dashboard-view.png) | ![Cuenta Regresiva SLA](docs/screenshots/04-sla/03-sla-countdown-table.png) |
 
 ---
 
-### Analítica y Métricas ITSM
-| KPIs Globales (MTTR, SLA, FCR) | Gráficos por Departamento e Incidencia |
+### 5. Auditoría Inmutable y Trazabilidad CDC (Change Data Capture)
+| Historial Global de Modificaciones (Audit Logs) | Comparador Diferencial de Cambios (Diff Viewer) |
 | :---: | :---: |
-| ![KPIs Dashboard](docs/screenshots/05-dashboard/01-kpi-summary.png) | ![Gráficos Recharts](docs/screenshots/05-dashboard/02-department-charts.png) |
+| ![Tabla Auditoría](docs/screenshots/05-audit/01-audit-logs-table.png) | ![Diff Viewer](docs/screenshots/05-audit/02-audit-diff-dialog.png) |
+
+| Visor de Payload Completo Estructurado (JSON) |
+| :---: |
+| ![Visor JSON](docs/screenshots/05-audit/03-audit-json-viewer.png) |
+
+---
+
+### 6. Activos TI e Inventario de Cómputo
+| Catálogo de Activos Tecnológicos del C.C. | Ficha Técnica de Hardware |
+| :---: | :---: |
+| ![Activos TI](docs/screenshots/06-equipments/03-it-assets-catalog.png) | ![Ficha Hardware](docs/screenshots/06-equipments/02-equipment-detail-card.png) |
+
+| Bitácora Histórica de Movimientos | Formato Digital de Resguardo / Traslado |
+| :---: | :---: |
+| ![Movimientos Activos](docs/screenshots/06-equipments/05-it-assets-movements.png) | ![Detalle Movimiento](docs/screenshots/06-equipments/06-it-assets-movement-view.png) |
+
+---
+
+### 7. Almacén de Consumibles y Refacciones
+| Inventario de Consumibles y Alertas de Stock | Registro de Lote / Recepción de Remesa |
+| :---: | :---: |
+| ![Stock Consumibles](docs/screenshots/07-consumables/01-consumables-stock-list.png) | ![Entrada Lote](docs/screenshots/07-consumables/02-consumable-batch-create.png) |
+
+| Despacho / Salida de Refacciones por Incidencia | Kardex Completo de Movimientos de Almacén |
+| :---: | :---: |
+| ![Salida Consumibles](docs/screenshots/07-consumables/03-consumable-output-form.png) | ![Kardex Consumibles](docs/screenshots/07-consumables/04-consumable-kardex-history.png) |
+
+---
+
+### 8. Herramientas de Taller & Préstamos
+| Catálogo de Herramientas de Trabajo | Control de Préstamos y Devoluciones |
+| :---: | :---: |
+| ![Catálogo Herramientas](docs/screenshots/08-tools/01-tools-catalog.png) | ![Bitácora Herramientas](docs/screenshots/08-tools/02-tools-movement-history.png) |
+
+---
+
+### 9. Reportes Técnicos, Folios y Gobernanza Institucional
+| Base de Conocimiento de Bitácoras de Intervención | Exportación de Reportes Ejecutivos a Excel |
+| :---: | :---: |
+| ![Base de Conocimiento](docs/screenshots/09-reports-folios/01-technical-reports-list.png) | ![Reportes Excel](docs/screenshots/09-reports-folios/03-executive-reports-page.png) |
+
+| Configuración de Folios y Prefijos por Departamento | Catálogo de Departamentos y Prioridades |
+| :---: | :---: |
+| ![Folios Departamento](docs/screenshots/09-reports-folios/04-folios-departments-list.png) | ![Departamentos](docs/screenshots/10-admin-governance/03-departments-catalog.png) |
+
+| Gestión de Periodos Escolares y Folios Activos | Administración de Jefaturas del Centro de Cómputo |
+| :---: | :---: |
+| ![Periodos Escolares](docs/screenshots/10-admin-governance/04-school-periods-manager.png) | ![Jefes CC](docs/screenshots/10-admin-governance/05-center-managers-history.png) |
+
+---
+
+### 10. Experiencia de Usuario y Accesibilidad
+| Interfaz en Tema Oscuro (Dark Theme) | Selector Dinámico de Idioma (Español / Inglés) |
+| :---: | :---: |
+| ![Tema Oscuro](docs/screenshots/11-ui-features/01-dark-mode-theme.png) | ![Selector Idioma](docs/screenshots/11-ui-features/02-language-switcher.png) |
 
 ---
 
