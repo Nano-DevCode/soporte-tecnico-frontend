@@ -274,15 +274,15 @@ docker compose up -d --build
 
 ---
 
-## 👥 Equipo de Desarrollo y Colaboradores
+## 👥 Equipo de Desarrollo
 
 El diseño, arquitectura, desarrollo técnico e implementación de este sistema fue realizado por el siguiente equipo:
 
-| Desarrollador / Colaborador | Perfil & Contacto | Aportes Principales en Git |
+| Desarrollador / Colaborador | Rol | Perfil & Contacto |
 | :--- | :--- | :--- |
-| **Nano-DevCode** | [![GitHub](https://img.shields.io/badge/GitHub-Nano--DevCode-181717?style=flat&logo=github)](https://github.com/Nano-DevCode)<br>📧 `mayka708.ms@gmail.com` | **Lead Developer & Arquitectura Full-Stack**<br>• Core de la aplicación React 19 / TypeScript / Vite<br>• Integración de WebSocket / React Query / Zustand<br>• Módulos de SLA, Auditoría, Seguridad y Sanitización<br>*(95 commits registrados)* |
-| **AlexDro360** | [![GitHub](https://img.shields.io/badge/GitHub-AlexDro360-181717?style=flat&logo=github)](https://github.com/AlexDro360)<br>📧 `21160666@itoaxaca.edu.mx` | **Core Contributor**<br>• Desarrollo de componentes UI e interfaces de usuario<br>• Implementación de formularios y flujos operativos de tickets<br>• Integración de vistas y lógica de negocio<br>*(41 commits registrados)* |
-| **JazminMartinezC** | [![GitHub](https://img.shields.io/badge/GitHub-JazminMartinezC-181717?style=flat&logo=github)](https://github.com/JazminMartinezC)<br>📧 `21160705@itoaxaca.edu.mx` | **Core Contributor**<br>• Maquetación, estilos Tailwind y componentes interactivos<br>• Estructuración de tablas de datos y catálogos<br>• Flujos de navegación y validaciones<br>*(29 commits registrados)* |
+| **Nano-DevCode** | Lead Developer & Arquitectura Frontend | [![GitHub](https://img.shields.io/badge/GitHub-Nano--DevCode-181717?style=flat&logo=github)](https://github.com/Nano-DevCode)<br>📧 `mayka708.ms@gmail.com` |
+| **AlexDro360** | Frontend Developer | [![GitHub](https://img.shields.io/badge/GitHub-AlexDro360-181717?style=flat&logo=github)](https://github.com/AlexDro360)<br>🎓 `21160666@itoaxaca.edu.mx` |
+| **JazminMartinezC** | Frontend Developer | [![GitHub](https://img.shields.io/badge/GitHub-JazminMartinezC-181717?style=flat&logo=github)](https://github.com/JazminMartinezC)<br>🎓 `21160705@itoaxaca.edu.mx` |
 
 ---
 
